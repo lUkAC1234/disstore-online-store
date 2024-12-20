@@ -1,0 +1,141 @@
+// FLEX JUSTIFY CONTENT + ALIGN ITEMS START/CENTER/END
+.flex-row-justify-align-start {
+    display: flex;
+    justify-content: flex-start;
+    align-items: start;
+}
+
+.flex-row-justify-align-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-row-justify-align-end {
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
+}
+
+// SPACE BETWEEN/AROUND/EVENLT + ALIGN ITEMS CENTER
+
+.flex-row-center-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-row-center-around {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.flex-row-center-evenly {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+// SPACE BETWEEN/AROUND/EVENLY WITHOUT ALIGN ITEMS
+
+.flex-row-justify-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-row-justify-around {
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.flex-row-justify-evenly {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+// ALIGN ITEMS START/CENTER/END WITHOUT JUSTIFY CONTENT
+.flex-row-align-start {
+    display: flex;
+    align-items: start;
+}
+
+.flex-row-align-center {
+    display: flex;
+    align-items: center;
+}
+
+.flex-row-align-end {
+    display: flex;
+    align-items: end;
+}
+
+// FLEX COLUMN
+
+// FLEX COLUMN JUSTIFY CONTENT + ALIGN ITEMS START/CENTER/END
+.flex-column-justify-align-start {
+    @extend .flex-row-justify-align-start;
+    flex-flow: column;
+}
+
+.flex-column-justify-align-center {
+    @extend .flex-row-justify-align-center;
+    flex-flow: column;
+}
+
+.flex-column-justify-align-end {
+    @extend .flex-row-justify-align-end;
+    flex-flow: column;
+}
+
+// FLEX COLUMN JUSTIFY CONTENT AROUND/BETWEEN/EVENLY + ALIGN ITEMS CENTER
+
+.flex-column-center-around {
+    @extend .flex-row-center-around;
+    flex-flow: column;
+}
+
+.flex-column-center-between {
+    @extend .flex-row-center-between;
+    flex-flow: column;
+}
+
+.flex-column-center-evenly {
+    @extend .flex-row-center-evenly;
+    flex-flow: column;
+}
+
+// FLEX COLUMN SPACE BETWEEN/AROUND/EVENLY WITHOUT ALIGN ITEMS
+
+.flex-column-justify-between {
+    @extend .flex-row-justify-between;
+    flex-flow: column;
+}
+
+.flex-column-justify-around {
+    @extend .flex-row-justify-around;
+    flex-flow: column;
+}
+
+.flex-column-justify-evenly {
+    @extend .flex-row-justify-evenly;
+    flex-flow: column;
+}
+
+// FLEX COLUMN ALIGN ITEMS START/CENTER/END WITHOUT JUSTIFY CONTENT
+.flex-column-align-start {
+    @extend .flex-row-align-start;
+    flex-flow: column;
+}
+
+.flex-column-align-center {
+    @extend .flex-row-align-center;
+    flex-flow: column;
+}
+
+
+.flex-column-align-end {
+    @extend .flex-row-align-end;
+    flex-flow: column;
+}

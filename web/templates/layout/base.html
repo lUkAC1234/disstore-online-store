@@ -1,0 +1,67 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
+    <meta name="author" content="devcybercode">
+    <meta property="og:site_name" content="DIS-STORE - Онлайн магазин одежды">
+    <meta property="og:url" content="https://devcybercode.com"/>
+    <meta property="og:type" content="website">
+    <meta name="description" content="">
+    <meta name="og:description" content="">
+    <meta name="keywords" content="">
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <!-- <link href="{% static 'main/scripts/js/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet"> -->
+
+    <link rel="stylesheet" type="text/css" href="{% static 'main/styles/scss/global.css' %}">
+
+    <link rel="icon" href="" type="image/png"/>
+    <link rel="shortcut icon" href="" type="image/svg+xml"/>
+    <link rel="canonical" href="https://devcybercode.com/">
+
+    <!-- Animation -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css"> -->
+    <!-- Animation End -->
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+
+    {% include 'layout/header.html' %}
+
+    {% block content %}
+
+    {% endblock %}
+
+
+    {% include 'layout/footer.html' %}
+
+    <script src="{% static 'main/scripts/js/header.js' %}"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" charset="utf-8"></script> -->
+    <!-- <script src="{% static 'main/scripts/js/owlcarousel/owl.carousel.min.js' %}"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script> -->
+    <!-- <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            wow = new WOW({
+                boxClass: 'fade',
+                animateClass: 'animated',
+                offset: 0,
+                mobile: true,
+                live: true
+            });
+            wow.init();
+        });
+        function closeMessage(button) {
+            button.parentNode.style.display = 'none';
+        }
+    </script> -->
+    {% block js_block %}
+
+    {% endblock %}
+</body>
+
+</html>

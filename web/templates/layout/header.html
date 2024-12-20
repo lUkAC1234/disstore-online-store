@@ -1,0 +1,43 @@
+{% load static i18n %}
+<header class="header" id="header">
+    <nav class="navbar">
+        <div class="navbar-wrapper">
+            <div class="header-logo-container">
+                <img src="{% static 'main/images/layout/logo.svg' %}" alt="">
+            </div>
+            <div class="header-links-container">
+                <ul class="header-links-wrapper">
+                    <li class="header-link">
+                        <a href="">Каталог</a>
+                    </li>
+                    <li class="header-link">
+                        <a href="">Новинки</a>
+                    </li>
+                    <li class="header-link">
+                        <a href="">Скидки</a>
+                    </li>
+                    <li class="header-link">
+                        <a href="">Контакты</a>
+                    </li>
+                    <li class="header-link">
+                        <a href="">О нас</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="header-search-container">
+                <button class="header-search-button">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <a href="#" class="header-like-link">
+                    <i class="fa-solid fa-heart"></i>
+                </a>
+                <a href="#" class="header-profile-link">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+                <a href="#" class="header-shopping-cart-link">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>

@@ -1,0 +1,507 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@600&family=Open+Sans:wght@300&family=Poppins:wght@400;500;600;700;800;900&display=swap");
+@font-face {
+  font-family: "Gilroy";
+  src: url("/static/main/fonts/girloy/Gilroy-Regular.ttf") format("truetype"); /* Default font */
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("/static/main/fonts/girloy/Gilroy-Light.ttf") format("truetype"); /* Light font */
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("/static/main/fonts/girloy/Gilroy-Medium.ttf") format("truetype"); /* Medium font */
+  font-weight: 500;
+  font-style: normal;
+}
+/* Base Colors */
+:root {
+  --primary-color: #20184E;
+  --purple: #8828FF;
+  --light-gray: #D8E0F0;
+  --light-purple: #C08DFF;
+  --yellow: #FFDA58;
+  --white: #ffffff;
+  --input-background: #D8E0F0;
+  --poppins: Gilroy, Arial, sans-serif !important;
+}
+
+.aligned label + p,
+.aligned .checkbox-row + div.help,
+.aligned label + div.readonly,
+.help,
+p.help,
+form p.help,
+div.help,
+form div.help,
+div.help,
+h1,
+h2,
+li {
+  color: var(--primary-color) !important;
+  font-family: var(--poppins) !important;
+  font-weight: 500 !important;
+  font-size: 1rem !important;
+}
+
+body {
+  background: linear-gradient(0deg, var(--white) 0%, var(--light-purple) 100%);
+}
+body #container #header {
+  background: var(--purple);
+  font-family: var(--poppins);
+  font-weight: 500;
+}
+body #container #header #site-name a {
+  color: var(--white);
+  font-size: 1.5rem !important;
+}
+body #container .breadcrumbs {
+  background: var(--primary-color);
+  font-family: var(--poppins);
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--light-gray);
+}
+body #container .breadcrumbs a {
+  color: var(--white);
+}
+body #container .shifted .sticky #nav-filter {
+  margin: 1rem auto;
+  background: none;
+  padding: 0.25rem;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-family: var(--poppins);
+  font-weight: 500;
+  border-bottom: 2px solid var(--primary-color);
+  color: var(--primary-color);
+}
+body #container .shifted .sticky #nav-filter:focus {
+  border-bottom: 2px solid var(--purple);
+}
+body #container .shifted .messagelist .success {
+  background-color: var(--purple);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--white);
+}
+body #container .shifted .messagelist .success a {
+  color: var(--white);
+}
+
+a:link, a:visited {
+  color: var(--white);
+}
+
+.toggle-nav-sidebar {
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  outline: none;
+}
+.toggle-nav-sidebar:hover, .toggle-nav-sidebar:focus {
+  background: var(--primary-color);
+}
+
+#content {
+  width: unset !important;
+  max-width: 1200px;
+  background: transparent;
+}
+#content .errorlist,
+#content .errornote {
+  background: var(--purple);
+  margin-inline: 0;
+  border-radius: 0.2rem;
+  border: none;
+  color: var(--white);
+}
+#content .errorlist li,
+#content .errornote li {
+  font-family: var(--poppins) !important;
+  color: var(--white) !important;
+  text-align: center;
+}
+#content .app-web tr {
+  background: var(--white);
+}
+#content .app-web tr th,
+#content .app-web tr td,
+#content .app-web tr a {
+  border: none;
+  color: var(--purple);
+  font-family: var(--poppins);
+}
+#content #change-history .paginator {
+  width: max-content;
+  background: var(--primary-color);
+  font-family: var(--poppins);
+  margin-top: 0.5rem;
+  border-radius: 0 0 0 0.5rem;
+}
+#content #change-history thead th {
+  background: var(--primary-color);
+  font-family: var(--poppins);
+}
+#content #change-history tr {
+  font-family: var(--poppins);
+}
+#content #change-history tr:nth-child(odd) {
+  background: var(--purple);
+}
+#content #change-history tr:nth-child(even) {
+  color: var(--primary-color);
+  background: var(--white);
+}
+#content #change-history tr th,
+#content #change-history tr td {
+  padding-block: 0.75rem;
+  border: none;
+}
+#content #deleted-objects a {
+  color: var(--purple);
+  font-size: 1.25rem;
+}
+#content form div:has(.cancel-link) input[type=submit] {
+  background: var(--purple);
+  font-family: var(--poppins);
+  height: fit-content;
+}
+#content form div:has(.cancel-link) .cancel-link {
+  background: var(--white);
+  font-family: var(--poppins);
+  color: var(--purple);
+  padding-block: 0.75rem;
+}
+#content .historylink,
+#content .object-tools a:link,
+#content .object-tools a:visited {
+  background-color: var(--primary-color);
+  font-family: var(--poppins);
+  font-weight: 500;
+  color: var(--white);
+}
+#content #content-related {
+  background: transparent;
+}
+#content #recent-actions-module {
+  background: var(--white);
+  padding-bottom: 0.5rem;
+}
+#content #recent-actions-module h1,
+#content #recent-actions-module h3,
+#content #recent-actions-module li,
+#content #recent-actions-module h2,
+#content #recent-actions-module span {
+  color: var(--primary-color) !important;
+  font-size: 1rem;
+}
+#content #recent-actions-module span {
+  font-size: 0.8rem;
+}
+#content #recent-actions-module a {
+  color: var(--purple);
+}
+#content #changelist {
+  background: transparent;
+}
+#content #changelist #toolbar {
+  background: var(--primary-color);
+}
+#content #changelist #toolbar div {
+  display: flex;
+  gap: 0.5rem;
+}
+#content #changelist #toolbar div input,
+#content #changelist #toolbar div label {
+  background: var(--white);
+  color: var(--primary-color);
+  font-family: var(--poppins);
+  font-size: 0.9rem;
+  border: none;
+  outline: none;
+  height: auto;
+}
+#content #changelist #toolbar div input[type=submit] {
+  color: var(--white);
+  background: var(--purple);
+}
+#content #changelist #toolbar div label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-inline: 0.35rem;
+  border-radius: 0.25rem;
+}
+#content #changelist #changelist-form .actions,
+#content #changelist #changelist-form .paginator {
+  background: var(--primary-color);
+  font-family: var(--poppins);
+  color: var(--white);
+  border-radius: 0.25rem;
+  margin-block: 1rem;
+  width: fit-content;
+}
+#content #changelist #changelist-form .actions input,
+#content #changelist #changelist-form .actions button,
+#content #changelist #changelist-form .actions select,
+#content #changelist #changelist-form .paginator input,
+#content #changelist #changelist-form .paginator button,
+#content #changelist #changelist-form .paginator select {
+  background: var(--white);
+  font-weight: 500;
+  font-family: var(--poppins);
+  font-size: 1rem;
+  outline: none;
+  border: none;
+}
+#content #changelist #changelist-form .actions select,
+#content #changelist #changelist-form .paginator select {
+  color: var(--primary-color);
+}
+#content #changelist #changelist-form .actions button,
+#content #changelist #changelist-form .paginator button {
+  background: var(--purple);
+  color: var(--white);
+}
+#content #changelist #changelist-form .results thead tr,
+#content #changelist #changelist-form .results thead th,
+#content #changelist #changelist-form .results thead td {
+  background: var(--primary-color);
+}
+#content #changelist #changelist-form .results tr {
+  background: var(--purple);
+  border-radius: 0.25rem;
+  margin-block: 0.5rem;
+}
+#content #changelist #changelist-form .results tr td,
+#content #changelist #changelist-form .results tr th,
+#content #changelist #changelist-form .results tr a {
+  color: var(--white);
+  font-family: var(--poppins);
+  font-size: 1rem;
+}
+
+.module {
+  background: var(--white);
+  border-radius: 0.5rem;
+}
+.module caption {
+  background: var(--purple);
+  font-family: var(--poppins);
+  font-weight: 500;
+}
+.module .model-group {
+  background: var(--purple);
+}
+.module .model-group a {
+  color: var(--white);
+  font-family: var(--poppins);
+  font-weight: 500;
+}
+.module .model-group th,
+.module .model-group td {
+  border: none;
+}
+.module .form-row {
+  padding: 10px;
+  border: none;
+}
+.module .form-row .flex-container {
+  display: block;
+}
+.module .form-row .flex-container label {
+  color: var(--primary-color);
+  font-size: 1rem;
+}
+.module .form-row .flex-container input,
+.module .form-row .flex-container textarea {
+  border: 1px solid var(--input-background);
+  background: none;
+  outline: none;
+  color: var(--primary-color);
+  font-family: var(--poppins);
+  font-weight: 500;
+  width: calc(100% - 10px);
+  min-width: calc(100% - 10px);
+  max-width: calc(100% - 10px);
+  font-size: 1rem;
+}
+.module .form-row .flex-container input:focus,
+.module .form-row .flex-container textarea:focus {
+  border-color: var(--primary-color);
+  transition: all 0.4s;
+}
+.module .form-row .flex-container textarea {
+  min-height: 5rem;
+}
+.module .form-row .flex-container input[type=file] {
+  width: max-content;
+  min-width: max-content;
+}
+.module .form-row .flex-container .file-upload {
+  color: var(--primary-color);
+  font-family: var(--poppins);
+  font-weight: 500;
+}
+.module .form-row .flex-container .file-upload a {
+  color: var(--purple);
+}
+.module .form-row .flex-container select {
+  background: var(--purple);
+  color: var(--white);
+  font-family: var(--poppins);
+  font-weight: 500;
+  border: none;
+  outline: none;
+}
+.module .form-row .flex-container select option {
+  background: var(--primary-color);
+}
+.module .form-row .flex-container select option:checked {
+  color: var(--purple);
+  background: var(--white);
+}
+.module .form-row .flex-container .readonly a {
+  color: var(--purple);
+}
+@media (max-width: 767px) {
+  .module .form-row {
+    padding: 15px 0.5rem;
+  }
+  .module .form-row .flex-container input,
+  .module .form-row .flex-container textarea {
+    max-width: 98%;
+    min-width: 98%;
+    width: 98%;
+  }
+}
+
+.submit-row {
+  background: var(--purple) !important;
+  border: none !important;
+}
+.submit-row .button,
+.submit-row input[type=submit],
+.submit-row input[type=button],
+.submit-row input,
+.submit-row a.button,
+.submit-row .deletelink {
+  background: var(--white);
+  color: var(--primary-color);
+  font-family: var(--poppins);
+  font-weight: 500;
+  border: 1px solid transparent;
+  outline: none;
+}
+.submit-row .button:hover, .submit-row .button:focus,
+.submit-row input[type=submit]:hover,
+.submit-row input[type=submit]:focus,
+.submit-row input[type=button]:hover,
+.submit-row input[type=button]:focus,
+.submit-row input:hover,
+.submit-row input:focus,
+.submit-row a.button:hover,
+.submit-row a.button:focus,
+.submit-row .deletelink:hover,
+.submit-row .deletelink:focus {
+  color: var(--white);
+  background: var(--primary-color);
+  transition: all 0.4s;
+}
+.submit-row .default {
+  background: var(--primary-color) !important;
+  color: var(--white) !important;
+}
+.submit-row .default:hover {
+  border: 1px solid var(--primary-color) !important;
+  color: var(--primary-color) !important;
+  background: var(--white) !important;
+}
+.submit-row .deletelink {
+  background: var(--primary-color) !important;
+}
+
+.main.shifted > #nav-sidebar {
+  background: linear-gradient(90deg, var(--white) 0%, var(--light-purple) 100%);
+  border-color: var(--primary-color);
+}
+.main.shifted > #nav-sidebar .app-web {
+  background: transparent;
+}
+.main.shifted > #nav-sidebar .app-web table caption {
+  background: var(--primary-color);
+  font-family: var(--poppins);
+  width: 90%;
+  margin: 0.5rem auto;
+  border-radius: 0.25rem;
+  color: var(--white);
+}
+.main.shifted > #nav-sidebar .app-web table tbody {
+  display: block !important;
+}
+.main.shifted > #nav-sidebar .app-web table tbody tr {
+  display: block;
+  margin: 0.5rem auto;
+  border-radius: 0.25rem;
+  width: 98%;
+  background: var(--purple);
+  font-family: var(--poppins);
+}
+.main.shifted > #nav-sidebar .app-web table tbody tr a {
+  color: var(--white) !important;
+  border: none;
+}
+.main.shifted > #nav-sidebar .app-web table tbody tr td,
+.main.shifted > #nav-sidebar .app-web table tbody tr th {
+  border: none;
+}
+
+.module .flex-container .readonly {
+  color: var(--primary-color) !important;
+}
+
+#changelist-filter {
+  background-color: var(--white) !important;
+}
+
+#changelist-filter li.selected {
+  border-color: var(--purple) !important;
+}
+
+#changelist-filter li.selected a {
+  color: var(--purple) !important;
+}
+
+#changelist-filter details summary {
+  color: var(--white);
+  font-size: 1rem;
+}
+
+#changelist-filter details > summary::before {
+  color: var(--purple) !important;
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+  background: var(--purple) !important;
+}
+
+#changelist-filter a {
+  color: var(--primary-color) !important;
+}
+#changelist-filter a:hover {
+  color: var(--purple) !important;
+}
+
+#changelist-filter h2 {
+  color: var(--white) !important;
+}
+
+/*# sourceMappingURL=__admin.css.map */

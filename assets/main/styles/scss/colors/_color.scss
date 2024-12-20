@@ -1,0 +1,9 @@
+$text-white: #FFFFFF;
+$text-black: #222222;
+$text-icon: #807D7E;
+
+:root {
+    --text-white: #{$text-white};
+    --text-black: #{$text-black};
+    --text-icon: #{$text-icon};
+}

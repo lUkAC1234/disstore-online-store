@@ -1,0 +1,8 @@
+@import './montserrat.scss';
+
+$font: "Montserrat", serif;
+
+:root {
+    --font: #{$font} !important;
+}
+

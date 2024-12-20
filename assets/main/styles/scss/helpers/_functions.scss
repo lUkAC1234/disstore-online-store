@@ -1,0 +1,42 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+pre,
+li,
+ul,
+address,
+i,
+strong {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+* {
+  scroll-behavior: smooth !important;
+}
+
+:root {
+  --rem: 16px;
+  font-size: calc(var(--rem) + (20 - 16) * (100vw - 320px) / (1280 - 320));
+}
+
+@function calc-rem($min-width, $step, $max-scale) {
+  @return ();
+}
+
+@for $i from 0 through 29 {
+  $width: 2500px + $i * 500px;
+  $rem: 16px + $i * 2.5px;
+  @at-root {
+    @media screen and (min-width: #{$width}) {
+      :root {
+        --rem: #{$rem};
+      }
+    }
+  }
+}

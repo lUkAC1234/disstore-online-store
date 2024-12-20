@@ -1,0 +1,8 @@
+$body-background: #f3f3f3;
+$error-background: #E57373;
+$button-background: #F6F6F6;
+:root {
+    --body-background: #{$body-background};
+    --error-background: #{$error-background};
+    --button-background: #{$button-background};
+}

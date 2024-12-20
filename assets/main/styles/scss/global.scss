@@ -1,0 +1,87 @@
+@import "./pages/_importpages";
+@import "./layout/_import";
+@import "./z-index-properties/_import_z_index";
+@import "./colors/_importcolorbackgound";
+@import "./fonts/_importfonts";
+@import "./helpers/_helpers";
+@import "./components/_components";
+@import "./positions/_positions";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  user-select: none;
+  outline: none;
+  font-family: var(--font);
+}
+
+html {
+  padding: 0;
+  margin: 0;
+
+  body {
+    scroll-behavior: smooth;
+  }
+
+  a {
+    text-decoration: none;
+    color: var(--text-black);
+  }
+}
+
+// HEADER-CONTENT-FOOTER POSITIONS 
+
+body {
+  margin: 0;
+  display: grid;
+  grid-template-areas:
+    "header"
+    "content"
+    "footer";
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: var(--background-white);
+  overflow-x: hidden;
+}
+
+.header {
+  grid-area: header;
+}
+
+.main {
+  grid-area: content;
+  background: var(--background-white);
+}
+
+.footer {
+  grid-area: footer;
+}
+
+// HEADER-CONTENT-FOOTER POSITIONS END
+
+// ScroolBar
+
+::-webkit-scrollbar {
+  width: 0.2rem;
+  height: 0.2rem;
+  overflow-x: none;
+  background: var(--scroolbar-dark);
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 0.3em;
+  background: var(--scroolbar-dark);
+  width: 0.2rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--background-purple);
+  background: -webkit-linear-gradient(to right, var(--text-light-purple), var(--text-purple));
+  background: linear-gradient(to right, var(--text-light-purple), var(--text-purple));
+  border-radius: 0.3em;
+}
+
+// ScroolBar END
