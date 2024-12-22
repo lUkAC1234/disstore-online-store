@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'main/styles/scss/global.css' %}">
 
     <link rel="icon" href="" type="image/png"/>
-    <link rel="shortcut icon" href="" type="image/svg+xml"/>
+    <link rel="shortcut icon" href="{% static 'main/images/layout/logo.svg' %}" type="image/svg+xml"/>
     <link rel="canonical" href="https://devcybercode.com/">
 
     <!-- Animation -->
@@ -30,7 +30,7 @@
 </head>
 
 <body>
-
+    <div class="rey-overlay"></div>
     {% include 'layout/header.html' %}
 
     {% block content %}

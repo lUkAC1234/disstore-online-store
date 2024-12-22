@@ -2,41 +2,95 @@
 <header class="header" id="header">
     <nav class="navbar">
         <div class="navbar-wrapper">
+            <button class="mobile-version-button">
+                <i class="fa-solid fa-bars"></i>
+            </button>
             <div class="header-logo-container">
-                <img src="{% static 'main/images/layout/logo.svg' %}" alt="">
+                <a href="">
+                    <img src="{% static 'main/images/layout/logo.svg' %}" alt="">
+                </a>
             </div>
-            <div class="header-links-container">
-                <ul class="header-links-wrapper">
-                    <li class="header-link">
-                        <a href="">Каталог</a>
-                    </li>
-                    <li class="header-link">
-                        <a href="">Новинки</a>
-                    </li>
-                    <li class="header-link">
-                        <a href="">Скидки</a>
-                    </li>
-                    <li class="header-link">
-                        <a href="">Контакты</a>
-                    </li>
-                    <li class="header-link">
-                        <a href="">О нас</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="header-search-container">
-                <button class="header-search-button">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-                <a href="#" class="header-like-link">
-                    <i class="fa-solid fa-heart"></i>
-                </a>
-                <a href="#" class="header-profile-link">
-                    <i class="fa-solid fa-user"></i>
-                </a>
-                <a href="#" class="header-shopping-cart-link">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                </a>
+            <div class="header-content-container">
+                <div class="header-links-container">
+                    <button class="mobile-version-close-button">
+                        <i class="fa-solid fa-xmark "></i>
+                    </button>
+                    <ul class="header-links-wrapper">
+                        <li class="header-link-list {% if request.path == '/sd' %}active{% endif %}">
+                            <button class="header-link button" href="">
+                                <a href="">Каталог</a>
+                                <span>
+                                    Каталог
+                                    <i class="fa-solid fa-arrow-right-long"></i>
+                                </span>
+                            </button>
+                            <div class="header-link-extra-details-container">
+                                <div class="header-link-extra-details-wrapper">
+                                    <button class="header-link-extra-details-close-button">
+                                        <i class="fa-solid fa-arrow-left-long"></i>
+                                    </button>
+                                    <a href="" class="header-link-extra-details-column first">Каталог</a>
+                                    <a href="" class="header-link-extra-details-column">
+                                        <div class="header-extra-link-image-container">
+                                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="">
+                                        </div>
+                                        <h4 class="header-extra-link-title">Кийим</h4>
+                                    </a>
+                                    <a href="" class="header-link-extra-details-column">
+                                        <div class="header-extra-link-image-container">
+                                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="">
+                                        </div>
+                                        <h4 class="header-extra-link-title">Кийим</h4>
+                                    </a>
+                                    <a href="" class="header-link-extra-details-column">
+                                        <div class="header-extra-link-image-container">
+                                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="">
+                                        </div>
+                                        <h4 class="header-extra-link-title">Кийим</h4>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="header-link-list">
+                            <a class="header-link" href="">Новинки</a>
+                        </li>
+                        <li class="header-link-list">
+                            <a class="header-link" href="">Скидки</a>
+                        </li>
+                        <li class="header-link-list">
+                            <a class="header-link" href="">Контакты</a>
+                        </li>
+                        <li class="header-link-list">
+                            <a class="header-link" href="">О нас</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="header-search-container">
+                    <div class="header-search-wrapper">
+                        <button id="searchButton" class="header-search-button">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        <div id="header-search-input-container" class="header-search-input-container">
+                            <div class="mobile-search-input-container">
+                                <h4 class="mobile-search-title">поиск disstore.uz</h4>
+                                <button class="mobile-search-close">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            <input id="searchInput" class="header-search-input" type="search" placeholder="Поиск по заголовку" name="search" value="">
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="header-like-link">
+                        <i class="fa-solid fa-heart"></i>
+                    </a>
+                    <a href="#" class="header-profile-link">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+                    <a href="#" class="header-shopping-cart-link">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>

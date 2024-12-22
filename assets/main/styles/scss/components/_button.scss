@@ -1,0 +1,16 @@
+.primary-button {
+    display: inline-block;
+    border: 0.1rem solid transparent;
+    background: var(--text-black);
+    color: var(--text-white);
+    padding: 1rem 2rem;
+    border-radius: 3.5rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+
+    &:hover {
+        color: var(--text-black);
+        background: var(--text-white);
+        border-color: var(--text-black);
+    }
+}

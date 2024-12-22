@@ -7,7 +7,34 @@ DIS-STORE - Онлайн магазин одежды
 
 {% block content %}
 <main class="main index-main">
-    DISSTORE
+    <section class="welcome-section">
+        <div class="welcome-container">
+            <div class="welcome-text-column">
+                <h1 class="welcome-main-title">Найдите одежду которая подходит вашему стилю</h1>
+                <p class="welcome-text">Ознакомьтесь с нашим разнообразным ассортиментом тщательно созданной одежды, разработанной, чтобы подчеркнуть вашу индивидуальность и удовлетворить ваше чувство стиля</p>
+                <a href="" class="welcome-link">Купить сейчас</a>
+                <div class="welcome-numbers-count-container">
+                    <div class="welcome-numbers-count-column">
+                        <span class="welcome-numbers-count">200+</span>
+                        <p class="welcome-numbers-count-text">Международных брендов</p>
+                    </div>
+                    <div class="welcome-numbers-count-column">
+                        <span class="welcome-numbers-count">2,000+</span>
+                        <p class="welcome-numbers-count-text">Высококачественная продукция</p>
+                    </div>
+                    <div class="welcome-numbers-count-column">
+                        <span class="welcome-numbers-count">30,000+</span>
+                        <p class="welcome-numbers-count-text">Довольных клиентов</p>
+                    </div>
+                </div>
+            </div>
+            <div class="welcome-image-column">
+                <img src="{% static 'main/images/main-page/welcomeImage.webp' %}" alt="">
+            </div>
+        </div>
+    </section>
+
+    <section class="next-section"></section>
 </main>
 {% endblock %}
 

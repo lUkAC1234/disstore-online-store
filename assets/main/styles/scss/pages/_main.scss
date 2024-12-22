@@ -1,5 +1,233 @@
 .main {
     overflow-x: hidden !important;
-    margin-top: 8rem;
-    height: 200vh;
+    margin-top: 6rem;
+}
+
+.welcome-section {
+    background-color: var(--welcome-background);
+}
+
+.welcome-container {
+    display: flex;
+    gap: 1rem;
+    padding: 2rem 12rem 0rem 6rem;
+}
+
+.welcome-main-title {
+    width: min(100%, 40rem);
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 100%;
+    margin-top: 3rem;
+}
+
+.welcome-text {
+    width: min(100%, 40rem);
+    color: var(--text-p);
+    margin-block: 1rem 2rem;
+}
+
+.welcome-image-column {
+    position: relative;
+    display: flex;
+    align-self: end;
+    height: 100%;
+    img {
+        width: 30rem;
+        height: 35rem;
+        object-fit: cover;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        width: 3rem;
+        height: 3rem;
+        background-image: url(../../images/main-page/star.webp);
+        background-size: cover;
+        background-repeat: no-repeat;
+        top: 15rem;
+        left: -5rem;
+    }
+    &::after {
+        content: "";
+        position: absolute;
+        width: 4rem;
+        height: 4rem;
+        background-image: url(../../images/main-page/star.webp);
+        background-size: cover;
+        background-repeat: no-repeat;
+        top: 5rem;
+        right: 0;
+    }
+}
+
+.welcome-link {
+    @extend .primary-button;
+}
+
+.welcome-numbers-count-container {
+    display: flex;
+    margin-top: 2rem;
+    gap: 1rem;
+}
+
+.welcome-numbers-count-column:not(:last-child) {
+    border-right: 0.1rem solid var(--welcome-border);
+    padding-right: 1rem;
+    margin-bottom: 1rem;
+}
+
+.welcome-numbers-count {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.welcome-numbers-count-text {
+    margin-block: 0.5rem; 
+    color: var(--text-p);
+}
+
+@media screen and (max-width: 2300px) {
+    .welcome-container {
+        padding-inline: 3rem;
+    }
+}
+
+@media screen and (max-width: 1850px) {
+    .welcome-container {
+        padding-inline: 3rem 1rem;
+    }
+
+    .welcome-image-column {
+        img {
+            width: 25rem;
+            height: 30rem;
+            object-fit: cover;
+        }
+    
+        &::before {
+            width: 2.5rem;
+            height: 2.5rem;
+            left: -2rem;
+        }
+        &::after {
+            width: 3rem;
+            height: 3rem;
+        }
+    }
+}
+
+@media screen and (max-width: 1350px) {
+    .welcome-container {
+        padding-inline: 1rem;
+    }
+
+    .welcome-main-title {
+        font-size: 3rem;
+    }
+}
+
+@media screen and (max-width: 1150px) {
+    .welcome-container {
+        flex-flow: column;
+        padding-inline: 3rem;
+    }
+
+    .welcome-main-title {
+        font-size: 3.5rem;
+    }
+
+    .welcome-image-column {
+        margin-inline: auto;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .welcome-container {
+        padding-inline: 1rem;
+    }
+
+    .welcome-main-title {
+        font-size: 3rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .welcome-main-title {
+        font-size: 2.5rem;
+    }
+
+    .welcome-link {
+        width: 100%;
+        text-align: center;
+    }
+
+    .welcome-numbers-count-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .welcome-numbers-count-column {
+        display: grid;
+        place-items: center;
+        width: calc(50% - 1rem);
+    }
+
+    .welcome-numbers-count {
+        font-size: 2rem;
+    }
+
+    .welcome-numbers-count-text {
+        text-align: center;
+    }
+
+    .welcome-numbers-count-column:not(:last-child) {
+        border-right: 0;
+    }
+
+    .welcome-numbers-count-column:first-child {
+        border-right: 0.1rem solid var(--welcome-border);
+    }
+
+    .welcome-image-column {
+        justify-content: center;
+        img {
+            width: min(100%, 25rem);
+            height: min(100%, 30rem);
+            object-fit: cover;
+        }
+
+        &::before {
+            left: 0rem;
+        }
+    }
+}
+
+@media screen and (max-width: 470px) {
+    .welcome-main-title {
+        font-size: 2rem;
+    }
+
+    .welcome-numbers-count {
+        font-size: 1.5rem;
+    }
+
+    .welcome-image-column {
+        &::before {
+            width: 2rem;
+            height: 2rem;
+            top: 10rem;
+        }
+        &::after {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+    }
+}
+
+
+.next-section {
+    height: 100vh;
+    background: var(--text-black);
 }
