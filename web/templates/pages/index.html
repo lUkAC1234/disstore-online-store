@@ -29,15 +29,174 @@ DIS-STORE - Онлайн магазин одежды
                 </div>
             </div>
             <div class="welcome-image-column">
-                <img src="{% static 'main/images/main-page/welcomeImage.webp' %}" alt="">
+                <img src="{% static 'main/images/main-page/welcomeImage.webp' %}" alt="" loading="lazy" decoding="async">
             </div>
         </div>
     </section>
 
-    <section class="next-section"></section>
+    <section class="brands-section">
+        <div class="brands-container">
+            <div class="brands-column">
+                <img src="{% static 'main/images/brands/versace.webp' %}" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="brands-column">
+                <img src="{% static 'main/images/brands/zara.webp' %}" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="brands-column">
+                <img src="{% static 'main/images/brands/gucci.webp' %}" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="brands-column">
+                <img src="{% static 'main/images/brands/prada.webp' %}" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="brands-column">
+                <img src="{% static 'main/images/brands/calvinKlein.webp' %}" alt="" loading="lazy" decoding="async">
+            </div>
+        </div>
+    </section>
+
+    <section class="swiper-section new-clothes-section">
+        <div class="swiper-main-container new-clothes-container">
+            <h2 class="swiper-subtitle new-clothes-subtitle">Новинки</h2>
+            <div class="swiper mySwiper-new-clothes">
+                <div class="new-clothes-wrapper swiper-wrapper">
+                    <div class="new-clothes-column swiper-slide">
+                        <div class="swiper-object-image-container new-clothes-image-container">
+                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="" loading="lazy" decoding="async">
+                        </div>
+                        <div class="new-clothes-content">
+                            <h4 class="swiper-object-title new-clothes-title">Футболка с деталями из ленты</h4>
+                            <bdi class="swiper-price new-clothes-price">2,420,000 сум <span class="original-price">2,620,000 сум</span><span class="discount">-20%</span></bdi>
+                        </div>
+                    </div>
+                    <div class="new-clothes-column swiper-slide">
+                        <div class="swiper-object-image-container new-clothes-image-container">
+                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="" loading="lazy" decoding="async">
+                        </div>
+                        <div class="new-clothes-content">
+                            <h4 class="swiper-object-title new-clothes-title">Футболка с деталями из</h4>
+                            <bdi class="swiper-price new-clothes-price">240,000 сум</bdi>
+                        </div>
+                    </div>
+                    <div class="new-clothes-column swiper-slide">
+                        <div class="swiper-object-image-container new-clothes-image-container">
+                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="" loading="lazy" decoding="async">
+                        </div>
+                        <div class="new-clothes-content">
+                            <h4 class="swiper-object-title new-clothes-title">Футболка с деталями из ленты</h4>
+                            <bdi class="swiper-price new-clothes-price">2,420,000 сум <span class="original-price">2,620,000 сум</span><span class="discount">-20%</span></bdi>
+                        </div>
+                    </div>
+                    <div class="new-clothes-column swiper-slide">
+                        <div class="swiper-object-image-container new-clothes-image-container">
+                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="" loading="lazy" decoding="async">
+                        </div>
+                        <div class="new-clothes-content">
+                            <h4 class="swiper-object-title new-clothes-title">Футболка с деталями из</h4>
+                            <bdi class="swiper-price new-clothes-price">2,420,000 сум <span class="original-price">2,620,000 сум</span><span class="discount">-20%</span></bdi>
+                        </div>
+                    </div>
+                    <div class="new-clothes-column swiper-slide">
+                        <div class="swiper-object-image-container new-clothes-image-container">
+                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="" loading="lazy" decoding="async">
+                        </div>
+                        <div class="new-clothes-content">
+                            <h4 class="swiper-object-title new-clothes-title">Футболка с деталями из</h4>
+                            <bdi class="swiper-price new-clothes-price">2,420,000 сум <span class="original-price">2,620,000 сум</span><span class="discount">-20%</span></bdi>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="swiper-buttons-together-right-container swiper-buttons-new-clothes-container">
+                    <div class="swiper-button-prev loop-button-new-clothes-prev"></div>
+                    <div class="swiper-button-next loop-button-new-clothes-next"></div>
+                </div>
+            </div>
+            <div class="view-all-clothes-link-container">
+                <a href="" class="view-all-clothes-link">Просмотреть все</a>
+            </div>
+        </div>
+    </section>
+    <div class="hr-line"></div>
+    <section class="swiper-section top-selling-section">
+        <div class="swiper-main-container top-selling-container">
+            <h2 class="swiper-subtitle top-selling-subtitle">Популярные</h2>
+            <div class="swiper mySwiper-top-selling">
+                <div class="top-selling-wrapper swiper-wrapper">
+                    <div class="top-selling-column swiper-slide">
+                        <div class="swiper-object-image-container top-selling-image-container">
+                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="" loading="lazy" decoding="async">
+                        </div>
+                        <div class="top-selling-content">
+                            <h4 class="swiper-object-title top-selling-title">Футболка с деталями из ленты</h4>
+                            <bdi class="swiper-price top-selling-price">2,420,000 сум <span class="original-price">2,620,000 сум</span><span class="discount">-20%</span></bdi>
+                        </div>
+                    </div>
+                    <div class="top-selling-column swiper-slide">
+                        <div class="swiper-object-image-container top-selling-image-container">
+                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="" loading="lazy" decoding="async">
+                        </div>
+                        <div class="top-selling-content">
+                            <h4 class="swiper-object-title top-selling-title">Футболка с деталями из</h4>
+                            <bdi class="swiper-price top-selling-price">240,000 сум</bdi>
+                        </div>
+                    </div>
+                    <div class="top-selling-column swiper-slide">
+                        <div class="swiper-object-image-container top-selling-image-container">
+                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="" loading="lazy" decoding="async">
+                        </div>
+                        <div class="top-selling-content">
+                            <h4 class="swiper-object-title top-selling-title">Футболка с деталями из ленты</h4>
+                            <bdi class="swiper-price top-selling-price">2,420,000 сум <span class="original-price">2,620,000 сум</span><span class="discount">-20%</span></bdi>
+                        </div>
+                    </div>
+                    <div class="top-selling-column swiper-slide">
+                        <div class="swiper-object-image-container top-selling-image-container">
+                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="" loading="lazy" decoding="async">
+                        </div>
+                        <div class="top-selling-content">
+                            <h4 class="swiper-object-title top-selling-title">Футболка с деталями из</h4>
+                            <bdi class="swiper-price top-selling-price">2,420,000 сум <span class="original-price">2,620,000 сум</span><span class="discount">-20%</span></bdi>
+                        </div>
+                    </div>
+                    <div class="swiper-object-image-container top-selling-column swiper-slide">
+                        <div class="top-selling-image-container">
+                            <img src="{% static 'main/images/layout/clothes.jpg' %}" alt="" loading="lazy" decoding="async">
+                        </div>
+                        <div class="top-selling-content">
+                            <h4 class="swiper-object-title top-selling-title">Футболка с деталями из</h4>
+                            <bdi class="swiper-price top-selling-price">2,420,000 сум <span class="original-price">2,620,000 сум</span><span class="discount">-20%</span></bdi>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="swiper-buttons-together-right-container swiper-buttons-top-selling-container">
+                    <div class="swiper-button-prev loop-button-top-selling-prev"></div>
+                    <div class="swiper-button-next loop-button-top-selling-next"></div>
+                </div>
+            </div>
+            <div class="view-all-clothes-link-container">
+                <a href="" class="view-all-clothes-link">Просмотреть все</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="extra-offer-section">
+        <div class="extra-offer-container">
+            <div class="extra-offer-content">
+                <h3 class="extra-offer-title">Мы сделаем вашу повседневную моду лучше</h3>
+                <p class="extra-offer-text">Откройте для себя модные новинки по отличным ценам, наслаждайтесь уникальными скидками и создайте стильный гардероб, который будет вдохновлять каждый день</p>
+                <a href="" class="extra-offer-link">Купить сейчас</a>
+            </div>
+            <div class="extra-offer-image-container">
+                <img src="{% static 'main/images/main-page/extraoffer.jpg' %}" alt="">
+            </div>
+        </div>
+    </section>
 </main>
 {% endblock %}
 
 {% block js_block %}
-
+<script src="{% static 'main/scripts/js/carousel.js' %}"></script>
 {% endblock %}

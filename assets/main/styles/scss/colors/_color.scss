@@ -2,10 +2,15 @@ $text-white: #FFFFFF;
 $text-black: #111111;
 $text-icon: #807D7E;
 $text-p: #00000099;
+$text-price: #00000066;
+$clothes-discount-number: #FF3333;
+
 
 :root {
     --text-white: #{$text-white};
     --text-black: #{$text-black};
     --text-icon: #{$text-icon};
     --text-p: #{$text-p};
+    --text-price: #{$text-price};
+    --clothes-discount-number: #{$clothes-discount-number};
 }

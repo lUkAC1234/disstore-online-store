@@ -4,6 +4,7 @@ $button-background: #F6F6F6;
 $header-search-background: #F0F0F0;
 $welcome-background: #F2F0F1;
 $welcome-border: #0000001A;
+$clothes-discount-background: #FF33331A;
 
 :root {
     --body-background: #{$body-background};
@@ -12,4 +13,5 @@ $welcome-border: #0000001A;
     --header-search-background: #{$header-search-background};
     --welcome-background: #{$welcome-background};
     --welcome-border: #{$welcome-border};
+    --clothes-discount-background: #{$clothes-discount-background};
 }
