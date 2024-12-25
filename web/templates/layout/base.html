@@ -25,7 +25,7 @@
     <link rel="canonical" href="https://devcybercode.com/">
 
     <!-- Animation -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css">
     <!-- Animation End -->
     <title>{% block title %}{% endblock %}</title>
 </head>
@@ -40,14 +40,13 @@
 
 
     {% include 'layout/footer.html' %}
-
     <script src="{% static 'main/scripts/js/header.js' %}"></script>
     <script src="{% static 'main/scripts/js/carousel.js' %}"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" charset="utf-8"></script> -->
     <!-- <script src="{% static 'main/scripts/js/owlcarousel/owl.carousel.min.js' %}"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script> -->
-    <!-- <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             wow = new WOW({
                 boxClass: 'fade',
@@ -61,7 +60,7 @@
         function closeMessage(button) {
             button.parentNode.style.display = 'none';
         }
-    </script> -->
+    </script>
     {% block js_block %}
 
     {% endblock %}
