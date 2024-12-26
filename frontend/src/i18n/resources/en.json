@@ -1,0 +1,284 @@
+{
+  "maxFileSizeWarning": {
+    "1": "A file named",
+    "2": "weighs",
+    "3": "megabytes",
+    "4": "the maximum allowed size for a single file"
+  },
+  "maxFileCountWarning": {
+    "1": "You have selected more than",
+    "2": "photos",
+    "3": "please try again without adding more than 5 photos!"
+  },
+  "treesTDI": {
+    "level1": "exactly 0",
+    "level2": "from 0 to 50",
+    "level3": "from 50 to 100",
+    "level4": "from 100 to 200",
+    "level5": "from 200 to 400",
+    "level6": "above 400",
+    "title": "Number of trees per hectare"
+  },
+  "locations": {
+    "protocolWarning": "Cannot determine location on an unsecured site",
+    "error": "Error determining geolocation, it is probably disabled in your settings!"
+  },
+  "trees": "Trees",
+  "closeModal": "Close modal window?",
+  "back": "Back",
+  "mapText": "Map",
+  "textTreeAmount": "Number of Trees",
+  "textArea": "District Area",
+  "textKM": "km",
+  "textPieces": "pcs",
+  "loading": "Loading",
+  "theme": {
+    "default": "Colorful",
+    "grey": "Gray"
+  },
+  "nav": {
+    "plantTrees": "Plant Trees",
+    "aboutProject": "About the Project",
+    "contacts": "Contact Us",
+    "infographics": "Infographics",
+    "volunteers": "Volunteers",
+    "news": "News",
+    "settings": "Developer Panel",
+    "btnTitle": "Open navigation panel"
+  },
+  "cities": {
+    "tashkent": "Tashkent"
+  },
+  "fontSize": "Font Size",
+  "error404": {
+    "title": "Page Not Found",
+    "description": "Oops, something went wrong!",
+    "link": "Homepage"
+  },
+  "aboutProject": {
+    "about": "About the Project",
+    "tech": "Technologies"
+  },
+  "form": {
+    "fullname": {
+      "label": "Please introduce yourself",
+      "inputText": "First and Last Name"
+    },
+    "email": {
+      "label": "Enter your email address",
+      "inputText": "Email Address"
+    },
+    "text": {
+      "label": "Please write what you would like to say",
+      "inputText": "Enter text",
+      "warning": "No more than 1200 characters"
+    },
+    "coordinates": {
+      "label": "Optionally add coordinates",
+      "placeholder": "Format: 41.2995, 69.2401",
+      "title": "Determine your geolocation?"
+    },
+    "files": {
+      "label": "If you have something to share, you can attach it here",
+      "labelBottom": "You can attach up to 5 files in jpeg or png format, each file no larger than 5 MB."
+    },
+    "phone": {
+      "label": "Optionally, you can share your phone number",
+      "inputText": "+998"
+    },
+    "submit": {
+      "buttonText": "Submit"
+    }
+  },
+  "contacts_title": "Contact Us",
+  "complain_title": "Report an Issue",
+  "changeMap": {
+    "layerText1": "Satellite",
+    "layerText2": "Light",
+    "layerText3": "Dark"
+  },
+  "treeProps": {
+    "type": "Genus",
+    "height": "Height",
+    "thickness": "Trunk Thickness",
+    "diameter": "Diameter",
+    "address": "Address",
+    "coordinates": "Coordinates",
+    "volunteer": "Volunteers",
+    "balanceHolder": "Balance Holder",
+    "dateUpdated": "Last Updated",
+    "complainBtnTitle": "Report an Issue",
+    "copy": "Copy",
+    "cm": "cm",
+    "m": "m"
+  },
+  "sortAccordition": {
+    "title": "Sorting",
+    "sortVolunteersText": "Volunteers",
+    "sortByTree": {
+      "search": {
+        "label": "Search",
+        "inputPlaceholder": "Enter the first three characters"
+      },
+      "treeParams": {
+        "label": "Tree Parameters",
+        "thickness": "By Trunk Thickness",
+        "height": "By Height",
+        "thickness2": "By Crown Width",
+        "thicknessMaxValue": "cm",
+        "heightMaxValue": "m",
+        "thickness2MaxValue": "m"
+      }
+    },
+    "sortByVolunteers": {
+      "search": {
+        "label": "Search",
+        "inputPlaceholder": "Enter the first three characters"
+      }
+    },
+    "copyBtn": "Copy",
+    "copyText": "Copy link",
+    "copied": "Copied",
+    "treeQtyLabel": "trees",
+    "activityText": "Activity",
+    "inactive": "Inactive",
+    "active": "Active",
+    "status": "Status",
+    "rankingText": "Ranking Place"
+  },
+  "privacyPolicy": "Privacy Policy",
+  "dtash": {
+    "title1": "Department",
+    "title2": "of Digital",
+    "title3": "Development"
+  },
+  "searchBar": {
+    "openButtonText": "Open",
+    "closeButtonText": "Close",
+    "selectSearchType": "Select Search Type",
+    "address": "Address",
+    "coordinates": "Coordinates",
+    "searchInputPlaceholder": "Enter address",
+    "searchText": "Search"
+  },
+  "mapParams": {
+    "label": "Map Parameters",
+    "maxallas": "Neighborhoods",
+    "areas": "Districts",
+    "parks": "Parks",
+    "ndvi": "NDVI",
+    "ndviText": "NDVI (Normalized Difference Vegetation Index) is a numerical indicator of vegetation quality and quantity on a plot of land. It is calculated from satellite images and depends on how plants reflect and absorb light waves of different lengths.",
+    "plantedYears": "Areas with long-term plantings",
+    "areaOpacity": "District Transparency",
+    "enablePopups": "Enable Popups",
+    "tdi": "TDI (Tile Density Index) — is a numerical indicator of tree density in a given area. It is calculated based on spatial data of tree tiles obtained from geospatial data or satellite imagery. The index depends on the number of trees, their distribution, and characteristics within each tile, allowing for the assessment of forest area density and the identification of changes or anomalies in forested regions."
+  },
+  "modalPayForm": {
+    "title": "We are glad you are interested in the service. Currently, donations are suspended. We promise everything will be up and running soon. Thank you for your understanding!"
+  },
+  "volunteerRankings": {
+    "name": "Volunteer Rankings",
+    "tabs": {
+      "wholePeriod": "Whole Period",
+      "perYear": "Per Year",
+      "perQuartile": "Per Quarter",
+      "perMonth": "Per Month",
+      "perWeek": "Per Week",
+      "yesterday": "Yesterday",
+      "today": "Today"
+    },
+    "filterInput": {
+      "placeholder": "Enter Name"
+    },
+    "table": {
+      "headers": {
+        "number": "№",
+        "volunteer": "Volunteer",
+        "activity": "Activity",
+        "treeQty": "Trees"
+      }
+    },
+    "showVolunteer": {
+      "fullname": "",
+      "treeQty": 0,
+      "treeQtyLabel": "trees",
+      "rankingPlaceLabel": "Ranking Place",
+      "rankingPlaceNum": 0,
+      "status": "",
+      "shareBtnLabel": "Share"
+    }
+  },
+  "results": {
+    "name": "Results",
+    "title": "Overall Results",
+    "treeQty": 0,
+    "treeQtyLabel": "trees",
+    "rankingPlaceLabel": "Ranking Place",
+    "rankingPlaceNum": 0,
+    "activityText": "Activity",
+    "activity": ""
+  },
+  "volunteerShare": {
+    "copyBtn": "Copy",
+    "copyText": "Copy link",
+    "treeQtyLabel": "trees",
+    "activityText": "Activity",
+    "inactive": "Inactive",
+    "rankingText": "Ranking Place"
+  },
+  "closeBtn": "Close",
+  "plantTreesView": {
+    "title": "How many trees should be planted?",
+    "forText": "",
+    "somText": "soum",
+    "treeText": "trees",
+    "donat": {
+      "title": "If you don't need a report on planted trees but want to support us, you can make a donation to our project.",
+      "btnTitle": "Make a Donation"
+    },
+    "certificate": {
+      "title": "Electronic Certificate",
+      "description": "The certificate is activated after gifting 3 trees.",
+      "label": "Your name for the certificate",
+      "placeholder": "Enter name"
+    },
+    "payment": {
+      "title": "Payment",
+      "block1": {
+        "labelPayment": "You are paying for planting:",
+        "labelCertificate": "Certificate:",
+        "labelCertificateType": "Electronic format",
+        "labelOverall": "Total:"
+      },
+      "block2": {
+        "labelFullname": "Full Name",
+        "labelFullnamePlaceholder": "Enter Full Name",
+        "labelPhone": "Your Phone",
+        "labelPhonePlaceholder": "+998",
+        "labelEmail": "Your Email",
+        "labelEmailPlaceholder": "Enter Email",
+        "submitBtn": "Proceed to Payment"
+      }
+    },
+    "achievements": {
+      "title": "Our Achievements",
+      "1": {
+        "treeCount": 0,
+        "label": "trees",
+        "description": "Planted from 2015-2021 under the 'Green Breath' program with partner companies in Tashkent."
+      },
+      "2": {
+        "peopleCount": 0,
+        "label": "people",
+        "description": "Residents of the 'Green Breath' project. Our style is online, supporting from home using our service."
+      },
+      "3": {
+        "ton": 0,
+        "label": "tons",
+        "description": "Carbon dioxide (SO2) offset by tree planting."
+      }
+    }
+  },
+  "noPhoto": "No Photo",
+  "coord": "You are within 50 meters of this point"
+}

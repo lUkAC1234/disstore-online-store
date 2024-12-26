@@ -31,9 +31,9 @@ html {
   }
 }
 
-// HEADER-CONTENT-FOOTER POSITIONS 
+// HEADER-CONTENT-FOOTER POSITIONS
 
-body {
+body #app {
   margin: 0;
   display: grid;
   grid-template-areas:
@@ -48,16 +48,16 @@ body {
 }
 
 .header {
-  grid-area: header;
+  grid-area: "header";
 }
 
 .main {
-  grid-area: content;
+  grid-area: "content";
   background: var(--background-white);
 }
 
 .footer {
-  grid-area: footer;
+  grid-area: "footer";
 }
 
 // HEADER-CONTENT-FOOTER POSITIONS END

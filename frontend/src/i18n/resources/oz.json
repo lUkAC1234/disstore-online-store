@@ -1,0 +1,284 @@
+﻿{
+  "maxFileSizeWarning": {
+    "1": "Nomli fayl",
+    "2": "ogʻirligi",
+    "3": "megabayt",
+    "4": "bir fayl uchun ruxsat etilgan maksimal hajm"
+  },
+  "maxFileCountWarning": {
+    "1": "Siz",
+    "2": "tadan koʻproq fotosurat tanladingiz",
+    "3": "iltimos, yana bir marta urinib koʻring va 5 tadan koʻproq fotosurat qoʻshmang!"
+  },
+  "treesTDI": {
+    "level1": "aniq 0",
+    "level2": "0 dan 50 gacha",
+    "level3": "50 dan 100 gacha",
+    "level4": "100 dan 200 gacha",
+    "level5": "200 dan 400 gacha",
+    "level6": "400 dan yuqori",
+    "title": "Bir gektardagi daraxtlar soni"
+  },
+  "locations": {
+    "protocolWarning": "Himoyalanmagan saytida joylashuvni aniqlab bo'lmaydi",
+    "error": "Geolokatsiyani aniqlashda xato, ehtimol sozlamalaringizda o'chirilgan!"
+  },
+  "trees": "Daraxtlar",
+  "closeModal": "Modal oynani yopishmi?",
+  "back": "Orqaga",
+  "mapText": "karta",
+  "textTreeAmount": "Daraxtlar soni",
+  "textArea": "Hudud maydoni",
+  "textKM": "km",
+  "textPieces": "dona",
+  "loading": "Loading",
+  "theme": {
+    "default": "Rangli",
+    "grey": "Kulrang"
+  },
+  "nav": {
+    "plantTrees": "Daraxtlarni ekish",
+    "aboutProject": "Loyiha haqida",
+    "contacts": "Qayta aloqa",
+    "infographics": "Infografika",
+    "volunteers": "Volontyorlar",
+    "news": "Yangiliklar",
+    "settings": "Панель разработчика",
+    "btnTitle": "Navigatsiya panelini ochish"
+  },
+  "cities": {
+    "tashkent": "Toshkent"
+  },
+  "fontSize": "Shrift hajmi",
+  "error404": {
+    "title": "Sahifa topilmadi",
+    "description": "Voy, nimadir noto'g'ri ketdi!",
+    "link": "Bosh sahifa"
+  },
+  "aboutProject": {
+    "about": "Loyiha haqida",
+    "tech": "Texnologiyalar"
+  },
+  "form": {
+    "fullname": {
+      "label": "O'zingizni tanishtiring",
+      "inputText": "Ism va familiya"
+    },
+    "email": {
+      "label": "Elektron pochtangizni kiriting",
+      "inputText": "Elektron pochtangiz"
+    },
+    "text": {
+      "label": "Iltimos, nima demoqchi bo'lganingizni yozing",
+      "inputText": "Matn kiriting",
+      "warning": "1200 ta belgidan oshmasin"
+    },
+    "coordinates": {
+      "label": "Ixtiyoriy ravishda koordinatalarni qo'shing",
+      "placeholder": "Format: 41.2995, 69.2401",
+      "title": "Geolokatsiyangizni aniqlaysizmi?"
+    },
+    "files": {
+      "label": "Agar baham ko'rmoqchi bo'lgan narsangiz bo'lsa, uni shu yerga biriktirishingiz mumkin",
+      "labelBottom": "Jpeg va png formatidagi 5 tadan ko'p bo'lmagan, har bir fayl 5 MB dan ortiq bo'lmagan faylni biriktirishga ruxsat beriladi."
+    },
+    "phone": {
+      "label": "Agar xohlasangiz, telefon raqamingizni baham ko'rishingiz mumkin",
+      "inputText": "+998"
+    },
+    "submit": {
+      "buttonText": "Yuborish"
+    }
+  },
+  "contacts_title": "Qayta aloqa",
+  "complain_title": "Shikoyat qilish",
+  "changeMap": {
+    "layerText1": "Sputnik",
+    "layerText2": "Yorug‘ rejim",
+    "layerText3": "Tungi rejim"
+  },
+  "treeProps": {
+    "type": "Daraxt turi",
+    "height": "Balandligi",
+    "thickness": "Qalinligi",
+    "diameter": "Diameter",
+    "address": "Adresi",
+    "coordinates": "Coordinatalar",
+    "volunteer": "Ixtiyoriy ishchi",
+    "balanceHolder": "Balans egasi",
+    "dateUpdated": "Oxirgi sana yangilandi",
+    "complainBtnTitle": "Shikoyat qilish",
+    "copy": "Nusxalash",
+    "cm": "sm",
+    "m": "m"
+  },
+  "sortAccordition": {
+    "title": "Saralash",
+    "sortVolunteersText": "Volontyorlar",
+    "sortByTree": {
+      "search": {
+        "label": "Qidirish",
+        "inputPlaceholder": "Dastlabki uchta belgini kiriting"
+      },
+      "treeParams": {
+        "label": "Daraxt tasnifi",
+        "thickness": "Tanasining qalinligi",
+        "height": "Balandlik boʻyicha",
+        "thickness2": "Shox-shabbalari kengligi",
+        "thicknessMaxValue": "sm",
+        "heightMaxValue": "m",
+        "thickness2MaxValue": "m"
+      }
+    },
+    "sortByVolunteers": {
+      "search": {
+        "label": "Qidirish",
+        "inputPlaceholder": "Dastlabki uchta belgini kiriting"
+      }
+    },
+    "copyBtn": "Nusxa olish",
+    "copyText": "Havolani nusxalash",
+    "copied": "Nusxalandi",
+    "treeQtyLabel": "daraxtlar",
+    "activityText": "Faollik",
+    "inactive": "Faol emas",
+    "active": "Faol",
+    "status": "Status",
+    "rankingText": "Reytingdagi o‘rni"
+  },
+  "privacyPolicy": "Maxfiylik siyosati",
+  "dtash": {
+    "title1": "Raqamli",
+    "title2": "rivojlanish",
+    "title3": "departamenti"
+  },
+  "searchBar": {
+    "openButtonText": "Ochish",
+    "closeButtonText": "Yopish",
+    "selectSearchType": "Qidirish turini tanlang",
+    "address": "Manzil",
+    "coordinates": "Koordinatalar",
+    "searchInputPlaceholder": "Manzilni kiriting",
+    "searchText": "Qidirish"
+  },
+  "mapParams": {
+    "label": "Xarita ko‘rsatkichlari",
+    "maxallas": "Mahallalar",
+    "areas": "Tumanlar",
+    "parks": "Bog'lar",
+    "ndvi": "NDVI",
+    "ndviText": "NDVI (Normallashtirilgan vegetatsiya indeksi) - maydondagi o‘simliklar sifati va sonining raqamli ko‘rsatkichi. U sunʼiy yo‘ldoshlar tasvirlari asosida hisob chiqilgan va o‘simliklarning turli uzunlikdagi yorug‘lik to‘lqinlarini chiqarishiga va yutishiga bog‘liq.",
+    "plantedYears": "Ko‘p yillik o‘simliklar ekilgan maydonlar",
+    "areaOpacity": "Rayonlarning shaffofligi",
+    "enablePopups": "Qalqib chiquvchilar",
+    "tdi": "TDI (Tile Density Index) — bu belgilangan hududdagi daraxtlar zichligini ko'rsatadigan sonli ko'rsatkich. U daraxtlar tayllari bo'yicha joylashuv ma'lumotlari yoki sun'iy yo'ldosh tasvirlari asosida hisoblanadi. Indeks daraxtlar soni, ularning taqsimlanishi va har bir taylda joylashuv xususiyatlariga bog'liq bo'lib, o'rmon hududlari zichligini baholash va o'rmon massividagi o'zgarishlarni yoki anomaliyalarni aniqlash imkonini beradi."
+  },
+  "modalPayForm": {
+    "title": "Xizmatga qiziqish bildirganingizdan xursandmiz. Hozirda xayriyalar to‘xtatilgan. Tez orada hamma narsa ishlaydi deb va'da beramiz. Tushunganingiz uchun rahmat!"
+  },
+  "volunteerRankings": {
+    "name": "Ko‘ngillilar reytingi",
+    "tabs": {
+      "wholePeriod": "Barcha davr",
+      "perYear": "Bir yil ichida",
+      "perQuartile": "Chorak uchun",
+      "perMonth": "Bir oy uchun",
+      "perWeek": "Bir hafta uchun",
+      "yesterday": "Kechagi kunda",
+      "today": "Bugungi kunda"
+    },
+    "filterInput": {
+      "placeholder": "Ismni kiriting"
+    },
+    "table": {
+      "headers": {
+        "number": "№",
+        "volunteer": "Ko‘ngilli",
+        "activity": "Faoliyat",
+        "treeQty": "Daraxtlar"
+      }
+    },
+    "showVolunteer": {
+      "fullname": "",
+      "treeQty": 0,
+      "treeQtyLabel": "daraxtlar",
+      "rankingPlaceLabel": "Reytingdagi o'rin",
+      "rankingPlaceNum": 0,
+      "status": "",
+      "shareBtnLabel": "Ulashish"
+    }
+  },
+  "results": {
+    "name": "Natijalar",
+    "title": "Umumiy natijalar",
+    "treeQty": 0,
+    "treeQtyLabel": "daraxtlar",
+    "rankingPlaceLabel": "Reytingdagi o'rin",
+    "rankingPlaceNum": 0,
+    "activityText": "Faoliyat",
+    "activity": ""
+  },
+  "volunteerShare": {
+    "copyBtn": "Nusxalash",
+    "copyText": "Havolani nusxalash",
+    "treeQtyLabel": "daraxtlar",
+    "activityText": "Faoliyat",
+    "inactive": "Faol emas",
+    "rankingText": "Reytingdagi o'rin"
+  },
+  "closeBtn": "Yopish",
+  "plantTreesView": {
+    "title": "Nechta daraxt ekish kerak?",
+    "forText": "uchun",
+    "somText": "so‘m",
+    "treeText": "daraxt",
+    "donat": {
+      "title": "Agar ekilgan daraxtlar haqida hisobot kerak bo'lmasa, lekin bizni qo'llab-quvvatlamoqchi bo'lsangiz loyihamizga xayriya qilishingiz mumkin.",
+      "btnTitle": "Xayriya qilish"
+    },
+    "certificate": {
+      "title": "Elektron sertifikat",
+      "description": "Sertifikat 3 ta daraxt hadya qilinganidan keyin faollashadi",
+      "label": "Sertifikat uchun sizning ismingiz",
+      "placeholder": "Ism kiriting"
+    },
+    "payment": {
+      "title": "To‘lov",
+      "block1": {
+        "labelPayment": "Siz ekish uchun to‘lov qilasiz:",
+        "labelCertificate": "Sertifikat:",
+        "labelCertificateType": "Elektron ko‘rinish",
+        "labelOverall": "Jami:"
+      },
+      "block2": {
+        "labelFullname": "F.I.Sh",
+        "labelFullnamePlaceholder": "F.I.Sh kiriting",
+        "labelPhone": "Telefon raqamingiz",
+        "labelPhonePlaceholder": "+998",
+        "labelEmail": "Elektron pochtangiz",
+        "labelEmailPlaceholder": "Elektron pochta kiriting",
+        "submitBtn": "To‘lovga o‘tish"
+      }
+    },
+    "achievements": {
+      "title": "Bizning yutuqlarimiz",
+      "1": {
+        "treeCount": 0,
+        "label": "daraxtlar",
+        "description": "2015-2021 yillarda “Yashil nafas” dasturi doirasida Toshkent shahridagi sherik kompaniyalar bilan birgalikda amalga oshirildi."
+      },
+      "2": {
+        "peopleCount": 0,
+        "label": "kishi",
+        "description": "“Yashil nafas” loyihasi rezidentlari Xizmatimizdan foydalanish bilan uydan chiqmasdan, onlayn uslubimiz qo‘llab-quvvatlanmoqda"
+      },
+      "3": {
+        "ton": 0,
+        "label": "tonna",
+        "description": "Daraxt ekishlar orqali SO2 karbonat angidrid qoplangan"
+      }
+    }
+  },
+  "noPhoto": "Rasm yo'q",
+  "coord": "Siz bu nuqtadan 50 metr masofada joylashgansiz"
+}

@@ -1,0 +1,10 @@
+import "assets/main/fonts/montserrat/montserrat-italic-cyrillic-ext.woff2";
+import "assets/main/fonts/montserrat/montserrat-italic-cyrillic.woff2";
+import "assets/main/fonts/montserrat/montserrat-italic-latin-ext.woff2";
+import "assets/main/fonts/montserrat/montserrat-italic-latin.woff2";
+import "assets/main/fonts/montserrat/montserrat-italic-vietnamese.woff2";
+import "assets/main/fonts/montserrat/montserrat-normal-cyrillic-ext.woff2";
+import "assets/main/fonts/montserrat/montserrat-normal-cyrillic.woff2";
+import "assets/main/fonts/montserrat/montserrat-normal-latin-ext.woff2";
+import "assets/main/fonts/montserrat/montserrat-normal-latin.woff2";
+import "assets/main/fonts/montserrat/montserrat-normal-vietnamese.woff2";

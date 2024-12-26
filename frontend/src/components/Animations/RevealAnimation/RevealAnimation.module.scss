@@ -1,0 +1,12 @@
+/* Styles for RevealAnimation component */
+.container {
+  display: block;
+  visibility: hidden;
+  filter: opacity(0) blur(10px);
+  transition: visibility 300ms, filter 300ms;
+
+  &--reveal {
+    visibility: visible;
+    filter: opacity(1) blur(0);
+  }
+}

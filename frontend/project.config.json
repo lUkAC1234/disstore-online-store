@@ -1,0 +1,38 @@
+{
+  "debug": false,
+  "reactDevTools": true,
+  "origin": "https://api-green.tashkent.uz",
+  "timeline": {
+    "from": "2024-06-11"
+  },
+  "layers": {
+    "ndvi": {
+      "opacity": 0.45,
+      "isActive": true
+    },
+    "maxalla": true,
+    "areas": true,
+    "parks": false,
+    "old-trees": false,
+    "areas-opacity": {
+      "opacity": 1,
+      "isActive": true
+    },
+    "show_verified": false,
+    "show_filters": false
+  },
+  "metaLocales": {
+    "ru": {
+      "description": "Проект предназначен для инвентаризации деревьев в городе Ташкент"
+    },
+    "uz": {
+      "description": "Лойиҳа Тошкент шаҳридаги дарахтларни инвентаризация қилиш учун мўлжалланган"
+    },
+    "oz": {
+      "description": "Loyiha Toshkent shahridagi daraxtlarni inventarizatsiya qilish uchun mo‘ljallangan"
+    },
+    "en": {
+      "description": "The project is intended for the inventory of trees in the city of Tashkent"
+    }
+  }
+}
