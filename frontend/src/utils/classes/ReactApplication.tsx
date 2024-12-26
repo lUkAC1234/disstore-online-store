@@ -79,8 +79,8 @@ class ReactApplication {
     if (!metaLocales?.[i18next.language]?.description) {
       return;
     }
-    const consoleStyles: string = "background-color:#71AA0E;color:white;font-size:20px;padding:40px;";
-    console.log(`%cGreen Tashkent - ${metaLocales?.[i18next.language]?.description}`, consoleStyles);
+    const consoleStyles: string = "background-color:#111;color:white;font-size:20px;padding:40px;";
+    console.log(`%cDISSTORE - ${metaLocales?.[i18next.language]?.description}`, consoleStyles);
   }
 
   public logDevMessage(): void {

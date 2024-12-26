@@ -7,7 +7,8 @@ import UIReact from "utils/classes/UIReact";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 import Header from "../Header/Header";
 
-const Home = lazy(() => import("components/Views/Home"));
+const Home = lazy(() => import("components/Views/Home/Home"));
+const Catalog = lazy(() => import("components/Views/Catalog"));
 const Error404 = lazy(() => import("components/Views/404"));
 
 @COMPONENT<RouterView>({
@@ -32,7 +33,7 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
     routesMap: new Map([
       ["/", { path: "/", element: <Navigate to={`/${this.props.i18n.language}`} />, index: true }],
       ["/:lang", { path: "/:lang", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Home /></Suspense>, index: true }],
-      ["/:lang/catalog", { path: "/:lang/catalog", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}>Catalog</Suspense> }],
+      ["/:lang/catalog", { path: "/:lang/catalog", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Catalog /></Suspense> }],
       ["/*", { path: "/*", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Error404 /></Suspense> }],
     ]),
   };

@@ -1,9 +1,13 @@
-import React, { PureComponent } from "react";
+import { PureComponent, ReactNode } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import Casual from "assets/main/images/main-page/casual.webp"
+import BrandsSection from "./BrandsSection";
+import welcomeImage from "assets/main/images/main-page/welcomeImage.webp";
 
 class MainPage extends PureComponent {
-  render(): React.ReactNode {
+
+  render(): ReactNode {
     return (
       <>
         <section className="welcome-section">
@@ -49,7 +53,7 @@ class MainPage extends PureComponent {
             </div>
             <div className="welcome-image-column fade fadeInRight">
               <img
-                src="/static/main/images/main-page/welcomeImage.webp"
+                src={welcomeImage}
                 alt="Fashion people"
                 loading="lazy"
                 decoding="async"
@@ -58,22 +62,7 @@ class MainPage extends PureComponent {
           </div>
         </section>
 
-        <section className="brands-section">
-          <div className="brands-container">
-            {["versace", "zara", "gucci", "prada", "calvinKlein"].map(
-              (brand, index) => (
-                <div key={index} className="brands-column fade fadeInUp">
-                  <img
-                    src={`/static/main/images/brands/${brand}.webp`}
-                    alt={`${brand} brand`}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              )
-            )}
-          </div>
-        </section>
+        <BrandsSection />
 
         <section className="swiper-section new-clothes-section">
           <div className="swiper-main-container new-clothes-container">
@@ -181,6 +170,119 @@ class MainPage extends PureComponent {
                 loading="lazy"
                 decoding="async"
               />
+            </div>
+          </div>
+        </section>
+
+        <section className="browse-style-section">
+          <div className="browse-style-container">
+            <h2 className="browse-style-subtitle fade fadeInDown">Поиск по стилю одежды</h2>
+            <div className="browse-style-wrapper first">
+              <a href="" className="browse-style-column casual">
+                <h3 className="browse-style-column-title fade fadeInUp">Повседневный</h3>
+                <div className="browse-style-column-image-container">
+                  <img
+                    src={Casual}
+                    alt="Offer image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </a>
+              <a href="" className="browse-style-column formal">
+                <h3 className="browse-style-column-title fade fadeInRight">Формальный</h3>
+                <div className="browse-style-column-image-container">
+                  <img src="static 'main/images/main-page/formal.webp'" alt="Formal clothes" loading="lazy" decoding="async" />
+                </div>
+              </a>
+            </div>
+            <div className="browse-style-wrapper second">
+              <a href="" className="browse-style-column party">
+                <h3 className="browse-style-column-title fade fadeInLeft">Вечеринка</h3>
+                <div className="browse-style-column-image-container">
+                  <img src="static 'main/images/main-page/party.webp'" alt="Party clothes" loading="lazy" decoding="async" />
+                </div>
+              </a>
+              <a href="" className="browse-style-column gym">
+                <h3 className="browse-style-column-title fade fadeInDown">Спортзал</h3>
+                <div className="browse-style-column-image-container">
+                  <img src="static 'main/images/main-page/gym.webp'" alt="Gym clothes" loading="lazy" decoding="async" />
+                </div>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section className="feedbacks-section">
+          <div className="swiper-main-container feedbacks-container">
+            <div className="feedbacks-title-section">
+              <h2 className="swiper-subtitle feedbacks-subtitle fade fadeInDown">Наши довольные клиенты</h2>
+              <div className="swiper-buttons-together-right-container swiper-buttons-feedbacks-container fade fadeInUp">
+                <div className="swiper-button-prev loop-button-feedbacks-prev">
+                  <i className="fa-solid fa-arrow-left"></i>
+                </div>
+                <div className="swiper-button-next loop-button-feedbacks-next">
+                  <i className="fa-solid fa-arrow-right"></i>
+                </div>
+              </div>
+            </div>
+            <div className="swiper mySwiper-feedbacks">
+              <div className="feedbacks-wrapper swiper-wrapper">
+                <div className="feedbacks-column swiper-slide">
+                  <div className="feedbacks-content">
+                    <div className="feedback-rate-container">
+                      <img src="static 'main/images/main-page/5star.png'" alt="" />
+                    </div>
+                    <h5 className="feedbacks-username">Sarah M.</h5>
+                    <p className="feedbacks-text">I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.</p>
+                  </div>
+                </div>
+                <div className="feedbacks-column swiper-slide">
+                  <div className="feedbacks-content">
+                    <div className="feedback-rate-container">
+                      <img src="static 'main/images/main-page/5star.png'" alt="" />
+                    </div>
+                    <h5 className="feedbacks-username">Sarah M.</h5>
+                    <p className="feedbacks-text">I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.</p>
+                  </div>
+                </div>
+                <div className="feedbacks-column swiper-slide">
+                  <div className="feedbacks-content">
+                    <div className="feedback-rate-container">
+                      <img src="static 'main/images/main-page/5star.png'" alt="" />
+                    </div>
+                    <h5 className="feedbacks-username">Sarah M.</h5>
+                    <p className="feedbacks-text">I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.</p>
+                  </div>
+                </div>
+                <div className="feedbacks-column swiper-slide">
+                  <div className="feedbacks-content">
+                    <div className="feedback-rate-container">
+                      <img src="static 'main/images/main-page/5star.png'" alt="" />
+                    </div>
+                    <h5 className="feedbacks-username">Sarah M.</h5>
+                    <p className="feedbacks-text">I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.</p>
+                  </div>
+                </div>
+                <div className="feedbacks-column swiper-slide">
+                  <div className="feedbacks-content">
+                    <div className="feedback-rate-container">
+                      <img src="static 'main/images/main-page/5star.png'" alt="" />
+                    </div>
+                    <h5 className="feedbacks-username">Sarah M.</h5>
+                    <p className="feedbacks-text">I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.</p>
+                  </div>
+                </div>
+                <div className="feedbacks-column swiper-slide">
+                  <div className="feedbacks-content">
+                    <div className="feedback-rate-container">
+                      <img src="static 'main/images/main-page/5star.png'" alt="" />
+                    </div>
+                    <h5 className="feedbacks-username">Sarah M.</h5>
+                    <p className="feedbacks-text">I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
