@@ -17,7 +17,7 @@ class FadeInAnimationAPI {
   ];
 
   private animationOptions: number | KeyframeAnimationOptions = {
-    duration: 400,
+    duration: 300,
   };
 
   constructor(node: HTMLElement, init?: FadeInAnimationAPIInit) {

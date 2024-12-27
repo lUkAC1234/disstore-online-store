@@ -49,14 +49,17 @@
         background: var(--text-black);
     }
 
-    i {
+    svg {
         font-size: 1.5rem;
-        color: var(--text-black);
-        transition: all 0.3s ease;
+
+        path {
+            fill: var(--text-black);
+            transition: all 0.3s ease;
+        }
     }
 
-    &:hover i {
-        color: var(--text-white);
+    &:hover svg path {
+        fill: var(--text-white);
     }
 }
 
@@ -147,7 +150,7 @@
         width: 2.25rem;
         height: 2.25rem;
 
-        i {
+        svg {
             font-size: 1.25rem;
         }
     }

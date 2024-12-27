@@ -19,6 +19,7 @@ class UIFancybox extends PureComponent<UIFancyboxProps> {
   static loadedFancybox: boolean = false;
 
   defaultOptions: Partial<OptionsType> = {
+    "hideScrollbar": false,
     on: {
       "init": () => {
         this.props.setFancyboxAttachStatus(true);

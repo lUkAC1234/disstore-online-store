@@ -6,6 +6,7 @@ import { COMPONENT } from "services/utils/Injectors";
 import UIReact from "utils/classes/UIReact";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 const Home = lazy(() => import("components/Views/Home/Home"));
 const Catalog = lazy(() => import("components/Views/Catalog"));
@@ -22,7 +23,7 @@ const Error404 = lazy(() => import("components/Views/404"));
           </Routes>
           <Outlet />
         </main>
-        <footer className="footer">Footer</footer>
+        <Footer />
       </>
     );
   }

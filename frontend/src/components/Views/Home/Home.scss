@@ -1,3 +1,5 @@
+@import "assets/main/styles/scss/components/_components";
+
 .main {
     overflow-x: hidden !important;
     margin-top: 6rem;
@@ -313,7 +315,7 @@
 // NEW ARRIVALS
 
 .swiper-section {
-    margin-block: 6rem;
+    margin-block: 3rem;
 }
 
 .swiper-main-container {
@@ -406,15 +408,18 @@
 
 .swiper-buttons-together-right-container {
     position: absolute;
-    bottom: 3rem;
+    bottom: 3.25rem;
     right: 0;
     z-index: var(--z-index-2);
-    width: 8rem;
+    width: 7.25rem;
 }
 
 .swiper-button-prev,
 .swiper-button-next {
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 3.25rem;
     width: 3.25rem;
     background: var(--text-black);
@@ -424,15 +429,29 @@
     transition: all 0.3s ease;
     color: var(--text-white);
     z-index: 100;
+    cursor: pointer;
 
-    &::after {
-        font-size: 0.75rem;
+    svg {
+        font-size: 1.25rem;
+    }
+
+    svg path {
+        fill: var(--text-white);
+        transition: all 0.3s ease;
     }
 
     &:hover {
         background-color: var(--text-white);
         color: var(--text-black);
     }
+
+    &:hover svg path {
+        fill: var(--text-black);
+    }
+}
+
+.swiper-button-next {
+    right: 0;
 }
 
 .view-all-clothes-link-container {
@@ -464,7 +483,7 @@
 // EXTRA OFFER SECTION STARTS
 
 .extra-offer-section {
-    margin-block: 6rem;
+    margin-block: 3rem;
 }
 
 .extra-offer-container {
@@ -490,7 +509,7 @@
     place-content: center;
     width: 40vw;
     height: 40rem;
-    background: url('../../images/main-page/offer.webp') no-repeat center center / cover;
+    background: url('assets/main/images/main-page/offer.webp') no-repeat center center / cover;
     border-radius: 1.5rem 0 0 1.5rem;
     padding: 2rem 2rem;
 }
@@ -590,6 +609,9 @@
 }
 
 @media screen and (max-width: 500px) {
+    .extra-offer-section {
+        margin-bottom: 0;
+    }
     .extra-offer-title {
         font-size: 2.5rem;
     }
@@ -623,7 +645,11 @@
 // BROWSE STYLE STARTS
 
 .browse-style-section {
-    margin-block: 6rem;
+    margin-block: 3rem;
+
+    @media screen and (max-width: 500px) {
+        margin-top: 0;
+    }
 }
 
 .browse-style-container {
@@ -753,7 +779,6 @@
 
 .mySwiper-feedbacks {
     width: 100%;
-    padding-inline: 0.5rem;
 }
 
 .feedbacks-title-section {
@@ -790,6 +815,10 @@
     @media screen and (max-width: 1400px) {
         margin-top: 1.5rem;
     }
+
+    @media screen and (max-width: 700px) {
+        margin-top: 0;
+    }
 }
 
 .loop-button-feedbacks-prev,
@@ -802,24 +831,24 @@
     width: 2rem;
     height: fit-content;
     border: unset;
-
-    &::before {
-        content: "";
-    }
-
-    &::after {
-        content: "";
-    }
-    i {
-        color: var(--text-black);
+    
+    svg {
         font-size: 1.5rem;
+    }
+
+    svg path {
+        fill: var(--text-black);
+    }
+
+    &:hover svg path {
+        opacity: 0.8;
     }
 }
 
 .feedbacks-column {
     background-color: var(--text-white);
     padding: 2rem 1rem;
-    box-shadow: 0px 0px 0.5rem 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.1);
     border-radius: 1rem;
 }
 

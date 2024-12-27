@@ -35,21 +35,6 @@ class BrandsSection extends PureComponent<BrandsSectionProps, BrandsSectionState
         ]
     };
 
-    componentDidMount(): void {
-        setTimeout(() => {
-            this.setState(prevState => {
-                const originalBrands = [...prevState.brands];
-                originalBrands.push(gucci);
-                originalBrands.push(zara);
-                originalBrands.push(prada);
-                originalBrands.push(calvinKlein);
-                return {
-                    ...prevState,
-                    brands: originalBrands
-                }
-            })
-        }, 5000);
-    }
     render(): ReactNode {
         return (
             <section className="brands-section">

@@ -138,11 +138,11 @@
         outline: none;
         cursor: pointer;
 
-        &:hover i {
+        &:hover svg {
             opacity: 0.8;
         }
 
-        i {
+        svg {
             font-size: 1rem;
             transition: all 0.3s ease;
         }
@@ -181,7 +181,7 @@
     background: none;
     cursor: pointer;
 
-    i {
+    svg {
         font-size: 1rem;
         color: var(--text-icon);
         transition: all 0.3s ease;
@@ -224,7 +224,7 @@
     border: none;
     cursor: pointer;
 
-    i {
+    svg {
         font-size: 1.25rem;
     }
 }
@@ -305,7 +305,7 @@
             opacity: 0.8;
         }
 
-        i {
+        svg {
             font-size: 1.25rem;
             transition: all 0.3s ease;
         }
@@ -430,8 +430,8 @@
 
     .header-search-container {
 
-        a i,
-        i {
+        a svg,
+        svg {
             font-size: 1.25rem;
             color: var(--text-black);
         }

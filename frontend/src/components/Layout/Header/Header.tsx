@@ -1,17 +1,100 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import LogoSvg from "assets/main/images/layout/logo.svg";
 import i18next from "i18next";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faXmark,
+  faBars,
+  faHeart,
+  faArrowRightLong,
+  faArrowLeftLong,
+  faMagnifyingGlass,
+  faUser,
+  faCartShopping
+} from '@fortawesome/free-solid-svg-icons';
 
 const lang: string = i18next.language;
 
 function Header(): ReactNode {
+  const searchInputContainerRef = useRef<HTMLDivElement>(null);
+  const headerLinksContainerRef = useRef<HTMLDivElement>(null);
+  const [activeLink, setActiveLink] = useState<string | null>(null);
+
+  useEffect(() => {
+    const searchButton = document.getElementById("searchButton");
+    const closeButton = document.querySelector(".mobile-search-close");
+    const mobileVersionButton = document.querySelector(".mobile-version-button");
+    const mobileVersionCloseButton = document.querySelector(".mobile-version-close-button");
+
+    const toggleSearchInput = () => {
+      if (searchInputContainerRef.current) {
+        searchInputContainerRef.current.classList.toggle("active");
+      }
+    };
+
+    const closeSearchInput = () => {
+      if (searchInputContainerRef.current) {
+        searchInputContainerRef.current.classList.remove("active");
+      }
+    };
+
+    const closeMenu = (event: MouseEvent) => {
+      if (
+        headerLinksContainerRef.current &&
+        !headerLinksContainerRef.current.contains(event.target as Node) &&
+        !mobileVersionButton?.contains(event.target as Node)
+      ) {
+        headerLinksContainerRef.current.classList.remove("active");
+        setActiveLink(null);
+      }
+    };
+
+    const toggleMenu = () => {
+      if (headerLinksContainerRef.current) {
+        headerLinksContainerRef.current.classList.add("active");
+      }
+    };
+
+    const closeMenuButton = () => {
+      if (headerLinksContainerRef.current) {
+        headerLinksContainerRef.current.classList.remove("active");
+      }
+    };
+
+    if (searchButton) searchButton.addEventListener("click", toggleSearchInput);
+    if (closeButton) closeButton.addEventListener("click", closeSearchInput);
+
+    if (mobileVersionButton) mobileVersionButton.addEventListener("click", toggleMenu);
+    if (mobileVersionCloseButton) mobileVersionCloseButton.addEventListener("click", closeMenuButton);
+
+    document.addEventListener("click", closeMenu);
+
+    return () => {
+      if (searchButton) searchButton.removeEventListener("click", toggleSearchInput);
+      if (closeButton) closeButton.removeEventListener("click", closeSearchInput);
+
+      if (mobileVersionButton) mobileVersionButton.removeEventListener("click", toggleMenu);
+      if (mobileVersionCloseButton) mobileVersionCloseButton.removeEventListener("click", closeMenuButton);
+
+      document.removeEventListener("click", closeMenu);
+    };
+  }, []);
+
+  const handleLinkClick = (link: string) => {
+    setActiveLink(link === activeLink ? null : link);
+  };
+
+  const handleCloseDetails = () => {
+    setActiveLink(null);
+  };
+
   return (
     <header className="header" id="header">
       <nav className="navbar">
         <div className="navbar-wrapper">
           <button className="mobile-version-button">
-            <i className="fa-solid fa-bars"></i>
+            <FontAwesomeIcon icon={faBars} />
           </button>
           <div className="header-logo-container">
             <Link to="/">
@@ -19,52 +102,92 @@ function Header(): ReactNode {
             </Link>
           </div>
           <div className="header-content-container">
-            <div className="header-links-container">
+            <div className="header-links-container" ref={headerLinksContainerRef}>
               <button className="mobile-version-close-button">
-                <i className="fa-solid fa-xmark"></i>
+                <FontAwesomeIcon icon={faXmark} />
               </button>
               <ul className="header-links-wrapper">
-                <li className={`header-link-list ${window.location.pathname === '/sd' ? 'active' : ''}`}>
-                  <button className="header-link button">
+                <li className="header-link-list">
+                  <button
+                    className={`header-link button ${activeLink === 'catalog' ? 'active' : ''}`}
+                    onClick={() => handleLinkClick('catalog')}
+                  >
                     <Link to={`/${lang}/catalog`}>Каталог</Link>
                     <span>
                       Каталог
-                      <i className="fa-solid fa-arrow-right-long"></i>
+                      <FontAwesomeIcon icon={faArrowRightLong} />
                     </span>
                   </button>
+                  <div className="header-link-extra-details-container">
+                    <div className="header-link-extra-details-wrapper">
+                      <button
+                        className="header-link-extra-details-close-button"
+                        onClick={handleCloseDetails}
+                      >
+                        <FontAwesomeIcon icon={faArrowLeftLong} />
+                      </button>
+                      <Link to={`/${lang}/catalog`} className="header-link-extra-details-column first">
+                        Каталог
+                      </Link>
+                      <Link to="/" className="header-link-extra-details-column">
+                        <div className="header-extra-link-image-container">
+                          <img src="" alt="" />
+                        </div>
+                        <h4 className="header-extra-link-title">Кийим</h4>
+                      </Link>
+                      <Link to="/" className="header-link-extra-details-column">
+                        <div className="header-extra-link-image-container">
+                          <img src="" alt="" />
+                        </div>
+                        <h4 className="header-extra-link-title">Кийим</h4>
+                      </Link>
+                      <Link to="/" className="header-link-extra-details-column">
+                        <div className="header-extra-link-image-container">
+                          <img src="" alt="" />
+                        </div>
+                        <h4 className="header-extra-link-title">Кийим</h4>
+                      </Link>
+                    </div>
+                  </div>
                 </li>
                 <li className="header-link-list">
-                  <a className="header-link" href="">Контакты</a>
+                  <Link className="header-link" to={`/${lang}/contacts`}>Контакты</Link>
                 </li>
                 <li className="header-link-list">
-                  <a className="header-link" href="">О нас</a>
+                  <Link className="header-link" to={`/${lang}/about`}>О нас</Link>
                 </li>
               </ul>
             </div>
             <div className="header-search-container">
               <div className="header-search-wrapper">
                 <button id="searchButton" className="header-search-button">
-                  <i className="fa-solid fa-magnifying-glass"></i>
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </button>
-                <div id="header-search-input-container" className="header-search-input-container">
+                <div id="header-search-input-container" className="header-search-input-container" ref={searchInputContainerRef}>
                   <div className="mobile-search-input-container">
                     <h4 className="mobile-search-title">поиск disstore.uz</h4>
                     <button className="mobile-search-close">
-                      <i className="fa-solid fa-xmark"></i>
+                      <FontAwesomeIcon icon={faXmark} />
                     </button>
                   </div>
-                  <input id="searchInput" className="header-search-input" type="search" placeholder="Поиск по заголовку" name="search" />
+                  <input
+                    id="searchInput"
+                    className="header-search-input"
+                    type="search"
+                    placeholder="Поиск по заголовку"
+                    name="search"
+                  />
                 </div>
               </div>
-              <a href="#" className="header-like-link">
-                <i className="fa-solid fa-heart"></i>
-              </a>
-              <a href="#" className="header-profile-link">
-                <i className="fa-solid fa-user"></i>
-              </a>
-              <a href="#" className="header-shopping-cart-link">
-                <i className="fa-solid fa-cart-shopping"></i>
-              </a>
+              <Link to="/favorites" className="header-like-link">
+                <FontAwesomeIcon icon={faHeart} />
+              </Link>
+              <Link to="/profile" className="header-profile-link">
+                <FontAwesomeIcon icon={faUser} />
+              </Link>
+              <Link to="/cart" className="header-shopping-cart-link">
+                <FontAwesomeIcon icon={faCartShopping} />
+              </Link>
             </div>
           </div>
         </div>
