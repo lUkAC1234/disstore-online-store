@@ -1,10 +1,5 @@
 @import "assets/main/styles/scss/components/_components";
 
-.main {
-    overflow-x: hidden !important;
-    margin-top: 6rem;
-}
-
 .welcome-section {
     background-color: var(--welcome-background);
 }
@@ -314,16 +309,19 @@
 
 // NEW ARRIVALS
 
-.swiper-section {
+.new-clothes-section,
+.top-selling-section {
     margin-block: 3rem;
 }
 
-.swiper-main-container {
+.new-clothes-container,
+.top-selling-container {
     padding-inline: 1rem;
     position: relative;
 }
 
-.swiper-subtitle {
+.new-clothes-subtitle,
+.top-selling-subtitle {
     font-size: 3.5rem;
     text-align: center;
     margin-bottom: 2rem;
@@ -338,13 +336,15 @@
     }
 }
 
-.swiper-wrapper {
+.mySwiper-top-selling .swiper-wrapper,
+.mySwiper-new-clothes .swiper-wrapper {
     display: flex;
     margin-top: 2rem;
     padding-bottom: 5rem;
 }
 
-.swiper {
+.mySwiper-top-selling,
+.mySwiper-new-clothes {
     width: 80vw;
 
     @media screen and (max-width: 2400px) {
@@ -356,11 +356,13 @@
     }
 }
 
-.swiper-slide {
+.mySwiper-top-selling .swiper-slide,
+.mySwiper-new-clothes .swiper-slide {
     width: 20rem;
 }
 
-.swiper-object-image-container {
+.mySwiper-top-selling .swiper-object-image-container,
+.mySwiper-new-clothes .swiper-object-image-container {
     display: block;
 
     img {
@@ -371,13 +373,15 @@
     }
 }
 
-.swiper-object-title {
+.mySwiper-top-selling .swiper-object-title,
+.mySwiper-new-clothes .swiper-object-title {
     font-size: 1rem;
     margin-block: 0.5rem 0.25rem;
     font-weight: 500;
 }
 
-.swiper-price {
+.mySwiper-top-selling .swiper-price,
+.mySwiper-new-clothes .swiper-price {
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
@@ -406,7 +410,8 @@
     }
 }
 
-.swiper-buttons-together-right-container {
+.mySwiper-top-selling .swiper-buttons-together-right-container,
+.mySwiper-new-clothes .swiper-buttons-together-right-container {
     position: absolute;
     bottom: 3.25rem;
     right: 0;
@@ -414,8 +419,10 @@
     width: 7.25rem;
 }
 
-.swiper-button-prev,
-.swiper-button-next {
+.mySwiper-top-selling .swiper-button-prev,
+.mySwiper-top-selling .swiper-button-next,
+.mySwiper-new-clothes .swiper-button-prev,
+.mySwiper-new-clothes .swiper-button-next {
     position: absolute;
     display: flex;
     justify-content: center;
@@ -450,7 +457,8 @@
     }
 }
 
-.swiper-button-next {
+.mySwiper-top-selling .swiper-button-next,
+.mySwiper-new-clothes .swiper-button-next {
     right: 0;
 }
 
@@ -828,7 +836,7 @@
     left: unset;
     right: unset;
     background-color: unset;
-    width: 2rem;
+    width: fit-content;
     height: fit-content;
     border: unset;
     

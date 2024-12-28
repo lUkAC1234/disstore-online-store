@@ -15,13 +15,17 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 const lang: string = i18next.language;
-
 function Header(): ReactNode {
   const searchInputContainerRef = useRef<HTMLDivElement>(null);
   const headerLinksContainerRef = useRef<HTMLDivElement>(null);
   const [activeLink, setActiveLink] = useState<string | null>(null);
+  const [clothesData, setClothesData] = useState([]);
 
   useEffect(() => {
+    fetch(`http://127.0.0.1:8000/`)
+      .then(response => response.json())
+      .then(data => setClothesData(data))
+      .catch(error => console.error('Error fetching clothes data:', error));
     const searchButton = document.getElementById("searchButton");
     const closeButton = document.querySelector(".mobile-search-close");
     const mobileVersionButton = document.querySelector(".mobile-version-button");
@@ -129,24 +133,20 @@ function Header(): ReactNode {
                       <Link to={`/${lang}/catalog`} className="header-link-extra-details-column first">
                         Каталог
                       </Link>
-                      <Link to="/" className="header-link-extra-details-column">
-                        <div className="header-extra-link-image-container">
-                          <img src="" alt="" />
-                        </div>
-                        <h4 className="header-extra-link-title">Кийим</h4>
-                      </Link>
-                      <Link to="/" className="header-link-extra-details-column">
-                        <div className="header-extra-link-image-container">
-                          <img src="" alt="" />
-                        </div>
-                        <h4 className="header-extra-link-title">Кийим</h4>
-                      </Link>
-                      <Link to="/" className="header-link-extra-details-column">
-                        <div className="header-extra-link-image-container">
-                          <img src="" alt="" />
-                        </div>
-                        <h4 className="header-extra-link-title">Кийим</h4>
-                      </Link>
+                      {clothesData.map((item, index) => (
+                        <Link
+                          key={index}
+                          to={`/${lang}/catalog/${item.title}`}
+                          className="header-link-extra-details-column"
+                        >
+                          {item.image && (
+                            <div className="header-extra-link-image-container">
+                              <img src={item.image} alt={item.title} />
+                            </div>
+                          )}
+                          <h4 className="header-extra-link-title">{item.title}</h4>
+                        </Link>
+                      ))}
                     </div>
                   </div>
                 </li>

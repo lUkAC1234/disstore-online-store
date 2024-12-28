@@ -14,7 +14,7 @@ class NewClothes extends PureComponent {
                     </h2>
                     <InjectedUIFancybox>
                         <Swiper
-                            className="mySwiper-top-selling"
+                            className="mySwiper-new-clothes"
                             modules={[Navigation]}
                             navigation={{
                                 nextEl: '.loop-button-new-clothes-next',

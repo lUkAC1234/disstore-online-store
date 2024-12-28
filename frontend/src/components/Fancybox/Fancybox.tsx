@@ -8,7 +8,7 @@ import { COMPONENT } from "services/utils/Injectors";
 @COMPONENT<UIFancybox>({
   template: (_this) => {
     return (
-      <div ref={_this.containerRef}>
+      <div className={_this.props.className} ref={_this.containerRef}>
         {_this.props.children}
       </div>
     );

@@ -16,6 +16,10 @@ strong {
   word-break: break-word !important;
 }
 
+*:not(button):not(a):not(svg):not(path):not(circle):not(g):not(span):not(div) {
+  color: var(--text-black);
+}
+
 * {
   scroll-behavior: smooth !important;
 }

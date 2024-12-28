@@ -9,6 +9,7 @@ declare global {
     init?: () => void;
     destroy?: () => void;
     carouselReady?: () => void;
+    className?: string;
   }
 }
 

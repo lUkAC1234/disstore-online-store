@@ -54,6 +54,8 @@ body #app {
 .main {
   grid-area: content;
   background: var(--background-white);
+  overflow-x: hidden !important;
+  margin-top: 6rem;
 }
 
 .footer {
