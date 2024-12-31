@@ -31,9 +31,9 @@ class Header extends PureComponent<object, HeaderState> {
   };
 
   componentDidMount() {
-    fetch("http://127.0.0.1:8000/")
+    fetch("http://127.0.0.1:8000/api/api/catalog/colors/")
       .then((response) => response.json())
-      .then((data) => this.setState({ clothesData: data }))
+      .then((data) => this.setState({ clothesData: data }), () => console.log(this.state))
       .catch((error) => console.error("Error fetching clothes data:", error));
   }
 
@@ -122,7 +122,7 @@ class Header extends PureComponent<object, HeaderState> {
                       }`}
                       onClick={() => this.handleLinkClick("catalog")}
                     >
-                      <Link 
+                      <Link
                       to={`/${lang}/catalog`}>Каталог
                       </Link>
                       <span>
@@ -168,16 +168,16 @@ class Header extends PureComponent<object, HeaderState> {
                     )}
                   </li>
                   <li className="header-link-list">
-                    <Link 
-                    className="header-link" 
+                    <Link
+                    className="header-link"
                     to={`/${lang}/contacts`}
                     onClick={this.closeEntireMenu}>
                       Контакты
                     </Link>
                   </li>
                   <li className="header-link-list">
-                    <Link 
-                    className="header-link" 
+                    <Link
+                    className="header-link"
                     to={`/${lang}/about`}
                     onClick={this.closeEntireMenu}>
                       О нас

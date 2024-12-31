@@ -43,7 +43,7 @@ const defaultProductOptions = {
   sizes: ["Small", "Medium", "Large", "X-Large"],
 };
 
-class Catalog extends PureComponent<{}, ProductOptionsState> {
+class Catalog extends PureComponent<object, ProductOptionsState> {
   images = [tshirt, tshirt2, tshirt3, clothes];
 
   state = {
