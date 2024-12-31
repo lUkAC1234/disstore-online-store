@@ -30,13 +30,6 @@ class Header extends PureComponent<object, HeaderState> {
     clothesData: [],
   };
 
-  componentDidMount() {
-    fetch("http://127.0.0.1:8000/api/api/catalog/colors/")
-      .then((response) => response.json())
-      .then((data) => this.setState({ clothesData: data }), () => console.log(this.state))
-      .catch((error) => console.error("Error fetching clothes data:", error));
-  }
-
   toggleSearchInput = () => {
     if (this.searchInputContainerRef.current) {
       this.searchInputContainerRef.current.classList.toggle("active");

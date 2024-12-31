@@ -1,7 +1,7 @@
 import styles from "./Catalog.module.scss";
 import "swiper/css";
 import "swiper/css/navigation";
-import { PureComponent, ReactNode } from "react";
+import { ReactNode } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import tshirt from "assets/main/images/catalog/tshirt.png";
 import tshirt2 from "assets/main/images/catalog/tshirt2.png";
@@ -15,6 +15,11 @@ import { Link } from "react-router-dom";
 import i18next from "i18next";
 import InjectedUIFancybox from "components/Fancybox/Fancybox";
 import NavigationSection from "./Navigation/Navigation";
+import { origin } from "../../../../project.config.json";
+import UIReact from "utils/classes/UIReact";
+import { ClothesContextActions, ClothItem } from "components/Context/ClothesContext";
+import { withContext } from "components/Context/ContextInjector";
+import { ClothesContext } from "components/Context/ContextCollection";
 
 const lang: string = i18next.language;
 
@@ -43,7 +48,7 @@ const defaultProductOptions = {
   sizes: ["Small", "Medium", "Large", "X-Large"],
 };
 
-class Catalog extends PureComponent<object, ProductOptionsState> {
+class Catalog extends UIReact<ClothesContextActions, ProductOptionsState> {
   images = [tshirt, tshirt2, tshirt3, clothes];
 
   state = {
@@ -60,6 +65,24 @@ class Catalog extends PureComponent<object, ProductOptionsState> {
       top: 0,
       behavior: "smooth",
     });
+
+    this.fetchData();
+  }
+
+  async fetchData(): Promise<void> {
+    try {
+      const response: Response = await fetch(origin, { signal: this.controller.signal });
+      if (!response.ok) {
+        throw "Response wasn't ok, something went wrong!";
+      }
+
+      const data: ClothItem[] = await response.json();
+      this.props.setData(data);
+      console.log(this.props);
+    } catch (err) {
+      alert(err);
+      console.error(err);
+    }
   }
 
   handleOptionChange = (optionType: string, value: string | number) => {
@@ -179,33 +202,32 @@ class Catalog extends PureComponent<object, ProductOptionsState> {
               </div>
               <div className={styles["catalog-product-details"]}>
                 <h1 className={styles["catalog-product-product-title"]}>
-                  Куртка длинная длина AW24CR1-12-21215
+                  {this.props.data?.[0].title}
                 </h1>
                 <div className={styles["catalog-product-product-rating"]}>
                   <img src={star5} alt="Rating" />
                   <span>В наличии: 38</span>
                 </div>
                 <bdi className={styles["catalog-product-product-pricing"]}>
-                  <span className={styles["catalog-product-current-price"]}>2,620,000 сум</span>
-                  <span className={styles["catalog-product-original-price"]}>2,620,000 сум</span>
+                  <span className={styles["catalog-product-current-price"]}>{this.props.data?.[0].price.toLocaleString()} сум</span>
+                  <span className={styles["catalog-product-original-price"]}>{this.props.data?.[0].price.toLocaleString()} сум</span>
                   <span className={styles["catalog-product-discount"]}>-40%</span>
                 </bdi>
                 <p className={styles["catalog-product-product-description"]}>
-                  Эта графическая футболка идеально подходит для любого случая. Изготовленная из
-                  мягкой и дышащей ткани, она обеспечивает превосходный комфорт и стиль.
+                  {this.props.data?.[0].description}
                 </p>
                 <div className={styles["hr-line"]}></div>
                 <div className={styles["product-options"]}>
                   <div className={styles["colors-section"]}>
                     <h4>Select Colors</h4>
                     <div className={styles["colors-container"]}>
-                      {defaultProductOptions.colors.map((color) => (
+                      {/* {this.props.data[0].colors.map((color) => (
                         <button
-                          key={color.name}
-                          className={`${styles["color-option"]} ${
-                            selectedOptions.color === color.name ? styles["selected"] : ""
-                          }`}
-                          style={{ backgroundColor: color.hex }}
+                          key={color}
+                          // className={`${styles["color-option"]} ${
+                          //   selectedOptions.color === color ? styles["selected"] : ""
+                          // }`}
+                          style={{ backgroundColor: color. }}
                           onClick={() => this.handleOptionChange("color", color.name)}
                           aria-label={`Select ${color.name} color`}
                         >
@@ -213,7 +235,7 @@ class Catalog extends PureComponent<object, ProductOptionsState> {
                             <span className={styles["checkmark"]}>✔</span>
                           )}
                         </button>
-                      ))}
+                      ))} */}
                     </div>
                   </div>
 
@@ -267,4 +289,6 @@ class Catalog extends PureComponent<object, ProductOptionsState> {
   }
 }
 
-export default Catalog;
+const UICatalog = withContext(ClothesContext, Catalog);
+
+export default UICatalog;

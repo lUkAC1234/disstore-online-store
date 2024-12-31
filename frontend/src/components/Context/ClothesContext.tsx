@@ -1,12 +1,21 @@
 import { PropsWithChildren, PureComponent, ReactNode } from "react";
 import { ClothesContext } from "./ContextCollection";
 
+export interface ClothItem {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  image: string;
+  colors: number[];
+}
+
 export interface ClothesContextState {
-  data: unknown;
+  data: ClothItem[];
 }
 export interface ClothesContextProps extends PropsWithChildren {}
 export interface ClothesContextActions extends ClothesContextState {
-  setData: (data: unknown) => void;
+  setData: (data: ClothItem[]) => void;
 }
 
 class ClothesContextProvider extends PureComponent<ClothesContextProps, ClothesContextState> {
@@ -27,7 +36,7 @@ class ClothesContextProvider extends PureComponent<ClothesContextProps, ClothesC
     );
   }
 
-  setData = (data: unknown): void => {
+  setData = (data: ClothItem[]): void => {
     this.setState({ data });
   }
 }
