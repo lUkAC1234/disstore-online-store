@@ -1,15 +1,15 @@
-from django.urls import path, include, reverse_lazy
-from .views import (
-    index,
-)
-
-# from django.views.i18n import set_language
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import index, ClothesModelViewSet, ColorModelViewSet
 
 app_name = "main"
 
+# Create a router and register your viewsets with it
+router = DefaultRouter()
+router.register(r'catalog/images', ClothesModelViewSet, basename='catalog_images')
+router.register(r'catalog/colors', ColorModelViewSet, basename='catalog_colors')
+
 urlpatterns = [
-    # path('set-language/', set_language, name='set_language'),
-    
-    # Main Page
-    path('', index.as_view(), name="index"),
+    path('', index.as_view(), name="index"),  # Main page (index)
+    path('api/', include(router.urls)),  # API paths for images and colors
 ]

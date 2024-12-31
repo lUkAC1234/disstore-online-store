@@ -12,8 +12,10 @@ interface ReviewState {
 class ReviewSection extends PureComponent<ReviewProps, ReviewState> {
     render(): ReactNode {
         return (
-            <section>
-                <h1>Review Section</h1>
+            <section className={styles["review-section"]}>
+                <div className={styles["review-container"]}>
+                    <h1>Review Section</h1>
+                </div>
             </section>
         )
     }

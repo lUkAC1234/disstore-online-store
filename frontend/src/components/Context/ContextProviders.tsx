@@ -1,5 +1,5 @@
 import { PropsWithChildren, ReactNode } from "react";
-import { GlobalContext } from "./ContextCollection";
+// import { GlobalContext } from "./ContextCollection";
 import GlobalContextProvider from "./GlobalContext";
 
 export interface ContextProvidersProps extends PropsWithChildren {}

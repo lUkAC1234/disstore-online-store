@@ -9,9 +9,20 @@ from django.views.generic import (
 )
     
 from rest_framework import status
-from .models import ClothesModel
-from .serializer import ClothesSerializer
+from .models import ClothesModel, ColorModel
+from .serializer import ClothesModelSerializer, ClothesImageSerializer, ColorSerializer
+from rest_framework import viewsets
 
 class index(ListCreateAPIView):
-    serializer_class = ClothesSerializer
+    serializer_class = ClothesModelSerializer
     queryset = ClothesModel.objects.all()
+
+# ViewSet for handling Clothes data with Images
+class ClothesModelViewSet(viewsets.ModelViewSet):
+    queryset = ClothesModel.objects.all()
+    serializer_class = ClothesImageSerializer
+
+# ViewSet for handling Color data
+class ColorModelViewSet(viewsets.ModelViewSet):
+    queryset = ColorModel.objects.all()
+    serializer_class = ColorSerializer

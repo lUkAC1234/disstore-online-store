@@ -3,7 +3,6 @@ import Details from "./Details";
 import FAQs from "./FAQs";
 import Review from "./Review";
 import TransformTransition from "components/TransformTransition/TransformTransition";
-import { debounce } from "utils/hooks/debounce";
 
 const exampleDetails = (
     <div>

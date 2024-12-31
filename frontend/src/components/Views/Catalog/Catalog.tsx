@@ -18,12 +18,12 @@ import NavigationSection from "./Navigation/Navigation";
 
 const lang: string = i18next.language;
 
-interface ProductOptionsProps {
-  productOptions: {
-    colors: { name: string; hex: string }[];
-    sizes: string[];
-  };
-}
+// interface ProductOptionsProps {
+//   productOptions: {
+//     colors: { name: string; hex: string }[];
+//     sizes: string[];
+//   };
+// }
 
 interface ProductOptionsState {
   selectedOptions: {

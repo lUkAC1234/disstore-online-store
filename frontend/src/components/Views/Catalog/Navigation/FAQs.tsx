@@ -8,8 +8,10 @@ interface FAQsProps {
 class FAQsSection extends PureComponent<FAQsProps> {
     render(): ReactNode {
         return (
-            <section>
-                <h1>FAQs Section</h1>
+            <section className={styles["faq-section"]}>
+                <div className={styles["faq-container"]}>
+                    <h1>FAQs Section</h1>
+                </div>
             </section>
         )
     }
