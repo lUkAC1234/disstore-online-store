@@ -23,6 +23,7 @@ html {
 
   body {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   a {
@@ -77,5 +78,6 @@ body #app {
 ::-webkit-scrollbar-thumb {
   background: var(--text-icon);
 }
+
 
 // ScroolBar END

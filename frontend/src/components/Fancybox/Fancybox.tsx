@@ -19,19 +19,20 @@ class UIFancybox extends PureComponent<UIFancyboxProps> {
   static loadedFancybox: boolean = false;
 
   defaultOptions: Partial<OptionsType> = {
-    "hideScrollbar": false,
     on: {
       "init": () => {
         this.props.setFancyboxAttachStatus(true);
         if (this.props.init) {
           this.props.init();
         }
+        document.body.classList.add("hide-scrollbar");
       },
       "destroy": () => {
         this.props.setFancyboxAttachStatus(false);
         if (this.props.destroy) {
           this.props.destroy();
         }
+        document.body.classList.remove("hide-scrollbar");
       },
       "Carousel.ready": () => {
         if (this.props.carouselReady) {

@@ -1,52 +1,52 @@
+import styles from "./Home.module.scss";
 import { PureComponent, ReactNode } from "react";
 import welcomeImage from "assets/main/images/main-page/welcomeImage.webp";
-
 
 class WelcomeSection extends PureComponent {
     render(): ReactNode {
         return (
-            <section className="welcome-section">
-                <div className="welcome-container">
-                    <div className="welcome-text-column">
-                        <h1 className="welcome-main-title fade fadeInDown">
+            <section className={styles["welcome-section"]}>
+                <div className={styles["welcome-container"]}>
+                    <div className={styles["welcome-text-column"]}>
+                        <h1 className={styles["welcome-main-title"]}>
                             Найдите одежду которая подходит вашему стилю
                         </h1>
-                        <p className="welcome-text fade fadeInUp">
+                        <p className={styles["welcome-text"]}>
                             Ознакомьтесь с нашим разнообразным ассортиментом тщательно
                             созданной одежды, разработанной, чтобы подчеркнуть вашу
                             индивидуальность и удовлетворить ваше чувство стиля
                         </p>
-                        <a href="" className="welcome-link fade fadeInLeft">
+                        <a href="" className={styles["welcome-link"]}>
                             Купить сейчас
                         </a>
-                        <div className="welcome-numbers-count-container">
-                            <div className="welcome-numbers-count-column">
-                                <span className="welcome-numbers-count fade fadeInUp">
+                        <div className={styles["welcome-numbers-count-container"]}>
+                            <div className={styles["welcome-numbers-count-column"]}>
+                                <span className={styles["welcome-numbers-count"]}>
                                     200+
                                 </span>
-                                <p className="welcome-numbers-count-text fade fadeInDown">
+                                <p className={styles["welcome-numbers-count-text"]}>
                                     Международных брендов
                                 </p>
                             </div>
-                            <div className="welcome-numbers-count-column">
-                                <span className="welcome-numbers-count fade fadeInUp">
+                            <div className={styles["welcome-numbers-count-column"]}>
+                                <span className={styles["welcome-numbers-count"]}>
                                     2,000+
                                 </span>
-                                <p className="welcome-numbers-count-text fade fadeInDown">
+                                <p className={styles["welcome-numbers-count-text"]}>
                                     Высококачественная продукция
                                 </p>
                             </div>
-                            <div className="welcome-numbers-count-column">
-                                <span className="welcome-numbers-count fade fadeInUp">
+                            <div className={styles["welcome-numbers-count-column"]}>
+                                <span className={styles["welcome-numbers-count"]}>
                                     30,000+
                                 </span>
-                                <p className="welcome-numbers-count-text fade fadeInDown">
+                                <p className={styles["welcome-numbers-count-text"]}>
                                     Довольных клиентов
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <div className="welcome-image-column fade fadeInRight">
+                    <div className={styles["welcome-image-column"]}>
                         <img
                             src={welcomeImage}
                             alt="Fashion people"

@@ -1,26 +1,27 @@
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styles from './Home.module.scss';
 import { PureComponent, ReactNode } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import clothes from "assets/main/images/layout/clothes.jpg";
 import InjectedUIFancybox from "components/Fancybox/Fancybox";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
-class TopSelling extends PureComponent {
+class NewClothes extends PureComponent {
     render(): ReactNode {
         return (
-            <section className="swiper-section top-selling-section">
-                <div className="swiper-main-container top-selling-container">
-                    <h2 className="swiper-subtitle top-selling-subtitle fade fadeInDown">
+            <section className={`swiper-section ${styles["top-selling-section"]}`}>
+                <div className={`swiper-main-container ${styles["top-selling-container"]}`}>
+                    <h2 className={`swiper-subtitle ${styles["top-selling-subtitle"]} fade fadeInDown`}>
                         Популярные
                     </h2>
-                    <InjectedUIFancybox>
+                    <InjectedUIFancybox className={styles["main-page-carousel-fancybox-container"]}>
                         <Swiper
-                            className="mySwiper-top-selling"
+                            className={styles["mySwiper-top-selling"]}
                             modules={[Navigation]}
                             navigation={{
-                                nextEl: '.loop-button-top-selling-next',
-                                prevEl: '.loop-button-top-selling-prev',
+                                nextEl: `.${styles["loop-button-top-selling-next"]}`,
+                                prevEl: `.${styles["loop-button-top-selling-prev"]}`,
                             }}
                             slidesPerView={4}
                             initialSlide={0}
@@ -33,7 +34,6 @@ class TopSelling extends PureComponent {
                                     slidesPerView: 1,
                                     spaceBetween: 10,
                                 },
-
                                 500: {
                                     slidesPerView: 1.5,
                                     spaceBetween: 10,
@@ -52,49 +52,54 @@ class TopSelling extends PureComponent {
                                 }
                             }}
                         >
-                            {[...Array(5)].map((_, index) => (
-                                <SwiperSlide key={index} className="top-selling-column">
-                                    <div className="swiper-object-image-container top-selling-image-container">
-                                        <a href={clothes} data-fancybox="top-selling">
-                                            <img
-                                                src={clothes}
-                                                alt=""
-                                                loading="lazy"
-                                                decoding="async"
-                                            />
-                                        </a>
-                                    </div>
-                                    <div className="top-selling-content">
-                                        <h4 className="swiper-object-title top-selling-title">
-                                            Футболка с деталями из ленты
-                                        </h4>
-                                        <bdi className="swiper-price top-selling-price">
-                                            2,420,000 сум{" "}
-                                            <span className="original-price">2,620,000 сум</span>
-                                            <span className="discount">-20%</span>
-                                        </bdi>
-                                    </div>
-                                </SwiperSlide>
-                            ))}
-                            <div className="swiper-buttons-together-right-container swiper-buttons-top-selling-container">
-                                <div className="swiper-button-prev loop-button-top-selling-prev">
+                            {[...Array(5)].map((_, index) => {
+                                const imageUrl = clothes;
+
+                                return (
+                                    <SwiperSlide key={index} className={styles["top-selling-column"]}>
+                                        <div className={styles["top-selling-image-container"]}>
+                                            <a href={imageUrl} data-fancybox="gallery" data-caption={`${imageUrl} ${index + 1}`}>
+                                                <img
+                                                    src={imageUrl}
+                                                    alt={`Clothes ${index + 1}`}
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                />
+                                            </a>
+                                        </div>
+                                        <div className={styles["top-selling-content"]}>
+                                            <h4 className={styles["top-selling-title"]}>
+                                                Футболка с деталями из
+                                            </h4>
+                                            <bdi className={styles["top-selling-price"]}>
+                                                23,420,000 сум
+                                                <span className={styles["original-price"]}>25,620,000 сум</span>
+                                                <span className={styles["discount"]}>-20%</span>
+                                            </bdi>
+                                        </div>
+                                    </SwiperSlide>
+                                );
+                            })}
+                            <div className={`${styles["swiper-buttons-together-right-container"]} ${styles["swiper-buttons-top-selling-container"]}`}>
+                                <div className={styles["loop-button-top-selling-prev"]}>
                                     <FontAwesomeIcon icon={faAngleLeft} />
                                 </div>
-                                <div className="swiper-button-next loop-button-top-selling-next">
+                                <div className={styles["loop-button-top-selling-next"]}>
                                     <FontAwesomeIcon icon={faAngleRight} />
                                 </div>
                             </div>
                         </Swiper>
                     </InjectedUIFancybox>
-                    <div className="view-all-clothes-link-container fade fadeInUp">
-                        <a href="" className="view-all-clothes-link">
+
+                    <div className={styles["view-all-clothes-link-container"]}>
+                        <a href="" className={styles["view-all-clothes-link"]}>
                             Просмотреть все
                         </a>
                     </div>
                 </div>
             </section>
-        )
+        );
     }
 }
 
-export default TopSelling;
+export default NewClothes;

@@ -4,31 +4,32 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import star5 from "assets/main/images/main-page/5star.png";
+import styles from "./Home.module.scss";
 
 class FeedbackSection extends PureComponent {
     render(): ReactNode {
         return (
-            <section className="feedbacks-section">
-                <div className="swiper-main-container feedbacks-container">
-                    <div className="feedbacks-title-section">
-                        <h2 className="swiper-subtitle feedbacks-subtitle fade fadeInDown">
+            <section className={styles["feedbacks-section"]}>
+                <div className={`${styles["feedbacks-main-container"]} ${styles["feedbacks-container"]}`}>
+                    <div className={styles["feedbacks-title-section"]}>
+                        <h2 className={styles["feedbacks-subtitle"]}>
                             Наши довольные клиенты
                         </h2>
-                        <div className="swiper-buttons-together-right-container swiper-buttons-feedbacks-container fade fadeInUp">
-                            <div className="swiper-button-prev loop-button-feedbacks-prev">
+                        <div className={`${styles["swiper-buttons-together-right-container"]} ${styles["swiper-buttons-feedbacks-container"]}`}>
+                            <div className={styles["loop-button-feedbacks-prev"]}>
                                 <FontAwesomeIcon icon={faArrowLeft} />
                             </div>
-                            <div className="swiper-button-next loop-button-feedbacks-next">
+                            <div className={styles["loop-button-feedbacks-next"]}>
                                 <FontAwesomeIcon icon={faArrowRight} />
                             </div>
                         </div>
                     </div>
                     <Swiper
-                        className="mySwiper-feedbacks"
+                        className={styles["mySwiper-feedbacks"]}
                         modules={[Navigation]}
                         navigation={{
-                            nextEl: '.loop-button-feedbacks-next',
-                            prevEl: '.loop-button-feedbacks-prev',
+                            nextEl: `.${styles["loop-button-feedbacks-next"]}`,
+                            prevEl: `.${styles["loop-button-feedbacks-prev"]}`,
                         }}
                         slidesPerView={5}
                         initialSlide={0}
@@ -60,16 +61,16 @@ class FeedbackSection extends PureComponent {
                         }}
                     >
                         {Array.from({ length: 6 }).map((_, index) => (
-                            <SwiperSlide key={index} className="feedbacks-column">
-                                <div className="feedbacks-content">
-                                    <div className="feedback-rate-container">
+                            <SwiperSlide key={index} className={styles["feedbacks-column"]}>
+                                <div className={styles["feedbacks-content"]}>
+                                    <div className={styles["feedback-rate-container"]}>
                                         <img
                                             src={star5}
                                             alt="Rating"
                                         />
                                     </div>
-                                    <h5 className="feedbacks-username">Sarah M.</h5>
-                                    <p className="feedbacks-text">
+                                    <h5 className={styles["feedbacks-username"]}>Sarah M.</h5>
+                                    <p className={styles["feedbacks-text"]}>
                                         I'm blown away by the quality and style of the clothes I
                                         received from Shop.co. From casual wear to elegant dresses,
                                         every piece I've bought has exceeded my expectations.

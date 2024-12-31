@@ -1,24 +1,27 @@
+import styles from './Home.module.scss';
 import { PureComponent, ReactNode } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import clothes from "assets/main/images/layout/clothes.jpg";
 import InjectedUIFancybox from "components/Fancybox/Fancybox";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 class NewClothes extends PureComponent {
     render(): ReactNode {
         return (
-            <section className="swiper-section new-clothes-section">
-                <div className="swiper-main-container new-clothes-container">
-                    <h2 className="swiper-subtitle new-clothes-subtitle fade fadeInDown">
+            <section className={`swiper-section ${styles["new-clothes-section"]}`}>
+                <div className={`swiper-main-container ${styles["new-clothes-container"]}`}>
+                    <h2 className={`swiper-subtitle ${styles["new-clothes-subtitle"]} fade fadeInDown`}>
                         Новинки
                     </h2>
-                    <InjectedUIFancybox>
+                    <InjectedUIFancybox className={styles["main-page-carousel-fancybox-container"]}>
                         <Swiper
-                            className="mySwiper-new-clothes"
+                            className={styles["mySwiper-new-clothes"]}
                             modules={[Navigation]}
                             navigation={{
-                                nextEl: '.loop-button-new-clothes-next',
-                                prevEl: '.loop-button-new-clothes-prev',
+                                nextEl: `.${styles["loop-button-new-clothes-next"]}`,
+                                prevEl: `.${styles["loop-button-new-clothes-prev"]}`,
                             }}
                             slidesPerView={4}
                             initialSlide={0}
@@ -50,12 +53,12 @@ class NewClothes extends PureComponent {
                             }}
                         >
                             {[...Array(5)].map((_, index) => {
-                                const imageUrl = clothes; 
+                                const imageUrl = clothes;
 
                                 return (
-                                    <SwiperSlide key={index} className="new-clothes-column">
-                                        <div className="swiper-object-image-container new-clothes-image-container">
-                                            <a href={imageUrl} data-fancybox="gallery" data-caption={`Image ${index + 1}`}>
+                                    <SwiperSlide key={index} className={styles["new-clothes-column"]}>
+                                        <div className={styles["new-clothes-image-container"]}>
+                                            <a href={imageUrl} data-fancybox="gallery" data-caption={`${imageUrl} ${index + 1}`}>
                                                 <img
                                                     src={imageUrl}
                                                     alt={`Clothes ${index + 1}`}
@@ -64,30 +67,38 @@ class NewClothes extends PureComponent {
                                                 />
                                             </a>
                                         </div>
-                                        <div className="new-clothes-content">
-                                            <h4 className="swiper-object-title new-clothes-title">
+                                        <div className={styles["new-clothes-content"]}>
+                                            <h4 className={styles["new-clothes-title"]}>
                                                 Футболка с деталями из
                                             </h4>
-                                            <bdi className="swiper-price new-clothes-price">
-                                                23,420,000 сум{" "}
-                                                <span className="original-price">25,620,000 сум</span>
-                                                <span className="discount">-20%</span>
+                                            <bdi className={styles["new-clothes-price"]}>
+                                                23,420,000 сум
+                                                <span className={styles["original-price"]}>25,620,000 сум</span>
+                                                <span className={styles["discount"]}>-20%</span>
                                             </bdi>
                                         </div>
                                     </SwiperSlide>
                                 );
                             })}
+                            <div className={`${styles["swiper-buttons-together-right-container"]} ${styles["swiper-buttons-new-clothes-container"]}`}>
+                                <div className={styles["loop-button-new-clothes-prev"]}>
+                                    <FontAwesomeIcon icon={faAngleLeft} />
+                                </div>
+                                <div className={styles["loop-button-new-clothes-next"]}>
+                                    <FontAwesomeIcon icon={faAngleRight} />
+                                </div>
+                            </div>
                         </Swiper>
                     </InjectedUIFancybox>
 
-                    <div className="view-all-clothes-link-container fade fadeInUp">
-                        <a href="" className="view-all-clothes-link">
+                    <div className={styles["view-all-clothes-link-container"]}>
+                        <a href="" className={styles["view-all-clothes-link"]}>
                             Просмотреть все
                         </a>
                     </div>
                 </div>
             </section>
-        )
+        );
     }
 }
 

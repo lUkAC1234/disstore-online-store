@@ -1,4 +1,4 @@
-import './Home.scss';
+import styles from './Home.module.scss';
 import { PureComponent, ReactNode } from "react";
 import "swiper/css";
 import BrandsSection from "./BrandsSection";
@@ -12,7 +12,12 @@ import WelcomeSection from "./WelcomeSection";
 // import DateComputed from "components/DateComputed/DateComputed";
 
 class MainPage extends PureComponent {
-  
+  // componentDidMount(): void {
+  //   window.scrollTo({
+  //     top: 0,
+  //     behavior: "smooth"
+  //   });
+  // }
   
   render(): ReactNode {
     
@@ -28,7 +33,7 @@ class MainPage extends PureComponent {
 
         <NewClothes />
 
-        <div className="hr-line"></div>
+        <div className={styles["hr-line"]}></div>
 
         <TopSelling />
 

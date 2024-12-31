@@ -185,7 +185,10 @@
         font-size: 1rem;
         color: var(--text-icon);
         transition: all 0.3s ease;
+    }
 
+    &:hover svg {
+        color: var(--text-black);
     }
 }
 
@@ -212,7 +215,7 @@
         border-color: var(--text-black);
     }
 
-    .header-search-container:focus-within .header-search-button i {
+    .header-search-container:focus-within .header-search-button svg {
         color: var(--text-black);
     }
 }
@@ -220,8 +223,8 @@
 .mobile-version-button,
 .header-link-extra-details-close-button {
     display: none;
-    background: none;
-    border: none;
+    background: transparent;
+    border: transparent;
     cursor: pointer;
 
     svg {

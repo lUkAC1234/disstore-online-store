@@ -1,3 +1,4 @@
+import styles from "./Home.module.scss";
 import { PureComponent, ReactNode } from "react";
 import gucci from "assets/main/images/brands/gucci.webp";
 import prada from "assets/main/images/brands/prada.webp";
@@ -12,10 +13,9 @@ interface BrandsSectionState {
 
 class BrandsSection extends PureComponent<BrandsSectionProps, BrandsSectionState> {
     get brands(): ReactNode {
-
         return this.state.brands?.map(
             (brand, index) => (
-                <div key={index} className="brands-column fade fadeInUp">
+                <div key={index} className={styles["brands-column"]}>
                     <img
                         src={brand}
                         alt={`${brand} brand`}
@@ -31,14 +31,14 @@ class BrandsSection extends PureComponent<BrandsSectionProps, BrandsSectionState
             zara,
             gucci,
             prada,
-            calvinKlein
+            calvinKlein,
         ]
     };
 
     render(): ReactNode {
         return (
-            <section className="brands-section">
-                <div className="brands-container">
+            <section className={styles["brands-section"]}>
+                <div className={styles["brands-container"]}>
                     {this.brands}
                 </div>
             </section>

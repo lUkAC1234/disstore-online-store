@@ -23,13 +23,13 @@
   },
   "metaLocales": {
     "ru": {
-      "description": "Проект предназначен для инвентаризации деревьев в городе Ташкент"
+      "description": "Онлайн магазин"
     },
     "uz": {
-      "description": "Лойиҳа Тошкент шаҳридаги дарахтларни инвентаризация қилиш учун мўлжалланган"
+      "description": "Онлайн дўкон"
     },
     "oz": {
-      "description": "Loyiha Toshkent shahridagi daraxtlarni inventarizatsiya qilish uchun mo‘ljallangan"
+      "description": "Onlayn do'kon"
     },
     "en": {
       "description": "The project is intended for the inventory of trees in the city of Tashkent"

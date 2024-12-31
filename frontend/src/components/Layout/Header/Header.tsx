@@ -1,8 +1,8 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { createRef, PureComponent } from "react";
 import { Link } from "react-router-dom";
 import LogoSvg from "assets/main/images/layout/logo.svg";
 import i18next from "i18next";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faXmark,
   faBars,
@@ -11,189 +11,228 @@ import {
   faArrowLeftLong,
   faMagnifyingGlass,
   faUser,
-  faCartShopping
-} from '@fortawesome/free-solid-svg-icons';
+  faCartShopping,
+} from "@fortawesome/free-solid-svg-icons";
 
-const lang: string = i18next.language;
-function Header(): ReactNode {
-  const searchInputContainerRef = useRef<HTMLDivElement>(null);
-  const headerLinksContainerRef = useRef<HTMLDivElement>(null);
-  const [activeLink, setActiveLink] = useState<string | null>(null);
-  const [clothesData, setClothesData] = useState([]);
+const lang = i18next.language;
 
-  useEffect(() => {
-    fetch(`http://127.0.0.1:8000/`)
-      .then(response => response.json())
-      .then(data => setClothesData(data))
-      .catch(error => console.error('Error fetching clothes data:', error));
-    const searchButton = document.getElementById("searchButton");
-    const closeButton = document.querySelector(".mobile-search-close");
-    const mobileVersionButton = document.querySelector(".mobile-version-button");
-    const mobileVersionCloseButton = document.querySelector(".mobile-version-close-button");
+interface HeaderState {
+  activeLink: string | null;
+  clothesData: { title: string; image?: string }[];
+}
 
-    const toggleSearchInput = () => {
-      if (searchInputContainerRef.current) {
-        searchInputContainerRef.current.classList.toggle("active");
-      }
-    };
+class Header extends PureComponent<object, HeaderState> {
+  searchInputContainerRef = createRef<HTMLDivElement>();
+  headerLinksContainerRef = createRef<HTMLDivElement>();
 
-    const closeSearchInput = () => {
-      if (searchInputContainerRef.current) {
-        searchInputContainerRef.current.classList.remove("active");
-      }
-    };
-
-    const closeMenu = (event: MouseEvent) => {
-      if (
-        headerLinksContainerRef.current &&
-        !headerLinksContainerRef.current.contains(event.target as Node) &&
-        !mobileVersionButton?.contains(event.target as Node)
-      ) {
-        headerLinksContainerRef.current.classList.remove("active");
-        setActiveLink(null);
-      }
-    };
-
-    const toggleMenu = () => {
-      if (headerLinksContainerRef.current) {
-        headerLinksContainerRef.current.classList.add("active");
-      }
-    };
-
-    const closeMenuButton = () => {
-      if (headerLinksContainerRef.current) {
-        headerLinksContainerRef.current.classList.remove("active");
-      }
-    };
-
-    if (searchButton) searchButton.addEventListener("click", toggleSearchInput);
-    if (closeButton) closeButton.addEventListener("click", closeSearchInput);
-
-    if (mobileVersionButton) mobileVersionButton.addEventListener("click", toggleMenu);
-    if (mobileVersionCloseButton) mobileVersionCloseButton.addEventListener("click", closeMenuButton);
-
-    document.addEventListener("click", closeMenu);
-
-    return () => {
-      if (searchButton) searchButton.removeEventListener("click", toggleSearchInput);
-      if (closeButton) closeButton.removeEventListener("click", closeSearchInput);
-
-      if (mobileVersionButton) mobileVersionButton.removeEventListener("click", toggleMenu);
-      if (mobileVersionCloseButton) mobileVersionCloseButton.removeEventListener("click", closeMenuButton);
-
-      document.removeEventListener("click", closeMenu);
-    };
-  }, []);
-
-  const handleLinkClick = (link: string) => {
-    setActiveLink(link === activeLink ? null : link);
+  state: Readonly<HeaderState> = {
+    activeLink: null,
+    clothesData: [],
   };
 
-  const handleCloseDetails = () => {
-    setActiveLink(null);
+  componentDidMount() {
+    fetch("http://127.0.0.1:8000/")
+      .then((response) => response.json())
+      .then((data) => this.setState({ clothesData: data }))
+      .catch((error) => console.error("Error fetching clothes data:", error));
+  }
+
+  toggleSearchInput = () => {
+    if (this.searchInputContainerRef.current) {
+      this.searchInputContainerRef.current.classList.toggle("active");
+    }
   };
 
-  return (
-    <header className="header" id="header">
-      <nav className="navbar">
-        <div className="navbar-wrapper">
-          <button className="mobile-version-button">
-            <FontAwesomeIcon icon={faBars} />
-          </button>
-          <div className="header-logo-container">
-            <Link to="/">
-              <img src={LogoSvg} alt="Logo" />
-            </Link>
-          </div>
-          <div className="header-content-container">
-            <div className="header-links-container" ref={headerLinksContainerRef}>
-              <button className="mobile-version-close-button">
-                <FontAwesomeIcon icon={faXmark} />
-              </button>
-              <ul className="header-links-wrapper">
-                <li className="header-link-list">
-                  <button
-                    className={`header-link button ${activeLink === 'catalog' ? 'active' : ''}`}
-                    onClick={() => handleLinkClick('catalog')}
-                  >
-                    <Link to={`/${lang}/catalog`}>Каталог</Link>
-                    <span>
-                      Каталог
-                      <FontAwesomeIcon icon={faArrowRightLong} />
-                    </span>
-                  </button>
-                  <div className="header-link-extra-details-container">
-                    <div className="header-link-extra-details-wrapper">
-                      <button
-                        className="header-link-extra-details-close-button"
-                        onClick={handleCloseDetails}
-                      >
-                        <FontAwesomeIcon icon={faArrowLeftLong} />
-                      </button>
-                      <Link to={`/${lang}/catalog`} className="header-link-extra-details-column first">
-                        Каталог
-                      </Link>
-                      {clothesData.map((item, index) => (
-                        <Link
-                          key={index}
-                          to={`/${lang}/catalog/${item.title}`}
-                          className="header-link-extra-details-column"
-                        >
-                          {item.image && (
-                            <div className="header-extra-link-image-container">
-                              <img src={item.image} alt={item.title} />
-                            </div>
-                          )}
-                          <h4 className="header-extra-link-title">{item.title}</h4>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </li>
-                <li className="header-link-list">
-                  <Link className="header-link" to={`/${lang}/contacts`}>Контакты</Link>
-                </li>
-                <li className="header-link-list">
-                  <Link className="header-link" to={`/${lang}/about`}>О нас</Link>
-                </li>
-              </ul>
+  closeSearchInput = () => {
+    if (this.searchInputContainerRef.current) {
+      this.searchInputContainerRef.current.classList.remove("active");
+    }
+  };
+
+  closeMenu = (event: MouseEvent) => {
+    const { activeLink } = this.state;
+    if (
+      this.headerLinksContainerRef.current &&
+      !this.headerLinksContainerRef.current.contains(event.target as Node)
+    ) {
+      this.headerLinksContainerRef.current.classList.remove("active");
+      if (activeLink) this.setState({ activeLink: null });
+    }
+  };
+
+  toggleMenu = () => {
+    if (this.headerLinksContainerRef.current) {
+      this.headerLinksContainerRef.current.classList.add("active");
+    }
+  };
+
+  closeMenuButton = () => {
+    if (this.headerLinksContainerRef.current) {
+      this.headerLinksContainerRef.current.classList.remove("active");
+    }
+  };
+
+  closeEntireMenu = () => {
+    this.headerLinksContainerRef.current?.classList.remove("active");
+  };
+
+  handleLinkClick = (link: string) => {
+    this.setState((prevState) => ({
+      activeLink: prevState.activeLink === link ? null : link,
+    }));
+  };
+
+  handleCloseDetails = () => {
+    this.setState({ activeLink: null });
+  };
+
+  render() {
+    const { activeLink, clothesData } = this.state;
+    return (
+      <header className="header" id="header">
+        <nav className="navbar">
+          <div className="navbar-wrapper">
+            <button
+              className="mobile-version-button"
+              onClick={this.toggleMenu}
+            >
+              <FontAwesomeIcon icon={faBars} />
+            </button>
+            <div className="header-logo-container">
+              <Link to="/">
+                <img src={LogoSvg} alt="Logo" />
+              </Link>
             </div>
-            <div className="header-search-container">
-              <div className="header-search-wrapper">
-                <button id="searchButton" className="header-search-button">
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+            <div className="header-content-container">
+              <div
+                className="header-links-container"
+                ref={this.headerLinksContainerRef}
+              >
+                <button
+                  className="mobile-version-close-button"
+                  onClick={this.closeMenuButton}
+                >
+                  <FontAwesomeIcon icon={faXmark} />
                 </button>
-                <div id="header-search-input-container" className="header-search-input-container" ref={searchInputContainerRef}>
-                  <div className="mobile-search-input-container">
-                    <h4 className="mobile-search-title">поиск disstore.uz</h4>
-                    <button className="mobile-search-close">
-                      <FontAwesomeIcon icon={faXmark} />
+                <ul className="header-links-wrapper">
+                  <li className="header-link-list">
+                    <button
+                      className={`header-link button ${
+                        activeLink === "catalog" ? "active" : ""
+                      }`}
+                      onClick={() => this.handleLinkClick("catalog")}
+                    >
+                      <Link 
+                      to={`/${lang}/catalog`}>Каталог
+                      </Link>
+                      <span>
+                        Каталог
+                        <FontAwesomeIcon icon={faArrowRightLong} />
+                      </span>
                     </button>
-                  </div>
-                  <input
-                    id="searchInput"
-                    className="header-search-input"
-                    type="search"
-                    placeholder="Поиск по заголовку"
-                    name="search"
-                  />
-                </div>
+                    {activeLink === "catalog" && (
+                      <div className="header-link-extra-details-container">
+                        <div className="header-link-extra-details-wrapper">
+                          <button
+                            className="header-link-extra-details-close-button"
+                            onClick={this.handleCloseDetails}
+                          >
+                            <FontAwesomeIcon icon={faArrowLeftLong} />
+                          </button>
+                          <Link
+                            to={`/${lang}/catalog`}
+                            className="header-link-extra-details-column first"
+                            onClick={this.closeEntireMenu}
+                          >
+                            Каталог
+                          </Link>
+                          {clothesData.map((item, index) => (
+                            <Link
+                              key={index}
+                              to={`/${lang}/catalog/${item.title}`}
+                              className="header-link-extra-details-column"
+                              onClick={this.closeEntireMenu}
+                            >
+                              {item.image && (
+                                <div className="header-extra-link-image-container">
+                                  <img src={item.image} alt={item.title} />
+                                </div>
+                              )}
+                              <h4 className="header-extra-link-title">
+                                {item.title}
+                              </h4>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </li>
+                  <li className="header-link-list">
+                    <Link 
+                    className="header-link" 
+                    to={`/${lang}/contacts`}
+                    onClick={this.closeEntireMenu}>
+                      Контакты
+                    </Link>
+                  </li>
+                  <li className="header-link-list">
+                    <Link 
+                    className="header-link" 
+                    to={`/${lang}/about`}
+                    onClick={this.closeEntireMenu}>
+                      О нас
+                    </Link>
+                  </li>
+                </ul>
               </div>
-              <Link to="/favorites" className="header-like-link">
-                <FontAwesomeIcon icon={faHeart} />
-              </Link>
-              <Link to="/profile" className="header-profile-link">
-                <FontAwesomeIcon icon={faUser} />
-              </Link>
-              <Link to="/cart" className="header-shopping-cart-link">
-                <FontAwesomeIcon icon={faCartShopping} />
-              </Link>
+              <div className="header-search-container">
+                <div className="header-search-wrapper">
+                  <button
+                    id="searchButton"
+                    className="header-search-button"
+                    onClick={this.toggleSearchInput}
+                  >
+                    <FontAwesomeIcon icon={faMagnifyingGlass} />
+                  </button>
+                  <div
+                    id="header-search-input-container"
+                    className="header-search-input-container"
+                    ref={this.searchInputContainerRef}
+                  >
+                    <div className="mobile-search-input-container">
+                      <h4 className="mobile-search-title">поиск disstore.uz</h4>
+                      <button
+                        className="mobile-search-close"
+                        onClick={this.closeSearchInput}
+                      >
+                        <FontAwesomeIcon icon={faXmark} />
+                      </button>
+                    </div>
+                    <input
+                      id="searchInput"
+                      className="header-search-input"
+                      type="search"
+                      placeholder="Поиск по заголовку"
+                      name="search"
+                    />
+                  </div>
+                </div>
+                <Link to={`/${lang}/favorites`} className="header-like-link">
+                  <FontAwesomeIcon icon={faHeart} />
+                </Link>
+                <Link to={`/${lang}/profile`} className="header-profile-link">
+                  <FontAwesomeIcon icon={faUser} />
+                </Link>
+                <Link to={`/${lang}/cart`} className="header-shopping-cart-link">
+                  <FontAwesomeIcon icon={faCartShopping} />
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
-    </header>
-  );
+        </nav>
+      </header>
+    );
+  }
 }
 
 export default Header;
