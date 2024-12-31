@@ -10,6 +10,7 @@ class ClothesModel(models.Model):
     description = models.TextField()
     price = models.PositiveIntegerField()
     colors = models.ManyToManyField('ColorModel', related_name='clothes')
+    image = models.ImageField(upload_to='clothes/images/%Y/%m/%d/')
     
     def __str__(self):
         return self.title
@@ -30,9 +31,9 @@ class ColorModel(models.Model):
         verbose_name_plural = 'Цвета'
         ordering = ('-id',)
 
-class ClothesImage(models.Model):
-    product = models.ForeignKey(ClothesModel, on_delete=models.CASCADE, related_name='catalogImages')
-    image = models.ImageField(upload_to='clothes/images/%Y/%m/%d/')
+# class ClothesImage(models.Model):
+#     product = models.ForeignKey(ClothesModel, on_delete=models.CASCADE, related_name='catalogImages')
+#     image = models.ImageField(upload_to='clothes/images/%Y/%m/%d/')
     
-    def __str__(self):
-        return f"Image for {self.product.title}"
+#     def __str__(self):
+#         return f"Image for {self.product.title}"
