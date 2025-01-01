@@ -43,7 +43,7 @@ class CatalogDetails extends UIReact<ClothesContextActions, ProductOptionsState>
   images = [tshirt, tshirt2, tshirt3, clothes];
 
   state = {
-    selectedImage: this.images[0],
+    selectedImage: null,
     selectedOptions: {
       color: "",  // Default empty color
       size: "",   // Default empty size
@@ -51,29 +51,52 @@ class CatalogDetails extends UIReact<ClothesContextActions, ProductOptionsState>
     },
   };
 
+  get slashOfID(): number {
+    const pathname: string = location.pathname;
+    const splittedPathname: string[] = pathname.split("/");
+    const slashOfID: string = splittedPathname[4];
+    return Number(slashOfID);
+  }
+
   componentDidMount(): void {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
 
-    this.fetchData();
+    this.fetchData(this.slashOfID);
+  }
+
+  componentWillUnmount(): void {
+    this.props.setData(null);
+  }
+
+  componentDidUpdate(prevProps: Readonly<ClothesContextActions>): void {
+    if (prevProps.data !== this.props.data) {
+      this.setSelectedImage(this.props.data?.catalogImages?.[0].image);
+    }
   }
 
   async fetchData(productId: number): Promise<void> {
     try {
-      const response: Response = await fetch(`${origin}${productId}`, { signal: this.controller.signal });
+      const response: Response = await fetch(`${origin}${productId}/`, { signal: this.controller.signal });
       if (!response.ok) {
         throw "Response wasn't ok, something went wrong!";
       }
 
-      const data: ClothItem[] = await response.json();
+      const data: ClothItem = await response.json();
       this.props.setData(data);
-      console.log(this.props);
+      console.log(this.props.data);
     } catch (err) {
-      alert(err);
       console.error(err);
     }
+  }
+
+  setSelectedImage(url: string): void {
+    this.setState(prevState => ({
+      ...prevState,
+      selectedImage: url,
+    }), () => console.log(this.state.selectedImage));
   }
 
   handleOptionChange = (optionType: string, value: string | number) => {
@@ -156,7 +179,7 @@ class CatalogDetails extends UIReact<ClothesContextActions, ProductOptionsState>
                       },
                     }}
                   >
-                    {this.images.map((image, index) => (
+                    {this.props.data?.catalogImages?.map(({ image }, index) => (
                       <SwiperSlide
                         key={index}
                         onClick={() => this.handleImageClick(image)}
@@ -183,29 +206,33 @@ class CatalogDetails extends UIReact<ClothesContextActions, ProductOptionsState>
                     </a>
                   </div>
                   <div style={{ display: "none" }}>
-                    {this.images
-                      .filter((image) => image !== selectedImage)
-                      .map((image, index) => (
-                        <a href={image} data-fancybox="gallery" key={index}></a>
+                    {this.props.data?.catalogImages
+                      ?.filter(({ image }) => image !== selectedImage)
+                      ?.map(({ image }, index) => (
+                        <a
+                          href={image}
+                          data-fancybox="gallery"
+                          key={index}
+                        />
                       ))}
                   </div>
                 </InjectedUIFancybox>
               </div>
               <div className={styles["catalog-product-details"]}>
                 <h1 className={styles["catalog-product-product-title"]}>
-                  {this.props.data?.[0].title}
+                  {this.props.data?.title}
                 </h1>
                 <div className={styles["catalog-product-product-rating"]}>
                   <img src={star5} alt="Rating" />
                   <span>В наличии: 38</span>
                 </div>
                 <bdi className={styles["catalog-product-product-pricing"]}>
-                  <span className={styles["catalog-product-current-price"]}>{this.props.data?.[0].price.toLocaleString()} сум</span>
-                  <span className={styles["catalog-product-original-price"]}>{this.props.data?.[0].price.toLocaleString()} сум</span>
+                  <span className={styles["catalog-product-current-price"]}>{this.props.data?.price.toLocaleString()} сум</span>
+                  <span className={styles["catalog-product-original-price"]}>{this.props.data?.price.toLocaleString()} сум</span>
                   <span className={styles["catalog-product-discount"]}>-40%</span>
                 </bdi>
                 <p className={styles["catalog-product-product-description"]}>
-                  {this.props.data?.[0].description}
+                  {this.props.data?.description}
                 </p>
                 <div className={styles["hr-line"]}></div>
                 <div className={styles["product-options"]}>

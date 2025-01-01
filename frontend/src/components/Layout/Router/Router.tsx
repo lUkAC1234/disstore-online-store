@@ -56,7 +56,7 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
     this.manageWindowEvents("addEventListener");
   }
 
-  componentDidUpdate(prevProps: Readonly<RouterViewProps>): void {
+  componentDidUpdate(): void {
     if (location.pathname !== this.state.pathname) {
       this.updatePathname();
       this.handleLanguageChange();

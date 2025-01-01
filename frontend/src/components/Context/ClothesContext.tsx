@@ -27,13 +27,14 @@ export interface ClothItem {
   catalogImages: CatalogImage[];
 }
 
-
 export interface ClothesContextState {
-  data: ClothItem[];
+  data: ClothItem;
 }
+
 export interface ClothesContextProps extends PropsWithChildren {}
+
 export interface ClothesContextActions extends ClothesContextState {
-  setData: (data: ClothItem[]) => void;
+  setData: (data: ClothItem) => void;
 }
 
 class ClothesContextProvider extends PureComponent<ClothesContextProps, ClothesContextState> {
@@ -54,8 +55,8 @@ class ClothesContextProvider extends PureComponent<ClothesContextProps, ClothesC
     );
   }
 
-  setData = (data: ClothItem[]): void => {
-    this.setState({ data });
+  setData = (data: ClothItem): void => {
+    this.setState({ data }, () => console.log(data));
   }
 }
 
