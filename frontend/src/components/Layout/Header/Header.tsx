@@ -1,4 +1,4 @@
-import { createRef, PureComponent } from "react";
+import { createRef, PureComponent, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import LogoSvg from "assets/main/images/layout/logo.svg";
 import i18next from "i18next";
@@ -13,6 +13,10 @@ import {
   faUser,
   faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
+import { withContext } from "components/Context/ContextInjector";
+import { ClothesListContext } from "components/Context/ContextCollection";
+import { ClothesListActions } from "components/Context/ClothesListContext";
+import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 
 const lang = i18next.language;
 
@@ -21,7 +25,7 @@ interface HeaderState {
   clothesData: { title: string; image?: string }[];
 }
 
-class Header extends PureComponent<object, HeaderState> {
+class Header extends PureComponent<ClothesListActions, HeaderState> {
   searchInputContainerRef = createRef<HTMLDivElement>();
   headerLinksContainerRef = createRef<HTMLDivElement>();
 
@@ -79,8 +83,11 @@ class Header extends PureComponent<object, HeaderState> {
     this.setState({ activeLink: null });
   };
 
+  componentDidMount(): void {
+  }
+
   render() {
-    const { activeLink, clothesData } = this.state;
+    const { activeLink } = this.state;
     return (
       <header className="header" id="header">
         <nav className="navbar">
@@ -139,23 +146,7 @@ class Header extends PureComponent<object, HeaderState> {
                           >
                             Каталог
                           </Link>
-                          {clothesData.map((item, index) => (
-                            <Link
-                              key={index}
-                              to={`/${lang}/catalog/${item.title}`}
-                              className="header-link-extra-details-column"
-                              onClick={this.closeEntireMenu}
-                            >
-                              {item.image && (
-                                <div className="header-extra-link-image-container">
-                                  <img src={item.image} alt={item.title} />
-                                </div>
-                              )}
-                              <h4 className="header-extra-link-title">
-                                {item.title}
-                              </h4>
-                            </Link>
-                          ))}
+                          {this.linksMobile}
                         </div>
                       </div>
                     )}
@@ -226,6 +217,34 @@ class Header extends PureComponent<object, HeaderState> {
       </header>
     );
   }
+
+  get linksMobile(): ReactNode {
+    const { loading, error, products } = this.props;
+
+    if (loading) {
+      return <SpinnerLoaderWrapper />;
+    } else if (error) {
+      return <p>Failed to load data</p>;
+    }
+
+    return products.map(({ title, catalogImages, id }) => (
+      <Link
+        key={id}
+        to={`/${lang}/catalog/clothes/${id}`}
+        className="header-link-extra-details-column"
+        onClick={this.closeEntireMenu}
+      >
+        <div className="header-extra-link-image-container">
+          <img src={catalogImages?.[0].image} />
+        </div>
+        <h4 className="header-extra-link-title">
+          {title}
+        </h4>
+      </Link>
+    ));
+  }
 }
 
-export default Header;
+const UIHeader = withContext(ClothesListContext, Header);
+
+export default UIHeader;
