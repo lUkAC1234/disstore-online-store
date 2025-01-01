@@ -1,4 +1,4 @@
-import styles from "./Catalog.module.scss";
+import styles from "./CatalogDetails.module.scss";
 import "swiper/css";
 import "swiper/css/navigation";
 import { ReactNode } from "react";
@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import i18next from "i18next";
 import InjectedUIFancybox from "components/Fancybox/Fancybox";
 import NavigationSection from "./Navigation/Navigation";
-import { origin } from "../../../../project.config.json";
+import { origin } from "../../../../../project.config.json";
 import UIReact from "utils/classes/UIReact";
 import { ClothesContextActions, ClothItem } from "components/Context/ClothesContext";
 import { withContext } from "components/Context/ContextInjector";
@@ -39,23 +39,14 @@ interface ProductOptionsState {
   selectedImage: string;
 }
 
-const defaultProductOptions = {
-  colors: [
-    { name: "brown", hex: "#5c4934" },
-    { name: "green", hex: "#3e5b43" },
-    { name: "navy", hex: "#313553" },
-  ],
-  sizes: ["Small", "Medium", "Large", "X-Large"],
-};
-
-class Catalog extends UIReact<ClothesContextActions, ProductOptionsState> {
+class CatalogDetails extends UIReact<ClothesContextActions, ProductOptionsState> {
   images = [tshirt, tshirt2, tshirt3, clothes];
 
   state = {
     selectedImage: this.images[0],
     selectedOptions: {
-      color: defaultProductOptions.colors[0]?.name || "",
-      size: defaultProductOptions.sizes[0] || "",
+      color: "",  // Default empty color
+      size: "",   // Default empty size
       quantity: 1,
     },
   };
@@ -69,9 +60,9 @@ class Catalog extends UIReact<ClothesContextActions, ProductOptionsState> {
     this.fetchData();
   }
 
-  async fetchData(): Promise<void> {
+  async fetchData(productId: number): Promise<void> {
     try {
-      const response: Response = await fetch(origin, { signal: this.controller.signal });
+      const response: Response = await fetch(`${origin}${productId}`, { signal: this.controller.signal });
       if (!response.ok) {
         throw "Response wasn't ok, something went wrong!";
       }
@@ -242,7 +233,7 @@ class Catalog extends UIReact<ClothesContextActions, ProductOptionsState> {
                   <div className={styles["sizes-section"]}>
                     <h4>Choose Size</h4>
                     <div className={styles["sizes-container"]}>
-                      {defaultProductOptions.sizes.map((size) => (
+                      {/* {defaultProductOptions.sizes.map((size) => (
                         <button
                           key={size}
                           className={`${styles["size-option"]} ${
@@ -252,7 +243,7 @@ class Catalog extends UIReact<ClothesContextActions, ProductOptionsState> {
                         >
                           {size}
                         </button>
-                      ))}
+                      ))} */}
                     </div>
                   </div>
 
@@ -289,6 +280,6 @@ class Catalog extends UIReact<ClothesContextActions, ProductOptionsState> {
   }
 }
 
-const UICatalog = withContext(ClothesContext, Catalog);
+const UICatalog = withContext(ClothesContext, CatalogDetails);
 
 export default UICatalog;

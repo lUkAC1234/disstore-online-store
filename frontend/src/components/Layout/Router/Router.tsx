@@ -8,8 +8,10 @@ import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFi
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
+// Lazy-loaded components
 const Home = lazy(() => import("components/Views/Home/Home"));
-const Catalog = lazy(() => import("components/Views/Catalog/Catalog"));
+const CatalogList = lazy(() => import("components/Views/Catalog/CatalogList"));
+const ClothesDetails = lazy(() => import("components/Views/Catalog/CatalogDetails/CatalogDetails"));
 const Error404 = lazy(() => import("components/Views/404"));
 
 @COMPONENT<RouterView>({
@@ -18,38 +20,35 @@ const Error404 = lazy(() => import("components/Views/404"));
       <>
         <Header />
         <main className="main">
-          <Routes>
-            {_this.routes}
-          </Routes>
+          <Routes>{_this.routes}</Routes>
           <Outlet />
         </main>
         <Footer />
       </>
     );
-  }
+  },
 })
 class RouterView extends UIReact<RouterViewProps, RouterViewState> {
   state: Readonly<RouterViewState> = {
     pathname: location.pathname,
     routesMap: new Map([
+      // Redirect root to the default language
       ["/", { path: "/", element: <Navigate to={`/${this.props.i18n.language}`} />, index: true }],
+      // Home page for each language
       ["/:lang", { path: "/:lang", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Home /></Suspense>, index: true }],
-      ["/:lang/catalog", { path: "/:lang/catalog", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Catalog /></Suspense> }],
+      // Catalog list page
+      ["/:lang/catalog", { path: "/:lang/catalog", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><CatalogList /></Suspense> }],
+      // Clothes details page
+      ["/:lang/catalog/clothes/:id", { path: "/:lang/catalog/clothes/:id", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><ClothesDetails /></Suspense> }],
+      // 404 page for unmatched routes
       ["/*", { path: "/*", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Error404 /></Suspense> }],
     ]),
   };
 
   get routes(): ReactNode {
-    return Array
-      .from(this.state?.routesMap)
-      .map(([, { path, element, index }], key) =>
-        <Route
-          path={path}
-          element={element}
-          index={index}
-          key={key}
-        />
-      );
+    return Array.from(this.state?.routesMap).map(([, { path, element, index }], key) => (
+      <Route path={path} element={element} index={index} key={key} />
+    ));
   }
 
   componentDidMount(): void {
@@ -62,7 +61,6 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
       this.updatePathname();
       this.handleLanguageChange();
     }
-
     this.redirectOnUnknownLang();
   }
 
@@ -75,15 +73,15 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
   }
 
   updatePathname = (): void => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       ...prevState,
       pathname: location.pathname,
     }));
-  }
+  };
 
   popstateHandler = (): void => {
     this.handleLanguageChange();
-  }
+  };
 
   handleLanguageChange(): void {
     const pathname: string = location.pathname;
@@ -94,8 +92,6 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
     if (supportedLanguages.includes(lang) && i18n.language !== lang) {
       i18n.changeLanguage(lang);
     }
-
-    // if (!supportedLanguages.includes(lang)) return;
   }
 
   redirectOnUnknownLang(): void {

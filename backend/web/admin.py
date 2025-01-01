@@ -1,8 +1,10 @@
 from django.contrib import admin
 from .models import (
-    UserModel, 
-    ClothesModel,
-    ColorModel
+    UserModel,
+    ClothesModel, 
+    ClothesColorModel, 
+    ClothesSizeModel,
+    ClothesImageModel
 )
 from django.utils.translation import gettext_lazy as _
 # For saving html code
@@ -24,9 +26,20 @@ class ClothesModelAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'title']
     search_fields = ['title']
 
-    
-@admin.register(ColorModel)
-class ClothesModelColorsAdmin(admin.ModelAdmin):
+@admin.register(ClothesColorModel)
+class ClothesColorModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'color']
     list_display_links = ['id', 'color']
     search_fields = ['color']
+
+@admin.register(ClothesSizeModel)
+class ClothesSizeModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'size']
+    list_display_links = ['id', 'size']
+    search_fields = ['size']
+
+@admin.register(ClothesImageModel)
+class ClothesImageModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'product']
+    list_display_links = ['id', 'product']
+    search_fields = ['product__title']

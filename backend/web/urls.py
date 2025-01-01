@@ -1,12 +1,18 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import index
-
-app_name = "main"
-
-# Create a router and register your viewsets with it
+from django.urls import path
+from .views import (
+    ClothesMainView,
+    ClothesModelCreateUpdateView,
+    ClothesColorCreateUpdateView,
+    ClothesSizeCreateUpdateView,
+    ClothesImageCreateUpdateView,
+    ClothesModelDetailView,
+)
 
 urlpatterns = [
-    path('', index.as_view(), name="index"),  # Main page (index)
-    # path('', ColorModelViewSet.as_view(), name="colors"),  # Main page (index)
+    path('clothes/', ClothesMainView.as_view(), name="clothes_main"),
+    path('clothes/manage/', ClothesModelCreateUpdateView.as_view(), name="clothes_manage"),
+    path('colors/manage/', ClothesColorCreateUpdateView.as_view(), name="colors_manage"),
+    path('sizes/manage/', ClothesSizeCreateUpdateView.as_view(), name="sizes_manage"),
+    path('images/manage/', ClothesImageCreateUpdateView.as_view(), name="images_manage"),
+    path('clothes/<int:id>/', ClothesModelDetailView.as_view(), name="clothes_detail"),  
 ]

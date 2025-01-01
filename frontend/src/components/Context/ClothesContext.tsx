@@ -1,14 +1,32 @@
 import { PropsWithChildren, PureComponent, ReactNode } from "react";
 import { ClothesContext } from "./ContextCollection";
 
+export interface Color {
+  id: number;
+  color: string;
+}
+
+export interface Size {
+  id: number;
+  size: string;
+}
+
+export interface CatalogImage {
+  id: number;
+  product: number;
+  image: string;
+}
+
 export interface ClothItem {
   id: number;
   title: string;
   description: string;
   price: number;
-  image: string;
-  colors: number[];
+  colors: Color[];
+  sizes: Size[];
+  catalogImages: CatalogImage[];
 }
+
 
 export interface ClothesContextState {
   data: ClothItem[];
