@@ -39,7 +39,7 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
       // Catalog list page
       ["/:lang/catalog", { path: "/:lang/catalog", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><CatalogList /></Suspense> }],
       // Clothes details page
-      ["/:lang/catalog/clothes/:id", { path: "/:lang/catalog/clothes/:id", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><ClothesDetails /></Suspense> }],
+      ["/:lang/catalog/clothes/:id", { path: "/:lang/catalog/clothes/:slug", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><ClothesDetails /></Suspense> }],
       // 404 page for unmatched routes
       ["/*", { path: "/*", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Error404 /></Suspense> }],
     ]),

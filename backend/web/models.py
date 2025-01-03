@@ -1,14 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import slugify
+from ckeditor.fields import RichTextField
+import random, string
+
+TRANSLIT_DICT = {
+    'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh', 'З': 'Z', 'И': 'I',
+    'Й': 'I', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O', 'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T',
+    'У': 'U', 'Ф': 'F', 'Х': 'Kh', 'Ц': 'Ts', 'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Shch', 'Ъ': '', 'Ы': 'Y', 'Ь': '',
+    'Э': 'E', 'Ю': 'Yu', 'Я': 'Ya', 'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo',
+    'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'i', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p',
+    'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'kh', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch',
+    'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya'
+}
+
+def transliterate_russian(text):
+    return ''.join(TRANSLIT_DICT.get(c, c) for c in text)
 
 class UserModel(AbstractUser):
     pass
 
 class ClothesModel(models.Model):
     title = models.CharField(_("Название"), max_length=100)
-    description = models.TextField(_("Описание"))
-    price = models.PositiveIntegerField(_("Цена"))
+    slug = models.SlugField(max_length=100, unique=True, blank=True, db_index=True, verbose_name=_("Отоброжаемая ссылка"))
+    short_description = models.TextField(max_length=100, verbose_name=_("Краткое описание"))
     colors = models.ManyToManyField(
         'ClothesColorModel', 
         verbose_name=_("Цвета"), 
@@ -20,12 +36,100 @@ class ClothesModel(models.Model):
         related_name='clothes'
     )
     
+    count = models.PositiveIntegerField(default=1, verbose_name=_('Количество'))
+    discount = models.PositiveIntegerField(default=0, verbose_name=_('Скидка'))
+    price = models.PositiveIntegerField(_("Цена"))
+    real_price = models.PositiveBigIntegerField(default=0, verbose_name=_('Реальная цена'))
+    type = models.ForeignKey(
+        "TypesModel", 
+        verbose_name=_("Тип одежды"),
+        on_delete=models.CASCADE,
+    )
+    
+    long_description = RichTextField(verbose_name=_("Полное описание"))
+    
+    @property
+    def is_discount(self):
+        return self.discount != 0
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = transliterate_russian(self.title)
+            base_slug = slugify(base_slug)
+            unique_slug = base_slug
+            random_suffix = ''.join(random.choices(string.ascii_letters + string.digits, k=50))
+            while ClothesModel.objects.filter(slug=unique_slug).exists():
+                random_suffix = ''.join(random.choices(string.ascii_letters + string.digits, k=50))
+                unique_slug = f"{base_slug}-{random_suffix}"
+
+            self.slug = unique_slug
+
+        super().save(*args, **kwargs)
+            
+    
     def __str__(self):
         return self.title
 
     class Meta:
         verbose_name = _("Одежда")
         verbose_name_plural = _("Одежды")
+        ordering = ('-id',)
+        
+# Clothes Reviews & FAQs models
+class ClothesReviewModel(models.Model):
+    product = models.ForeignKey(
+        ClothesModel, 
+        on_delete=models.CASCADE, 
+        related_name='reviews', 
+        verbose_name=_("Продукт")
+    )
+    user = models.ForeignKey(
+        UserModel, 
+        on_delete=models.CASCADE, 
+        verbose_name=_("Пользователь")
+    )
+    text = models.TextField(_("Текст"))
+    created_at = models.DateTimeField(_("Дата создания"), auto_now_add=True)
+    is_allowed = models.BooleanField(_("Разрешено"), default=False)
+    
+    def __str__(self):
+        return f"Отзыв для {self.product.title}"
+
+    class Meta:
+        verbose_name = _("Отзыв")
+        verbose_name_plural = _("Отзывы")
+        ordering = ('-id',)
+    
+class ClothesFAQModel(models.Model):
+    product = models.ForeignKey(
+        ClothesModel, 
+        on_delete=models.CASCADE, 
+        related_name='faqs', 
+        verbose_name=_("Продукт")
+    )
+    question = models.TextField(_("Вопрос"))
+    answer = models.TextField(_("Ответ"), blank=True, null=True)
+    created_at = models.DateTimeField(_("Дата создания"), auto_now_add=True)
+    
+    def __str__(self):
+        return f"Вопрос для {self.product.title}"
+
+    class Meta:
+        verbose_name = _("Вопрос")
+        verbose_name_plural = _("Вопросы")
+        ordering = ('-id',)
+        
+# Clothes Characteristics Models
+class TypesModel(models.Model):
+    title = models.CharField(_("Название"), max_length=100)
+    image = models.ImageField(_("Изображение"), upload_to='clothes/types/%Y/%m/%d/')
+    
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _("Тип одежды")
+        verbose_name_plural = _("Типы одежды")
         ordering = ('-id',)
         
 class ClothesColorModel(models.Model):
@@ -60,7 +164,7 @@ class ClothesImageModel(models.Model):
     image = models.ImageField(_("Изображение"), upload_to='clothes/images/%Y/%m/%d/')
     
     def __str__(self):
-        return f"Image for {self.product.title}"
+        return f"Рисунок для {self.product.title}"
     
     class Meta:
         verbose_name = _("Изображение")

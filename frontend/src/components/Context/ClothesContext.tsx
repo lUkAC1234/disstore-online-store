@@ -17,15 +17,53 @@ export interface CatalogImage {
   image: string;
 }
 
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+}
+
+export interface Reviews {
+  id: number;
+  product: number;
+  user: User[];
+  text: string;
+  created_at: string;
+}
+
+export interface FAQs {
+  id: number;
+  product: number;
+  question: string;
+  answer: string;
+}
+
+export interface Clothestypes {
+  id: number;
+  title: string;
+  image: string;
+}
+
 export interface ClothItem {
   id: number;
   title: string;
-  description: string;
+  short_description: string;
+  long_description: string;
+  slug: string;
+  discount: number;
   price: number;
+  real_price: number;
+  count: number;
+  type: Clothestypes;
   colors: Color[];
   sizes: Size[];
   catalogImages: CatalogImage[];
+  reviews: Reviews[];
+  faqs: FAQs[];
 }
+
 
 export interface ClothesContextState {
   data: ClothItem;
@@ -56,7 +94,7 @@ class ClothesContextProvider extends PureComponent<ClothesContextProps, ClothesC
   }
 
   setData = (data: ClothItem): void => {
-    this.setState({ data }, () => console.log(data));
+    this.setState({ data });
   }
 }
 

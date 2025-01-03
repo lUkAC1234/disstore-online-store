@@ -1,32 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@600&family=Open+Sans:wght@300&family=Poppins:wght@400;500;600;700;800;900&display=swap");
-@font-face {
-  font-family: "Gilroy";
-  src: url("/static/main/fonts/girloy/Gilroy-Regular.ttf") format("truetype"); /* Default font */
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: "Gilroy";
-  src: url("/static/main/fonts/girloy/Gilroy-Light.ttf") format("truetype"); /* Light font */
-  font-weight: 300;
-  font-style: normal;
-}
-@font-face {
-  font-family: "Gilroy";
-  src: url("/static/main/fonts/girloy/Gilroy-Medium.ttf") format("truetype"); /* Medium font */
-  font-weight: 500;
-  font-style: normal;
-}
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 /* Base Colors */
 :root {
-  --primary-color: #20184E;
-  --purple: #8828FF;
+  --primary-color: #111111;
+  --primary-color-second: #111111;
   --light-gray: #D8E0F0;
-  --light-purple: #C08DFF;
-  --yellow: #FFDA58;
-  --white: #ffffff;
+  --light-color: #fff;
+  --white: #b7babe;
   --input-background: #D8E0F0;
-  --poppins: Gilroy, Arial, sans-serif !important;
+  --font: Montserrat, serif !important;
 }
 
 .aligned label + p,
@@ -42,17 +23,17 @@ h1,
 h2,
 li {
   color: var(--primary-color) !important;
-  font-family: var(--poppins) !important;
+  font-family: var(--font) !important;
   font-weight: 500 !important;
   font-size: 1rem !important;
 }
 
 body {
-  background: linear-gradient(0deg, var(--white) 0%, var(--light-purple) 100%);
+  background: linear-gradient(0deg, var(--white) 0%, var(--light-color) 100%);
 }
 body #container #header {
-  background: var(--purple);
-  font-family: var(--poppins);
+  background: var(--primary-color-second);
+  font-family: var(--font);
   font-weight: 500;
 }
 body #container #header #site-name a {
@@ -61,7 +42,7 @@ body #container #header #site-name a {
 }
 body #container .breadcrumbs {
   background: var(--primary-color);
-  font-family: var(--poppins);
+  font-family: var(--font);
   font-weight: 500;
   font-size: 1.1rem;
   color: var(--light-gray);
@@ -76,16 +57,16 @@ body #container .shifted .sticky #nav-filter {
   border: none;
   outline: none;
   font-size: 1rem;
-  font-family: var(--poppins);
+  font-family: var(--font);
   font-weight: 500;
   border-bottom: 2px solid var(--primary-color);
   color: var(--primary-color);
 }
 body #container .shifted .sticky #nav-filter:focus {
-  border-bottom: 2px solid var(--purple);
+  border-bottom: 2px solid var(--primary-color-second);
 }
 body #container .shifted .messagelist .success {
-  background-color: var(--purple);
+  background-color: var(--primary-color-second);
   font-size: 1rem;
   font-weight: 500;
   color: var(--white);
@@ -115,7 +96,7 @@ a:link, a:visited {
 }
 #content .errorlist,
 #content .errornote {
-  background: var(--purple);
+  background: var(--primary-color-second);
   margin-inline: 0;
   border-radius: 0.2rem;
   border: none;
@@ -123,7 +104,7 @@ a:link, a:visited {
 }
 #content .errorlist li,
 #content .errornote li {
-  font-family: var(--poppins) !important;
+  font-family: var(--font) !important;
   color: var(--white) !important;
   text-align: center;
 }
@@ -134,25 +115,25 @@ a:link, a:visited {
 #content .app-web tr td,
 #content .app-web tr a {
   border: none;
-  color: var(--purple);
-  font-family: var(--poppins);
+  color: var(--primary-color-second);
+  font-family: var(--font);
 }
 #content #change-history .paginator {
   width: max-content;
   background: var(--primary-color);
-  font-family: var(--poppins);
+  font-family: var(--font);
   margin-top: 0.5rem;
   border-radius: 0 0 0 0.5rem;
 }
 #content #change-history thead th {
   background: var(--primary-color);
-  font-family: var(--poppins);
+  font-family: var(--font);
 }
 #content #change-history tr {
-  font-family: var(--poppins);
+  font-family: var(--font);
 }
 #content #change-history tr:nth-child(odd) {
-  background: var(--purple);
+  background: var(--primary-color-second);
 }
 #content #change-history tr:nth-child(even) {
   color: var(--primary-color);
@@ -164,25 +145,25 @@ a:link, a:visited {
   border: none;
 }
 #content #deleted-objects a {
-  color: var(--purple);
+  color: var(--primary-color-second);
   font-size: 1.25rem;
 }
 #content form div:has(.cancel-link) input[type=submit] {
-  background: var(--purple);
-  font-family: var(--poppins);
+  background: var(--primary-color-second);
+  font-family: var(--font);
   height: fit-content;
 }
 #content form div:has(.cancel-link) .cancel-link {
   background: var(--white);
-  font-family: var(--poppins);
-  color: var(--purple);
+  font-family: var(--font);
+  color: var(--primary-color-second);
   padding-block: 0.75rem;
 }
 #content .historylink,
 #content .object-tools a:link,
 #content .object-tools a:visited {
   background-color: var(--primary-color);
-  font-family: var(--poppins);
+  font-family: var(--font);
   font-weight: 500;
   color: var(--white);
 }
@@ -205,7 +186,7 @@ a:link, a:visited {
   font-size: 0.8rem;
 }
 #content #recent-actions-module a {
-  color: var(--purple);
+  color: var(--primary-color-second);
 }
 #content #changelist {
   background: transparent;
@@ -221,7 +202,7 @@ a:link, a:visited {
 #content #changelist #toolbar div label {
   background: var(--white);
   color: var(--primary-color);
-  font-family: var(--poppins);
+  font-family: var(--font);
   font-size: 0.9rem;
   border: none;
   outline: none;
@@ -229,7 +210,7 @@ a:link, a:visited {
 }
 #content #changelist #toolbar div input[type=submit] {
   color: var(--white);
-  background: var(--purple);
+  background: var(--primary-color-second);
 }
 #content #changelist #toolbar div label {
   display: flex;
@@ -241,7 +222,7 @@ a:link, a:visited {
 #content #changelist #changelist-form .actions,
 #content #changelist #changelist-form .paginator {
   background: var(--primary-color);
-  font-family: var(--poppins);
+  font-family: var(--font);
   color: var(--white);
   border-radius: 0.25rem;
   margin-block: 1rem;
@@ -255,7 +236,7 @@ a:link, a:visited {
 #content #changelist #changelist-form .paginator select {
   background: var(--white);
   font-weight: 500;
-  font-family: var(--poppins);
+  font-family: var(--font);
   font-size: 1rem;
   outline: none;
   border: none;
@@ -266,7 +247,7 @@ a:link, a:visited {
 }
 #content #changelist #changelist-form .actions button,
 #content #changelist #changelist-form .paginator button {
-  background: var(--purple);
+  background: var(--primary-color-second);
   color: var(--white);
 }
 #content #changelist #changelist-form .results thead tr,
@@ -275,7 +256,7 @@ a:link, a:visited {
   background: var(--primary-color);
 }
 #content #changelist #changelist-form .results tr {
-  background: var(--purple);
+  background: var(--primary-color-second);
   border-radius: 0.25rem;
   margin-block: 0.5rem;
 }
@@ -283,7 +264,7 @@ a:link, a:visited {
 #content #changelist #changelist-form .results tr th,
 #content #changelist #changelist-form .results tr a {
   color: var(--white);
-  font-family: var(--poppins);
+  font-family: var(--font);
   font-size: 1rem;
 }
 
@@ -292,16 +273,16 @@ a:link, a:visited {
   border-radius: 0.5rem;
 }
 .module caption {
-  background: var(--purple);
-  font-family: var(--poppins);
+  background: var(--primary-color-second);
+  font-family: var(--font);
   font-weight: 500;
 }
 .module .model-group {
-  background: var(--purple);
+  background: var(--primary-color-second);
 }
 .module .model-group a {
   color: var(--white);
-  font-family: var(--poppins);
+  font-family: var(--font);
   font-weight: 500;
 }
 .module .model-group th,
@@ -322,10 +303,10 @@ a:link, a:visited {
 .module .form-row .flex-container input,
 .module .form-row .flex-container textarea {
   border: 1px solid var(--input-background);
-  background: none;
+  background: var(--light-color);
   outline: none;
   color: var(--primary-color);
-  font-family: var(--poppins);
+  font-family: var(--font);
   font-weight: 500;
   width: calc(100% - 10px);
   min-width: calc(100% - 10px);
@@ -346,16 +327,16 @@ a:link, a:visited {
 }
 .module .form-row .flex-container .file-upload {
   color: var(--primary-color);
-  font-family: var(--poppins);
+  font-family: var(--font);
   font-weight: 500;
 }
 .module .form-row .flex-container .file-upload a {
-  color: var(--purple);
+  color: var(--primary-color-second);
 }
 .module .form-row .flex-container select {
-  background: var(--purple);
+  background: var(--primary-color-second);
   color: var(--white);
-  font-family: var(--poppins);
+  font-family: var(--font);
   font-weight: 500;
   border: none;
   outline: none;
@@ -364,11 +345,11 @@ a:link, a:visited {
   background: var(--primary-color);
 }
 .module .form-row .flex-container select option:checked {
-  color: var(--purple);
+  color: var(--primary-color-second);
   background: var(--white);
 }
 .module .form-row .flex-container .readonly a {
-  color: var(--purple);
+  color: var(--primary-color-second);
 }
 @media (max-width: 767px) {
   .module .form-row {
@@ -383,7 +364,7 @@ a:link, a:visited {
 }
 
 .submit-row {
-  background: var(--purple) !important;
+  background: var(--primary-color-second) !important;
   border: none !important;
 }
 .submit-row .button,
@@ -392,9 +373,9 @@ a:link, a:visited {
 .submit-row input,
 .submit-row a.button,
 .submit-row .deletelink {
-  background: var(--white);
+  background: var(--light-color);
   color: var(--primary-color);
-  font-family: var(--poppins);
+  font-family: var(--font);
   font-weight: 500;
   border: 1px solid transparent;
   outline: none;
@@ -428,7 +409,7 @@ a:link, a:visited {
 }
 
 .main.shifted > #nav-sidebar {
-  background: linear-gradient(90deg, var(--white) 0%, var(--light-purple) 100%);
+  background: linear-gradient(90deg, var(--white) 0%, var(--light-color) 100%);
   border-color: var(--primary-color);
 }
 .main.shifted > #nav-sidebar .app-web {
@@ -436,7 +417,7 @@ a:link, a:visited {
 }
 .main.shifted > #nav-sidebar .app-web table caption {
   background: var(--primary-color);
-  font-family: var(--poppins);
+  font-family: var(--font);
   width: 90%;
   margin: 0.5rem auto;
   border-radius: 0.25rem;
@@ -450,8 +431,8 @@ a:link, a:visited {
   margin: 0.5rem auto;
   border-radius: 0.25rem;
   width: 98%;
-  background: var(--purple);
-  font-family: var(--poppins);
+  background: var(--primary-color-second);
+  font-family: var(--font);
 }
 .main.shifted > #nav-sidebar .app-web table tbody tr a {
   color: var(--white) !important;
@@ -471,11 +452,11 @@ a:link, a:visited {
 }
 
 #changelist-filter li.selected {
-  border-color: var(--purple) !important;
+  border-color: var(--primary-color-second) !important;
 }
 
 #changelist-filter li.selected a {
-  color: var(--purple) !important;
+  color: var(--primary-color-second) !important;
 }
 
 #changelist-filter details summary {
@@ -484,24 +465,28 @@ a:link, a:visited {
 }
 
 #changelist-filter details > summary::before {
-  color: var(--purple) !important;
+  color: var(--primary-color-second) !important;
 }
 
 .module h2,
 .module caption,
 .inline-group h2 {
-  background: var(--purple) !important;
+  background: var(--primary-color-second) !important;
 }
 
 #changelist-filter a {
   color: var(--primary-color) !important;
 }
 #changelist-filter a:hover {
-  color: var(--purple) !important;
+  color: var(--primary-color-second) !important;
 }
 
 #changelist-filter h2 {
   color: var(--white) !important;
+}
+
+#login-form .form-row label {
+  color: var(--white);
 }
 
 /*# sourceMappingURL=__admin.css.map */

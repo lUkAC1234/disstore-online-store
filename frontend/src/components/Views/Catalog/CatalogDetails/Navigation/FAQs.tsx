@@ -2,7 +2,7 @@ import { PureComponent, ReactNode } from "react";
 import styles from "./Navigation.module.scss";
 
 interface FAQsProps {
-    
+    faqs?: any[];
 }
 
 class FAQsSection extends PureComponent<FAQsProps> {
@@ -11,6 +11,16 @@ class FAQsSection extends PureComponent<FAQsProps> {
             <section className={styles["faq-section"]}>
                 <div className={styles["faq-container"]}>
                     <h1>FAQs Section</h1>
+                    {this.props.faqs && this.props.faqs.length > 0 ? (
+                        this.props.faqs.map((faqs, index) => (
+                            <div key={index}>
+                                <h4>{faqs.question}</h4>
+                                <p>{faqs.answer}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p>Пока что нету вопросов</p>
+                    )}
                 </div>
             </section>
         )

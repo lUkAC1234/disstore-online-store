@@ -1,5 +1,19 @@
 from rest_framework import serializers
-from .models import ClothesModel, ClothesColorModel, ClothesSizeModel, ClothesImageModel
+from .models import (
+    UserModel,
+    ClothesModel, 
+    ClothesColorModel, 
+    ClothesSizeModel, 
+    ClothesImageModel,
+    TypesModel,
+    ClothesReviewModel, 
+    ClothesFAQModel
+)
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
 class ClothesColorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,14 +30,48 @@ class ClothesImageSerializer(serializers.ModelSerializer):
         model = ClothesImageModel
         fields = ['id', 'product', 'image']
 
+class ClothesTypeModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TypesModel
+        fields = ['id', 'title', 'image']
+        
+class ClothesReviewModelSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    class Meta:
+        model = ClothesReviewModel
+        fields = ['id', 'product', 'user', 'text', 'created_at']
+
+class ClothesFAQModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClothesFAQModel
+        fields = ['id', 'product', 'question', 'answer']
+
 class ClothesModelSerializer(serializers.ModelSerializer):
     colors = ClothesColorSerializer(many=True, read_only=True)
     sizes = ClothesSizeSerializer(many=True, read_only=True)
+    type = ClothesTypeModelSerializer(read_only=True)
     catalogImages = ClothesImageSerializer(many=True, read_only=True)
+    reviews = ClothesReviewModelSerializer(many=True)
+    faqs = ClothesFAQModelSerializer(many=True, read_only=True)
 
     class Meta:
         model = ClothesModel
-        fields = ['id', 'title', 'description', 'price', 'colors', 'sizes', 'catalogImages']
+        fields = ['id', 
+                  'title', 
+                  'slug',
+                  'short_description', 
+                  'long_description',
+                  'price', 
+                  'discount', 
+                  'real_price', 
+                  'count',
+                  'colors', 
+                  'sizes', 
+                  'type', 
+                  'catalogImages',
+                  'reviews',
+                  'faqs'
+                  ]
 
 class ClothesModelCreateUpdateSerializer(serializers.ModelSerializer):
     colors = serializers.PrimaryKeyRelatedField(queryset=ClothesColorModel.objects.all(), many=True)
@@ -31,7 +79,7 @@ class ClothesModelCreateUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ClothesModel
-        fields = ['id', 'title', 'description', 'price', 'colors', 'sizes']
+        fields = ['id', 'title', 'description', 'price', 'discount', 'colors', 'sizes', 'types']
 
     def create(self, validated_data):
         colors = validated_data.pop('colors', [])

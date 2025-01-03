@@ -6,13 +6,15 @@ from .views import (
     ClothesSizeCreateUpdateView,
     ClothesImageCreateUpdateView,
     ClothesModelDetailView,
+    ClothesTypeMainView
 )
 
 urlpatterns = [
-    path('clothes/', ClothesMainView.as_view(), name="clothes_main"),
-    path('clothes/manage/', ClothesModelCreateUpdateView.as_view(), name="clothes_manage"),
+    path('', ClothesMainView.as_view(), name="clothes_main"),
+    path('manage/', ClothesModelCreateUpdateView.as_view(), name="clothes_manage"),
     path('colors/manage/', ClothesColorCreateUpdateView.as_view(), name="colors_manage"),
     path('sizes/manage/', ClothesSizeCreateUpdateView.as_view(), name="sizes_manage"),
     path('images/manage/', ClothesImageCreateUpdateView.as_view(), name="images_manage"),
-    path('clothes/<int:id>/', ClothesModelDetailView.as_view(), name="clothes_detail"),  
+    path('types/', ClothesTypeMainView.as_view(), name="types_main"),
+    path('<slug:slug>/', ClothesModelDetailView.as_view(), name="clothes_detail"),  
 ]

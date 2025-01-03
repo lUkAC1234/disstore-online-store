@@ -1,19 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@600&family=Open+Sans:wght@300&family=Poppins:wght@400;500;600;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-@import '../../fonts/girloy';
-
-$girloy: 'Gilroy', Arial, sans-serif;
+$font: "Montserrat", serif;
 
 /* Base Colors */
 :root {
-    --primary-color: #20184E;
-    --purple: #8828FF;
+    --primary-color: #111111;
+    --primary-color-second: #111111;
     --light-gray: #D8E0F0;
-    --light-purple: #C08DFF;
-    --yellow: #FFDA58;
-    --white: #ffffff;
+    --light-color: #fff;
+    --white: #b7babe;
     --input-background: #D8E0F0;
-    --poppins:  #{$girloy} !important;
+    --font: #{$font} !important;
 }
 
 .aligned label+p,
@@ -29,18 +26,18 @@ h1,
 h2,
 li {
     color: var(--primary-color) !important;
-    font-family: var(--poppins) !important;
+    font-family: var(--font) !important;
     font-weight: 500 !important;
     font-size: 1rem !important;
 }
 
 body {
-    background: linear-gradient(0deg, var(--white) 0%, var(--light-purple) 100%);
+    background: linear-gradient(0deg, var(--white) 0%, var(--light-color) 100%);
 
     #container {
         #header {
-            background: var(--purple);
-            font-family: var(--poppins);
+            background: var(--primary-color-second);
+            font-family: var(--font);
             font-weight: 500;
 
             #site-name {
@@ -54,7 +51,7 @@ body {
 
         .breadcrumbs {
             background: var(--primary-color);
-            font-family: var(--poppins);
+            font-family: var(--font);
             font-weight: 500;
             font-size: 1.1rem;
             color: var(--light-gray);
@@ -73,20 +70,20 @@ body {
                     border: none;
                     outline: none;
                     font-size: 1rem;
-                    font-family: var(--poppins);
+                    font-family: var(--font);
                     font-weight: 500;
                     border-bottom: 2px solid var(--primary-color);
                     color: var(--primary-color);
 
                     &:focus {
-                        border-bottom: 2px solid var(--purple);
+                        border-bottom: 2px solid var(--primary-color-second);
                     }
                 }
             }
 
             .messagelist {
                 .success {
-                    background-color: var(--purple);
+                    background-color: var(--primary-color-second);
                     font-size: 1rem;
                     font-weight: 500;
                     color: var(--white);
@@ -123,14 +120,14 @@ a:link, a:visited {
 
     .errorlist,
     .errornote {
-        background: var(--purple);
+        background: var(--primary-color-second);
         margin-inline: 0;
         border-radius: 0.2rem;
         border: none;
         color: var(--white);
 
         li {
-            font-family: var(--poppins) !important;
+            font-family: var(--font) !important;
             color: var(--white) !important;
             text-align: center;
         }
@@ -144,8 +141,8 @@ a:link, a:visited {
             td,
             a {
                 border: none;
-                color: var(--purple);
-                font-family: var(--poppins);
+                color: var(--primary-color-second);
+                font-family: var(--font);
             }
         }
     }
@@ -154,7 +151,7 @@ a:link, a:visited {
         .paginator {
             width: max-content;
             background: var(--primary-color);
-            font-family: var(--poppins);
+            font-family: var(--font);
             margin-top: 0.5rem;
             border-radius: 0 0 0 0.5rem;
         }
@@ -163,15 +160,15 @@ a:link, a:visited {
 
             th {
                 background: var(--primary-color);
-                font-family: var(--poppins);
+                font-family: var(--font);
             }
         }
 
         tr {
-            font-family: var(--poppins);
+            font-family: var(--font);
 
             &:nth-child(odd) {
-                background: var(--purple);
+                background: var(--primary-color-second);
             }
 
             &:nth-child(even) {
@@ -189,7 +186,7 @@ a:link, a:visited {
 
     #deleted-objects {
         a {
-            color: var(--purple);
+            color: var(--primary-color-second);
             font-size: 1.25rem;
         }
     }
@@ -198,15 +195,15 @@ a:link, a:visited {
         div {
             &:has(.cancel-link) {
                 input[type="submit"] {
-                    background: var(--purple);
-                    font-family: var(--poppins);
+                    background: var(--primary-color-second);
+                    font-family: var(--font);
                     height: fit-content;
                 }
 
                 .cancel-link {
                     background: var(--white);
-                    font-family: var(--poppins);
-                    color: var(--purple);
+                    font-family: var(--font);
+                    color: var(--primary-color-second);
                     padding-block: 0.75rem;
                 }
             }
@@ -217,7 +214,7 @@ a:link, a:visited {
     .object-tools a:link,
     .object-tools a:visited {
         background-color: var(--primary-color);
-        font-family: var(--poppins);
+        font-family: var(--font);
         font-weight: 500;
         color: var(--white);
     }
@@ -244,7 +241,7 @@ a:link, a:visited {
         }
 
         a {
-            color: var(--purple);
+            color: var(--primary-color-second);
         }
     }
 
@@ -262,7 +259,7 @@ a:link, a:visited {
                 label {
                     background: var(--white);
                     color: var(--primary-color);
-                    font-family: var(--poppins);
+                    font-family: var(--font);
                     font-size: 0.9rem;
                     border: none;
                     outline: none;
@@ -271,7 +268,7 @@ a:link, a:visited {
 
                 input[type="submit"] {
                     color: var(--white);
-                    background: var(--purple);
+                    background: var(--primary-color-second);
                 }
 
                 label {
@@ -289,7 +286,7 @@ a:link, a:visited {
             .actions,
             .paginator {
                 background: var(--primary-color);
-                font-family: var(--poppins);
+                font-family: var(--font);
                 color: var(--white);
                 border-radius: 0.25rem;
                 margin-block: 1rem;
@@ -300,7 +297,7 @@ a:link, a:visited {
                 select {
                     background: var(--white);
                     font-weight: 500;
-                    font-family: var(--poppins);
+                    font-family: var(--font);
                     font-size: 1rem;
                     outline: none;
                     border: none;
@@ -311,7 +308,7 @@ a:link, a:visited {
                 }
 
                 button {
-                    background: var(--purple);
+                    background: var(--primary-color-second);
                     color: var(--white);
                 }
             }
@@ -328,7 +325,7 @@ a:link, a:visited {
                 }
 
                 tr {
-                    background: var(--purple);
+                    background: var(--primary-color-second);
                     border-radius: 0.25rem;
                     margin-block: 0.5rem;
 
@@ -336,7 +333,7 @@ a:link, a:visited {
                     th,
                     a {
                         color: var(--white);
-                        font-family: var(--poppins);
+                        font-family: var(--font);
                         font-size: 1rem;
                     }
                 }
@@ -350,17 +347,17 @@ a:link, a:visited {
     border-radius: 0.5rem;
 
     caption {
-        background: var(--purple);
-        font-family: var(--poppins);
+        background: var(--primary-color-second);
+        font-family: var(--font);
         font-weight: 500;
     }
 
     .model-group {
-        background: var(--purple);
+        background: var(--primary-color-second);
 
         a {
             color: var(--white);
-            font-family: var(--poppins);
+            font-family: var(--font);
             font-weight: 500;
         }
 
@@ -385,10 +382,10 @@ a:link, a:visited {
             input,
             textarea {
                 border: 1px solid var(--input-background);
-                background: none;
+                background: var(--light-color);
                 outline: none;
                 color: var(--primary-color);
-                font-family: var(--poppins);
+                font-family: var(--font);
                 font-weight: 500;
                 width: calc(100% - 10px);
                 min-width: calc(100% - 10px);
@@ -412,18 +409,18 @@ a:link, a:visited {
 
             .file-upload {
                 color: var(--primary-color);
-                font-family: var(--poppins);
+                font-family: var(--font);
                 font-weight: 500;
 
                 a {
-                    color: var(--purple);
+                    color: var(--primary-color-second);
                 }
             }
 
             select {
-                background: var(--purple);
+                background: var(--primary-color-second);
                 color: var(--white);
-                font-family: var(--poppins);
+                font-family: var(--font);
                 font-weight: 500;
                 border: none;
                 outline: none;
@@ -432,7 +429,7 @@ a:link, a:visited {
                     background: var(--primary-color);
 
                     &:checked {
-                        color: var(--purple);
+                        color: var(--primary-color-second);
                         background: var(--white);
                     }
                 }
@@ -440,7 +437,7 @@ a:link, a:visited {
 
             .readonly {
                 a {
-                    color: var(--purple);
+                    color: var(--primary-color-second);
                 }
             }
         }
@@ -462,7 +459,7 @@ a:link, a:visited {
 }
 
 .submit-row {
-    background: var(--purple) !important;
+    background: var(--primary-color-second) !important;
     border: none !important;
 
     .button,
@@ -471,9 +468,9 @@ a:link, a:visited {
     input,
     a.button,
     .deletelink {
-        background: var(--white);
+        background: var(--light-color);
         color: var(--primary-color);
-        font-family: var(--poppins);
+        font-family: var(--font);
         font-weight: 500;
         border: 1px solid transparent;
         outline: none;
@@ -503,7 +500,7 @@ a:link, a:visited {
 }
 
 .main.shifted>#nav-sidebar {
-    background: linear-gradient(90deg, var(--white) 0%, var(--light-purple) 100%);
+    background: linear-gradient(90deg, var(--white) 0%, var(--light-color) 100%);
     border-color: var(--primary-color);
 
     .app-web {
@@ -512,7 +509,7 @@ a:link, a:visited {
         table {
             caption {
                 background: var(--primary-color);
-                font-family: var(--poppins);
+                font-family: var(--font);
                 width: 90%;
                 margin: 0.5rem auto;
                 border-radius: 0.25rem;
@@ -527,8 +524,8 @@ a:link, a:visited {
                     margin: 0.5rem auto;
                     border-radius: 0.25rem;
                     width: 98%;
-                    background: var(--purple);
-                    font-family: var(--poppins);
+                    background: var(--primary-color-second);
+                    font-family: var(--font);
 
                     a {
                         color: var(--white) !important;
@@ -554,11 +551,11 @@ a:link, a:visited {
 }
 
 #changelist-filter li.selected {
-    border-color: var(--purple) !important;
+    border-color: var(--primary-color-second) !important;
 }
 
 #changelist-filter li.selected a {
-    color: var(--purple) !important;
+    color: var(--primary-color-second) !important;
 }
 
 #changelist-filter details summary {
@@ -567,20 +564,20 @@ a:link, a:visited {
 }
 
 #changelist-filter details>summary::before {
-    color: var(--purple) !important;
+    color: var(--primary-color-second) !important;
 }
 
 .module h2,
 .module caption,
 .inline-group h2 {
-    background: var(--purple) !important;
+    background: var(--primary-color-second) !important;
 }
 
 #changelist-filter a {
     color: var(--primary-color) !important;
 
     &:hover {
-        color: var(--purple) !important;
+        color: var(--primary-color-second) !important;
     }
 }
 
@@ -588,3 +585,6 @@ a:link, a:visited {
     color: var(--white) !important;
 }
 
+#login-form .form-row label {
+    color: var(--white);
+}

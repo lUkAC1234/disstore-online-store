@@ -1,13 +1,14 @@
 from rest_framework import status
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from .models import ClothesModel, ClothesColorModel, ClothesSizeModel, ClothesImageModel
+from .models import ClothesModel, ClothesColorModel, ClothesSizeModel, ClothesImageModel, TypesModel
 from .serializer import (
     ClothesModelSerializer,
     ClothesModelCreateUpdateSerializer,
     ClothesColorSerializer,
     ClothesSizeSerializer,
-    ClothesImageSerializer
+    ClothesImageSerializer,
+    ClothesTypeModelSerializer
 )
 
 class ClothesMainView(ListAPIView):
@@ -39,8 +40,13 @@ class ClothesImageCreateUpdateView(CreateAPIView, UpdateAPIView, DestroyAPIView)
 
     def perform_create(self, serializer):
         serializer.save()
+        
+class ClothesTypeMainView(ListAPIView):
+    queryset = TypesModel.objects.all()
+    serializer_class = ClothesTypeModelSerializer
 
 class ClothesModelDetailView(RetrieveAPIView):
     queryset = ClothesModel.objects.prefetch_related('colors', 'sizes', 'catalogImages').all()
     serializer_class = ClothesModelSerializer
-    lookup_field = 'id'
+    lookup_field = 'slug'
+    

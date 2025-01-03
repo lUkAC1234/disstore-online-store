@@ -2,7 +2,7 @@ import { PureComponent, ReactNode } from "react";
 import styles from "./Navigation.module.scss"; 
 
 interface DetailsProps {
-  detailsText: ReactNode; 
+  detailsText?: ReactNode; 
 }
 
 class DetailsSection extends PureComponent<DetailsProps> {
@@ -14,10 +14,12 @@ class DetailsSection extends PureComponent<DetailsProps> {
         <div className={styles["details-container"]}>
           <h2 className={styles["details-title"]}>Product Details</h2>
           <div className={styles["details-content"]}>
-            {detailsText ? (
-              detailsText
+          {detailsText ? (
+              <div
+                dangerouslySetInnerHTML={{ __html: String(detailsText) }}
+              />
             ) : (
-              <p>No details available at the moment. Please check back later.</p>
+              <p>Пока что нету полной описании</p>
             )}
           </div>
         </div>

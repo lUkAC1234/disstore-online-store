@@ -3,12 +3,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { ReactNode } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import tshirt from "assets/main/images/catalog/tshirt.png";
-import tshirt2 from "assets/main/images/catalog/tshirt2.png";
-import tshirt3 from "assets/main/images/catalog/tshirt3.png";
-import clothes from "assets/main/images/layout/clothes.jpg";
 import { Navigation } from "swiper/modules";
-import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faCheck, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import star5 from "assets/main/images/main-page/5star.png";
 import { Link } from "react-router-dom";
@@ -26,15 +22,9 @@ import { ClothesContext, ClothesListContext } from "components/Context/ContextCo
 import { debounce } from "utils/hooks/debounce";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import SpinnerLoader from "components/Loaders/SpinnerLoader";
+import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 
 const lang: string = i18next.language;
-
-// interface ProductOptionsProps {
-//   productOptions: {
-//     colors: { name: string; hex: string }[];
-//     sizes: string[];
-//   };
-// }
 
 interface ProductOptionsState {
   selectedOptions: {
@@ -42,36 +32,37 @@ interface ProductOptionsState {
     size: string;
     quantity: number;
   };
-  selectedImage: string;
+  selectedImage: string | null;
 }
 
 class CatalogDetails extends UIReact<
   ClothesContextActions & ClothesListActions,
   ProductOptionsState
 > {
-  images = [tshirt, tshirt2, tshirt3, clothes];
 
-  state = {
+  state: ProductOptionsState = {
     selectedImage: null,
     selectedOptions: {
-      color: "", // Default empty color
-      size: "", // Default empty size
+      color: "",
+      size: "",
       quantity: 1,
     },
   };
 
-  get slashOfID(): number {
+  get slashOfSlug(): string {
     const pathname: string = location.pathname;
     const splittedPathname: string[] = pathname.split("/");
     const slashOfID: string = splittedPathname[4];
-    return Number(slashOfID);
+    return slashOfID;
   }
+
 
   componentDidMount(): void {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
+
 
     this.fetchData();
 
@@ -87,44 +78,54 @@ class CatalogDetails extends UIReact<
   }
 
   componentWillUnmount(): void {
+    super.componentWillUnmount();
     this.props.setData(null);
   }
 
   componentDidUpdate(prevProps: Readonly<ClothesContextActions>): void {
-    if (prevProps.data !== this.props.data) {
-      this.setSelectedImage(this.props.data?.catalogImages?.[0].image);
+    if (prevProps.data !== this.props.data && this.props.data) {
+      const { colors, sizes, catalogImages } = this.props.data;
+
+      this.setState({
+        selectedOptions: {
+          color: colors?.[0]?.color || "",
+          size: sizes?.[0]?.size || "",
+          quantity: 1,
+        },
+        selectedImage: catalogImages?.[0]?.image || null,
+      });
     }
   }
 
   fetchData = debounce(
-    async () => await this.fetchDataProduct(this.slashOfID),
-    250
+    async () => {
+      await this.fetchDataProduct(this.slashOfSlug);
+    }, 100
   );
 
-  async fetchDataProduct(productId: number): Promise<void> {
+  async fetchDataProduct(productSlug: string): Promise<void> {
     try {
-      const response: Response = await fetch(`${origin}${productId}/`, {
+      const response: Response = await fetch(`${origin}${productSlug}/`, {
         signal: this.controller.signal,
       });
       if (!response.ok) {
-        throw "Response wasn't ok, something went wrong!";
+        throw new Error("Response wasn't ok, something went wrong!");
       }
-
+    
       const data: ClothItem = await response.json();
       this.props.setData(data);
-      console.log(this.props.data);
-    } catch (err) {
-      console.error(err);
+    }
+    catch (err) {
+      return;
     }
   }
-
+  
   setSelectedImage(url: string): void {
     this.setState(
       (prevState) => ({
         ...prevState,
         selectedImage: url,
       }),
-      () => console.log(this.state.selectedImage)
     );
   }
 
@@ -137,17 +138,21 @@ class CatalogDetails extends UIReact<
     }));
   };
 
-  handleQuantityChange = (type: "increase" | "decrease") => {
+  handleQuantityChange = (
+    type: "increase" | "decrease",
+    maxAvailable: number
+  ) => {
     this.setState((prevState) => ({
       selectedOptions: {
         ...prevState.selectedOptions,
         quantity:
           type === "increase"
-            ? prevState.selectedOptions.quantity + 1
-            : Math.max(1, prevState.selectedOptions.quantity - 1),
+            ? Math.min(100, maxAvailable, prevState.selectedOptions.quantity + 1) // Cap the quantity at 100 or maxAvailable
+            : Math.max(1, prevState.selectedOptions.quantity - 1), // Ensure the minimum is 1
       },
     }));
   };
+
 
   handleImageClick = (image: string) => {
     this.setState({ selectedImage: image });
@@ -156,34 +161,43 @@ class CatalogDetails extends UIReact<
   render(): ReactNode {
     return (
       <>
-        {/* Catalog Section */}
         <section className={styles["catalog-section"]}>
-          {this.product}
+          {this.props.loading ? (
+            <SpinnerLoaderWrapperFixed /> 
+          ) : this.product}
         </section>
-        <NavigationSection />
+        <NavigationSection 
+          long_description={this.props.data?.long_description} 
+          reviews={this.props.data?.reviews}
+          faqs={this.props.data?.faqs}
+        />
       </>
     );
   }
 
   get product(): ReactNode {
     const { selectedImage, selectedOptions } = this.state;
+    const maxAvailable = this.props.data?.count;
 
     if (this.props.loading) {
       return <SpinnerLoader />;
     } else if (this.props.error) {
-      return <h1>Oops, something went wrong!!!</h1>
+      return <h1>Ойй, Что то пошло не так !!!</h1>
     }
 
     return (
+
       <div className={styles["catalog-container"]}>
-        <div className={styles["catalog-link-way"]}>
+        <div className="catalog-link-way">
           <Link to={`/${lang}/`}>Home</Link>
           <FontAwesomeIcon icon={faAngleRight} />
           <Link to={`/${lang}/catalog`}>Shop</Link>
           <FontAwesomeIcon icon={faAngleRight} />
           <Link to={`/${lang}/catalog/men`}>Men</Link>
           <FontAwesomeIcon icon={faAngleRight} />
-          T-shirts
+          <Link to={`/${lang}/catalog/men`}>{this.props.data?.type?.title}</Link>
+          <FontAwesomeIcon icon={faAngleRight} />
+          {this.props.data?.title}
         </div>
         <div className={styles["catalog-wrapper"]}>
           <div className={styles["thumbnail-navigation"]}>
@@ -192,13 +206,18 @@ class CatalogDetails extends UIReact<
                 className={
                   styles["swiper-navigation-buttons-catalog-container"]
                 }
+                style={{
+                  display: this.props.data?.catalogImages?.length > 3 ? "flex" : "none",
+                }}
               >
-                <div
-                  className={`swiper-button-prev ${styles["navigation-button-catalog-prev"]}`}
-                ></div>
-                <div
-                  className={`swiper-button-next ${styles["navigation-button-catalog-next"]}`}
-                ></div>
+                <div className={`
+                    swiper-button-prev 
+                    ${styles["navigation-button-catalog-prev"]}`}>
+                </div>
+                <div className={`
+                    swiper-button-next 
+                    ${styles["navigation-button-catalog-next"]}`}>
+                </div>
               </div>
               <Swiper
                 direction="vertical"
@@ -221,7 +240,7 @@ class CatalogDetails extends UIReact<
                     slidesPerView: 3,
                     direction: "horizontal",
                   },
-                  992: {
+                  1100: {
                     direction: "vertical",
                     slidesPerView: 3,
                   },
@@ -236,9 +255,8 @@ class CatalogDetails extends UIReact<
                     <img
                       src={image}
                       alt={`Thumbnail ${index + 1}`}
-                      className={`${styles["thumbnail"]} ${
-                        selectedImage === image ? styles["active"] : ""
-                      }`}
+                      className={`${styles["thumbnail"]} ${selectedImage === image ? styles["active"] : ""
+                        }`}
                     />
                   </SwiperSlide>
                 ))}
@@ -272,81 +290,95 @@ class CatalogDetails extends UIReact<
             </h1>
             <div className={styles["catalog-product-product-rating"]}>
               <img src={star5} alt="Rating" />
-              <span>В наличии: 38</span>
+              <span>В наличии: {this.props.data?.count}</span>
             </div>
             <bdi className={styles["catalog-product-product-pricing"]}>
               <span className={styles["catalog-product-current-price"]}>
-                {this.props.data?.price.toLocaleString()} сум
+                {this.props.data?.real_price.toLocaleString('en-US')} сум
               </span>
               <span className={styles["catalog-product-original-price"]}>
-                {this.props.data?.price.toLocaleString()} сум
+                {this.props.data?.price.toLocaleString('en-US')} сум
               </span>
-              <span className={styles["catalog-product-discount"]}>-40%</span>
+              <span className={styles["catalog-product-discount"]}>
+                -{this.props.data?.discount}%
+              </span>
             </bdi>
-            <p className={styles["catalog-product-product-description"]}>
-              {this.props.data?.description}
+            <p className={styles["catalog-product-description"]}>
+              {this.props.data?.short_description}
             </p>
             <div className={styles["hr-line"]}></div>
             <div className={styles["product-options"]}>
               <div className={styles["colors-section"]}>
-                <h4>Select Colors</h4>
+                <h4 className={styles["product-options-title"]}>Выберите цвет</h4>
                 <div className={styles["colors-container"]}>
                   {this.props.data?.colors?.map(({ color }) => (
                     <button
                       key={color}
-                      className={`${styles["color-option"]} ${
-                        selectedOptions.color === color ? styles["selected"] : ""
-                      }`}
+                      className={`
+                        ${styles["color-option"]} 
+                        ${selectedOptions.color === color ? styles["selected"] : ""}
+                      `}
                       style={{ backgroundColor: color }}
                       onClick={() => this.handleOptionChange("color", color)}
                       aria-label={`Select ${color} color`}
                     >
                       {selectedOptions.color === color && (
-                        <span className={styles["checkmark"]}>✔</span>
+                        <span className={styles["catalog-checkmark"]}>
+                          <FontAwesomeIcon icon={faCheck} />
+                        </span>
                       )}
                     </button>
                   ))}
                 </div>
               </div>
 
+              <div className={styles["hr-line"]}></div>
+
               <div className={styles["sizes-section"]}>
-                <h4>Choose Size</h4>
+                <h4 className={styles["product-options-title"]}>Выберите размер</h4>
                 <div className={styles["sizes-container"]}>
                   {this.props.data?.sizes?.map(({ size }) => (
-                  <button
-                    key={size}
-                    className={`${styles["size-option"]} ${
-                      selectedOptions.size === size ? styles["selected"] : ""
-                    }`}
-                    onClick={() => this.handleOptionChange("size", size)}
-                  >
-                    {size}
-                  </button>
-                ))}
+                    <button
+                      key={size}
+                      className={`${styles["size-option"]} ${selectedOptions.size === size ? styles["selected"] : ""
+                        }`}
+                      onClick={() => this.handleOptionChange("size", size)}
+                    >
+                      {size}
+                    </button>
+                  ))}
                 </div>
               </div>
+
+              <div className={styles["hr-line"]}></div>
 
               <div className={styles["quantity-section"]}>
                 <div className={styles["quantity-container"]}>
-                  <button
-                    className={styles["quantity-btn"]}
-                    onClick={() => this.handleQuantityChange("decrease")}
-                  >
-                    -
-                  </button>
-                  <span className={styles["quantity-value"]}>
-                    {selectedOptions.quantity}
-                  </span>
-                  <button
-                    className={styles["quantity-btn"]}
-                    onClick={() => this.handleQuantityChange("increase")}
-                  >
-                    +
+                  <div className={styles["quantity-wrapper"]}>
+                    <button
+                      className={styles["quantity-btn"]}
+                      onClick={() => this.handleQuantityChange("decrease", maxAvailable)}
+                    >
+                      <FontAwesomeIcon icon={faMinus} />
+                    </button>
+                    <span className={styles["quantity-value"]}>
+                      {this.state.selectedOptions.quantity}
+                    </span>
+                    <button
+                      className={styles["quantity-btn"]}
+                      onClick={() => this.handleQuantityChange("increase", maxAvailable)}
+                    >
+                      <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                  </div>
+
+                  <button className={styles["catalog-add-to-cart-btn"]}>
+                    Добавить в корзину
                   </button>
                 </div>
               </div>
 
-              <button className={styles["add-to-cart-btn"]}>Add to Cart</button>
+
             </div>
           </div>
         </div>

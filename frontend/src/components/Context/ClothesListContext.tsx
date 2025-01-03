@@ -41,7 +41,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
 
   async fetchData(): Promise<void> {
     try {
-      const response: Response = await fetch(origin);
+      const response: Response = await fetch(`${origin}`);
       this.setLoadingState(true);
 
       if (!response.ok) {

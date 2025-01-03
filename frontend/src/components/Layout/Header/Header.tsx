@@ -16,13 +16,13 @@ import {
 import { withContext } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
-import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
+import SpinnerLoader from "components/Loaders/SpinnerLoader";
 
 const lang = i18next.language;
 
 interface HeaderState {
   activeLink: string | null;
-  clothesData: { title: string; image?: string }[];
+  clothesTypeData: { title?: string; image?: string }[];
 }
 
 class Header extends PureComponent<ClothesListActions, HeaderState> {
@@ -31,18 +31,18 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
 
   state: Readonly<HeaderState> = {
     activeLink: null,
-    clothesData: [],
+    clothesTypeData: [],
   };
 
   toggleSearchInput = () => {
     if (this.searchInputContainerRef.current) {
-      this.searchInputContainerRef.current.classList.toggle("active");
+      this.searchInputContainerRef.current?.classList.toggle("active");
     }
   };
 
   closeSearchInput = () => {
     if (this.searchInputContainerRef.current) {
-      this.searchInputContainerRef.current.classList.remove("active");
+      this.searchInputContainerRef.current?.classList.remove("active");
     }
   };
 
@@ -50,22 +50,22 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
     const { activeLink } = this.state;
     if (
       this.headerLinksContainerRef.current &&
-      !this.headerLinksContainerRef.current.contains(event.target as Node)
+      !this.headerLinksContainerRef.current?.contains(event.target as Node)
     ) {
-      this.headerLinksContainerRef.current.classList.remove("active");
+      this.headerLinksContainerRef.current?.classList.remove("active");
       if (activeLink) this.setState({ activeLink: null });
     }
   };
 
   toggleMenu = () => {
     if (this.headerLinksContainerRef.current) {
-      this.headerLinksContainerRef.current.classList.add("active");
+      this.headerLinksContainerRef.current?.classList.add("active");
     }
   };
 
   closeMenuButton = () => {
     if (this.headerLinksContainerRef.current) {
-      this.headerLinksContainerRef.current.classList.remove("active");
+      this.headerLinksContainerRef.current?.classList.remove("active");
     }
   };
 
@@ -117,53 +117,50 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
                 <ul className="header-links-wrapper">
                   <li className="header-link-list">
                     <button
-                      className={`header-link button ${
-                        activeLink === "catalog" ? "active" : ""
-                      }`}
+                      className={`header-link button ${activeLink === "catalog" ? "active" : ""
+                        }`}
                       onClick={() => this.handleLinkClick("catalog")}
                     >
                       <Link
-                      to={`/${lang}/catalog`}>Каталог
+                        to={`/${lang}/catalog`}>Каталог
                       </Link>
                       <span>
                         Каталог
                         <FontAwesomeIcon icon={faArrowRightLong} />
                       </span>
                     </button>
-                    {activeLink === "catalog" && (
-                      <div className="header-link-extra-details-container">
-                        <div className="header-link-extra-details-wrapper">
-                          <button
-                            className="header-link-extra-details-close-button"
-                            onClick={this.handleCloseDetails}
-                          >
-                            <FontAwesomeIcon icon={faArrowLeftLong} />
-                          </button>
-                          <Link
-                            to={`/${lang}/catalog`}
-                            className="header-link-extra-details-column first"
-                            onClick={this.closeEntireMenu}
-                          >
-                            Каталог
-                          </Link>
-                          {this.linksMobile}
-                        </div>
+                    <div className="header-link-extra-details-container">
+                      <div className="header-link-extra-details-wrapper">
+                        <button
+                          className="header-link-extra-details-close-button"
+                          onClick={this.handleCloseDetails}
+                        >
+                          <FontAwesomeIcon icon={faArrowLeftLong} />
+                        </button>
+                        <Link
+                          to={`/${lang}/catalog`}
+                          className="header-link-extra-details-column first"
+                          onClick={this.closeEntireMenu}
+                        >
+                          Каталог
+                        </Link>
+                        {this.linksMobile}
                       </div>
-                    )}
+                    </div>
                   </li>
                   <li className="header-link-list">
                     <Link
-                    className="header-link"
-                    to={`/${lang}/contacts`}
-                    onClick={this.closeEntireMenu}>
+                      className="header-link"
+                      to={`/${lang}/contacts`}
+                      onClick={this.closeEntireMenu}>
                       Контакты
                     </Link>
                   </li>
                   <li className="header-link-list">
                     <Link
-                    className="header-link"
-                    to={`/${lang}/about`}
-                    onClick={this.closeEntireMenu}>
+                      className="header-link"
+                      to={`/${lang}/about`}
+                      onClick={this.closeEntireMenu}>
                       О нас
                     </Link>
                   </li>
@@ -220,28 +217,38 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
 
   get linksMobile(): ReactNode {
     const { loading, error, products } = this.props;
-
+  
     if (loading) {
-      return <SpinnerLoaderWrapper />;
+      return <SpinnerLoader />;
     } else if (error) {
-      return <p>Failed to load data</p>;
+      return <h4>Не удалось загрузить данные</h4>;
     }
-
-    return products.map(({ title, catalogImages, id }) => (
-      <Link
-        key={id}
-        to={`/${lang}/catalog/clothes/${id}`}
-        className="header-link-extra-details-column"
-        onClick={this.closeEntireMenu}
-      >
-        <div className="header-extra-link-image-container">
-          <img src={catalogImages?.[0].image} />
-        </div>
-        <h4 className="header-extra-link-title">
-          {title}
-        </h4>
-      </Link>
-    ));
+  
+    if (!products || products.length === 0) {
+      return <h4>Нету данных</h4>;
+    }
+  
+    const uniqueTypes = new Set(); 
+    return products.map(({ type }) => {
+      if (uniqueTypes.has(type.id)) return null; 
+      uniqueTypes.add(type.id);
+  
+      return (
+        <Link
+          key={type.id}
+          to={`/${lang}/catalog/${type.id}`}
+          className="header-link-extra-details-column"
+          onClick={this.closeEntireMenu}
+        >
+          <div className="header-extra-link-image-container">
+            <img src={type.image} alt={type.title} />
+          </div>
+          <h4 className="header-extra-link-title">
+            {type.title}
+          </h4>
+        </Link>
+      );
+    });
   }
 }
 

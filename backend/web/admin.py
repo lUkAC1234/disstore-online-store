@@ -4,7 +4,10 @@ from .models import (
     ClothesModel, 
     ClothesColorModel, 
     ClothesSizeModel,
-    ClothesImageModel
+    ClothesImageModel,
+    TypesModel, 
+    ClothesReviewModel,
+    ClothesFAQModel
 )
 from django.utils.translation import gettext_lazy as _
 # For saving html code
@@ -25,21 +28,49 @@ class ClothesModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'title']
     list_display_links = ['id', 'title']
     search_fields = ['title']
-
+    prepopulated_fields = {'slug': ('title', )}
+    
 @admin.register(ClothesColorModel)
 class ClothesColorModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'color']
-    list_display_links = ['id', 'color']
-    search_fields = ['color']
+    list_display = ['id', 'hex', 'color']
+    list_display_links = ['id', 'hex', 'color']
+    search_fields = ['hex']
+
+    def hex(self, obj):
+        return mark_safe(
+            f"<div style='background-color: {obj.color}; width: 30px; height: 30px; border-radius: 50%; box-shadow: 0 5px 10px rgb(0 0 0 / 20%);'></div>")
+
 
 @admin.register(ClothesSizeModel)
 class ClothesSizeModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'size']
     list_display_links = ['id', 'size']
     search_fields = ['size']
-
+    
 @admin.register(ClothesImageModel)
 class ClothesImageModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'product']
     list_display_links = ['id', 'product']
     search_fields = ['product__title']
+    
+@admin.register(TypesModel)
+class ClothesTypeModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title']
+    list_display_links = ['id', 'title']
+    search_fields = ['title']
+
+@admin.register(ClothesReviewModel)
+class ClothesReviewModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'product', 'user']
+    list_display_links = ['id', 'product', 'user']
+    search_fields = ['product__title', 'user__username']
+
+@admin.register(ClothesFAQModel)
+class ClothesFAQModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'product']
+    list_display_links = ['id', 'product']
+    search_fields = ['product__title']
+
+
+admin.site.site_header = 'DISSTORE.UZ'
+admin.site.site_title = 'DISSTORE.UZ'
