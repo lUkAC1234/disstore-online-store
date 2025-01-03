@@ -60,7 +60,7 @@ class CatalogList extends UIReact<ClothesListActions, ClothItem> {
                   ))
                 ) : (
                   <div className={styles["filter-type"]}>
-                    <h2>No types available</h2>
+                    <h2>Нету никаких типов одежды</h2>
                   </div>
                 )}
               </div>
