@@ -79,7 +79,20 @@ class ClothesModelCreateUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ClothesModel
-        fields = ['id', 'title', 'description', 'price', 'discount', 'colors', 'sizes', 'types']
+        fields = [
+            'id', 
+            'title', 
+            'slug',
+            'short_description', 
+            'long_description',
+            'price', 
+            'discount', 
+            'real_price', 
+            'count',
+            'colors', 
+            'sizes', 
+            'type', 
+        ]
 
     def create(self, validated_data):
         colors = validated_data.pop('colors', [])

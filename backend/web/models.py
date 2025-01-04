@@ -23,7 +23,7 @@ class UserModel(AbstractUser):
 
 class ClothesModel(models.Model):
     title = models.CharField(_("Название"), max_length=100)
-    slug = models.SlugField(max_length=100, unique=True, blank=True, db_index=True, verbose_name=_("Отоброжаемая ссылка"))
+    slug = models.SlugField(max_length=500, unique=True, blank=True, db_index=True, verbose_name=_("Отоброжаемая ссылка"))
     short_description = models.TextField(max_length=100, verbose_name=_("Краткое описание"))
     colors = models.ManyToManyField(
         'ClothesColorModel', 
@@ -57,9 +57,9 @@ class ClothesModel(models.Model):
             base_slug = transliterate_russian(self.title)
             base_slug = slugify(base_slug)
             unique_slug = base_slug
-            random_suffix = ''.join(random.choices(string.ascii_letters + string.digits, k=50))
+            random_suffix = ''.join(random.choices(string.ascii_letters + string.digits, k=200))
             while ClothesModel.objects.filter(slug=unique_slug).exists():
-                random_suffix = ''.join(random.choices(string.ascii_letters + string.digits, k=50))
+                random_suffix = ''.join(random.choices(string.ascii_letters + string.digits, k=200))
                 unique_slug = f"{base_slug}-{random_suffix}"
 
             self.slug = unique_slug

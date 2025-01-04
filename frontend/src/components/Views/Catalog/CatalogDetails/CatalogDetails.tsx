@@ -23,7 +23,7 @@ import { debounce } from "utils/hooks/debounce";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import SpinnerLoader from "components/Loaders/SpinnerLoader";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
-
+import Error404 from "components/Views/404";
 const lang: string = i18next.language;
 
 interface ProductOptionsState {
@@ -108,18 +108,22 @@ class CatalogDetails extends UIReact<
       const response: Response = await fetch(`${origin}${productSlug}/`, {
         signal: this.controller.signal,
       });
+
       if (!response.ok) {
-        throw new Error("Response wasn't ok, something went wrong!");
+        if (response.status === 404) {
+          window.location.href = `/${lang}/page-not-found-404`;
+          return;
+        }
+        throw new Error("Не удалось загрузить данные");
       }
-    
+
       const data: ClothItem = await response.json();
       this.props.setData(data);
-    }
-    catch (err) {
+    } catch (err) {
       return;
     }
   }
-  
+
   setSelectedImage(url: string): void {
     this.setState(
       (prevState) => ({
@@ -163,11 +167,11 @@ class CatalogDetails extends UIReact<
       <>
         <section className={styles["catalog-section"]}>
           {this.props.loading ? (
-            <SpinnerLoaderWrapperFixed /> 
+            <SpinnerLoaderWrapperFixed />
           ) : this.product}
         </section>
-        <NavigationSection 
-          long_description={this.props.data?.long_description} 
+        <NavigationSection
+          long_description={this.props.data?.long_description}
           reviews={this.props.data?.reviews}
           faqs={this.props.data?.faqs}
         />
@@ -182,7 +186,11 @@ class CatalogDetails extends UIReact<
     if (this.props.loading) {
       return <SpinnerLoader />;
     } else if (this.props.error) {
-      return <h1>Ойй, Что то пошло не так !!!</h1>
+      return (
+        <div className={styles["catalog-container"]}>
+          <h2>Ойй, что-то пошло не так !</h2>
+        </div>
+      );
     }
 
     return (

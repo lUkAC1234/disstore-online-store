@@ -2,6 +2,123 @@
     padding: 3rem;
 }
 
-.catalog-link-way {
-    
+.catalog-wrapper {
+    display: flex;
+}
+
+.catalog-filter-container {
+    width: 16rem;
+    background-color: var(--text--white);
+    border: 0.1rem solid var(--welcome-border);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.filters-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .filters-title {
+        font-size: 1.25rem;
+    }
+
+    svg {
+        font-size: 1.25rem;
+        transform: rotate(-90deg);
+        color: var(--text-p);
+        cursor: pointer;
+    }
+}
+
+.hr-line {
+    width: 100%;
+    height: 0.075rem;
+    background: var(--welcome-border);
+    margin-block: 1rem;
+}
+
+.filter-error {
+    font-size: 0.9rem;
+    border: 0.06rem solid var(--text-p);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.filters-types {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.filter-type-column {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
+    .filter-type-title {
+        font-size: 0.9rem;
+        color: var(--text-p);
+    }
+
+    svg {
+        color: var(--text-p);
+    }
+}
+
+.filters-colors-title,
+.filters-sizes-title {
+    font-size: 1.125rem;
+    margin-block: 1rem;
+}
+
+.filters-color-wrapper,
+.filters-sizes-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filters-color-column {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 0.1rem solid var(--welcome-border);
+}
+
+.filters-sizes-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border: transparent;
+    background-color: var(--header-search-background);
+    color: var(--text-p);
+    font-size: 0.8rem;
+    border-radius: 3.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+
+    &.selected {
+        background: var(--text-black);
+        color: var(--text-white);
+    }
+}
+
+.filters-apply-button {
+    width: min(100%, 30rem);
+    background: var(--text-black);
+    color: var(--text-white);
+    border-radius: 3.5rem;
+    cursor: pointer;
+    border: 0.1rem solid transparent;
+    font-size: 0.9rem;
+    transition: background 0.3s ease, color 0.3s ease;
+    padding: 0.5rem 1rem;
+
+    &:hover {
+        background: var(--text-white);
+        color: var(--text-black);
+        border-color: var(--text-black);
+    }
 }

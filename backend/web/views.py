@@ -11,6 +11,8 @@ from .serializer import (
     ClothesTypeModelSerializer
 )
 
+from rest_framework.exceptions import NotFound
+
 class ClothesMainView(ListAPIView):
     queryset = ClothesModel.objects.prefetch_related('colors', 'sizes', 'catalogImages').all()
     serializer_class = ClothesModelSerializer
@@ -18,6 +20,7 @@ class ClothesMainView(ListAPIView):
 class ClothesModelCreateUpdateView(CreateAPIView, UpdateAPIView, DestroyAPIView):
     queryset = ClothesModel.objects.all()
     serializer_class = ClothesModelCreateUpdateSerializer
+    lookup_field = 'slug'
 
 class ClothesColorCreateUpdateView(CreateAPIView, UpdateAPIView, DestroyAPIView):
     queryset = ClothesColorModel.objects.all()
@@ -49,4 +52,11 @@ class ClothesModelDetailView(RetrieveAPIView):
     queryset = ClothesModel.objects.prefetch_related('colors', 'sizes', 'catalogImages').all()
     serializer_class = ClothesModelSerializer
     lookup_field = 'slug'
-    
+
+    def get_object(self):
+        try:
+            # Attempt to fetch the object by slug
+            return self.queryset.get(slug=self.kwargs.get(self.lookup_field))
+        except ClothesModel.DoesNotExist:
+            # Raise a 404 error explicitly
+            raise NotFound(detail="Clothes not found", code=404)
