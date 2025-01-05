@@ -23,7 +23,7 @@ import { debounce } from "utils/hooks/debounce";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import SpinnerLoader from "components/Loaders/SpinnerLoader";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
-import Error404 from "components/Views/404";
+import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 const lang: string = i18next.language;
 
 interface ProductOptionsState {
@@ -85,15 +85,14 @@ class CatalogDetails extends UIReact<
   componentDidUpdate(prevProps: Readonly<ClothesContextActions>): void {
     if (prevProps.data !== this.props.data && this.props.data) {
       const { colors, sizes, catalogImages } = this.props.data;
-
-      this.setState({
+      this.setState((prevState) => ({
         selectedOptions: {
-          color: colors?.[0]?.color || "",
-          size: sizes?.[0]?.size || "",
-          quantity: 1,
+          color: prevState.selectedOptions.color || colors?.[0]?.color || "",
+          size: prevState.selectedOptions.size || sizes?.[0]?.size || "",
+          quantity: prevState.selectedOptions.quantity || 1,
         },
-        selectedImage: catalogImages?.[0]?.image || null,
-      });
+        selectedImage: prevState.selectedImage || catalogImages?.[0]?.image || null,
+      }));
     }
   }
 
@@ -158,7 +157,7 @@ class CatalogDetails extends UIReact<
   };
 
 
-  handleImageClick = (image: string) => {
+  handleImageClick = (image: string): void => {
     this.setState({ selectedImage: image });
   };
 
@@ -244,11 +243,11 @@ class CatalogDetails extends UIReact<
                     slidesPerView: 2,
                     direction: "horizontal",
                   },
-                  360: {
+                  361: {
                     slidesPerView: 3,
                     direction: "horizontal",
                   },
-                  1100: {
+                  1101: {
                     direction: "vertical",
                     slidesPerView: 3,
                   },
@@ -263,25 +262,28 @@ class CatalogDetails extends UIReact<
                     <img
                       src={image}
                       alt={`Thumbnail ${index + 1}`}
-                      className={`${styles["thumbnail"]} ${selectedImage === image ? styles["active"] : ""
-                        }`}
+                      className={`${styles["thumbnail"]} ${selectedImage === image ? styles["active"] : ""}`}
                     />
                   </SwiperSlide>
                 ))}
               </Swiper>
               <div className={styles["catalog-main-image"]}>
-                <a
-                  href={selectedImage}
-                  data-fancybox="gallery"
-                  data-src={selectedImage}
-                >
-                  <img
-                    src={selectedImage}
-                    alt="Selected Product"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </a>
+                {selectedImage ? (
+                  <a
+                    href={selectedImage}
+                    data-fancybox="gallery"
+                    data-src={selectedImage}
+                  >
+                    <img
+                      src={selectedImage}
+                      alt="Выбранный рисунок"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                ) : (
+                  <SpinnerLoaderWrapper />
+                )}
               </div>
               <div style={{ display: "none" }}>
                 {this.props.data?.catalogImages
@@ -304,12 +306,18 @@ class CatalogDetails extends UIReact<
               <span className={styles["catalog-product-current-price"]}>
                 {this.props.data?.real_price.toLocaleString('en-US')} сум
               </span>
-              <span className={styles["catalog-product-original-price"]}>
-                {this.props.data?.price.toLocaleString('en-US')} сум
-              </span>
-              <span className={styles["catalog-product-discount"]}>
-                -{this.props.data?.discount}%
-              </span>
+              {this.props.data?.discount ? (
+                <>
+                  <span className={styles["catalog-product-original-price"]}>
+                    {this.props.data?.price.toLocaleString('en-US')} сум
+                  </span>
+                  <span className={styles["catalog-product-discount"]}>
+                    -{this.props.data?.discount}%
+                  </span>
+                </>
+              ) : (
+                null
+              )}
             </bdi>
             <p className={styles["catalog-product-description"]}>
               {this.props.data?.short_description}

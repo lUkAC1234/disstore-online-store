@@ -8,7 +8,7 @@ import { ClothesListContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import { ClothItem } from "components/Context/ClothesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faSliders } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 
@@ -21,6 +21,16 @@ class CatalogList extends UIReact<ClothesListActions, ClothItem> {
       behavior: "smooth",
     });
   }
+
+  handleApplyFilters = () => {
+    const { setIsFilterActive } = this.props;
+    setIsFilterActive(true);
+  };
+
+  handleResetFilters = () => {
+    const { setIsFilterActive } = this.props;
+    setIsFilterActive(false);
+  };
 
   render(): ReactNode {
     const { products } = this.props;
@@ -64,10 +74,19 @@ class CatalogList extends UIReact<ClothesListActions, ClothItem> {
             Мужчинам
           </div>
           <div className={styles["catalog-wrapper"]}>
-            <div className={styles["catalog-filter-container"]}>
+            <div className={`${styles["catalog-filter-container"]} ${this.props.isFilterActive ? styles["active"] : ''}`}>
               <div className={styles["filters-title-container"]}>
                 <h3 className={styles["filters-title"]}>Фильтры</h3>
-                <FontAwesomeIcon icon={faSliders} />
+                {this.props.isFilterActive ? (
+                  <button
+                    className={styles["filters-reset-mobile"]}
+                    onClick={this.handleResetFilters}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </button>
+                ) : (
+                  <FontAwesomeIcon icon={faSliders} />
+                )}
               </div>
               <div className={styles["hr-line"]}></div>
               <div className={styles["filters-types"]}>
@@ -128,34 +147,63 @@ class CatalogList extends UIReact<ClothesListActions, ClothItem> {
               </div>
             </div>
             <div className={styles["catalog-items-list"]}>
-              <div className={styles["catalog-head-subtitle"]}>
-                <h1 className={styles["catalog-active-filter"]}>
-                  Мужчинам ({products.length})
-                </h1>
+              <div className={styles["catalog-head-subtitle-container"]}>
+
+                <div className={styles["catalog-active-filter"]}>
+                  <button
+                    className={styles["filters-mobile-version"]}
+                    onClick={this.handleApplyFilters}
+                  >
+                    <FontAwesomeIcon icon={faSliders} />
+                  </button>
+                  <h1 className={styles["catalog-active-filter-title"]}>Мужчинам</h1>
+                </div>
                 <div className={styles["catalog-sort-container"]}>
-                  <h3>Сортировать по:</h3>
-                  <select name="sort" id="sort" defaultValue="price">
-                    <option value="price">Популярности</option>
-                    <option value="newest">Новизне</option>
+                  <h3 className={styles["sort-info-title"]}>Сортировать по:</h3>
+                  <select
+                    className={styles["catalog-sorting"]}
+                    name="sort"
+                    id="sort"
+                    defaultValue="price"
+                  >
+                    <option className={styles["sort-option"]} value="price">Популярности</option>
+                    <option className={styles["sort-option"]} value="newest">Новизне</option>
                   </select>
                 </div>
               </div>
-              {products && products.length > 0 ? (
-                products.map((item: ClothItem) => (
-                  <div key={item.id} className={styles["catalog-item"]}>
-                    <div className={styles["catalog-image-container"]}>
-                      <img
-                        src={item.catalogImages?.[0]?.image}
-                        alt={item.title}
-                      />
-                    </div>
-                    <h2>{item.title}</h2>
-                    <Link to={`/${lang}/catalog/clothes/${item.slug}`}>View Details</Link>
-                  </div>
-                ))
-              ) : (
-                <p>No items available</p>
-              )}
+              <div className={styles["catalog-items-wrapper"]}>
+                {products && products.length > 0 ? (
+                  products.map((item: ClothItem) => (
+                    <Link key={item.id} to={`/${lang}/catalog/clothes/${item.slug}`}>
+                      <div className={styles["catalog-item"]}>
+                        <div className={styles["catalog-image-container"]}>
+                          {item.catalogImages?.[0]?.image ? (
+                            <img
+                              src={item.catalogImages[0].image}
+                              alt={item.title || "Image"}
+                            />
+                          ) : (
+                            <SpinnerLoaderWrapper />
+                          )}
+                        </div>
+                        <h2 className={styles["catalog-item-title"]}>{item.title}</h2>
+                        <p className={styles["catalog-item-description"]}>{item.short_description}</p>
+                        <bdi className={styles["catalog-price-container"]}>
+                          <span className={styles["catalog-real-price"]}>{item.real_price.toLocaleString('en-US')} сум</span>
+                          {item.discount ? (
+                            <>
+                              <span className={styles["catalog-price"]}>{item.price.toLocaleString('en-US')} сум</span>
+                              <span className={styles["catalog-discount"]}>-{item.discount}%</span>
+                            </>
+                          ) : null}
+                        </bdi>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <p>No items available</p>
+                )}
+              </div>
             </div>
           </div>
         </div>

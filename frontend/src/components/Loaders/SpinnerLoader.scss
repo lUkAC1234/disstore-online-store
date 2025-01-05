@@ -2,7 +2,7 @@
   width: 6rem;
   aspect-ratio: 1;
   border-radius: 50%;
-  border: 0.4rem solid var(--text-black);
+  border: 0.2rem solid var(--text-black);
   animation:
     l20-1 0.8s infinite linear alternate,
     l20-2 1.6s infinite linear;
@@ -11,6 +11,16 @@
     opacity: 0;
     scale: 0;
     transition: all 0.3s ease-out;
+  }
+
+  @media screen and (max-width: 992px) {
+    width: 4rem;
+    border-width: 0.15rem;
+  }
+
+  @media screen and (max-width: 600px) {
+    width: 2rem;
+    border-width: 0.1rem;
   }
 }
 

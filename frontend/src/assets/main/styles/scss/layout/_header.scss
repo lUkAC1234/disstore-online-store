@@ -199,7 +199,7 @@
 
 .header-search-input {
     width: 100%;
-    height: 100%;
+    height: min(100%, 2.5rem);
     border: none;
     font-size: 1rem;
     background-color: var(--header-search-background);

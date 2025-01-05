@@ -4,10 +4,12 @@
 
 .catalog-wrapper {
     display: flex;
+    gap: 1rem;
 }
 
 .catalog-filter-container {
-    width: 16rem;
+    width: 25rem;
+    height: max-content;
     background-color: var(--text--white);
     border: 0.1rem solid var(--welcome-border);
     border-radius: 1rem;
@@ -83,8 +85,11 @@
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
-    border: 0.1rem solid var(--welcome-border);
+    border: 0.1rem solid transparent;
+    cursor: pointer;
+    border-color: var(--text-black);
 }
+
 
 .filters-sizes-column {
     display: flex;
@@ -94,7 +99,7 @@
     border: transparent;
     background-color: var(--header-search-background);
     color: var(--text-p);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     border-radius: 3.5rem;
     cursor: pointer;
     transition: background 0.3s ease, color 0.3s ease;
@@ -112,13 +117,291 @@
     border-radius: 3.5rem;
     cursor: pointer;
     border: 0.1rem solid transparent;
-    font-size: 0.9rem;
+    font-size: 1rem;
     transition: background 0.3s ease, color 0.3s ease;
-    padding: 0.5rem 1rem;
+    padding: 1rem 1rem;
 
     &:hover {
         background: var(--text-white);
         color: var(--text-black);
         border-color: var(--text-black);
+    }
+}
+
+.catalog-items-list {
+    width: 100%;
+}
+
+.catalog-head-subtitle-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-inline: 1rem;
+}
+
+.catalog-active-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.catalog-active-filter-title {
+    font-size: 2.5rem;
+
+    @media screen and (max-width: 400px) {
+        font-size: 1.75rem !important;
+    }
+}
+
+.catalog-sort-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.sort-info-title {
+    font-size: 1rem;
+    color: var(--text-p);
+    font-weight: 400;
+}
+
+.catalog-sorting {
+    background: transparent;
+    border: 0 transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--text-black);
+    font-weight: 500;
+    width: fit-content;
+
+    .sort-option {
+        font-size: 0.75rem;
+    }
+}
+
+.catalog-items-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    gap: 0.5rem;
+
+    @media screen and (max-width: 1600px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.catalog-item {
+    width: 100%;
+    overflow: hidden;
+    padding: 1rem;
+    transition: box-shadow 0.3s ease;
+    height: 100%;
+
+    &:hover img {
+        transform: scale(1.05);
+    }
+
+    &:hover {
+        box-shadow: 0 0.25rem 1rem -0.6rem var(--text-p);
+    }
+}
+
+.catalog-image-container {
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 1.5rem;
+    background: var(--clothes-image-background);
+
+    img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 1.5rem;
+        border: 0.1rem solid var(--welcome-border);
+        object-fit: cover;
+        background: var(--clothes-image-background);
+        transition: transform 0.3s ease;
+    }
+}
+
+.catalog-item-title {
+    font-size: 1.125rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.catalog-item-description {
+    margin-block: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: var(--text-p);
+}
+
+.catalog-price-container {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    gap: 0.1rem 1rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.catalog-price {
+    color: var(--text-price);
+    text-decoration: line-through;
+}
+
+.catalog-discount {
+    color: var(--clothes-discount-number);
+    background: var(--clothes-discount-background);
+    padding: 0.25rem 1rem;
+    border-radius: 3.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-left: auto;
+}
+
+@media screen and (max-width: 2000px) {
+    .catalog-container {
+        padding-inline: 1rem;
+    }
+
+    .catalog-filter-container {
+        width: 20rem;
+    }
+
+    .catalog-item {
+        padding: 0.5rem;
+    }
+
+    .catalog-item-title {
+        font-size: 1rem;
+    }
+
+    .catalog-price-container {
+        font-size: 1.125rem;
+    }
+
+    .catalog-discount {
+        font-size: 0.9rem;
+    }
+}
+
+.filters-mobile-version {
+    display: none;
+    border: transparent;
+    background: var(--header-search-background);
+    border-radius: 50%;
+    cursor: pointer;
+    width: 3.5rem;
+    height: 3.5rem;
+
+    svg {
+        font-size: 1.5rem;
+        transform: rotate(-90deg);
+        color: var(--text-p);
+    }
+}
+
+.filters-reset-mobile {
+    display: none;
+    border: transparent;
+    background: transparent;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1200px) {
+    body:has(.catalog-filter-container.active) {
+        overflow-y: hidden;
+    }
+
+    .catalog-filter-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: max-content;
+        transform: translateY(100%);
+        opacity: 0;
+        visibility: hidden;
+        background: var(--text-white);
+        transition:
+            transform 0.5s ease,
+            opacity 0.5s ease,
+            visibility 0.5s ease;
+        transform-origin: bottom;
+        z-index: var(--z-index-1);
+        overflow-y: auto;
+
+        &.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+            transition:
+                transform 0.5s ease,
+                opacity 0.5s ease,
+                visibility 0.5s ease;
+        }
+    }
+
+    .filters-mobile-version,
+    .filters-reset-mobile {
+        display: block;
+    }
+
+    .filters-apply-button {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .catalog-active-filter-title {
+        font-size: 2rem;
+    }
+
+    .filters-mobile-version {
+        width: 2.5rem;
+        height: 2.5rem;
+    
+        svg {
+            font-size: 1rem;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .catalog-container {
+        padding-inline: 0.25rem;
+    }
+
+    .catalog-item {
+        padding: 0 0.1rem 1rem;
+    }
+
+    .catalog-item-title {
+        font-size: 0.9rem;
+    }
+
+    .catalog-item-description {
+        font-size: 0.8rem;
+    }
+
+    .catalog-price-container {
+        gap: 0.25rem;
+        font-size: 1rem;
+    }
+
+    .catalog-discount {
+        font-size: 0.8rem;
+    }
+
+    .catalog-image-container {
+        border-radius: 1rem;
+        img {
+            border-radius: 1rem;
+        }
     }
 }

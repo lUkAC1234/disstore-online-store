@@ -7,12 +7,14 @@ export interface ClothesListContextState {
   products: ClothItem[];
   loading: boolean;
   error: boolean;
+  isFilterActive: boolean;
 }
 
 export interface ClothesListContextProps extends PropsWithChildren {}
 
 export interface ClothesListActions extends ClothesListContextState {
   setProducts: (products: ClothItem[]) => void;
+  setIsFilterActive: (isFilterActive: boolean) => void;
 }
 
 class ClothesListProvider extends PureComponent<ClothesListContextProps, ClothesListContextState> {
@@ -20,6 +22,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
     products: [],
     loading: false,
     error: false,
+    isFilterActive: false,
   };
 
   render() {
@@ -28,6 +31,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
         value={{
           ...this.state,
           setProducts: this.setProducts,
+          setIsFilterActive: this.setIsFilterActive,
         }}
       >
         {this.props.children}
@@ -77,6 +81,13 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
       ...prevState,
       products,
       loading: false,
+    }));
+  };
+
+  setIsFilterActive = (value: boolean): void => {
+    this.setState(prevState => ({
+      ...prevState,
+      isFilterActive: value,
     }));
   };
 }
