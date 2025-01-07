@@ -100,7 +100,6 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     }
   }
 
-  // TODO: Fetching products from server
   async fetchFilteredProducts(): Promise<void> {
     console.log("fetching...");
 
@@ -150,17 +149,13 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
 
             if (selectedTypeId === typeItem.id) {
                 if (!types) {
-                    types += `type=${typeItem.id}`;
+                    types += `types=${typeItem.id}`;
                 } else {
-                    types += `&type=${typeItem.id}`;
+                    types += `&types=${typeItem.id}`;
                 }
             }
         }
     }
-
-    // console.log(colors);
-    // console.log(types);
-    // console.log(sizes);
 
     let finalTypesURL: string = "";
     let finalSizesURL: string = "";

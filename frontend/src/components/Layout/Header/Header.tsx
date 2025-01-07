@@ -250,7 +250,7 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
     return this.state.type.map(item => (
       <Link
         key={item.id}
-        to={`/${lang}/catalog/${item.id}`}
+        to={`/${lang}/catalog`}
         className="header-link-extra-details-column"
         onClick={this.closeEntireMenu}
       >
