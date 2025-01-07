@@ -194,7 +194,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
             throw new Error("Хуй его знает че случилось!");
         }
 
-        const data = response.json();
+        const data = await response.json();
         console.log(data);
     } catch (err) {
         console.error(err);
