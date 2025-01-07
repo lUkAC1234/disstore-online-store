@@ -104,7 +104,7 @@ class CatalogDetails extends UIReact<
 
   async fetchDataProduct(productSlug: string): Promise<void> {
     try {
-      const cachedData = localStorage.getItem(productSlug);
+      const cachedData = sessionStorage.getItem(productSlug);
 
       if (cachedData) {
         const data: ClothItem = JSON.parse(cachedData);
@@ -125,7 +125,7 @@ class CatalogDetails extends UIReact<
       }
 
       const data: ClothItem = await response.json();
-      localStorage.setItem(productSlug, JSON.stringify(data));
+      sessionStorage.setItem(productSlug, JSON.stringify(data));
       this.props.setData(data);
     } catch (err) {
       return;
@@ -227,11 +227,11 @@ class CatalogDetails extends UIReact<
                 }}
               >
                 <div className={`
-                    swiper-button-prev 
+                    swiper-button-prev
                     ${styles["navigation-button-catalog-prev"]}`}>
                 </div>
                 <div className={`
-                    swiper-button-next 
+                    swiper-button-next
                     ${styles["navigation-button-catalog-next"]}`}>
                 </div>
               </div>
@@ -340,7 +340,7 @@ class CatalogDetails extends UIReact<
                     <button
                       key={color}
                       className={`
-                        ${styles["color-option"]} 
+                        ${styles["color-option"]}
                         ${selectedOptions.color === color ? styles["selected"] : ""}
                       `}
                       style={{ backgroundColor: color }}
