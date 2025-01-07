@@ -17,3 +17,10 @@ app.setupAPIs(() => {
 });
 
 app.renderApp();
+
+window.addEventListener("unload", () => {
+    sessionStorage.removeItem("colors");
+    sessionStorage.removeItem("sizes");
+    sessionStorage.removeItem("types");
+    sessionStorage.removeItem("products");
+});

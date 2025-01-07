@@ -18,6 +18,7 @@ import { ClothesListContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import SpinnerLoader from "components/Loaders/SpinnerLoader";
 import { Clothestypes } from "components/Context/ClothesContext";
+import { origin } from "../../../../project.config.json";
 
 const lang = i18next.language;
 
@@ -40,11 +41,13 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
   }
 
   loadTypeData = async () => {
-    const type = JSON.parse(localStorage.getItem("types") || "[]");
+    const type = JSON.parse(sessionStorage.getItem("types") || "[]");
 
-    if (!type.length) {
+    console.log(type, type.length);
+
+    if (type.length <= 0) {
       const typeData = await fetch(`${origin}types/`).then(res => res.json());
-      localStorage.setItem("types", JSON.stringify(typeData));
+      sessionStorage.setItem("types", JSON.stringify(typeData));
       this.setState({ type: typeData });
     } else {
       this.setState({ type });
@@ -234,8 +237,8 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
 
     if (loading) {
       return <SpinnerLoader />;
-    } 
-    
+    }
+
     if (error) {
       return <h4>Не удалось загрузить данные</h4>;
     }
@@ -257,8 +260,8 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
         <h4 className="header-extra-link-title">{item.title}</h4>
       </Link>
     ));
-  };
   }
+}
 
 const UIHeader = withContext(ClothesListContext, Header);
 
