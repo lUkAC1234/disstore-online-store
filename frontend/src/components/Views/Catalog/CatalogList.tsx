@@ -90,6 +90,117 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     }));
   };
 
+  componentDidUpdate(prevProps: Readonly<ClothesListActions>, prevState: Readonly<CatalogState>): void {
+    if (
+        prevState.selectedColors.length !== this.state.selectedColors.length ||
+        prevState.selectedSizes.length !== this.state.selectedSizes.length ||
+        prevState.selectedTypes.length !== this.state.selectedTypes.length
+    ) {
+        this.fetchFilteredProducts();
+    }
+  }
+
+  // TODO: Fetching products from server
+  async fetchFilteredProducts(): Promise<void> {
+    console.log("fetching...");
+
+    let colors: string = "";
+    let sizes: string = "";
+    let types: string = "";
+
+    for (let i = 0; i < this.state.selectedColors.length; ++i) {
+        const colorId: number = this.state.selectedColors[i];
+
+        for (let j = 0; j < this.state.colors.length; ++j) {
+            const colorItem: Color = this.state.colors[j];
+
+            if (colorId === colorItem.id) {
+                if (!colors) {
+                    colors += `color=${colorItem.id}`;
+                } else {
+                    colors += `&color=${colorItem.id}`;
+                }
+            }
+        }
+    }
+
+
+    for (let i = 0; i < this.state.selectedSizes.length; ++i) {
+        const sizeId: number = this.state.selectedSizes[i];
+
+        for (let j = 0; j < this.state.sizes.length; ++j) {
+            const sizeItem: Size = this.state.sizes[j];
+
+            if (sizeId === sizeItem.id) {
+                if (!sizes) {
+                    sizes += `size=${sizeItem.id}`;
+                } else {
+                    sizes += `&size=${sizeItem.id}`;
+                }
+            }
+        }
+    }
+
+
+    for (let i = 0; i < this.state.selectedTypes.length; ++i) {
+        const selectedTypeId: number = this.state.selectedTypes[i];
+
+        for (let j = 0; j < this.state.type.length; ++j) {
+            const typeItem: Clothestypes = this.state.type[j];
+
+            if (selectedTypeId === typeItem.id) {
+                if (!types) {
+                    types += `type=${typeItem.id}`;
+                } else {
+                    types += `&type=${typeItem.id}`;
+                }
+            }
+        }
+    }
+
+    // console.log(colors);
+    // console.log(types);
+    // console.log(sizes);
+
+    let finalTypesURL: string = "";
+    let finalSizesURL: string = "";
+
+    if (types) {
+        if (colors) {
+            finalTypesURL = `&${types}`;
+        } else {
+            finalTypesURL = types;
+        }
+    } else {
+        finalTypesURL = "";
+    }
+
+    if (sizes) {
+        if (colors || types) {
+            finalSizesURL = `&${sizes}`;
+        } else {
+            finalSizesURL = sizes;
+        }
+    } else {
+        finalSizesURL = "";
+    }
+
+    const url: string = `${origin}?${colors ?? ""}${finalTypesURL}${finalSizesURL}`;
+
+    try {
+        const response: Response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error("Хуй его знает че случилось!");
+        }
+
+        const data = response.json();
+        console.log(data);
+    } catch (err) {
+        console.error(err);
+    }
+  }
+
   render(): ReactNode {
     const { loading, error, products } = this.props;
     const { type, colors, sizes } = this.state;
@@ -179,14 +290,35 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                 <h3 className={styles["filters-colors-title"]}>Цвета</h3>
                 <div className={styles["filters-color-wrapper"]}>
                   {colors.length > 0 ? (
-                    colors.map((item) => (
-                      <button
-                        key={item.id}
-                        className={styles["filters-color-column"]}
-                        style={{ backgroundColor: item.color }}
-                      >
-                      </button>
-                    ))
+                    colors.map((item) => {
+                        return <button
+                          key={item.id}
+                          className={styles["filters-color-column"]}
+                          style={{
+                            backgroundColor: item.color,
+                            border: this.state.selectedColors.findIndex(value => value === item.id) !== -1 ? "10px solid red" : "",
+                          }}
+                          onClick={() => {
+                            this.setState(prevState => {
+                                const originalSelectedColors = [...prevState.selectedColors];
+                                const indexFound: number = originalSelectedColors.findIndex(index => index === item.id);
+                                const hasItem: boolean = indexFound !== -1;
+
+                                if (hasItem) {
+                                    originalSelectedColors.splice(indexFound, 1);
+                                } else {
+                                    originalSelectedColors.push(item.id);
+                                }
+
+                                return {
+                                    ...prevState,
+                                    selectedColors: originalSelectedColors,
+                                };
+                            }, () => console.log(this.state.selectedColors));
+                          }}
+                        >
+                        </button>
+                    })
                   ) : (
                     <h4 className={styles["filter-error"]}>Пока что нету никаких цветов одежды</h4>
                   )}
@@ -201,6 +333,28 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                       <button
                         key={item.id}
                         className={styles["filters-sizes-column"]}
+                        style={{
+                            background: this.state.selectedSizes.findIndex(value => value === item.id) !== -1 ? "black" : "",
+                            color: this.state.selectedSizes.findIndex(value => value === item.id) !== -1 ? "white" : "",
+                        }}
+                        onClick={() => {
+                            this.setState(prevState => {
+                                const originalselectedSizes = [...prevState.selectedSizes];
+                                const indexFound: number = originalselectedSizes.findIndex(index => index === item.id);
+                                const hasItem: boolean = indexFound !== -1;
+
+                                if (hasItem) {
+                                    originalselectedSizes.splice(indexFound, 1);
+                                } else {
+                                    originalselectedSizes.push(item.id);
+                                }
+
+                                return {
+                                    ...prevState,
+                                    selectedSizes: originalselectedSizes,
+                                };
+                            }, () => console.log(this.state.selectedSizes));
+                        }}
                       >
                         {item.size}
                       </button>
@@ -244,11 +398,8 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
               </div>
               <div className={styles["catalog-items-wrapper"]}>
                 {products && products.length > 0 ? (
-                  products.map((item: ClothItem) => {
-                    const foundItemId: number = this.state.selectedTypes.findIndex(itemId => itemId === item.id);
-                    const hasItem: boolean = foundItemId !== -1;
-
-                    const template: ReactNode = <Link key={item.id} to={`/${lang}/catalog/clothes/${item.slug}`}>
+                  products.map((item: ClothItem) =>
+                    <Link key={item.id} to={`/${lang}/catalog/clothes/${item.slug}`}>
                       <div className={styles["catalog-item"]}>
                         <div className={styles["catalog-image-container"]}>
                           {item.catalogImages?.[0]?.image ? (
@@ -272,12 +423,8 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                           ) : null}
                         </bdi>
                       </div>
-                    </Link>;
-
-                    if (this.state.selectedTypes.length === 0 || hasItem) {
-                        return template;
-                    }
-                    })
+                    </Link>
+                    )
                 ) : (
                   <p>Подходящих товаров не найдено</p>
                 )}
