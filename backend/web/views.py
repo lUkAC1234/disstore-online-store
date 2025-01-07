@@ -53,16 +53,15 @@ class ClothesModelFilter(django_filters.FilterSet):
             valid_sizes = ClothesSizeModel.objects.filter(id__in=size_ids).values_list('id', flat=True)
             queryset = queryset.filter(sizes__id__in=list(valid_sizes))
         return queryset
-
+    
     def filter_type(self, queryset, name, value):
-        if value:
-            if not value.isdigit():
-                raise ValidationError("Type ID must be an integer.")
-            if not TypesModel.objects.filter(id=value).exists():
-                raise ValidationError(f"Invalid type ID: {value}")
-            queryset = queryset.filter(type__id=value)
+        type_ids = self.request.GET.getlist('type')
+        if type_ids:
+            if not all(id.isdigit() for id in type_ids):
+                raise ValidationError("All type IDs must be integers.")
+            valid_types = TypesModel.objects.filter(id__in=type_ids).values_list('id', flat=True)
+            queryset = queryset.filter(type__id__in=list(valid_types))
         return queryset
-
 
 class ClothesMainView(ListAPIView):
     queryset = ClothesModel.objects.prefetch_related('colors', 'sizes', 'catalogImages').all()

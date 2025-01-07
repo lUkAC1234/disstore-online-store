@@ -49,7 +49,7 @@ class ClothesFAQModelSerializer(serializers.ModelSerializer):
 class ClothesModelSerializer(serializers.ModelSerializer):
     colors = ClothesColorSerializer(many=True, read_only=True)
     sizes = ClothesSizeSerializer(many=True, read_only=True)
-    type = ClothesTypeModelSerializer(read_only=True)
+    type = ClothesTypeModelSerializer(many=True, read_only=True)
     catalogImages = ClothesImageSerializer(many=True, read_only=True)
     reviews = ClothesReviewModelSerializer(many=True)
     faqs = ClothesFAQModelSerializer(many=True, read_only=True)
