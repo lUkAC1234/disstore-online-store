@@ -6,40 +6,97 @@ import UIReact from "utils/classes/UIReact";
 import { withContext } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
-import { ClothItem } from "components/Context/ClothesContext";
+import {
+  Clothestypes,
+  ClothItem,
+  Size,
+  Color,
+} from "components/Context/ClothesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleRight,
+  faSliders,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
+import { origin } from "../../../../project.config.json";
 
 const lang: string = i18next.language;
 
-class CatalogList extends UIReact<ClothesListActions, ClothItem> {
-  componentDidMount() {
+interface CatalogState {
+  isFilterActive: boolean;
+  sizes: Size[];
+  type: Clothestypes[];
+  colors: Color[];
+  selectedSizes: Size[];
+  selectedTypes: Clothestypes[];
+  selectedColors: Color[];
+}
+
+class CatalogList extends UIReact<ClothesListActions, CatalogState> {
+  state: CatalogState = {
+    selectedSizes: [],
+    selectedTypes: [],
+    selectedColors: [],
+    isFilterActive: false,
+    sizes: [],
+    type: [],
+    colors: [],
+  };
+
+  async componentDidMount() {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
+    try {
+      const [sizes, type, colors] = await this.fetchFilters();
+      this.setState({ sizes, type, colors });
+    } catch (error) {
+      console.error("Failed to fetch filters:", error);
+    }
   }
 
-  handleApplyFilters = () => {
-    const { setIsFilterActive } = this.props;
-    setIsFilterActive(true);
+  fetchFilters = async (): Promise<[Size[], Clothestypes[], Color[]]> => {
+    const cachedSizes = localStorage.getItem("sizes");
+    const cachedTypes = localStorage.getItem("types");
+    const cachedColors = localStorage.getItem("colors");
+
+    if (cachedSizes && cachedTypes && cachedColors) {
+      return [
+        JSON.parse(cachedSizes),
+        JSON.parse(cachedTypes),
+        JSON.parse(cachedColors),
+      ];
+    }
+
+    const [sizesData, typeData, colorsData] = await Promise.all([
+      fetch(`${origin}sizes/`).then((res) => res.json()),
+      fetch(`${origin}types/`).then((res) => res.json()),
+      fetch(`${origin}colors/`).then((res) => res.json()),
+    ]);
+
+    localStorage.setItem("sizes", JSON.stringify(sizesData));
+    localStorage.setItem("types", JSON.stringify(typeData));
+    localStorage.setItem("colors", JSON.stringify(colorsData));
+
+    return [sizesData, typeData, colorsData];
   };
 
-  handleResetFilters = () => {
-    const { setIsFilterActive } = this.props;
-    setIsFilterActive(false);
+  toggleFilter = () => {
+    this.setState((prevState) => ({
+      isFilterActive: !prevState.isFilterActive,
+    }));
   };
 
   render(): ReactNode {
-    const { products } = this.props;
+    const { loading, error, products } = this.props;
+    const { type, colors, sizes } = this.state;
 
-    if (this.props.loading) {
-      return <SpinnerLoaderWrapperFixed />;
-    }
+    if (loading) return <SpinnerLoaderWrapperFixed />;
 
-    if (this.props.error) {
+    if (error) {
       return (
         <section className={styles["catalog-section"]}>
           <div className={styles["catalog-container"]}>
@@ -49,19 +106,6 @@ class CatalogList extends UIReact<ClothesListActions, ClothItem> {
         </section>
       );
     }
-
-
-    const uniqueColors = [
-      ...new Map(
-        products.flatMap((item) => item.colors).map((item) => [item.color, item])
-      ).values(),
-    ];
-
-    const uniqueSizes = [
-      ...new Map(
-        products.flatMap((item) => item.sizes).map((item) => [item.size, item])
-      ).values(),
-    ];
 
     return (
       <section className={styles["catalog-section"]}>
@@ -73,14 +117,15 @@ class CatalogList extends UIReact<ClothesListActions, ClothItem> {
             <FontAwesomeIcon icon={faAngleRight} />
             Мужчинам
           </div>
+
           <div className={styles["catalog-wrapper"]}>
-            <div className={`${styles["catalog-filter-container"]} ${this.props.isFilterActive ? styles["active"] : ''}`}>
+            <div className={`${styles["catalog-filter-container"]} ${this.state.isFilterActive ? styles["active"] : ''}`}>
               <div className={styles["filters-title-container"]}>
                 <h3 className={styles["filters-title"]}>Фильтры</h3>
-                {this.props.isFilterActive ? (
+                {this.state.isFilterActive ? (
                   <button
                     className={styles["filters-reset-mobile"]}
-                    onClick={this.handleResetFilters}
+                    onClick={this.toggleFilter}
                   >
                     <FontAwesomeIcon icon={faXmark} />
                   </button>
@@ -90,18 +135,16 @@ class CatalogList extends UIReact<ClothesListActions, ClothItem> {
               </div>
               <div className={styles["hr-line"]}></div>
               <div className={styles["filters-types"]}>
-                {products.some((item) => item.type) ? (
-                  products
-                    .filter(
-                      (item, index, self) =>
-                        item.type && self.findIndex((i) => i.type?.id === item.type?.id) === index
-                    )
-                    .map((item) => (
-                      <div key={item.type.id} className={styles["filter-type-column"]}>
-                        <h4 className={styles["filter-type-title"]}>{item.type.title}</h4>
-                        <FontAwesomeIcon icon={faAngleRight} />
-                      </div>
-                    ))
+                {type.length > 0 ? (
+                  type.map((item) => (
+                    <div
+                      key={item.id}
+                      className={styles["filter-type-column"]}
+                    >
+                      <h4 className={styles["filter-type-title"]}>{item.title}</h4>
+                      <FontAwesomeIcon icon={faAngleRight} />
+                    </div>
+                  ))
                 ) : (
                   <h4 className={styles["filter-error"]}>Нету никаких типов одежды</h4>
                 )}
@@ -110,8 +153,8 @@ class CatalogList extends UIReact<ClothesListActions, ClothItem> {
               <div className={styles["filters-colors-list"]}>
                 <h3 className={styles["filters-colors-title"]}>Цвета</h3>
                 <div className={styles["filters-color-wrapper"]}>
-                  {uniqueColors.length > 0 ? (
-                    uniqueColors.map((item) => (
+                  {colors.length > 0 ? (
+                    colors.map((item) => (
                       <button
                         key={item.id}
                         className={styles["filters-color-column"]}
@@ -128,9 +171,12 @@ class CatalogList extends UIReact<ClothesListActions, ClothItem> {
               <div className={styles["filters-sizes-list"]}>
                 <h3 className={styles["filters-sizes-title"]}>Размеры</h3>
                 <div className={styles["filters-sizes-wrapper"]}>
-                  {uniqueSizes.length > 0 ? (
-                    uniqueSizes.map((item) => (
-                      <button key={item.id} className={styles["filters-sizes-column"]}>
+                  {sizes.length > 0 ? (
+                    sizes.map((item) => (
+                      <button 
+                        key={item.id} 
+                        className={styles["filters-sizes-column"]}
+                      >
                         {item.size}
                       </button>
                     ))
@@ -152,7 +198,7 @@ class CatalogList extends UIReact<ClothesListActions, ClothItem> {
                 <div className={styles["catalog-active-filter"]}>
                   <button
                     className={styles["filters-mobile-version"]}
-                    onClick={this.handleApplyFilters}
+                    onClick={this.toggleFilter}
                   >
                     <FontAwesomeIcon icon={faSliders} />
                   </button>
@@ -201,7 +247,7 @@ class CatalogList extends UIReact<ClothesListActions, ClothItem> {
                     </Link>
                   ))
                 ) : (
-                  <p>No items available</p>
+                  <p>Подходящих товаров не найдено</p>
                 )}
               </div>
             </div>

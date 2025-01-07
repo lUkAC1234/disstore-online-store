@@ -57,14 +57,14 @@ class CatalogDetails extends UIReact<
   }
 
 
-  componentDidMount(): void {
+  async componentDidMount(): Promise<void> {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
 
 
-    this.fetchData();
+    await this.fetchData();
 
     window.addEventListener("popstate", this.fetchData, {
       signal: this.controller.signal,
@@ -104,6 +104,14 @@ class CatalogDetails extends UIReact<
 
   async fetchDataProduct(productSlug: string): Promise<void> {
     try {
+      const cachedData = localStorage.getItem(productSlug);
+
+      if (cachedData) {
+        const data: ClothItem = JSON.parse(cachedData);
+        this.props.setData(data);
+        return;
+      }
+
       const response: Response = await fetch(`${origin}${productSlug}/`, {
         signal: this.controller.signal,
       });
@@ -117,11 +125,13 @@ class CatalogDetails extends UIReact<
       }
 
       const data: ClothItem = await response.json();
+      localStorage.setItem(productSlug, JSON.stringify(data));
       this.props.setData(data);
     } catch (err) {
       return;
     }
   }
+
 
   setSelectedImage(url: string): void {
     this.setState(
@@ -141,27 +151,36 @@ class CatalogDetails extends UIReact<
     }));
   };
 
-  handleQuantityChange = (
-    type: "increase" | "decrease",
-    maxAvailable: number
-  ) => {
-    this.setState((prevState) => ({
+  handleQuantityChange = (type: "increase" | "decrease", maxAvailable: number): void => {
+    this.setState(({ selectedOptions }) => ({
       selectedOptions: {
-        ...prevState.selectedOptions,
-        quantity:
-          type === "increase"
-            ? Math.min(100, maxAvailable, prevState.selectedOptions.quantity + 1) // Cap the quantity at 100 or maxAvailable
-            : Math.max(1, prevState.selectedOptions.quantity - 1), // Ensure the minimum is 1
+        ...selectedOptions,
+        quantity: Math.min(
+          Math.max(type === "increase" ? selectedOptions.quantity + 1 : selectedOptions.quantity - 1, 1),
+          maxAvailable,
+          100
+        ),
       },
     }));
   };
-
 
   handleImageClick = (image: string): void => {
     this.setState({ selectedImage: image });
   };
 
   render(): ReactNode {
+    if (this.props.loading) {
+      return <SpinnerLoaderWrapperFixed />;
+    }
+
+    if (this.props.error) {
+      return (
+        <div className={styles["catalog-container"]}>
+          <h2>Ойй, что-то пошло не так !</h2>
+        </div>
+      );
+    }
+
     return (
       <>
         <section className={styles["catalog-section"]}>
@@ -181,16 +200,6 @@ class CatalogDetails extends UIReact<
   get product(): ReactNode {
     const { selectedImage, selectedOptions } = this.state;
     const maxAvailable = this.props.data?.count;
-
-    if (this.props.loading) {
-      return <SpinnerLoader />;
-    } else if (this.props.error) {
-      return (
-        <div className={styles["catalog-container"]}>
-          <h2>Ойй, что-то пошло не так !</h2>
-        </div>
-      );
-    }
 
     return (
 

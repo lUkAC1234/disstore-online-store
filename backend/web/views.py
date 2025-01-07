@@ -1,7 +1,13 @@
 from rest_framework import status
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from .models import ClothesModel, ClothesColorModel, ClothesSizeModel, ClothesImageModel, TypesModel
+from .models import (
+    ClothesModel, 
+    ClothesColorModel, 
+    ClothesSizeModel, 
+    ClothesImageModel, 
+    TypesModel
+)
 from .serializer import (
     ClothesModelSerializer,
     ClothesModelCreateUpdateSerializer,
@@ -12,10 +18,30 @@ from .serializer import (
 )
 
 from rest_framework.exceptions import NotFound
+import django_filters
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
+
+# Filtering
+class ClothesModelFilter(django_filters.FilterSet):
+    title = django_filters.CharFilter(lookup_expr='icontains', label='Title')
+    price_min = django_filters.NumberFilter(field_name='price', lookup_expr='gte', label='Min Price')
+    price_max = django_filters.NumberFilter(field_name='price', lookup_expr='lte', label='Max Price')
+    color = django_filters.ModelMultipleChoiceFilter(queryset=ClothesColorModel.objects.all(), to_field_name='color', label='Colors')
+    size = django_filters.ModelMultipleChoiceFilter(queryset=ClothesSizeModel.objects.all(), to_field_name='size', label='Sizes')
+    type = django_filters.ModelChoiceFilter(queryset=TypesModel.objects.all(), label='Type')
+
+    class Meta:
+        model = ClothesModel
+        fields = ['title', 'price_min', 'price_max', 'color', 'size', 'type']
 
 class ClothesMainView(ListAPIView):
     queryset = ClothesModel.objects.prefetch_related('colors', 'sizes', 'catalogImages').all()
     serializer_class = ClothesModelSerializer
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filterset_class = ClothesModelFilter
+    ordering_fields = ['price', 'title']
+    ordering = ['price']
 
 class ClothesModelCreateUpdateView(CreateAPIView, UpdateAPIView, DestroyAPIView):
     queryset = ClothesModel.objects.all()
@@ -44,10 +70,6 @@ class ClothesImageCreateUpdateView(CreateAPIView, UpdateAPIView, DestroyAPIView)
     def perform_create(self, serializer):
         serializer.save()
         
-class ClothesTypeMainView(ListAPIView):
-    queryset = TypesModel.objects.all()
-    serializer_class = ClothesTypeModelSerializer
-
 class ClothesModelDetailView(RetrieveAPIView):
     queryset = ClothesModel.objects.prefetch_related('colors', 'sizes', 'catalogImages').all()
     serializer_class = ClothesModelSerializer
@@ -55,8 +77,19 @@ class ClothesModelDetailView(RetrieveAPIView):
 
     def get_object(self):
         try:
-            # Attempt to fetch the object by slug
             return self.queryset.get(slug=self.kwargs.get(self.lookup_field))
         except ClothesModel.DoesNotExist:
-            # Raise a 404 error explicitly
             raise NotFound(detail="Clothes not found", code=404)
+        
+        
+class ClothesTypeMainView(ListAPIView):
+    queryset = TypesModel.objects.all()
+    serializer_class = ClothesTypeModelSerializer
+    
+class ClothesColorsMainView(ListAPIView):
+    queryset = ClothesColorModel.objects.all()
+    serializer_class = ClothesColorSerializer
+    
+class ClothesSizesMainView(ListAPIView):
+    queryset = ClothesSizeModel.objects.all()
+    serializer_class = ClothesSizeSerializer

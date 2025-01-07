@@ -61,6 +61,7 @@ export default defineConfig({
               const chunkInfoName: string = chunkInfoNames[i];
               if (regexChecker(/\.(css)$/, chunkInfoName)) return "css/[name].[hash].[ext]";
               if (regexChecker(/\.(svg)$/, chunkInfoName)) return "assets/svg/[name].[hash].[ext]";
+              if (regexChecker(/\.(webp)$/, chunkInfoName)) return "assets/webp/[name].[hash].[ext]";
               if (regexChecker(/\.(jpg|jpeg)$/, chunkInfoName)) return "assets/jpg/[name].[hash].[ext]";
               if (regexChecker(/\.(png)$/, chunkInfoName)) return "assets/png/[name].[hash].[ext]";
               if (regexChecker(/\.(gif)$/, chunkInfoName)) return "assets/gif/[name].[hash].[ext]";

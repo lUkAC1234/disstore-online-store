@@ -1,5 +1,5 @@
 .catalog-container {
-    padding: 3rem;
+    padding: 3rem 3rem 3rem 1rem;
 }
 
 .catalog-wrapper {
@@ -13,7 +13,7 @@
     background-color: var(--text--white);
     border: 0.1rem solid var(--welcome-border);
     border-radius: 1rem;
-    padding: 1rem;
+    padding: 3rem 1rem;
 }
 
 .filters-title-container {
@@ -203,10 +203,6 @@
     &:hover img {
         transform: scale(1.05);
     }
-
-    &:hover {
-        box-shadow: 0 0.25rem 1rem -0.6rem var(--text-p);
-    }
 }
 
 .catalog-image-container {
@@ -220,7 +216,6 @@
         width: 100%;
         aspect-ratio: 1 / 1;
         border-radius: 1.5rem;
-        border: 0.1rem solid var(--welcome-border);
         object-fit: cover;
         background: var(--clothes-image-background);
         transition: transform 0.3s ease;
@@ -245,7 +240,7 @@
     align-items: center;
     width: 100%;
     gap: 0.1rem 1rem;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1.25rem;
 }
 

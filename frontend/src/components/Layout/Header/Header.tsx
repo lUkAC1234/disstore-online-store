@@ -17,12 +17,13 @@ import { withContext } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import SpinnerLoader from "components/Loaders/SpinnerLoader";
+import { Clothestypes } from "components/Context/ClothesContext";
 
 const lang = i18next.language;
 
 interface HeaderState {
   activeLink: string | null;
-  clothesTypeData: { title?: string; image?: string }[];
+  type: Clothestypes[];
 }
 
 class Header extends PureComponent<ClothesListActions, HeaderState> {
@@ -31,7 +32,23 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
 
   state: Readonly<HeaderState> = {
     activeLink: null,
-    clothesTypeData: [],
+    type: [],
+  };
+
+  async componentDidMount(): Promise<void> {
+    this.loadTypeData();
+  }
+
+  loadTypeData = async () => {
+    const type = JSON.parse(localStorage.getItem("types") || "[]");
+
+    if (!type.length) {
+      const typeData = await fetch(`${origin}types/`).then(res => res.json());
+      localStorage.setItem("types", JSON.stringify(typeData));
+      this.setState({ type: typeData });
+    } else {
+      this.setState({ type });
+    }
   };
 
   toggleSearchInput = () => {
@@ -82,9 +99,6 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
   handleCloseDetails = () => {
     this.setState({ activeLink: null });
   };
-
-  componentDidMount(): void {
-  }
 
   render() {
     const { activeLink } = this.state;
@@ -217,40 +231,34 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
 
   get linksMobile(): ReactNode {
     const { loading, error, products } = this.props;
-  
+
     if (loading) {
       return <SpinnerLoader />;
-    } else if (error) {
+    } 
+    
+    if (error) {
       return <h4>Не удалось загрузить данные</h4>;
     }
-  
+
     if (!products || products.length === 0) {
       return <h4>Нету данных</h4>;
     }
-  
-    const uniqueTypes = new Set(); 
-    return products.map(({ type }) => {
-      if (uniqueTypes.has(type.id)) return null; 
-      uniqueTypes.add(type.id);
-  
-      return (
-        <Link
-          key={type.id}
-          to={`/${lang}/catalog/${type.id}`}
-          className="header-link-extra-details-column"
-          onClick={this.closeEntireMenu}
-        >
-          <div className="header-extra-link-image-container">
-            <img src={type.image} alt={type.title} />
-          </div>
-          <h4 className="header-extra-link-title">
-            {type.title}
-          </h4>
-        </Link>
-      );
-    });
+
+    return this.state.type.map(item => (
+      <Link
+        key={item.id}
+        to={`/${lang}/catalog/${item.id}`}
+        className="header-link-extra-details-column"
+        onClick={this.closeEntireMenu}
+      >
+        <div className="header-extra-link-image-container">
+          <img src={item.image} alt={item.title} />
+        </div>
+        <h4 className="header-extra-link-title">{item.title}</h4>
+      </Link>
+    ));
+  };
   }
-}
 
 const UIHeader = withContext(ClothesListContext, Header);
 

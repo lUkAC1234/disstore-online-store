@@ -7,14 +7,12 @@ export interface ClothesListContextState {
   products: ClothItem[];
   loading: boolean;
   error: boolean;
-  isFilterActive: boolean;
 }
 
 export interface ClothesListContextProps extends PropsWithChildren {}
 
 export interface ClothesListActions extends ClothesListContextState {
   setProducts: (products: ClothItem[]) => void;
-  setIsFilterActive: (isFilterActive: boolean) => void;
 }
 
 class ClothesListProvider extends PureComponent<ClothesListContextProps, ClothesListContextState> {
@@ -22,7 +20,6 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
     products: [],
     loading: false,
     error: false,
-    isFilterActive: false,
   };
 
   render() {
@@ -31,7 +28,6 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
         value={{
           ...this.state,
           setProducts: this.setProducts,
-          setIsFilterActive: this.setIsFilterActive,
         }}
       >
         {this.props.children}
@@ -39,8 +35,14 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
     );
   }
 
-  componentDidMount(): void {
-    this.fetchData();
+  async componentDidMount() {
+    const cachedProducts = sessionStorage.getItem("products");
+    
+    if (cachedProducts) {
+      this.setProducts(JSON.parse(cachedProducts));
+    } else {
+      this.fetchData();
+    }
   }
 
   async fetchData(): Promise<void> {
@@ -49,10 +51,11 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
       this.setLoadingState(true);
 
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Не удалось загрузить данные");
       }
 
       const data: ClothItem[] = await response.json();
+      sessionStorage.setItem("products", JSON.stringify(data));
       this.setProducts(data);
     } catch (err) {
       this.setErrorState();
@@ -81,13 +84,6 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
       ...prevState,
       products,
       loading: false,
-    }));
-  };
-
-  setIsFilterActive = (value: boolean): void => {
-    this.setState(prevState => ({
-      ...prevState,
-      isFilterActive: value,
     }));
   };
 }
