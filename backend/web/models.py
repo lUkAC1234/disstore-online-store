@@ -40,10 +40,9 @@ class ClothesModel(models.Model):
     discount = models.PositiveIntegerField(default=0, verbose_name=_('Скидка'))
     price = models.PositiveIntegerField(_("Цена"))
     real_price = models.PositiveBigIntegerField(default=0, verbose_name=_('Реальная цена'))
-    type = models.ForeignKey(
+    type = models.ManyToManyField(
         "TypesModel", 
         verbose_name=_("Тип одежды"),
-        on_delete=models.CASCADE,
     )
     
     long_description = RichTextField(verbose_name=_("Полное описание"))
