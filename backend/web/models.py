@@ -28,21 +28,22 @@ class ClothesModel(models.Model):
     colors = models.ManyToManyField(
         'ClothesColorModel', 
         verbose_name=_("Цвета"), 
-        related_name='clothes'
+        related_name='colors'
     )
     sizes = models.ManyToManyField(
         'ClothesSizeModel', 
         verbose_name=_("Размеры"), 
-        related_name='clothes'
+        related_name='sizes'
     )
     
     count = models.PositiveIntegerField(default=1, verbose_name=_('Количество'))
     discount = models.PositiveIntegerField(default=0, verbose_name=_('Скидка'))
     price = models.PositiveIntegerField(_("Цена"))
     real_price = models.PositiveBigIntegerField(default=0, verbose_name=_('Реальная цена'))
-    type = models.ManyToManyField(
+    types = models.ManyToManyField(
         "TypesModel", 
         verbose_name=_("Тип одежды"),
+        related_name='types'
     )
     
     long_description = RichTextField(verbose_name=_("Полное описание"))

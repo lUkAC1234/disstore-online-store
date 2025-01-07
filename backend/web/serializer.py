@@ -49,7 +49,7 @@ class ClothesFAQModelSerializer(serializers.ModelSerializer):
 class ClothesModelSerializer(serializers.ModelSerializer):
     colors = ClothesColorSerializer(many=True, read_only=True)
     sizes = ClothesSizeSerializer(many=True, read_only=True)
-    type = ClothesTypeModelSerializer(many=True, read_only=True)
+    types = ClothesTypeModelSerializer(many=True, read_only=True)
     catalogImages = ClothesImageSerializer(many=True, read_only=True)
     reviews = ClothesReviewModelSerializer(many=True)
     faqs = ClothesFAQModelSerializer(many=True, read_only=True)
@@ -67,7 +67,7 @@ class ClothesModelSerializer(serializers.ModelSerializer):
                   'count',
                   'colors', 
                   'sizes', 
-                  'type', 
+                  'types', 
                   'catalogImages',
                   'reviews',
                   'faqs'
@@ -91,7 +91,7 @@ class ClothesModelCreateUpdateSerializer(serializers.ModelSerializer):
             'count',
             'colors', 
             'sizes', 
-            'type', 
+            'types', 
         ]
 
     def create(self, validated_data):

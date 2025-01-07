@@ -22,6 +22,7 @@ import django_filters
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 # Filtering
 class ClothesModelFilter(django_filters.FilterSet):
@@ -29,47 +30,53 @@ class ClothesModelFilter(django_filters.FilterSet):
     price_min = django_filters.NumberFilter(field_name='price', lookup_expr='gte', label='Min Price')
     price_max = django_filters.NumberFilter(field_name='price', lookup_expr='lte', label='Max Price')
     color = django_filters.CharFilter(label='Colors', method='filter_color')
+    types = django_filters.CharFilter(label='Types', method='filter_type')
     size = django_filters.CharFilter(label='Sizes', method='filter_size')
-    type = django_filters.CharFilter(label='Type', method='filter_type')
 
     class Meta:
         model = ClothesModel
-        fields = ['title', 'price_min', 'price_max', 'color', 'size', 'type']
+        fields = ['title', 'price_min', 'price_max', 'color', 'types', 'size']
 
     def filter_color(self, queryset, name, value):
-        if value:
-            color_ids = value.split(',')
+        """Filter by color IDs."""
+        color_ids = self.request.GET.getlist('color')  # Get all color IDs from query
+        if color_ids:
             if not all(id.isdigit() for id in color_ids):
                 raise ValidationError("All color IDs must be integers.")
-            valid_colors = ClothesColorModel.objects.filter(id__in=color_ids).values_list('id', flat=True)
-            queryset = queryset.filter(colors__id__in=list(valid_colors))
-        return queryset
-
-    def filter_size(self, queryset, name, value):
-        if value:
-            size_ids = value.split(',')
-            if not all(id.isdigit() for id in size_ids):
-                raise ValidationError("All size IDs must be integers.")
-            valid_sizes = ClothesSizeModel.objects.filter(id__in=size_ids).values_list('id', flat=True)
-            queryset = queryset.filter(sizes__id__in=list(valid_sizes))
+            # Filter the queryset for valid color IDs
+            queryset = queryset.filter(colors__id__in=color_ids).distinct()
         return queryset
     
     def filter_type(self, queryset, name, value):
-        type_ids = self.request.GET.getlist('type')
+        """Filter by type IDs."""
+        type_ids = self.request.GET.getlist('types')  # Get all type IDs from query
         if type_ids:
             if not all(id.isdigit() for id in type_ids):
                 raise ValidationError("All type IDs must be integers.")
-            valid_types = TypesModel.objects.filter(id__in=type_ids).values_list('id', flat=True)
-            queryset = queryset.filter(type__id__in=list(valid_types))
+            # Filter the queryset for valid type IDs
+            queryset = queryset.filter(types__id__in=type_ids).distinct()
+        return queryset
+
+    def filter_size(self, queryset, name, value):
+        """Filter by size IDs."""
+        size_ids = self.request.GET.getlist('size')  # Get all size IDs from query
+        if size_ids:
+            if not all(id.isdigit() for id in size_ids):
+                raise ValidationError("All size IDs must be integers.")
+            # Filter the queryset for valid size IDs
+            queryset = queryset.filter(sizes__id__in=size_ids).distinct()
         return queryset
 
 class ClothesMainView(ListAPIView):
-    queryset = ClothesModel.objects.prefetch_related('colors', 'sizes', 'catalogImages').all()
     serializer_class = ClothesModelSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filterset_class = ClothesModelFilter
     ordering_fields = ['price', 'title']
     ordering = ['price']
+
+    def get_queryset(self):
+        return ClothesModel.objects.prefetch_related('colors', 'sizes', 'types', 'catalogImages')
+
 
 class ClothesModelCreateUpdateView(CreateAPIView, UpdateAPIView, DestroyAPIView):
     queryset = ClothesModel.objects.all()
