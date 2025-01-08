@@ -7,6 +7,8 @@ export interface ClothesListContextState {
   products: ClothItem[];
   loading: boolean;
   error: boolean;
+  min: number;
+  max: number
 }
 
 export interface ClothesListContextProps extends PropsWithChildren {}
@@ -20,6 +22,8 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
     products: [],
     loading: false,
     error: false,
+    min: 0,
+    max: 0,
   };
 
   render() {
@@ -47,16 +51,21 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
 
   async fetchData(): Promise<void> {
     try {
-      const response: Response = await fetch(`${origin}`);
+      const response: Response = await fetch(`${origin}clothes/`);
       this.setLoadingState(true);
 
       if (!response.ok) {
         throw new Error("Не удалось загрузить данные");
       }
 
-      const data: ClothItem[] = await response.json();
+      const data: {price_min: number, price_max: number, products: ClothItem[]} = await response.json();
       sessionStorage.setItem("products", JSON.stringify(data));
-      this.setProducts(data);
+      this.setProducts(data.products);
+      this.setState((prevstate) => ({
+        ...prevstate,
+        min: data.price_min,
+        max: data.price_max
+      }))
     } catch (err) {
       this.setErrorState();
     } finally {

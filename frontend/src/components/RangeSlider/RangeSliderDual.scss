@@ -1,0 +1,38 @@
+.rc-slider-handle {
+  border: 2px solid var(--text-black);
+  opacity: 1;
+  width: 16px;
+  height: 16px;
+  margin-top: -6.5px;
+  transition: outline 300ms;
+  outline: 0px solid transparent !important;
+
+  &:hover {
+    outline: 8px solid var(--text-black) !important;
+    border: 2px solid var(--text-black);
+  }
+
+  &:active {
+    outline: 7px solid var(--text-black) !important;
+    border: 2px solid var(--text-black);
+  }
+
+  @media screen and (max-width: 639px) {
+    margin-top: -6px;
+  }
+}
+
+.rc-slider-handle-1,
+.rc-slider-handle-2 {
+  outline: 0px solid transparent !important;
+}
+
+.rc-slider-track, .rc-slider-tracks {
+  background-color: var(--text-black);
+}
+
+.rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
+  box-shadow: none;
+  border-color: var(--text-black);
+  outline: 7px solid var(--text-black) !important;
+}

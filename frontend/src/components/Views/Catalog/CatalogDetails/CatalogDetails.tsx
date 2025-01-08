@@ -21,7 +21,6 @@ import { withContext } from "components/Context/ContextInjector";
 import { ClothesContext, ClothesListContext } from "components/Context/ContextCollection";
 import { debounce } from "utils/hooks/debounce";
 import { ClothesListActions } from "components/Context/ClothesListContext";
-import SpinnerLoader from "components/Loaders/SpinnerLoader";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 const lang: string = i18next.language;

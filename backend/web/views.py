@@ -18,66 +18,57 @@ from .serializer import (
 )
 
 from rest_framework.exceptions import NotFound
-import django_filters
-from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from django.core.exceptions import ValidationError
-from django.db.models import Q
-
-# Filtering
-class ClothesModelFilter(django_filters.FilterSet):
-    title = django_filters.CharFilter(lookup_expr='icontains', label='Title')
-    price_min = django_filters.NumberFilter(field_name='price', lookup_expr='gte', label='Min Price')
-    price_max = django_filters.NumberFilter(field_name='price', lookup_expr='lte', label='Max Price')
-    color = django_filters.CharFilter(label='Colors', method='filter_color')
-    types = django_filters.CharFilter(label='Types', method='filter_type')
-    size = django_filters.CharFilter(label='Sizes', method='filter_size')
-
-    class Meta:
-        model = ClothesModel
-        fields = ['title', 'price_min', 'price_max', 'color', 'types', 'size']
-
-    def filter_color(self, queryset, name, value):
-        """Filter by color IDs."""
-        color_ids = self.request.GET.getlist('color')  # Get all color IDs from query
-        if color_ids:
-            if not all(id.isdigit() for id in color_ids):
-                raise ValidationError("All color IDs must be integers.")
-            # Filter the queryset for valid color IDs
-            queryset = queryset.filter(colors__id__in=color_ids).distinct()
-        return queryset
-    
-    def filter_type(self, queryset, name, value):
-        """Filter by type IDs."""
-        type_ids = self.request.GET.getlist('types')  # Get all type IDs from query
-        if type_ids:
-            if not all(id.isdigit() for id in type_ids):
-                raise ValidationError("All type IDs must be integers.")
-            # Filter the queryset for valid type IDs
-            queryset = queryset.filter(types__id__in=type_ids).distinct()
-        return queryset
-
-    def filter_size(self, queryset, name, value):
-        """Filter by size IDs."""
-        size_ids = self.request.GET.getlist('size')  # Get all size IDs from query
-        if size_ids:
-            if not all(id.isdigit() for id in size_ids):
-                raise ValidationError("All size IDs must be integers.")
-            # Filter the queryset for valid size IDs
-            queryset = queryset.filter(sizes__id__in=size_ids).distinct()
-        return queryset
+from django.db.models import Min, Max, Q
+from .filters import ClothesModelFilter
 
 class ClothesMainView(ListAPIView):
     serializer_class = ClothesModelSerializer
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = ClothesModelFilter
-    ordering_fields = ['price', 'title']
-    ordering = ['price']
 
-    def get_queryset(self):
-        return ClothesModel.objects.prefetch_related('colors', 'sizes', 'types', 'catalogImages')
+    def get(self, request, *args, **kwargs):
+        queryset = ClothesModel.objects.prefetch_related('colors', 'sizes', 'types', 'catalogImages')
+        
+        price_range = queryset.aggregate(
+            price_min=Min('real_price'),
+            price_max=Max('real_price')
+        )
 
+        price_min_query = request.GET.get('price_min')
+        price_max_query = request.GET.get('price_max')
 
+        if price_min_query:
+            try:
+                price_min_query = float(price_min_query)
+                if price_min_query < price_range['price_min']:
+                    raise ValidationError(f"Min price cannot be lower than {price_range['price_min']}.")
+                queryset = queryset.filter(real_price__gte=price_min_query)
+            except ValueError:
+                raise ValidationError("Invalid value for 'price_min'.")
+
+        if price_max_query:
+            try:
+                price_max_query = float(price_max_query)
+                if price_max_query > price_range['price_max']:
+                    raise ValidationError(f"Max price cannot be higher than {price_range['price_max']}.")
+                queryset = queryset.filter(real_price__lte=price_max_query)
+            except ValueError:
+                raise ValidationError("Invalid value for 'price_max'.")
+
+        filtered_queryset = ClothesModelFilter(data=request.GET, queryset=queryset, request=request).qs
+
+        serializer = self.serializer_class(filtered_queryset, many=True)
+
+        response_data = {
+            'price_min': price_range['price_min'],
+            'price_max': price_range['price_max'],
+            'products': serializer.data
+        }
+
+        return Response(response_data)
+    
 class ClothesModelCreateUpdateView(CreateAPIView, UpdateAPIView, DestroyAPIView):
     queryset = ClothesModel.objects.all()
     serializer_class = ClothesModelCreateUpdateSerializer

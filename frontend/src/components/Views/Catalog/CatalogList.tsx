@@ -1,25 +1,19 @@
 import styles from "./CatalogList.module.scss";
-import { ReactNode } from "react";
+import { ChangeEvent, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import i18next from "i18next";
 import UIReact from "utils/classes/UIReact";
 import { withContext } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
-import {
-  Clothestypes,
-  ClothItem,
-  Size,
-  Color,
-} from "components/Context/ClothesContext";
+import { Size, Clothestypes, Color, ClothItem } from "components/Context/ClothesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleRight,
-  faSliders,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
+import { fetchFilters, fetchFilteredProducts } from "./CatalogList.utils.ts";
+import RangeSliderDual from "components/RangeSlider/RangeSliderDual.tsx";
+import { debounce } from "utils/hooks/debounce.ts";
 import { origin } from "../../../../project.config.json";
 
 const lang: string = i18next.language;
@@ -32,6 +26,10 @@ interface CatalogState {
   selectedSizes: number[];
   selectedTypes: number[];
   selectedColors: number[];
+  min: number;
+  max: number;
+  selectedMin: number;
+  selectedMax: number;
 }
 
 class CatalogList extends UIReact<ClothesListActions, CatalogState> {
@@ -43,45 +41,101 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     sizes: [],
     type: [],
     colors: [],
+    min: 0,
+    max: 0,
+    selectedMin: 0,
+    selectedMax: 0,
   };
 
   async componentDidMount() {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.addEventListener(
+      "mousedown",
+      this.filtersHandleClickOutside,
+      { signal: this.controller.signal }
+    );
     try {
-      const [sizes, type, colors] = await this.fetchFilters();
-      this.setState({ sizes, type, colors });
+      const [sizes, type, colors] = await fetchFilters();
+      this.setState((prevstate) => ({
+        ...prevstate,
+        sizes, type, colors,
+        min: this.props.min,
+        max: this.props.max,
+        selectedMin: this.props.min,
+        selectedMax: this.props.max
+      }))
     } catch (error) {
-      console.error("Failed to fetch filters:", error);
+      console.error(error);
     }
   }
 
-  fetchFilters = async (): Promise<[Size[], Clothestypes[], Color[]]> => {
-    const cachedSizes = sessionStorage.getItem("sizes");
-    const cachedTypes = sessionStorage.getItem("types");
-    const cachedColors = sessionStorage.getItem("colors");
+  async fetchMinMaxPricesRange(): Promise<void> {
+    try {
+      const response = await fetch(`${origin}clothes/`)
+      if (!response.ok) {
+        throw new Error("Bro you cooked")
+      }
+      const data = await response.json()
+      this.setState((prevstate) => ({
+        ...prevstate,
+        min: data.price_min,
+        max: data.price_max,
+        selectedMin: data.price_min,
+        selectedMax: data.price_max
+      }))
+    } 
+    catch(err) {
+      console.error(err)
+    }
+  }
 
-    if (cachedSizes && cachedTypes && cachedColors) {
-      return [
-        JSON.parse(cachedSizes),
-        JSON.parse(cachedTypes),
-        JSON.parse(cachedColors),
-      ];
+  componentDidUpdate(prevProps: Readonly<ClothesListActions>, prevState: Readonly<CatalogState>) {
+    if (
+      prevState.selectedColors !== this.state.selectedColors ||
+      prevState.selectedSizes !== this.state.selectedSizes ||
+      prevState.selectedTypes !== this.state.selectedTypes 
+    ) {
+      this.loadFilteredProducts();
+    } 
+    else if (
+      prevState.selectedMin !== this.state.selectedMin ||
+      prevState.selectedMax !== this.state.selectedMax ) {
+        this.debouncedloadFilteredProducts();
     }
 
-    const [sizesData, typeData, colorsData] = await Promise.all([
-      fetch(`${origin}sizes/`).then((res) => res.json()),
-      fetch(`${origin}types/`).then((res) => res.json()),
-      fetch(`${origin}colors/`).then((res) => res.json()),
-    ]);
+    if (
+      prevProps.min !== this.props.min ||
+      prevProps.max !== this.props.max
+    ) {
+      this.setState((prevstate) => ({
+        ...prevstate,
+        min: this.props.min,
+        max: this.props.max,
+        selectedMin: this.props.min,
+        selectedMax: this.props.max
+      }))
+    }
+  }
 
-    sessionStorage.setItem("sizes", JSON.stringify(sizesData));
-    sessionStorage.setItem("types", JSON.stringify(typeData));
-    sessionStorage.setItem("colors", JSON.stringify(colorsData));
+  debouncedloadFilteredProducts = debounce(async () => {
+    await this.loadFilteredProducts()
+  }, 250);
 
-    return [sizesData, typeData, colorsData];
+  async loadFilteredProducts() {
+    try {
+      const products = await fetchFilteredProducts(
+        this.state.selectedColors,
+        this.state.selectedSizes,
+        this.state.selectedTypes,
+        this.state.colors,
+        this.state.sizes,
+        this.state.type,
+        {min: this.state.selectedMin, max: this.state.selectedMax}
+      );
+      this.props.setProducts(products.products);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   toggleFilter = () => {
@@ -90,111 +144,12 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     }));
   };
 
-  componentDidUpdate(prevProps: Readonly<ClothesListActions>, prevState: Readonly<CatalogState>): void {
-    if (
-        prevState.selectedColors.length !== this.state.selectedColors.length ||
-        prevState.selectedSizes.length !== this.state.selectedSizes.length ||
-        prevState.selectedTypes.length !== this.state.selectedTypes.length
-    ) {
-        this.fetchFilteredProducts();
+  filtersHandleClickOutside = (event) => {
+    const filterContainer = document.querySelector(`.${styles["catalog-filter-container"]}`);
+    if (filterContainer && !filterContainer.contains(event.target)) {
+      this.setState({ isFilterActive: false });
     }
-  }
-
-  async fetchFilteredProducts(): Promise<void> {
-    console.log("fetching...");
-
-    let colors: string = "";
-    let sizes: string = "";
-    let types: string = "";
-
-    for (let i = 0; i < this.state.selectedColors.length; ++i) {
-        const colorId: number = this.state.selectedColors[i];
-
-        for (let j = 0; j < this.state.colors.length; ++j) {
-            const colorItem: Color = this.state.colors[j];
-
-            if (colorId === colorItem.id) {
-                if (!colors) {
-                    colors += `color=${colorItem.id}`;
-                } else {
-                    colors += `&color=${colorItem.id}`;
-                }
-            }
-        }
-    }
-
-
-    for (let i = 0; i < this.state.selectedSizes.length; ++i) {
-        const sizeId: number = this.state.selectedSizes[i];
-
-        for (let j = 0; j < this.state.sizes.length; ++j) {
-            const sizeItem: Size = this.state.sizes[j];
-
-            if (sizeId === sizeItem.id) {
-                if (!sizes) {
-                    sizes += `size=${sizeItem.id}`;
-                } else {
-                    sizes += `&size=${sizeItem.id}`;
-                }
-            }
-        }
-    }
-
-
-    for (let i = 0; i < this.state.selectedTypes.length; ++i) {
-        const selectedTypeId: number = this.state.selectedTypes[i];
-
-        for (let j = 0; j < this.state.type.length; ++j) {
-            const typeItem: Clothestypes = this.state.type[j];
-
-            if (selectedTypeId === typeItem.id) {
-                if (!types) {
-                    types += `types=${typeItem.id}`;
-                } else {
-                    types += `&types=${typeItem.id}`;
-                }
-            }
-        }
-    }
-
-    let finalTypesURL: string = "";
-    let finalSizesURL: string = "";
-
-    if (types) {
-        if (colors) {
-            finalTypesURL = `&${types}`;
-        } else {
-            finalTypesURL = types;
-        }
-    } else {
-        finalTypesURL = "";
-    }
-
-    if (sizes) {
-        if (colors || types) {
-            finalSizesURL = `&${sizes}`;
-        } else {
-            finalSizesURL = sizes;
-        }
-    } else {
-        finalSizesURL = "";
-    }
-
-    const url: string = `${origin}?${colors ?? ""}${finalTypesURL}${finalSizesURL}`;
-
-    try {
-        const response: Response = await fetch(url);
-
-        if (!response.ok) {
-            throw new Error("Хуй его знает че случилось!");
-        }
-
-        const products = await response.json();
-        this.props.setProducts(products);
-    } catch (err) {
-        console.error(err);
-    }
-  }
+  };
 
   render(): ReactNode {
     const { loading, error, products } = this.props;
@@ -245,33 +200,21 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                   type.map((item) => (
                     <button
                       key={item.id}
-                      className={styles["filter-type-column"]}
+                      className={`${styles["filter-type-column"]} ${this.state.selectedTypes.findIndex(value => value === item.id) !== -1 ? styles["active"] : ''}`}
                       onClick={() => {
                         this.setState(prevState => {
-                            const originalSelectedTypes = [...prevState.selectedTypes];
-                            const indexFound: number = originalSelectedTypes.findIndex(index => index === item.id);
-                            const hasItem: boolean = indexFound !== -1;
+                          const isSelected = prevState.selectedTypes.includes(item.id);
 
-                            if (hasItem) {
-                                originalSelectedTypes.splice(indexFound, 1);
-                            } else {
-                                originalSelectedTypes.push(item.id);
-                            }
-
-                            return {
-                                ...prevState,
-                                selectedTypes: originalSelectedTypes,
-                            };
+                          return {
+                            ...prevState,
+                            selectedTypes: isSelected
+                              ? prevState.selectedTypes.filter(id => id !== item.id)
+                              : [...prevState.selectedTypes, item.id],
+                          };
                         });
                       }}
                     >
-                      <h4
-                        className={styles["filter-type-title"]}
-                        style={{
-                            background: this.state.selectedTypes.findIndex(value => value === item.id) !== -1 ? "black" : "",
-                            color: this.state.selectedTypes.findIndex(value => value === item.id) !== -1 ? "white" : ""
-                        }}
-                      >{item.title}</h4>
+                      {item.title}
                       <FontAwesomeIcon icon={faAngleRight} />
                     </button>
                   ))
@@ -279,40 +222,51 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                   <h4 className={styles["filter-error"]}>Нету никаких типов одежды</h4>
                 )}
               </div>
-              <input type="range" />
+
+              <div className={styles["hr-line"]}></div>
+              <div className={styles["price-filter"]}>
+                <div className={styles["price-filter-header"]}>
+                  <span>Price</span>
+                </div>
+                <span>{this.state.selectedMin}</span>
+                <RangeSliderDual 
+                  step={1} 
+                  min={this.state.min} 
+                  max={this.state.max}
+                  values={[this.state.selectedMin, this.state.selectedMax]}
+                  setValues={(values) => this.setState(prevstate =>({
+                    ...prevstate,
+                    selectedMin: values[0],
+                    selectedMax: values[1]
+                  }))} 
+                  
+                />
+                <span>{this.state.selectedMax}</span>
+              </div>
               <div className={styles["hr-line"]}></div>
               <div className={styles["filters-colors-list"]}>
                 <h3 className={styles["filters-colors-title"]}>Цвета</h3>
                 <div className={styles["filters-color-wrapper"]}>
                   {colors.length > 0 ? (
                     colors.map((item) => {
-                        return <button
-                          key={item.id}
-                          className={styles["filters-color-column"]}
-                          style={{
-                            backgroundColor: item.color,
-                            border: this.state.selectedColors.findIndex(value => value === item.id) !== -1 ? "10px solid red" : "",
-                          }}
-                          onClick={() => {
-                            this.setState(prevState => {
-                                const originalSelectedColors = [...prevState.selectedColors];
-                                const indexFound: number = originalSelectedColors.findIndex(index => index === item.id);
-                                const hasItem: boolean = indexFound !== -1;
-
-                                if (hasItem) {
-                                    originalSelectedColors.splice(indexFound, 1);
-                                } else {
-                                    originalSelectedColors.push(item.id);
-                                }
-
-                                return {
-                                    ...prevState,
-                                    selectedColors: originalSelectedColors,
-                                };
-                            }, () => console.log(this.state.selectedColors));
-                          }}
-                        >
-                        </button>
+                      return <button
+                        key={item.id}
+                        className={`${styles["filters-color-column"]} ${this.state.selectedColors.findIndex(value => value === item.id) !== -1 ? styles["active"] : ''}`}
+                        style={{
+                          backgroundColor: item.color,
+                        }}
+                        onClick={() => {
+                          this.setState(
+                            prevState => ({
+                              ...prevState,
+                              selectedColors: prevState.selectedColors.includes(item.id)
+                                ? prevState.selectedColors.filter(id => id !== item.id)
+                                : [...prevState.selectedColors, item.id],
+                            }),
+                          );
+                        }}
+                      >
+                      </button>
                     })
                   ) : (
                     <h4 className={styles["filter-error"]}>Пока что нету никаких цветов одежды</h4>
@@ -327,28 +281,16 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                     sizes.map((item) => (
                       <button
                         key={item.id}
-                        className={styles["filters-sizes-column"]}
-                        style={{
-                            background: this.state.selectedSizes.findIndex(value => value === item.id) !== -1 ? "black" : "",
-                            color: this.state.selectedSizes.findIndex(value => value === item.id) !== -1 ? "white" : "",
-                        }}
+                        className={`${styles["filters-sizes-column"]} ${this.state.selectedSizes.findIndex(value => value === item.id) !== -1 ? styles["active"] : ''}`}
                         onClick={() => {
-                            this.setState(prevState => {
-                                const originalselectedSizes = [...prevState.selectedSizes];
-                                const indexFound: number = originalselectedSizes.findIndex(index => index === item.id);
-                                const hasItem: boolean = indexFound !== -1;
-
-                                if (hasItem) {
-                                    originalselectedSizes.splice(indexFound, 1);
-                                } else {
-                                    originalselectedSizes.push(item.id);
-                                }
-
-                                return {
-                                    ...prevState,
-                                    selectedSizes: originalselectedSizes,
-                                };
-                            }, () => console.log(this.state.selectedSizes));
+                          this.setState(
+                            prevState => ({
+                              ...prevState,
+                              selectedSizes: prevState.selectedSizes.includes(item.id)
+                                ? prevState.selectedSizes.filter(id => id !== item.id)
+                                : [...prevState.selectedSizes, item.id],
+                            }),
+                          );
                         }}
                       >
                         {item.size}
@@ -358,12 +300,6 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                     <h4 className={styles["filter-error"]}>Пока что нету никаких размеров одежды</h4>
                   )}
                 </div>
-              </div>
-              <div className={styles["hr-line"]}></div>
-              <div className={styles["filters-applying-container"]}>
-                <button className={styles["filters-apply-button"]}>
-                  Применить фильтры
-                </button>
               </div>
             </div>
             <div className={styles["catalog-items-list"]}>
@@ -399,7 +335,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                         <div className={styles["catalog-image-container"]}>
                           {item.catalogImages?.[0]?.image ? (
                             <img
-                              src={item.catalogImages[0].image}
+                              src={`${origin}${item.catalogImages[0].image.replace('/', '')}`}
                               alt={item.title || "Image"}
                             />
                           ) : (
@@ -419,7 +355,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                         </bdi>
                       </div>
                     </Link>
-                    )
+                  )
                 ) : (
                   <p>Подходящих товаров не найдено</p>
                 )}
