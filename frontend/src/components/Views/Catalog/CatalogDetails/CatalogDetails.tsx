@@ -111,7 +111,7 @@ class CatalogDetails extends UIReact<
         return;
       }
 
-      const response: Response = await fetch(`${origin}${productSlug}/`, {
+      const response: Response = await fetch(`${origin}clothes/${productSlug}/`, {
         signal: this.controller.signal,
       });
 
@@ -204,13 +204,9 @@ class CatalogDetails extends UIReact<
 
       <div className={styles["catalog-container"]}>
         <div className="catalog-link-way">
-          <Link to={`/${lang}/`}>Home</Link>
+          <Link to={`/${lang}/`}>Главная</Link>
           <FontAwesomeIcon icon={faAngleRight} />
-          <Link to={`/${lang}/catalog`}>Shop</Link>
-          <FontAwesomeIcon icon={faAngleRight} />
-          <Link to={`/${lang}/catalog/men`}>Men</Link>
-          <FontAwesomeIcon icon={faAngleRight} />
-          <Link to={`/${lang}/catalog/men`}>{this.props.data?.type?.title}</Link>
+          <Link to={`/${lang}/catalog`}>Каталог</Link>
           <FontAwesomeIcon icon={faAngleRight} />
           {this.props.data?.title}
         </div>

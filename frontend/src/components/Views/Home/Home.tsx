@@ -12,12 +12,12 @@ import WelcomeSection from "./WelcomeSection";
 // import DateComputed from "components/DateComputed/DateComputed";
 
 class MainPage extends PureComponent {
-  // componentDidMount(): void {
-  //   window.scrollTo({
-  //     top: 0,
-  //     behavior: "smooth"
-  //   });
-  // }
+  async componentDidMount(): Promise<void> {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
   
   render(): ReactNode {
     

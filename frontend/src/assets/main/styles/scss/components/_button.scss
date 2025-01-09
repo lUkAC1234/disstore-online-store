@@ -8,6 +8,8 @@
     border-radius: 3.5rem;
     transition: all 0.3s ease;
     font-weight: 500;
+    cursor: pointer;
+    font-size: 0.9rem;
 
     &:hover {
         color: var(--text-black);

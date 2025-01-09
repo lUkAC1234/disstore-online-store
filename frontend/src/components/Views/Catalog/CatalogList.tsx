@@ -1,5 +1,5 @@
 import styles from "./CatalogList.module.scss";
-import { ChangeEvent, ReactNode } from "react";
+import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import i18next from "i18next";
 import UIReact from "utils/classes/UIReact";
@@ -15,6 +15,7 @@ import { fetchFilters, fetchFilteredProducts } from "./CatalogList.utils.ts";
 import RangeSliderDual from "components/RangeSlider/RangeSliderDual.tsx";
 import { debounce } from "utils/hooks/debounce.ts";
 import { origin } from "../../../../project.config.json";
+import CatalogErrorPage from "./CatalogError/CatalogErrorPage.tsx";
 
 const lang: string = i18next.language;
 
@@ -83,8 +84,8 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
         selectedMin: data.price_min,
         selectedMax: data.price_max
       }))
-    } 
-    catch(err) {
+    }
+    catch (err) {
       console.error(err)
     }
   }
@@ -93,14 +94,14 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     if (
       prevState.selectedColors !== this.state.selectedColors ||
       prevState.selectedSizes !== this.state.selectedSizes ||
-      prevState.selectedTypes !== this.state.selectedTypes 
+      prevState.selectedTypes !== this.state.selectedTypes
     ) {
       this.loadFilteredProducts();
-    } 
+    }
     else if (
       prevState.selectedMin !== this.state.selectedMin ||
-      prevState.selectedMax !== this.state.selectedMax ) {
-        this.debouncedloadFilteredProducts();
+      prevState.selectedMax !== this.state.selectedMax) {
+      this.debouncedloadFilteredProducts();
     }
 
     if (
@@ -117,9 +118,25 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     }
   }
 
+  resetFilters = async () => {
+    this.setState(
+      {
+        selectedSizes: [],
+        selectedTypes: [],
+        selectedColors: [],
+        selectedMin: this.state.min,
+        selectedMax: this.state.max,
+      },
+      () => {
+        this.debouncedloadFilteredProducts();
+      }
+    );
+  };
+
+
   debouncedloadFilteredProducts = debounce(async () => {
     await this.loadFilteredProducts()
-  }, 250);
+  }, 500);
 
   async loadFilteredProducts() {
     try {
@@ -130,7 +147,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
         this.state.colors,
         this.state.sizes,
         this.state.type,
-        {min: this.state.selectedMin, max: this.state.selectedMax}
+        { min: this.state.selectedMin, max: this.state.selectedMax }
       );
       this.props.setProducts(products.products);
     } catch (err) {
@@ -174,9 +191,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
           <div className="catalog-link-way">
             <Link to={`/${lang}/`}>Главная</Link>
             <FontAwesomeIcon icon={faAngleRight} />
-            <Link to={`/${lang}/catalog`}>Каталог</Link>
-            <FontAwesomeIcon icon={faAngleRight} />
-            Мужчинам
+            Каталог
           </div>
 
           <div className={styles["catalog-wrapper"]}>
@@ -224,24 +239,27 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
               </div>
 
               <div className={styles["hr-line"]}></div>
-              <div className={styles["price-filter"]}>
+              <div className={styles["price-filter-container"]}>
                 <div className={styles["price-filter-header"]}>
-                  <span>Price</span>
+                  <h4 className={styles["price-filter-subtitle"]}>Цена</h4>
                 </div>
-                <span>{this.state.selectedMin}</span>
-                <RangeSliderDual 
-                  step={1} 
-                  min={this.state.min} 
+
+                <RangeSliderDual
+                  step={1}
+                  min={this.state.min}
                   max={this.state.max}
                   values={[this.state.selectedMin, this.state.selectedMax]}
-                  setValues={(values) => this.setState(prevstate =>({
+                  setValues={(values) => this.setState(prevstate => ({
                     ...prevstate,
                     selectedMin: values[0],
                     selectedMax: values[1]
-                  }))} 
-                  
+                  }))}
+
                 />
-                <span>{this.state.selectedMax}</span>
+                <div className={styles["price-filter-info-text-container"]}>
+                  <span>{this.state.selectedMin}</span>
+                  <span>{this.state.selectedMax}</span>
+                </div>
               </div>
               <div className={styles["hr-line"]}></div>
               <div className={styles["filters-colors-list"]}>
@@ -312,7 +330,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                   >
                     <FontAwesomeIcon icon={faSliders} />
                   </button>
-                  <h1 className={styles["catalog-active-filter-title"]}>Мужчинам</h1>
+                  <h1 className={styles["catalog-active-filter-title"]}>Каталог</h1>
                 </div>
                 <div className={styles["catalog-sort-container"]}>
                   <h3 className={styles["sort-info-title"]}>Сортировать по:</h3>
@@ -327,15 +345,19 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                   </select>
                 </div>
               </div>
-              <div className={styles["catalog-items-wrapper"]}>
-                {products && products.length > 0 ? (
-                  products.map((item: ClothItem) =>
-                    <Link key={item.id} to={`/${lang}/catalog/clothes/${item.slug}`}>
+              {products && products.length > 0 ? (
+                <div className={styles["catalog-items-wrapper"]}>
+                  {products.map((item: ClothItem) => (
+                    <Link
+                      className={styles["catalog-item-link"]}
+                      key={item.id}
+                      to={`/${lang}/catalog/clothes/${item.slug}`}
+                    >
                       <div className={styles["catalog-item"]}>
                         <div className={styles["catalog-image-container"]}>
                           {item.catalogImages?.[0]?.image ? (
                             <img
-                              src={`${origin}${item.catalogImages[0].image.replace('/', '')}`}
+                              src={`${origin}${item.catalogImages[0].image}`}
                               alt={item.title || "Image"}
                             />
                           ) : (
@@ -344,22 +366,31 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                         </div>
                         <h2 className={styles["catalog-item-title"]}>{item.title}</h2>
                         <p className={styles["catalog-item-description"]}>{item.short_description}</p>
+                        <p className={styles["catalog-item-description"]}>Осталось в наличии <strong>{item.count}</strong></p>
                         <bdi className={styles["catalog-price-container"]}>
-                          <span className={styles["catalog-real-price"]}>{item.real_price.toLocaleString('en-US')} сум</span>
-                          {item.discount ? (
+                          <span className={styles["catalog-real-price"]}>
+                            {item.real_price.toLocaleString("en-US")} сум
+                          </span>
+                          {item.discount && (
                             <>
-                              <span className={styles["catalog-price"]}>{item.price.toLocaleString('en-US')} сум</span>
+                              <span className={styles["catalog-price"]}>
+                                {item.price.toLocaleString("en-US")} сум
+                              </span>
                               <span className={styles["catalog-discount"]}>-{item.discount}%</span>
                             </>
-                          ) : null}
+                          )}
                         </bdi>
                       </div>
                     </Link>
-                  )
-                ) : (
-                  <p>Подходящих товаров не найдено</p>
-                )}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <CatalogErrorPage
+                  resetFilters={this.resetFilters}
+                  error={"К сожалению, на данный момент данные с этими фильтрами/поисковыми запросами отсутствуют"}
+                />
+              )}
+
             </div>
           </div>
         </div>
