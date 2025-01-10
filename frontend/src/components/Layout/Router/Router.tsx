@@ -12,7 +12,7 @@ import Footer from "../Footer/Footer";
 const Home = lazy(() => import("components/Views/Home/Home"));
 const CatalogList = lazy(() => import("components/Views/Catalog/CatalogList"));
 const ClothesDetails = lazy(() => import("components/Views/Catalog/CatalogDetails/CatalogDetails"));
-const Error404 = lazy(() => import("components/Views/404"));
+const Error404 = lazy(() => import("components/Views/Errors/error404/404"));
 
 @COMPONENT<RouterView>({
   template: (_this) => {

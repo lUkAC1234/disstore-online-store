@@ -75,7 +75,8 @@ body #container .shifted .messagelist .success a {
   color: var(--white);
 }
 
-a:link, a:visited {
+a:link,
+a:visited {
   color: var(--white);
 }
 
@@ -487,6 +488,33 @@ a:link, a:visited {
 
 #login-form .form-row label {
   color: var(--white);
+}
+
+.inline-related .module .inline-heading {
+  color: var(--light-color) !important;
+  background: var(--primary-color) !important;
+  border-color: var(--primary-color);
+}
+
+.inline-related .module thead th {
+  background: var(--white);
+  color: var(--primary-color);
+}
+
+.inline-related .module .form-row {
+  background: var(--primary-color);
+}
+.inline-related .module .form-row .file-upload,
+.inline-related .module .form-row .original p,
+.inline-related .module .form-row .field-image_preview p {
+  color: var(--light-color);
+}
+
+.inline-related .module .add-row td {
+  background: var(--primary-color) !important;
+}
+.inline-related .module .add-row a {
+  color: var(--light-color);
 }
 
 /*# sourceMappingURL=__admin.css.map */

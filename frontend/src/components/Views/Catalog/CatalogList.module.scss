@@ -1,5 +1,5 @@
 .catalog-container {
-    padding: 1rem 3rem 3rem 1rem;
+    padding: 3rem 3rem 3rem 1rem;
 }
 
 .catalog-wrapper {
@@ -10,7 +10,7 @@
 .catalog-filter-container {
     width: 25rem;
     height: max-content;
-    background-color: var(--text--white);
+    background-color: var(--text-white);
     border: 0.1rem solid var(--welcome-border);
     border-radius: 1rem;
     padding: 3rem 1rem;
@@ -210,6 +210,7 @@
 }
 
 .catalog-item {
+    position: relative;
     width: 100%;
     overflow: hidden;
     padding: 1rem;
@@ -219,9 +220,60 @@
     &:hover img {
         transform: scale(1.05);
     }
+
+    &:hover .catalog-item-wishlist-cart-container {
+        transform: scaleY(1);
+    }
+}
+
+.catalog-item-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--z-index-1);
+}
+
+.catalog-item-wishlist-cart-container {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 5rem);
+    top: 2.5rem;
+    left: 2.5rem;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s ease;
+    z-index: var(--z-index-1);
+    pointer-events: none;
+}
+
+.catalog-add-wishlist-cart-link{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--text-white);
+    border: 0.1rem solid transparent;
+    transition: border-color 0.3s ease;
+    pointer-events: auto;
+    
+    &:hover {
+        border-color: var(--text-black);
+    }
+
+    svg {
+        font-size: 1.25rem;
+        color: var(--text-black);
+    }
 }
 
 .catalog-image-container {
+    position: relative;
     overflow: hidden;
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -250,6 +302,27 @@
     color: var(--text-p);
 }
 
+.catalog-item-title,
+.catalog-item-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 1; 
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.catalog-item-count {
+    color: var(--text-p);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+
+    .count {
+        color: var(--text-black);
+        font-weight: 600;
+    }
+}
+
 .catalog-price-container {
     display: inline-flex;
     flex-wrap: wrap;
@@ -260,19 +333,31 @@
     font-size: 1.25rem;
 }
 
+.catalog-real-price {
+    background: var(--text-black);
+    color: var(--text-white);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+}
+
 .catalog-price {
     color: var(--text-price);
     text-decoration: line-through;
+    font-size: 1.125rem;
 }
 
 .catalog-discount {
+    position: absolute;
     color: var(--clothes-discount-number);
     background: var(--clothes-discount-background);
     padding: 0.25rem 1rem;
-    border-radius: 3.5rem;
-    font-size: 1rem;
+    border-radius: 3.5rem 0 0 3.5rem;
+    font-size: 1.25rem;
     font-weight: 500;
-    margin-left: auto;
+    bottom: 3rem;
+    right: 0;
+    z-index: var(--z-index-1);
+    pointer-events: none;
 }
 
 @media screen and (max-width: 2000px) {
@@ -297,7 +382,7 @@
     }
 
     .catalog-discount {
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
 }
 
@@ -344,7 +429,7 @@
             opacity 0.5s ease,
             visibility 0.5s ease;
         transform-origin: bottom;
-        z-index: var(--z-index-1);
+        z-index: var(--z-index-3);
         overflow-y: auto;
 
         &.active {
@@ -384,7 +469,7 @@
         padding-inline: 0.25rem;
     }
 
-    .catalog-item-link {
+    .catalog-item {
         &:nth-child(3n) {
             grid-column: span 2;
         }
@@ -400,17 +485,31 @@
         font-size: 0.9rem;
     }
 
-    .catalog-item-description {
+    .catalog-item-description,
+    .catalog-item-count {
         font-size: 0.8rem;
     }
 
     .catalog-price-container {
         gap: 0.25rem;
         font-size: 1rem;
+
+        @media screen and (max-width: 500px) {
+            font-size: 0.9rem;
+        }
+
+        @media screen and (max-width: 400px) {
+            font-size: 0.8rem;
+        }
     }
 
     .catalog-discount {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
+        bottom: 1rem;
+
+        @media screen and (max-width: 500px) {
+            font-size: 0.8rem;
+        }
     }
 
     .catalog-image-container {
@@ -418,6 +517,22 @@
 
         img {
             border-radius: 1rem;
+        }
+    }
+
+    .catalog-item-wishlist-cart-container {
+        transform: scaleY(1);
+        width: calc(100% - 3rem);
+        top: 1.5rem;
+        left: 1.5rem;
+    }
+    
+    .catalog-add-wishlist-cart-link{
+        width: 2rem;
+        height: 2rem;
+
+        svg {
+            font-size: 1rem;
         }
     }
 }

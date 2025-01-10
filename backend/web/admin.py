@@ -23,12 +23,26 @@ class UserAdmin(admin.ModelAdmin):
     list_display_links = ['id', 'username']
     search_fields = ['username']
     
+class ClothesImageInline(admin.TabularInline):
+    model = ClothesImageModel
+    extra = 4  
+    fields = ['image', 'image_preview']
+    readonly_fields = ['image_preview']
+
+    def image_preview(self, obj):
+        if obj.image and hasattr(obj.image, 'url'):
+            return mark_safe(f'<img src="{obj.image.url}" style="max-height: 100px; max-width: 150px;" />')
+        return "Нет изображения"
+    image_preview.short_description = "Превью"
+
 @admin.register(ClothesModel)
 class ClothesModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'title']
     list_display_links = ['id', 'title']
     search_fields = ['title']
     prepopulated_fields = {'slug': ('title', )}
+    readonly_fields = ['real_price']
+    inlines = [ClothesImageInline]
     
 @admin.register(ClothesColorModel)
 class ClothesColorModelAdmin(admin.ModelAdmin):
@@ -49,9 +63,18 @@ class ClothesSizeModelAdmin(admin.ModelAdmin):
     
 @admin.register(ClothesImageModel)
 class ClothesImageModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'product']
+    list_display = ['id', 'product', 'image_preview']
     list_display_links = ['id', 'product']
     search_fields = ['product__title']
+    list_filter = ['product']  
+    readonly_fields = ['image_preview']  
+
+    def image_preview(self, obj):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" style="max-height: 100px; max-width: 150px;" />')
+        return "Нет изображения"
+    image_preview.short_description = "Превью"
+    
     
 @admin.register(TypesModel)
 class ClothesTypeModelAdmin(admin.ModelAdmin):

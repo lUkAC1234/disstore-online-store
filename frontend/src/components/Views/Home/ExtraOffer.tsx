@@ -1,6 +1,7 @@
 import styles from "./Home.module.scss";
 import { PureComponent, ReactNode } from "react";
 import extraoffer from "assets/main/images/main-page/extraoffer.webp";
+import { Link } from "react-router-dom";
 
 class ExtraOffer extends PureComponent {
     render(): ReactNode {
@@ -16,9 +17,9 @@ class ExtraOffer extends PureComponent {
                             уникальными скидками и создайте стильный гардероб, который будет
                             вдохновлять каждый день
                         </p>
-                        <a href="" className={styles["extra-offer-link"]}>
+                        <Link to={""} className={styles["extra-offer-link"]}>
                             Купить сейчас
-                        </a>
+                        </Link>
                     </div>
                     <div className={styles["extra-offer-image-container"]}>
                         <img

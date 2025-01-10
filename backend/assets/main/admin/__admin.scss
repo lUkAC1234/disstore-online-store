@@ -97,7 +97,8 @@ body {
     }
 }
 
-a:link, a:visited {
+a:link,
+a:visited {
     color: var(--white);
 }
 
@@ -587,4 +588,37 @@ a:link, a:visited {
 
 #login-form .form-row label {
     color: var(--white);
+}
+
+// ADMIN INLINE MODULES STYLES
+
+.inline-related .module .inline-heading {
+    color: var(--light-color) !important;
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color);
+}
+
+.inline-related .module thead th {
+    background: var(--white);
+    color: var(--primary-color);
+}
+
+.inline-related .module .form-row {
+    background: var(--primary-color);
+
+    .file-upload,
+    .original p,
+    .field-image_preview p  {
+        color: var(--light-color);
+    }
+}
+
+.inline-related .module .add-row {
+    td {
+        background: var(--primary-color) !important;
+    }
+
+    a {
+        color: var(--light-color);
+    }
 }

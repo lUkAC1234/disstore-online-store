@@ -4,6 +4,7 @@ import Casual from "assets/main/images/main-page/casual.webp";
 import Formal from "assets/main/images/main-page/formal.webp";
 import Party from "assets/main/images/main-page/party.webp";
 import Gym from "assets/main/images/main-page/gym.webp";
+import { Link } from "react-router-dom";
 
 class BrowseSection extends PureComponent {
     render(): ReactNode {
@@ -12,7 +13,7 @@ class BrowseSection extends PureComponent {
                 <div className={styles["browse-style-container"]}>
                     <h2 className={styles["browse-style-subtitle"]}>Поиск по стилю одежды</h2>
                     <div className={`${styles["browse-style-wrapper"]} ${styles["first"]}`}>
-                        <a href="" className={`${styles["browse-style-column"]} ${styles["casual"]}`}>
+                        <Link to={""} className={`${styles["browse-style-column"]} ${styles["casual"]}`}>
                             <h3 className={styles["browse-style-column-title"]}>Повседневный</h3>
                             <div className={styles["browse-style-column-image-container"]}>
                                 <img
@@ -22,8 +23,8 @@ class BrowseSection extends PureComponent {
                                     decoding="async"
                                 />
                             </div>
-                        </a>
-                        <a href="" className={`${styles["browse-style-column"]} ${styles["formal"]}`}>
+                        </Link>
+                        <Link to={""} className={`${styles["browse-style-column"]} ${styles["formal"]}`}>
                             <h3 className={styles["browse-style-column-title"]}>Формальный</h3>
                             <div className={styles["browse-style-column-image-container"]}>
                                 <img
@@ -33,10 +34,10 @@ class BrowseSection extends PureComponent {
                                     decoding="async"
                                 />
                             </div>
-                        </a>
+                        </Link>
                     </div>
                     <div className={`${styles["browse-style-wrapper"]} ${styles["second"]}`}>
-                        <a href="" className={`${styles["browse-style-column"]} ${styles["party"]}`}>
+                        <Link to={""} className={`${styles["browse-style-column"]} ${styles["party"]}`}>
                             <h3 className={styles["browse-style-column-title"]}>Вечеринка</h3>
                             <div className={styles["browse-style-column-image-container"]}>
                                 <img
@@ -46,8 +47,8 @@ class BrowseSection extends PureComponent {
                                     decoding="async"
                                 />
                             </div>
-                        </a>
-                        <a href="" className={`${styles["browse-style-column"]} ${styles["gym"]}`}>
+                        </Link>
+                        <Link to={""} className={`${styles["browse-style-column"]} ${styles["gym"]}`}>
                             <h3 className={styles["browse-style-column-title"]}>Спортзал</h3>
                             <div className={styles["browse-style-column-image-container"]}>
                                 <img
@@ -57,7 +58,7 @@ class BrowseSection extends PureComponent {
                                     decoding="async"
                                 />
                             </div>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </section>

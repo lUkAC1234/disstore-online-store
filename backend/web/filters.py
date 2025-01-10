@@ -4,35 +4,33 @@ from .models import ClothesModel
 
 class ClothesModelFilter(django_filters.FilterSet):
     title = django_filters.CharFilter(lookup_expr='icontains', label='Title')
-    color = django_filters.CharFilter(method='filter_color')
-    types = django_filters.CharFilter(method='filter_type')  
-    size = django_filters.CharFilter(method='filter_size') 
+    color = django_filters.CharFilter(method='filter_multiple', label='Colors')
+    types = django_filters.CharFilter(method='filter_multiple', label='Types')
+    size = django_filters.CharFilter(method='filter_multiple', label='Sizes')
 
     class Meta:
         model = ClothesModel
         fields = ['title', 'color', 'types', 'size']
 
-    def filter_color(self, queryset, name, value):
-        """Filter by color IDs."""
-        try:
-            # Parse comma-separated values
-            color_ids = [int(id.strip()) for id in value.split(",") if id.strip().isdigit()]
-            return queryset.filter(colors__id__in=color_ids).distinct()
-        except Exception:
-            raise ValidationError("Color filter requires valid integer IDs separated by commas.")
+    def filter_multiple(self, queryset, name, value):
+        """
+        Generic filter for multiple IDs.
+        Automatically determines the related field to filter.
+        """
+        param_values = self.request.GET.getlist(name)  
+        if param_values:
+            try:
+                ids = [int(id.strip()) for id in param_values if id.strip().isdigit()]
 
-    def filter_type(self, queryset, name, value):
-        """Filter by type IDs."""
-        try:
-            type_ids = [int(id.strip()) for id in value.split(",") if id.strip().isdigit()]
-            return queryset.filter(types__id__in=type_ids).distinct()
-        except Exception:
-            raise ValidationError("Type filter requires valid integer IDs separated by commas.")
-
-    def filter_size(self, queryset, name, value):
-        """Filter by size IDs."""
-        try:
-            size_ids = [int(id.strip()) for id in value.split(",") if id.strip().isdigit()]
-            return queryset.filter(sizes__id__in=size_ids).distinct()
-        except Exception:
-            raise ValidationError("Size filter requires valid integer IDs separated by commas.")
+                field_lookup = {
+                    "color": "colors__id__in",
+                    "size": "sizes__id__in",
+                    "types": "types__id__in"
+                }
+                if name not in field_lookup:
+                    raise ValidationError(f"Invalid filter parameter: {name}")
+                query_field = field_lookup[name]
+                return queryset.filter(**{query_field: ids}).distinct()
+            except ValueError:
+                raise ValidationError(f"{name.capitalize()} filter requires valid integer IDs.")
+        return queryset

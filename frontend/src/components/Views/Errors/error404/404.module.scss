@@ -1,0 +1,100 @@
+@import "assets/main/styles/scss/components/_components";
+
+.page-not-found-section {
+    margin-block: 1rem;
+}
+
+.page-not-found-container {
+    display: grid;
+    place-items: center;
+    padding: 5rem 1rem;
+    border: 0.1rem solid var(--welcome-border);
+    margin-inline: 1rem;
+}
+
+.page-not-found-error {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 900;
+    gap: 0.5rem;
+
+    span {
+        font-size: 7rem;
+    }
+
+    .error-center-number {
+        background: var(--text-black);
+        color: var(--text-white);
+        height: fit-content;
+        padding-inline: 1rem;
+        border-radius: 50%;
+        font-size: 5rem;
+    }
+}
+
+.page-not-found-error-subtitle {
+    text-align: center;
+
+    @media screen and (max-width: 600px) {
+        font-size: 1.25rem;
+    }
+}
+
+.page-not-found-info {
+    color: var(--text-p);
+    width: min(100%, 30rem);
+    text-align: center;
+    margin-block: 0.5rem 1rem;
+}
+
+.page-not-found-links-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    flex-wrap: wrap
+}
+
+.page-not-found-link-home {
+    @extend .primary-white-button;
+    font-size: 1rem;
+}
+
+.page-not-found-link-catalog {
+    @extend .primary-button;
+    font-size: 1rem;
+}
+
+@media screen and (max-width: 992px) {
+    .page-not-found-error {
+        span {
+            font-size: 5rem;
+        }
+        .error-center-number {
+            font-size: 3.5rem;
+        }
+    }
+
+    .page-not-found-link-home,
+    .page-not-found-link-catalog {
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .page-not-found-container {
+        padding-inline: 0.5rem;
+    }
+
+    .page-not-found-links-container {
+        flex-flow: column;
+        width: 100%;
+    }
+
+    .page-not-found-link-home,
+    .page-not-found-link-catalog {
+        width: 100%;
+        text-align: center;
+        font-size: 1rem;
+    }
+}

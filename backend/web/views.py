@@ -30,37 +30,30 @@ class ClothesMainView(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         queryset = ClothesModel.objects.prefetch_related('colors', 'sizes', 'types', 'catalogImages')
-        
+
         price_range = queryset.aggregate(
             price_min=Min('real_price'),
             price_max=Max('real_price')
         )
 
-        price_min_query = request.GET.get('price_min')
-        price_max_query = request.GET.get('price_max')
+        try:
+            price_min_query = float(request.GET.get('price_min', price_range['price_min']))
+            price_max_query = float(request.GET.get('price_max', price_range['price_max']))
 
-        if price_min_query:
-            try:
-                price_min_query = float(price_min_query)
-                if price_min_query < price_range['price_min']:
-                    raise ValidationError(f"Min price cannot be lower than {price_range['price_min']}.")
-                queryset = queryset.filter(real_price__gte=price_min_query)
-            except ValueError:
-                raise ValidationError("Invalid value for 'price_min'.")
+            if price_min_query < price_range['price_min']:
+                raise ValidationError(f"Min price cannot be lower than {price_range['price_min']}.")
+            if price_max_query > price_range['price_max']:
+                raise ValidationError(f"Max price cannot be higher than {price_range['price_max']}.")
 
-        if price_max_query:
-            try:
-                price_max_query = float(price_max_query)
-                if price_max_query > price_range['price_max']:
-                    raise ValidationError(f"Max price cannot be higher than {price_range['price_max']}.")
-                queryset = queryset.filter(real_price__lte=price_max_query)
-            except ValueError:
-                raise ValidationError("Invalid value for 'price_max'.")
+            queryset = queryset.filter(
+                real_price__gte=price_min_query,
+                real_price__lte=price_max_query
+            )
+        except ValueError:
+            raise ValidationError("Invalid value for 'price_min' or 'price_max'.")
 
-        filtered_queryset = ClothesModelFilter(data=request.GET, queryset=queryset, request=request).qs
-
-        serializer = self.serializer_class(filtered_queryset, many=True)
-
+        filtered_queryset = self.filterset_class(data=request.GET, queryset=queryset, request=request).qs
+        serializer = self.get_serializer(filtered_queryset, many=True)
         response_data = {
             'price_min': price_range['price_min'],
             'price_max': price_range['price_max'],

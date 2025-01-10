@@ -1,25 +1,34 @@
 import { PropsWithChildren, PureComponent } from "react";
 import { ClothesListContext } from "./ContextCollection";
-import { ClothItem } from "./ClothesContext";
+import { Clothestypes, ClothItem, Size, Color } from "./ClothesContext";
 import { origin } from "../../../project.config.json";
 
 export interface ClothesListContextState {
   products: ClothItem[];
+  sizes: Size[];
+  type: Clothestypes[];
+  colors: Color[];
   loading: boolean;
   error: boolean;
   min: number;
   max: number
 }
 
-export interface ClothesListContextProps extends PropsWithChildren {}
+export interface ClothesListContextProps extends PropsWithChildren { }
 
 export interface ClothesListActions extends ClothesListContextState {
   setProducts: (products: ClothItem[]) => void;
+  setTypes: (type: Clothestypes[]) => void;
+  setColors: (colors: Color[]) => void;
+  setSizes: (sizes: Size[]) => void;
 }
 
 class ClothesListProvider extends PureComponent<ClothesListContextProps, ClothesListContextState> {
   state: Readonly<ClothesListContextState> = {
     products: [],
+    sizes: [],
+    type: [],
+    colors: [],
     loading: false,
     error: false,
     min: 0,
@@ -32,6 +41,9 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
         value={{
           ...this.state,
           setProducts: this.setProducts,
+          setTypes: this.setTypes,
+          setColors: this.setColors,
+          setSizes: this.setSizes,
         }}
       >
         {this.props.children}
@@ -41,7 +53,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
 
   async componentDidMount() {
     const cachedProducts = sessionStorage.getItem("products");
-    
+
     if (cachedProducts) {
       this.setProducts(JSON.parse(cachedProducts));
     } else {
@@ -58,7 +70,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
         throw new Error("Не удалось загрузить данные");
       }
 
-      const data: {price_min: number, price_max: number, products: ClothItem[]} = await response.json();
+      const data: { price_min: number, price_max: number, products: ClothItem[] } = await response.json();
       sessionStorage.setItem("products", JSON.stringify(data));
       this.setProducts(data.products);
       this.setState((prevstate) => ({
@@ -85,6 +97,27 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
     this.setState(prevState => ({
       ...prevState,
       loading: value,
+    }));
+  };
+
+  setTypes = (type: Clothestypes[]): void => {
+    this.setState(prevState => ({
+      ...prevState,
+      type,
+    }));
+  };
+  
+  setColors = (colors: Color[]): void => {
+    this.setState(prevState => ({
+      ...prevState,
+      colors,
+    }));
+  };
+
+  setSizes = (sizes: Size[]): void => {
+    this.setState(prevState => ({
+      ...prevState,
+      sizes,
     }));
   };
 

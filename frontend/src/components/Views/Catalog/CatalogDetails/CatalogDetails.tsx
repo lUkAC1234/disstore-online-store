@@ -23,6 +23,7 @@ import { debounce } from "utils/hooks/debounce";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
+import { max } from "d3";
 const lang: string = i18next.language;
 
 interface ProductOptionsState {
@@ -44,7 +45,7 @@ class CatalogDetails extends UIReact<
     selectedOptions: {
       color: "",
       size: "",
-      quantity: 1,
+      quantity: this.props.data?.count <= 0 ? 0 : 1,
     },
   };
 
@@ -88,7 +89,7 @@ class CatalogDetails extends UIReact<
         selectedOptions: {
           color: prevState.selectedOptions.color || colors?.[0]?.color || "",
           size: prevState.selectedOptions.size || sizes?.[0]?.size || "",
-          quantity: prevState.selectedOptions.quantity || 1,
+          quantity: this.props.data?.count <= 0 ? 0 : prevState.selectedOptions.quantity,
         },
         selectedImage: prevState.selectedImage || catalogImages?.[0]?.image || null,
       }));
@@ -304,13 +305,15 @@ class CatalogDetails extends UIReact<
             </h1>
             <div className={styles["catalog-product-product-rating"]}>
               <img src={star5} alt="Rating" />
-              <span>В наличии: {this.props.data?.count}</span>
+              <span>
+                {this.props.data?.count > 0 ? `В наличии: ${this.props.data.count}` : "Товар закончился"}
+              </span>
             </div>
             <bdi className={styles["catalog-product-product-pricing"]}>
               <span className={styles["catalog-product-current-price"]}>
                 {this.props.data?.real_price.toLocaleString('en-US')} сум
               </span>
-              {this.props.data?.discount ? (
+              {this.props.data?.discount > 0 ? (
                 <>
                   <span className={styles["catalog-product-original-price"]}>
                     {this.props.data?.price.toLocaleString('en-US')} сум
@@ -392,7 +395,7 @@ class CatalogDetails extends UIReact<
                     </button>
                   </div>
 
-                  <button className={styles["catalog-add-to-cart-btn"]}>
+                  <button disabled={this.props.data?.count <= 0} className={styles["catalog-add-to-cart-btn"]}>
                     Добавить в корзину
                   </button>
                 </div>

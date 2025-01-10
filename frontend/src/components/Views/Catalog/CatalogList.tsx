@@ -8,13 +8,12 @@ import { ClothesListContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import { Size, Clothestypes, Color, ClothItem } from "components/Context/ClothesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faAngleRight, faCartShopping, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 import { fetchFilters, fetchFilteredProducts } from "./CatalogList.utils.ts";
 import RangeSliderDual from "components/RangeSlider/RangeSliderDual.tsx";
 import { debounce } from "utils/hooks/debounce.ts";
-import { origin } from "../../../../project.config.json";
 import CatalogErrorPage from "./CatalogError/CatalogErrorPage.tsx";
 
 const lang: string = i18next.language;
@@ -257,8 +256,8 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
 
                 />
                 <div className={styles["price-filter-info-text-container"]}>
-                  <span>{this.state.selectedMin}</span>
-                  <span>{this.state.selectedMax}</span>
+                  <span>{this.state.selectedMin.toLocaleString("en-US")} сум</span>
+                  <span>{this.state.selectedMax.toLocaleString("en-US")} сум</span>
                 </div>
               </div>
               <div className={styles["hr-line"]}></div>
@@ -348,53 +347,69 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
               {products && products.length > 0 ? (
                 <div className={styles["catalog-items-wrapper"]}>
                   {products.map((item: ClothItem) => (
-                    <Link
-                      className={styles["catalog-item-link"]}
-                      key={item.id}
-                      to={`/${lang}/catalog/clothes/${item.slug}`}
-                    >
-                      <div className={styles["catalog-item"]}>
-                        <div className={styles["catalog-image-container"]}>
-                          {item.catalogImages?.[0]?.image ? (
-                            <img
-                              src={`${origin}${item.catalogImages[0].image}`}
-                              alt={item.title || "Image"}
-                            />
-                          ) : (
-                            <SpinnerLoaderWrapper />
-                          )}
-                        </div>
-                        <h2 className={styles["catalog-item-title"]}>{item.title}</h2>
-                        <p className={styles["catalog-item-description"]}>{item.short_description}</p>
-                        <p className={styles["catalog-item-description"]}>Осталось в наличии <strong>{item.count}</strong></p>
-                        <bdi className={styles["catalog-price-container"]}>
-                          <span className={styles["catalog-real-price"]}>
-                            {item.real_price.toLocaleString("en-US")} сум
-                          </span>
-                          {item.discount && (
-                            <>
-                              <span className={styles["catalog-price"]}>
-                                {item.price.toLocaleString("en-US")} сум
-                              </span>
-                              <span className={styles["catalog-discount"]}>-{item.discount}%</span>
-                            </>
-                          )}
-                        </bdi>
+
+                    <div key={item.id} className={styles["catalog-item"]}>
+                      <Link
+                        className={styles["catalog-item-link"]}
+                        to={`/${lang}/catalog/clothes/${item.slug}`}
+                      ></Link>
+                      <div className={styles["catalog-item-wishlist-cart-container"]}>
+                        <Link to={""} className={styles["catalog-add-wishlist-cart-link"]}>
+                          <FontAwesomeIcon icon={faCartShopping} />
+                        </Link>
+                        <Link to={""} className={styles["catalog-add-wishlist-cart-link"]}>
+                          <FontAwesomeIcon icon={faHeart} />
+                        </Link>
                       </div>
-                    </Link>
+                      <div className={styles["catalog-image-container"]}>
+                        {item.discount > 0 && (
+                          <span className={styles["catalog-discount"]}>-{item.discount}%</span>
+                        )}
+                        {item.catalogImages?.[0]?.image ? (
+                          <img
+                            src={item.catalogImages[0].image}
+                            alt={item.title || "Image"}
+                          />
+                        ) : (
+                          <SpinnerLoaderWrapper />
+                        )}
+                      </div>
+                      <h2 className={styles["catalog-item-title"]}>
+                        {item.title.length > 20 ? `${item.title.slice(0, 20)}...` : item.title}
+                      </h2>
+                      <p className={styles["catalog-item-description"]}>
+                        {item.short_description.length > 40 ? `${item.short_description.slice(0, 40)}...` : item.short_description}
+                      </p>
+                      {item.count > 0 ? (
+                        <p className={styles["catalog-item-count"]}>В наличии <strong className={styles["count"]}>{item.count}</strong></p>
+                      ) : (
+                        <p className={styles["catalog-item-count"]}>Товар закончился</p>
+                      )
+                      }
+                      <bdi className={styles["catalog-price-container"]}>
+                        <span className={styles["catalog-real-price"]}>
+                          {item.real_price.toLocaleString("en-US")} сум
+                        </span>
+                        {item.discount > 0 && (
+                          <span className={styles["catalog-price"]}>
+                            {item.price.toLocaleString("en-US")} сум
+                          </span>
+                        )}
+                      </bdi>
+                    </div>
                   ))}
                 </div>
               ) : (
                 <CatalogErrorPage
                   resetFilters={this.resetFilters}
-                  error={"К сожалению, на данный момент данные с этими фильтрами/поисковыми запросами отсутствуют"}
+                  error={"К сожалению, на данный момент данные с этими фильтрами или поисковыми запросами отсутствуют"}
                 />
               )}
 
             </div>
           </div>
         </div>
-      </section>
+      </section >
     );
   }
 }

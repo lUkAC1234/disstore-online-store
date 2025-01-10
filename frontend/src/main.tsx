@@ -19,8 +19,10 @@ app.setupAPIs(() => {
 app.renderApp();
 
 window.addEventListener("unload", () => {
-    sessionStorage.removeItem("colors");
-    sessionStorage.removeItem("sizes");
-    sessionStorage.removeItem("types");
-    sessionStorage.removeItem("products");
+  const preservedKeys = ["cart", "wishlist"];
+  Object.keys(sessionStorage).forEach(key => {
+      if (!preservedKeys.includes(key)) {
+          sessionStorage.removeItem(key);
+      }
+  });
 });

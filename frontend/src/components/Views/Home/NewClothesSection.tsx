@@ -6,6 +6,7 @@ import clothes from "assets/main/images/layout/clothes.jpg";
 import InjectedUIFancybox from "components/Fancybox/Fancybox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { Link } from 'react-router-dom';
 
 class NewClothes extends PureComponent {
     render(): ReactNode {
@@ -92,9 +93,9 @@ class NewClothes extends PureComponent {
                     </InjectedUIFancybox>
 
                     <div className={styles["view-all-clothes-link-container"]}>
-                        <a href="" className={styles["view-all-clothes-link"]}>
+                        <Link to={""} className={styles["view-all-clothes-link"]}>
                             Просмотреть все
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </section>
