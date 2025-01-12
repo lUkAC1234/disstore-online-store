@@ -15,9 +15,9 @@ export const fetchFilters = async (): Promise<[Size[], Clothestypes[], Color[]]>
   }
 
   const [sizesData, typeData, colorsData] = await Promise.all([
-    fetch(`${origin}clothes/sizes/`).then((res) => res.json()),
-    fetch(`${origin}clothes/types/`).then((res) => res.json()),
-    fetch(`${origin}clothes/colors/`).then((res) => res.json()),
+    fetch(`${origin}/clothes/sizes/`).then((res) => res.json()),
+    fetch(`${origin}/clothes/types/`).then((res) => res.json()),
+    fetch(`${origin}/clothes/colors/`).then((res) => res.json()),
   ]);
 
   sessionStorage.setItem("sizes", JSON.stringify(sizesData));
@@ -56,7 +56,7 @@ export const fetchFilteredProducts = async (
   const queryString = [colorQuery, typeQuery, sizeQuery, priceQuery]
     .filter(Boolean)
     .join("&");
-  const url = `${origin}clothes/?${queryString}`;
+  const url = `${origin}/clothes/?${queryString}`;
 
   const response = await fetch(url);
   if (!response.ok) {

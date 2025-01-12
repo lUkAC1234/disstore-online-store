@@ -9,6 +9,8 @@ import BrowseSection from "./BrowseSection";
 import FeedbackSection from "./FeedbackSection";
 import WelcomeSection from "./WelcomeSection";
 import { ClothesListActions } from 'components/Context/ClothesListContext';
+import { ClothesListContext } from 'components/Context/ContextCollection';
+import { withContext } from 'components/Context/ContextInjector';
 // import Transition from "components/Animations/Transition/Transition";
 // import DateComputed from "components/DateComputed/DateComputed";
 
@@ -48,4 +50,6 @@ class MainPage extends PureComponent<ClothesListActions>  {
   }
 }
 
-export default MainPage;
+const UIHome = withContext(ClothesListContext, MainPage);
+
+export default UIHome;

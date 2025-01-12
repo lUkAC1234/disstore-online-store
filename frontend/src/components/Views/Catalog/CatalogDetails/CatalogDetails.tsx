@@ -111,7 +111,7 @@ class CatalogDetails extends UIReact<
         return;
       }
 
-      const response: Response = await fetch(`${origin}clothes/${productSlug}/`, {
+      const response: Response = await fetch(`${origin}/clothes/${productSlug}/`, {
         signal: this.controller.signal,
       });
 

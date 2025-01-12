@@ -44,7 +44,7 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
     const type = JSON.parse(sessionStorage.getItem("types") || "[]");
     
     if (type.length <= 0) {
-      const typeData = await fetch(`${origin}clothes/types/`).then(res => res.json());
+      const typeData = await fetch(`${origin}/clothes/types/`).then(res => res.json());
       sessionStorage.setItem("types", JSON.stringify(typeData));
       this.setState({ type: typeData });
     } else {

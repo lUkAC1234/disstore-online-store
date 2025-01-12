@@ -67,7 +67,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
 
   async fetchData(): Promise<void> {
     try {
-      const response: Response = await fetch(`${origin}clothes/`);
+      const response: Response = await fetch(`${origin}/clothes/`);
       this.setLoadingState(true);
 
       if (!response.ok) {
@@ -80,7 +80,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
       this.setState((prevstate) => ({
         ...prevstate,
         min: data.price_min,
-        max: data.price_max
+        max: data.price_max,
       }))
     } catch (err) {
       this.setErrorState();

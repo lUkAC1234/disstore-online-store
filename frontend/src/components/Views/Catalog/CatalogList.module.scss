@@ -1,5 +1,8 @@
+@use "assets/main/styles/scss/components/_components";
+
 .catalog-container {
     padding: 3rem 3rem 3rem 1rem;
+    min-height: 30rem;
 }
 
 .catalog-wrapper {
@@ -41,9 +44,14 @@
 
     svg {
         font-size: 1.25rem;
-        transform: rotate(-90deg);
+        transform: rotate(-90deg);  
         color: var(--text-p);
         cursor: pointer;
+    }
+
+    .filters-title-button {
+        border: transparent;
+        background-color: transparent;
     }
 }
 
@@ -142,14 +150,53 @@
     justify-content: space-between;
     gap: 1rem;
     margin-top: 1rem;
+    width: 100%;
 
-    input {
-        font-size: 1rem;
+    label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 0.1rem solid var(--text-black);
+        border-radius: 0.5rem;
+        padding-inline: 0.5rem;
+        color: var(--text-p);
+        width: 100%;
     }
+
+    input[type="number"] {
+        width: 100%;
+        font-size: 1rem;
+        background-color: transparent;
+        border: none;
+        padding-block: 0.5rem;
+    }
+
+    @media screen and (max-width: 2000px) {
+        gap: 0.5rem;
+
+        label {
+            gap: 0.2rem;
+            padding-inline: 0.1rem;
+            font-size: 0.9rem;
+        }
+
+        input[type="number"] {
+            font-size: 0.8rem;
+        }
+    }
+}
+
+.add-to-cart-button {
+    @extend .primary-button;
+    width: 100%;
+    font-size: 1rem;
 }
 
 .catalog-items-list {
     width: 100%;
+    @media screen and (min-width: 1201px) {
+        overflow-y: hidden;
+    }
 }
 
 .catalog-head-subtitle-container {
@@ -254,7 +301,7 @@
     pointer-events: none;
 }
 
-.catalog-add-wishlist-cart-link{
+.catalog-add-wishlist-cart-link {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -265,7 +312,7 @@
     border: 0.1rem solid transparent;
     transition: border-color 0.3s ease;
     pointer-events: auto;
-    
+
     &:hover {
         border-color: var(--text-black);
     }
@@ -309,7 +356,7 @@
 .catalog-item-title,
 .catalog-item-description {
     display: -webkit-box;
-    -webkit-line-clamp: 1; 
+    -webkit-line-clamp: 1;
     line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -482,7 +529,7 @@
         &:nth-child(3n) .catalog-image-container img {
             aspect-ratio: 16 / 9;
         }
-        
+
     }
 
     .catalog-item-title {
@@ -530,8 +577,8 @@
         top: 1.5rem;
         left: 1.5rem;
     }
-    
-    .catalog-add-wishlist-cart-link{
+
+    .catalog-add-wishlist-cart-link {
         width: 2rem;
         height: 2rem;
 
