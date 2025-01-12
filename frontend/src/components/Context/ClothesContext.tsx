@@ -14,7 +14,8 @@ export interface Size {
 export interface CatalogImage {
   id: number;
   product: number;
-  image: string;
+  image?: string | null;
+  thumbnail?: string | null;
 }
 
 export interface User {

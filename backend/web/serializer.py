@@ -28,7 +28,7 @@ class ClothesSizeSerializer(serializers.ModelSerializer):
 class ClothesImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClothesImageModel
-        fields = ['id', 'product', 'image']
+        fields = ['id', 'product', 'image', 'thumbnail']
 
 class ClothesTypeModelSerializer(serializers.ModelSerializer):
     class Meta:

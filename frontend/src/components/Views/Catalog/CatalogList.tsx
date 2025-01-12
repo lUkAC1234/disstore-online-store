@@ -15,6 +15,7 @@ import { fetchFilters, fetchFilteredProducts } from "./CatalogList.utils.ts";
 import RangeSliderDual from "components/RangeSlider/RangeSliderDual.tsx";
 import { debounce } from "utils/hooks/debounce.ts";
 import CatalogErrorPage from "./CatalogError/CatalogErrorPage.tsx";
+import SpinnerLoader from "components/Loaders/SpinnerLoader.tsx";
 
 const lang: string = i18next.language;
 
@@ -56,6 +57,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     );
     try {
       const [sizes, type, colors] = await fetchFilters();
+      this.debouncedloadFilteredProducts()
       this.setState((prevstate) => ({
         ...prevstate,
         sizes, type, colors,
@@ -88,32 +90,10 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
       console.error(err)
     }
   }
-
-  componentDidUpdate(prevProps: Readonly<ClothesListActions>, prevState: Readonly<CatalogState>) {
-    if (
-      prevState.selectedColors !== this.state.selectedColors ||
-      prevState.selectedSizes !== this.state.selectedSizes ||
-      prevState.selectedTypes !== this.state.selectedTypes
-    ) {
-      this.loadFilteredProducts();
-    }
-    else if (
-      prevState.selectedMin !== this.state.selectedMin ||
-      prevState.selectedMax !== this.state.selectedMax) {
-      this.debouncedloadFilteredProducts();
-    }
-
-    if (
-      prevProps.min !== this.props.min ||
-      prevProps.max !== this.props.max
-    ) {
-      this.setState((prevstate) => ({
-        ...prevstate,
-        min: this.props.min,
-        max: this.props.max,
-        selectedMin: this.props.min,
-        selectedMax: this.props.max
-      }))
+  
+  componentDidUpdate(prevProps: Readonly<ClothesListActions>, prevState: Readonly<CatalogState>, snapshot?: unknown): void {
+    if (prevProps.loading !== this.props.loading) {
+      console.log(this.props.loading)
     }
   }
 
@@ -135,10 +115,11 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
 
   debouncedloadFilteredProducts = debounce(async () => {
     await this.loadFilteredProducts()
-  }, 500);
+  }, 250);
 
   async loadFilteredProducts() {
     try {
+      this.props.setLoadingProducts(true)
       const products = await fetchFilteredProducts(
         this.state.selectedColors,
         this.state.selectedSizes,
@@ -149,7 +130,9 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
         { min: this.state.selectedMin, max: this.state.selectedMax }
       );
       this.props.setProducts(products.products);
+      this.props.setLoadingProducts(false)
     } catch (err) {
+      this.props.setLoadingProducts(false)
       console.error(err);
     }
   };
@@ -256,8 +239,68 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
 
                 />
                 <div className={styles["price-filter-info-text-container"]}>
-                  <span>{this.state.selectedMin.toLocaleString("en-US")} сум</span>
-                  <span>{this.state.selectedMax.toLocaleString("en-US")} сум</span>
+                  <input
+                    value={this.state.selectedMin}
+                    type="number"
+                    min={0}
+                    max={this.state.max}
+                    onChange={(evt) => {
+                      this.setState({
+                        selectedMin: Number(evt.target.value)
+                      });
+                    }}
+                    onBlur={() => {
+                      let correctedValue = Number(this.state.selectedMin);
+                      if (correctedValue < this.state.min) {
+                        correctedValue = this.state.min;
+                      } else if (correctedValue > this.state.max) {
+                        correctedValue = this.state.max;
+                      }
+                      this.setState({ selectedMin: correctedValue });
+                    }}
+                    onKeyDown={(evt) => {
+                      if (evt.key === 'Enter') {
+                        let correctedValue = Number(this.state.selectedMin);
+                        if (correctedValue < this.state.min) {
+                          correctedValue = this.state.min;
+                        } else if (correctedValue > this.state.max) {
+                          correctedValue = this.state.max;
+                        }
+                        this.setState({ selectedMin: correctedValue });
+                      }
+                    }}
+                  /> сум
+                  <input
+                    value={this.state.selectedMax}
+                    type="number"
+                    min={0}
+                    max={this.state.max}
+                    onChange={(evt) => {
+                      this.setState({
+                        selectedMax: Number(evt.target.value)
+                      });
+                    }}
+                    onBlur={() => {
+                      let correctedValue = Number(this.state.selectedMax);
+                      if (correctedValue < this.state.min) {
+                        correctedValue = this.state.min;
+                      } else if (correctedValue > this.state.max) {
+                        correctedValue = this.state.max;
+                      }
+                      this.setState({ selectedMax: correctedValue });
+                    }}
+                    onKeyDown={(evt) => {
+                      if (evt.key === 'Enter') {
+                        let correctedValue = Number(this.state.selectedMax);
+                        if (correctedValue < this.state.min) {
+                          correctedValue = this.state.min;
+                        } else if (correctedValue > this.state.max) {
+                          correctedValue = this.state.max;
+                        }
+                        this.setState({ selectedMax: correctedValue });
+                      }
+                    }}
+                  /> сум
                 </div>
               </div>
               <div className={styles["hr-line"]}></div>
@@ -318,6 +361,10 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                   )}
                 </div>
               </div>
+              <div className={styles["hr-line"]}></div>
+              <div>
+                <button onClick={this.debouncedloadFilteredProducts}>Применить фильтры</button>
+              </div>
             </div>
             <div className={styles["catalog-items-list"]}>
               <div className={styles["catalog-head-subtitle-container"]}>
@@ -344,6 +391,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                   </select>
                 </div>
               </div>
+              {this.props.loadingProducts ? <SpinnerLoaderWrapper fixedPosition /> : ""}
               {products && products.length > 0 ? (
                 <div className={styles["catalog-items-wrapper"]}>
                   {products.map((item: ClothItem) => (
@@ -365,14 +413,24 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                         {item.discount > 0 && (
                           <span className={styles["catalog-discount"]}>-{item.discount}%</span>
                         )}
-                        {item.catalogImages?.[0]?.image ? (
+                        {item?.catalogImages?.[0]?.thumbnail ? (
                           <img
-                            src={item.catalogImages[0].image}
-                            alt={item.title || "Image"}
+                            src={item.catalogImages[0].thumbnail}
+                            alt={item.title || "Рисунок"}
+                            loading="lazy"
+                            decoding="async"
+                            onLoad={(e) => {
+                              const imgElement = e.target as HTMLImageElement;
+                              const mainImage = item.catalogImages[0]?.image;
+                              if (mainImage) {
+                                imgElement.src = mainImage;
+                              }
+                            }}
                           />
                         ) : (
                           <SpinnerLoaderWrapper />
-                        )}
+                        )
+                        }
                       </div>
                       <h2 className={styles["catalog-item-title"]}>
                         {item.title.length > 20 ? `${item.title.slice(0, 20)}...` : item.title}

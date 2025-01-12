@@ -23,7 +23,6 @@ import { debounce } from "utils/hooks/debounce";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
-import { max } from "d3";
 const lang: string = i18next.language;
 
 interface ProductOptionsState {
@@ -267,6 +266,8 @@ class CatalogDetails extends UIReact<
                     <img
                       src={image}
                       alt={`Thumbnail ${index + 1}`}
+                      loading="lazy"
+                      decoding="async"
                       className={`${styles["thumbnail"]} ${selectedImage === image ? styles["active"] : ""}`}
                     />
                   </SwiperSlide>

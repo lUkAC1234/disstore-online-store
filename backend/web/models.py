@@ -4,6 +4,9 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 from ckeditor.fields import RichTextField
 import random, string
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
 
 TRANSLIT_DICT = {
     'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh', 'З': 'Z', 'И': 'I',
@@ -162,7 +165,35 @@ class ClothesImageModel(models.Model):
         verbose_name=_("Продукт")
     )
     image = models.ImageField(_("Изображение"), upload_to='clothes/images/%Y/%m/%d/')
-    
+    thumbnail = models.ImageField(_("Миниатюра"), upload_to='clothes/images/thumbnails/%Y/%m/%d/', blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.thumbnail:
+            self.thumbnail = self.make_thumbnail(self.image)
+        super().save(*args, **kwargs)
+
+    def make_thumbnail(self, image):
+        img = Image.open(image)
+        
+        # Ensure the image is in RGB mode
+        if img.mode == 'RGBA':
+            background = Image.new('RGB', img.size, (255, 255, 255))  
+            background.paste(img, mask=img.split()[3]) 
+            img = background
+        elif img.mode != 'RGB':
+            img = img.convert('RGB')
+        
+        target_width = 10
+        aspect_ratio = img.width / img.height
+        target_height = int(target_width / aspect_ratio)
+        
+        img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+        
+        thumb_io = BytesIO()
+        img.save(thumb_io, format='JPEG', quality=10)  
+        thumbnail = ContentFile(thumb_io.getvalue(), name=f"thumb_{image.name}")
+        return thumbnail
+
     def __str__(self):
         return f"Рисунок для {self.product.title}"
     

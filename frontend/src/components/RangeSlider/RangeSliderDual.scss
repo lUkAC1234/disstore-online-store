@@ -1,22 +1,22 @@
 .rc-slider-handle {
-  border: 0.1rem solid var(--text-black);
+  border: 0.075rem solid var(--text-black) !important;
+  outline: 0.05rem solid transparent;
   opacity: 1;
   width: 1.25rem;
   height: 1.25rem;
   margin-top: -0.45rem !important;
-  transition: outline 0.3s ease, border 0.3s ease;
-  background: var(--text-black);
+  transition: outline 0.15s ease, border 0.15s ease;
+  background: var(--text-white);
 
   &:hover,
   &:active {
-    outline: 0.1rem solid var(--text-black) !important;
-    border: 0.05rem solid var(--text-white);
+    outline: 0.5rem solid rgba(0, 0, 0, 0.5) !important;
   }
 }
 
 .rc-slider-handle-1,
 .rc-slider-handle-2 {
-  outline: 0px solid transparent !important;
+  outline: 0rem solid transparent !important;
 }
 
 .rc-slider-track, .rc-slider-tracks,
@@ -27,7 +27,7 @@
 
 .rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
   box-shadow: none;
-  outline: 0.1rem solid var(--text-black) !important;
+  outline: 0.25rem solid rgba(0, 0, 0, 0.5) !important;
   border: 0.05rem solid var(--text-white);
 }
 
@@ -42,4 +42,8 @@
   .rc-slider-rail{
     height: 0.4rem;
   }
+}
+
+.rc-slider-track {
+  background-color: var(--text-black);
 }

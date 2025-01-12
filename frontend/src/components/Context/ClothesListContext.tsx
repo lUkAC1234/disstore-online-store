@@ -9,6 +9,7 @@ export interface ClothesListContextState {
   type: Clothestypes[];
   colors: Color[];
   loading: boolean;
+  loadingProducts: boolean,
   error: boolean;
   min: number;
   max: number
@@ -21,6 +22,7 @@ export interface ClothesListActions extends ClothesListContextState {
   setTypes: (type: Clothestypes[]) => void;
   setColors: (colors: Color[]) => void;
   setSizes: (sizes: Size[]) => void;
+  setLoadingProducts: (setLoadingProducts: boolean) => void;
 }
 
 class ClothesListProvider extends PureComponent<ClothesListContextProps, ClothesListContextState> {
@@ -30,6 +32,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
     type: [],
     colors: [],
     loading: false,
+    loadingProducts: false,
     error: false,
     min: 0,
     max: 0,
@@ -44,6 +47,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
           setTypes: this.setTypes,
           setColors: this.setColors,
           setSizes: this.setSizes,
+          setLoadingProducts: this.setLoadingProducts,
         }}
       >
         {this.props.children}
@@ -97,6 +101,13 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
     this.setState(prevState => ({
       ...prevState,
       loading: value,
+    }));
+  };
+
+  setLoadingProducts = (value: boolean): void => {
+    this.setState(prevState => ({
+      ...prevState,
+      loadingProducts: value,
     }));
   };
 

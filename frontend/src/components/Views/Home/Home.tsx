@@ -8,10 +8,11 @@ import ExtraOffer from "./ExtraOffer";
 import BrowseSection from "./BrowseSection";
 import FeedbackSection from "./FeedbackSection";
 import WelcomeSection from "./WelcomeSection";
+import { ClothesListActions } from 'components/Context/ClothesListContext';
 // import Transition from "components/Animations/Transition/Transition";
 // import DateComputed from "components/DateComputed/DateComputed";
 
-class MainPage extends PureComponent {
+class MainPage extends PureComponent<ClothesListActions>  {
   async componentDidMount(): Promise<void> {
     window.scrollTo({
       top: 0,
