@@ -190,6 +190,10 @@
     @extend .primary-button;
     width: 100%;
     font-size: 1rem;
+
+    @media screen and (max-width: 2000px) {
+        padding-inline: 0.5rem;
+    }
 }
 
 .catalog-items-list {
@@ -463,6 +467,10 @@
 @media screen and (max-width: 1200px) {
     body:has(.catalog-filter-container.active) {
         overflow-y: hidden;
+
+        .filters-mobile-version {
+            pointer-events: none;
+        }
     }
 
     .catalog-filter-container {

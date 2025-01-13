@@ -1,4 +1,3 @@
-import "./Fonts";
 import "assets/main/styles/scss/global.scss";
 import HistoryAPI from "utils/events/HistoryAPI";
 import FadeInAnimationAPI from "utils/classes/FadeInAnimationAPI";

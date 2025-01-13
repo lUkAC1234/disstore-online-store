@@ -56,7 +56,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
   }
 
   async componentDidMount() {
-    const cachedProducts = sessionStorage.getItem("products");
+    const cachedProducts = sessionStorage.getItem("c");
 
     if (cachedProducts) {
       this.setProducts(JSON.parse(cachedProducts));
@@ -67,16 +67,16 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
 
   async fetchData(): Promise<void> {
     try {
-      const response: Response = await fetch(`${origin}/clothes/`);
+      const response: Response = await fetch(`${origin}/clothes/?page=${1}`);
       this.setLoadingState(true);
 
       if (!response.ok) {
         throw new Error("Не удалось загрузить данные");
       }
 
-      const data: { price_min: number, price_max: number, products: ClothItem[] } = await response.json();
-      sessionStorage.setItem("products", JSON.stringify(data));
-      this.setProducts(data.products);
+      const data: { price_min: number, price_max: number, results: ClothItem[] } = await response.json();
+      sessionStorage.setItem("results", JSON.stringify(data));
+      this.setProducts(data.results);
       this.setState((prevstate) => ({
         ...prevstate,
         min: data.price_min,

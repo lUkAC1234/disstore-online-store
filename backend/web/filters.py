@@ -8,8 +8,8 @@ class ClothesModelFilter(django_filters.FilterSet):
     color = django_filters.CharFilter(method='filter_multiple', label='Colors')
     types = django_filters.CharFilter(method='filter_multiple', label='Types')
     size = django_filters.CharFilter(method='filter_multiple', label='Sizes')
-    price_min = django_filters.NumberFilter(method='filter_price_min', label='Minimum Price')
-    price_max = django_filters.NumberFilter(method='filter_price_max', label='Maximum Price')
+    price_min = django_filters.NumberFilter(field_name='real_price', lookup_expr='gte', label='Minimum Price')
+    price_max = django_filters.NumberFilter(field_name='real_price', lookup_expr='lte', label='Maximum Price')
 
     class Meta:
         model = ClothesModel
@@ -24,7 +24,6 @@ class ClothesModelFilter(django_filters.FilterSet):
         if param_values:
             try:
                 ids = [int(id.strip()) for id in param_values if id.strip().isdigit()]
-
                 field_lookup = {
                     "color": "colors__id__in",
                     "size": "sizes__id__in",
@@ -32,24 +31,7 @@ class ClothesModelFilter(django_filters.FilterSet):
                 }
                 if name not in field_lookup:
                     raise ValidationError(f"Invalid filter parameter: {name}")
-                query_field = field_lookup[name]
-                return queryset.filter(**{query_field: ids}).distinct()
+                return queryset.filter(**{field_lookup[name]: ids}).distinct()
             except ValueError:
                 raise ValidationError(f"{name.capitalize()} filter requires valid integer IDs.")
-        return queryset
-
-    def filter_price_min(self, queryset, name, value):
-        """
-        Filter for minimum price only if user has provided a value.
-        """
-        if value is not None:
-            queryset = queryset.filter(real_price__gte=value)
-        return queryset
-
-    def filter_price_max(self, queryset, name, value):
-        """
-        Filter for maximum price only if user has provided a value.
-        """
-        if value is not None:
-            queryset = queryset.filter(real_price__lte=value)
         return queryset

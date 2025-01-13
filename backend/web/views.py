@@ -22,11 +22,17 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.core.exceptions import ValidationError
 from django.db.models import Min, Max, Q
 from .filters import ClothesModelFilter
+from rest_framework.pagination import PageNumberPagination
+
+class ResultsSetPagination(PageNumberPagination):
+    page_size = 2  
+    page_size_query_param = 'page_size'
 
 class ClothesMainView(ListAPIView):
     serializer_class = ClothesModelSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ClothesModelFilter
+    pagination_class = ResultsSetPagination
 
     def get_queryset(self):
         return ClothesModel.objects.prefetch_related('colors', 'sizes', 'types', 'catalogImages')
@@ -34,20 +40,30 @@ class ClothesMainView(ListAPIView):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
 
-        price_range = queryset.aggregate(
+        filtered_queryset = self.filter_queryset(queryset)
+
+        price_range = filtered_queryset.aggregate(
             price_min=Min('real_price'),
             price_max=Max('real_price')
         )
+        
+        page = self.paginate_queryset(filtered_queryset)
 
-        filtered_queryset = self.filterset_class(data=request.GET, queryset=queryset, request=request).qs
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            paginated_response = self.get_paginated_response(serializer.data)
+            paginated_response.data.update({
+                'price_min': price_range['price_min'],
+                'price_max': price_range['price_max'],
+            })
+            return paginated_response
+
         serializer = self.get_serializer(filtered_queryset, many=True)
-        response_data = {
+        return Response({
             'price_min': price_range['price_min'],
             'price_max': price_range['price_max'],
-            'products': serializer.data
-        }
-
-        return Response(response_data)
+            'results': serializer.data
+        })
 
 class ClothesModelCreateUpdateView(CreateAPIView, UpdateAPIView, DestroyAPIView):
     queryset = ClothesModel.objects.all()

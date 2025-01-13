@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
 import styles from "./CatalogList.module.scss";
+import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import i18next from "i18next";
 import UIReact from "utils/classes/UIReact";
@@ -8,14 +8,15 @@ import { ClothesListContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import { Size, Clothestypes, Color, ClothItem } from "components/Context/ClothesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faAngleRight, faCartShopping, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 import { fetchFilters, fetchFilteredProducts } from "./CatalogList.utils.ts";
 import RangeSliderDual from "components/RangeSlider/RangeSliderDual.tsx";
 import { debounce } from "utils/hooks/debounce.ts";
 import CatalogErrorPage from "./CatalogError/CatalogErrorPage.tsx";
-import { origin } from "../../../../project.config.json";
+import CatalogPagination from "./CatalogPagination/CatalogPagination.tsx";
+import CatalogProducts from "./CatalogProductsList/Products.tsx";
 
 const lang: string = i18next.language;
 
@@ -31,6 +32,11 @@ interface CatalogState {
   max: number;
   selectedMin: number;
   selectedMax: number;
+  currentPage: number;
+  nextPage: string | null;
+  prevPage: string | null;
+  totalPages: number;
+  count: number;
 }
 
 class CatalogList extends UIReact<ClothesListActions, CatalogState> {
@@ -46,6 +52,11 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     max: 0,
     selectedMin: 0,
     selectedMax: 0,
+    currentPage: 1,
+    nextPage: null,
+    prevPage: null,
+    totalPages: 1,
+    count: 0,
   };
 
   componentDidMount() {
@@ -55,8 +66,38 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     });
     this.filterPrice()
     this.initializeFiltersAndPrices();
+    this.setState((prevState) => ({
+      ...prevState,
+      totalPages: Math.ceil(this.state.count / this.props.products.length),
+    })) 
+    this.debouncedLoadFilteredProducts()
   }
 
+  handleNextPage = () => {
+    const { currentPage, totalPages } = this.state;
+    if (currentPage < totalPages) {
+      this.setState((prevstate) => ({
+        ...prevstate,
+        currentPage: prevstate.currentPage+1
+      }), () => this.debouncedLoadFilteredProducts());
+    }
+  };
+
+  handlePrevPage = () => {
+    const { currentPage } = this.state;
+    console.log("pagination start")
+    console.log(this.state)
+    if (currentPage > 1) {
+      this.setState((prevstate) => ({
+        ...prevstate,
+        currentPage: prevstate.currentPage-1
+      }), () => {
+        this.debouncedLoadFilteredProducts()
+        console.log("pagination")
+      });
+    }
+  };
+  
   initializeFiltersAndPrices = async () => {
     try {
       const [sizes, type, colors] = await fetchFilters();
@@ -73,6 +114,16 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
   componentDidUpdate(prevProps: Readonly<ClothesListActions>, prevState: Readonly<CatalogState>, snapshot?: unknown): void {
     if (prevProps.min !== this.props.min || prevProps.max !== this.props.max) {
       this.filterPrice()
+    }
+    if (prevProps.products.length !== this.props.products.length) {
+      this.setState((prevState) => ({
+        ...prevState,
+        totalPages: Math.ceil(this.state.count / this.props.products.length),
+      }))
+    }
+    if (prevState.count !== this.state.count) {
+      console.log(this.state.count)
+      console.log(this.props.products)
     }
   }
 
@@ -113,10 +164,17 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
         this.state.colors,
         this.state.sizes,
         this.state.type,
-        { min: this.state.selectedMin, max: this.state.selectedMax }
+        { min: this.state.selectedMin, max: this.state.selectedMax },
+        this.state.currentPage,
       );
-
-      this.props.setProducts(products.products);
+      
+      this.props.setProducts(products.results);
+      this.setState((prevState) => ({
+        ...prevState,
+        totalPages: Math.ceil(products.count / products.results.length),
+        count: products.count,
+      }))
+      console.log(products.count)
     } catch (error) {
       console.error("Error loading filtered products", error);
     } finally {
@@ -138,7 +196,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
   handlePriceInputChange = (field: "selectedMin" | "selectedMax", value: number) => {
     this.setState((prevState) => {
       const correctedValue = Math.max(
-        prevState.min,
+        0,
         Math.min(prevState.max, value)
       );
       return { [field]: correctedValue } as Pick<CatalogState, typeof field>;
@@ -158,18 +216,13 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
 
   render(): ReactNode {
     const { loading, error, products } = this.props;
-    const { type, colors, sizes, selectedMin, selectedMax } = this.state;
+    const { type, colors, sizes, selectedMin, selectedMax, currentPage, totalPages } = this.state;
 
     if (loading) return <SpinnerLoaderWrapperFixed />;
 
     if (error) {
       return (
-        <section className={styles["catalog-section"]}>
-          <div className={styles["catalog-container"]}>
-            <h2>{`Не удается загрузить данные :(`}</h2>
-            <SpinnerLoaderWrapper />
-          </div>
-        </section>
+        <CatalogErrorPage error={"К сожалению, не удалось загрузить данные"} />
       );
     }
 
@@ -186,7 +239,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
             <div className={`${styles["catalog-filter-container"]} ${this.state.isFilterActive ? styles["active"] : ''}`}>
               <div className={styles["filters-title-container"]}>
                 <h3 className={styles["filters-title"]}>Фильтры</h3>
-                <button 
+                <button
                   className={styles["filters-title-button"]}
                   onClick={this.toggleFilter}
                 >
@@ -334,73 +387,19 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
               {this.props.loadingProducts ? (
                 <SpinnerLoaderWrapper relativeCentered />
               ) : products && products.length > 0 ? (
-                <div className={styles["catalog-items-wrapper"]}>
-                  {products.map((item: ClothItem) => (
-                    <div key={item.id} className={styles["catalog-item"]}>
-                      <Link
-                        className={styles["catalog-item-link"]}
-                        to={`/${lang}/catalog/clothes/${item.slug}`}
-                      ></Link>
-                      <div className={styles["catalog-item-wishlist-cart-container"]}>
-                        <Link to={""} className={styles["catalog-add-wishlist-cart-link"]}>
-                          <FontAwesomeIcon icon={faCartShopping} />
-                        </Link>
-                        <Link to={""} className={styles["catalog-add-wishlist-cart-link"]}>
-                          <FontAwesomeIcon icon={faHeart} />
-                        </Link>
-                      </div>
-                      <div className={styles["catalog-image-container"]}>
-                        {item.discount > 0 && (
-                          <span className={styles["catalog-discount"]}>-{item.discount}%</span>
-                        )}
-                        {item?.catalogImages?.[0]?.thumbnail ? (
-                          <img
-                            src={item.catalogImages[0].thumbnail}
-                            alt={item.title || "Рисунок"}
-                            loading="lazy"
-                            decoding="async"
-                            onLoad={(e) => {
-                              const imgElement = e.target as HTMLImageElement;
-                              const mainImage = item.catalogImages[0]?.image;
-                              if (mainImage) {
-                                imgElement.src = mainImage;
-                              }
-                            }}
-                          />
-                        ) : (
-                          <SpinnerLoaderWrapper />
-                        )}
-                      </div>
-                      <h2 className={styles["catalog-item-title"]}>
-                        {item.title.length > 20 ? `${item.title.slice(0, 20)}...` : item.title}
-                      </h2>
-                      <p className={styles["catalog-item-description"]}>
-                        {item.short_description.length > 40 ? `${item.short_description.slice(0, 40)}...` : item.short_description}
-                      </p>
-                      {item.count > 0 ? (
-                        <p className={styles["catalog-item-count"]}>В наличии <strong className={styles["count"]}>{item.count}</strong></p>
-                      ) : (
-                        <p className={styles["catalog-item-count"]}>Товар закончился</p>
-                      )}
-                      <bdi className={styles["catalog-price-container"]}>
-                        <span className={styles["catalog-real-price"]}>
-                          {item.real_price.toLocaleString("en-US")} сум
-                        </span>
-                        {item.discount > 0 && (
-                          <span className={styles["catalog-price"]}>
-                            {item.price.toLocaleString("en-US")} сум
-                          </span>
-                        )}
-                      </bdi>
-                    </div>
-                  ))}
-                </div>
+                <CatalogProducts products={products} />
               ) : (
                 <CatalogErrorPage
                   resetFilters={this.resetFilters}
                   error={"К сожалению, данные отсутствуют"}
                 />
               )}
+              <CatalogPagination 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                handlePrevPage={this.handlePrevPage}
+                handleNextPage={this.handleNextPage}
+              />
             </div>
           </div>
         </div>

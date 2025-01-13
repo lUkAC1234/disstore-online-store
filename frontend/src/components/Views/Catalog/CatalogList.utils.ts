@@ -34,8 +34,15 @@ export const fetchFilteredProducts = async (
   colors: Color[],
   sizes: Size[],
   types: Clothestypes[],
-  priceRange: {min: number, max: number}
-): Promise<{products: ClothItem[], price_min: number, price_max: number}> => {
+  priceRange: { min: number, max: number },
+  page: number,
+): Promise<{
+  next: string | null,
+  previous: string | null,
+  count: number,
+  results: ClothItem[],
+  price_min: number, price_max: number
+}> => {
   const generateQueryString = <T extends { id: number }>(
     selectedItems: number[],
     allItems: T[],
@@ -56,7 +63,7 @@ export const fetchFilteredProducts = async (
   const queryString = [colorQuery, typeQuery, sizeQuery, priceQuery]
     .filter(Boolean)
     .join("&");
-  const url = `${origin}/clothes/?${queryString}`;
+  const url = `${origin}/clothes/?page=${page}&${queryString}`;
 
   const response = await fetch(url);
   if (!response.ok) {
@@ -65,4 +72,3 @@ export const fetchFilteredProducts = async (
 
   return response.json();
 };
-
