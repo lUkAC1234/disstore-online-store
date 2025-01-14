@@ -7,6 +7,16 @@ export interface ClothesListContextState {
   products: ClothItem[];
   sizes: Size[];
   type: Clothestypes[];
+  selectedSizes: number[];
+  selectedTypes: number[];
+  selectedColors: number[];
+  selectedMin: number;
+  selectedMax: number;
+  currentPage: number;
+  nextPage: string | null;
+  prevPage: string | null;
+  totalPages: number;
+  count: number;
   colors: Color[];
   loading: boolean;
   loadingProducts: boolean,
@@ -28,6 +38,9 @@ export interface ClothesListActions extends ClothesListContextState {
 class ClothesListProvider extends PureComponent<ClothesListContextProps, ClothesListContextState> {
   state: Readonly<ClothesListContextState> = {
     products: [],
+    selectedSizes: [],
+    selectedTypes: [],
+    selectedColors: [],
     sizes: [],
     type: [],
     colors: [],
@@ -36,6 +49,13 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
     error: false,
     min: 0,
     max: 0,
+    selectedMin: 0,
+    selectedMax: 0,
+    currentPage: 1,
+    nextPage: null,
+    prevPage: null,
+    totalPages: 1,
+    count: 0,
   };
 
   render() {
@@ -61,33 +81,33 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
     if (cachedProducts) {
       this.setProducts(JSON.parse(cachedProducts));
     } else {
-      this.fetchData();
+      this.fetchProducts();
     }
   }
 
-  async fetchData(): Promise<void> {
+  fetchProducts = async (): Promise<void> => {
     try {
-      const response: Response = await fetch(`${origin}/clothes/?page=${1}`);
       this.setLoadingState(true);
 
+      const response = await fetch(`${origin}/clothes/?page=${this.state.currentPage}`);
       if (!response.ok) {
-        throw new Error("Не удалось загрузить данные");
+        throw new Error("Failed to fetch products");
       }
 
-      const data: { price_min: number, price_max: number, results: ClothItem[] } = await response.json();
-      sessionStorage.setItem("results", JSON.stringify(data));
+      const data = await response.json();
       this.setProducts(data.results);
-      this.setState((prevstate) => ({
-        ...prevstate,
+      this.setState((prevState) => ({
+        ...prevState,
+        totalPages: data.total_pages,
         min: data.price_min,
         max: data.price_max,
-      }))
-    } catch (err) {
+      }));
+    } catch (error) {
       this.setErrorState();
     } finally {
       this.setLoadingState(false);
     }
-  }
+  };
 
   setErrorState = (): void => {
     this.setState(prevState => ({

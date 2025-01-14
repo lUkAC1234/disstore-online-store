@@ -1,5 +1,7 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Pagination.module.scss";
 import { PureComponent, ReactNode } from "react";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 interface CatalogPaginationProps {
     currentPage: number;
@@ -14,19 +16,23 @@ class CatalogPagination extends PureComponent<CatalogPaginationProps> {
         return (
             <div className={styles["catalog-pagination"]}>
                 <button
-                    onClick={this.props.handlePrevPage} 
+                    onClick={this.props.handlePrevPage}
                     className={styles["catalog-pagination-button"]}
+                    disabled={currentPage === 1}
                 >
-                    Предедущая
+                    <FontAwesomeIcon icon={faArrowLeft} />
+                    <span>Предедущая</span>
                 </button>
-                <span>
-                    Страницы {currentPage} из {totalPages}
+                <span className={styles["pagination-counter"]}>
+                    {currentPage} из {totalPages}
                 </span>
                 <button
-                    onClick={this.props.handleNextPage} 
-                    className={styles["catalog-pagination"]}
+                    onClick={this.props.handleNextPage}
+                    className={styles["catalog-pagination-button"]}
+                    disabled={currentPage === totalPages}
                 >
-                    Следующая
+                    <span>Следующая</span>
+                    <FontAwesomeIcon icon={faArrowRight} />
                 </button>
             </div>
         )

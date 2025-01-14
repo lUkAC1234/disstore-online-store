@@ -1,0 +1,29 @@
+.catalog-pagination {
+    display: flex;
+    justify-content: space-between;
+}
+
+.catalog-pagination-button {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: var(--text-white);
+    border: 0.1rem solid var(--welcome-border);
+    cursor: pointer;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+
+    @media screen and (max-width: 500px) {
+        span {
+            display: none;
+        }
+    }
+}
+
+.pagination-counter {
+    background: var(--text-white);
+    border: 0.1rem solid var(--welcome-border);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}

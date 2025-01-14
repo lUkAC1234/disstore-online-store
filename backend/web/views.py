@@ -25,9 +25,18 @@ from .filters import ClothesModelFilter
 from rest_framework.pagination import PageNumberPagination
 
 class ResultsSetPagination(PageNumberPagination):
-    page_size = 2  
+    page_size = 2
     page_size_query_param = 'page_size'
 
+    def paginate_queryset(self, queryset, request, view=None):
+        try:
+            return super().paginate_queryset(queryset, request, view)
+        except NotFound:
+            self.paginator = self.django_paginator_class(queryset, self.get_page_size(request))
+            self.page = self.paginator.page(self.paginator.num_pages)
+            self.request = request
+            return list(self.page)
+        
 class ClothesMainView(ListAPIView):
     serializer_class = ClothesModelSerializer
     filter_backends = (DjangoFilterBackend,)
@@ -39,14 +48,13 @@ class ClothesMainView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-
         filtered_queryset = self.filter_queryset(queryset)
 
         price_range = filtered_queryset.aggregate(
             price_min=Min('real_price'),
             price_max=Max('real_price')
         )
-        
+
         page = self.paginate_queryset(filtered_queryset)
 
         if page is not None:

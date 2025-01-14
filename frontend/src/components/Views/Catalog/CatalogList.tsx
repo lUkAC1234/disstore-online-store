@@ -6,7 +6,7 @@ import UIReact from "utils/classes/UIReact";
 import { withContext } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
-import { Size, Clothestypes, Color, ClothItem } from "components/Context/ClothesContext";
+import { Size, Clothestypes, Color } from "components/Context/ClothesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
@@ -69,7 +69,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     this.setState((prevState) => ({
       ...prevState,
       totalPages: Math.ceil(this.state.count / this.props.products.length),
-    })) 
+    }));
     this.debouncedLoadFilteredProducts()
   }
 
@@ -78,7 +78,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     if (currentPage < totalPages) {
       this.setState((prevstate) => ({
         ...prevstate,
-        currentPage: prevstate.currentPage+1
+        currentPage: prevstate.currentPage + 1
       }), () => this.debouncedLoadFilteredProducts());
     }
   };
@@ -90,14 +90,14 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     if (currentPage > 1) {
       this.setState((prevstate) => ({
         ...prevstate,
-        currentPage: prevstate.currentPage-1
+        currentPage: prevstate.currentPage - 1
       }), () => {
         this.debouncedLoadFilteredProducts()
         console.log("pagination")
       });
     }
   };
-  
+
   initializeFiltersAndPrices = async () => {
     try {
       const [sizes, type, colors] = await fetchFilters();
@@ -119,7 +119,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
       this.setState((prevState) => ({
         ...prevState,
         totalPages: Math.ceil(this.state.count / this.props.products.length),
-      }))
+      }));
     }
     if (prevState.count !== this.state.count) {
       console.log(this.state.count)
@@ -167,13 +167,12 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
         { min: this.state.selectedMin, max: this.state.selectedMax },
         this.state.currentPage,
       );
-      
+
       this.props.setProducts(products.results);
       this.setState((prevState) => ({
         ...prevState,
         totalPages: Math.ceil(products.count / products.results.length),
-        count: products.count,
-      }))
+      }));
       console.log(products.count)
     } catch (error) {
       console.error("Error loading filtered products", error);
@@ -394,12 +393,19 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                   error={"К сожалению, данные отсутствуют"}
                 />
               )}
-              <CatalogPagination 
-                currentPage={currentPage}
-                totalPages={totalPages}
-                handlePrevPage={this.handlePrevPage}
-                handleNextPage={this.handleNextPage}
-              />
+              {this.state.totalPages > 1 ? (
+                <>
+                  <div className={styles["hr-line"]}></div>
+                  <CatalogPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    handlePrevPage={this.handlePrevPage}
+                    handleNextPage={this.handleNextPage}
+                  />
+                </>
+              ) : (
+                null
+              )}
             </div>
           </div>
         </div>
