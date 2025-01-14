@@ -111,7 +111,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     }
   };
 
-  componentDidUpdate(prevProps: Readonly<ClothesListActions>, prevState: Readonly<CatalogState>, snapshot?: unknown): void {
+  componentDidUpdate(prevProps: Readonly<ClothesListActions>, prevState: Readonly<CatalogState>): void {
     if (prevProps.min !== this.props.min || prevProps.max !== this.props.max) {
       this.filterPrice()
     }
