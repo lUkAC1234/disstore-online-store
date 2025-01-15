@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import i18next from "i18next";
 import UIReact from "utils/classes/UIReact";
 import { withContext } from "components/Context/ContextInjector";
-import { ClothesListContext } from "components/Context/ContextCollection";
+import { ClothesListContext, UserContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import { Size, Clothestypes, Color } from "components/Context/ClothesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,6 +17,7 @@ import { debounce } from "utils/hooks/debounce.ts";
 import CatalogErrorPage from "./CatalogError/CatalogErrorPage.tsx";
 import CatalogPagination from "./CatalogPagination/CatalogPagination.tsx";
 import CatalogProducts from "./CatalogProductsList/Products.tsx";
+import { UserContextActions } from "components/Context/UserContext.tsx";
 
 const lang: string = i18next.language;
 
@@ -39,7 +40,9 @@ interface CatalogState {
   count: number;
 }
 
-class CatalogList extends UIReact<ClothesListActions, CatalogState> {
+interface CatalogListProps extends ClothesListActions, UserContextActions {}
+
+class CatalogList extends UIReact<CatalogListProps, CatalogState> {
   state: CatalogState = {
     selectedSizes: [],
     selectedTypes: [],
@@ -416,6 +419,6 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
   }
 }
 
-const UICatalogList = withContext(ClothesListContext, CatalogList);
+const UICatalogList = withContext(ClothesListContext, withContext(UserContext, CatalogList));
 
 export default UICatalogList;
