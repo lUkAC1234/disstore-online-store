@@ -175,7 +175,6 @@ class ClothesImageModel(models.Model):
     def make_thumbnail(self, image):
         img = Image.open(image)
         
-        # Ensure the image is in RGB mode
         if img.mode == 'RGBA':
             background = Image.new('RGB', img.size, (255, 255, 255))  
             background.paste(img, mask=img.split()[3]) 

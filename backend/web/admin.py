@@ -13,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 # For saving html code
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
+from .forms import ClothesModelForm
 # from modeltranslation.admin import TranslationAdmin
 
 # --------------------------------------------------------------------------- #
@@ -37,6 +38,7 @@ class ClothesImageInline(admin.TabularInline):
 
 @admin.register(ClothesModel)
 class ClothesModelAdmin(admin.ModelAdmin):
+    form = ClothesModelForm
     list_display = ['id', 'title']
     list_display_links = ['id', 'title']
     search_fields = ['title']

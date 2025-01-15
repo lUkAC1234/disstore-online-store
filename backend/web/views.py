@@ -25,7 +25,7 @@ from .filters import ClothesModelFilter
 from rest_framework.pagination import PageNumberPagination
 
 class ResultsSetPagination(PageNumberPagination):
-    page_size = 1
+    page_size = 6
     page_size_query_param = 'page_size'
 
     def paginate_queryset(self, queryset, request, view=None):
