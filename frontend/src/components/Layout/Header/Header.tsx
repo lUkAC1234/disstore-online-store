@@ -42,7 +42,7 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
 
   loadTypeData = async () => {
     const type = JSON.parse(sessionStorage.getItem("types") || "[]");
-    
+
     if (type.length <= 0) {
       const typeData = await fetch(`${origin}/clothes/types/`).then(res => res.json());
       sessionStorage.setItem("types", JSON.stringify(typeData));
@@ -250,7 +250,10 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
         key={item.id}
         to={`/${lang}/catalog`}
         className="header-link-extra-details-column"
-        onClick={this.closeEntireMenu}
+        onClick={() => {
+            this.closeEntireMenu();
+            this.props.setSelectedTypes([item.id], this.props.debouncedFetchFilteredProducts);
+        }}
       >
         <div className="header-extra-link-image-container">
           <img src={item.image} alt={item.title} />

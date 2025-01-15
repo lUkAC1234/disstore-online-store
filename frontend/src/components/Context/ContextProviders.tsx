@@ -5,16 +5,14 @@ import ClothesListProvider from "./ClothesListContext";
 
 export interface ContextProvidersProps extends PropsWithChildren {}
 
-function ContextProviders(props: ContextProvidersProps): ReactNode {
-  return (
-    <GlobalContextProvider>
-      <ClothesListProvider>
-        <ClothesContextProvider>
-          {props.children}
-        </ClothesContextProvider>
-      </ClothesListProvider>
-    </GlobalContextProvider>
-  );
+const providers = [
+    GlobalContextProvider,
+    ClothesListProvider,
+    ClothesContextProvider,
+];
+
+function ContextProviders({ children }: ContextProvidersProps): ReactNode {
+   return providers.reduce((acc, Provider) => <Provider>{acc}</Provider>, children);
 }
 
 export default ContextProviders;

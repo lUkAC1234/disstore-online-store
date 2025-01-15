@@ -64,13 +64,13 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     document.addEventListener("mousedown", this.filtersHandleClickOutside, {
       signal: this.controller.signal,
     });
-    this.filterPrice()
-    this.initializeFiltersAndPrices();
-    this.setState((prevState) => ({
-      ...prevState,
-      totalPages: Math.ceil(this.state.count / this.props.products.length),
-    }));
-    this.debouncedLoadFilteredProducts()
+    // this.filterPrice()
+    // this.initializeFiltersAndPrices();
+    // this.setState((prevState) => ({
+    //   ...prevState,
+    //   totalPages: Math.ceil(this.state.count / this.props.products.length),
+    // }));
+    // this.debouncedLoadFilteredProducts()
   }
 
   handleNextPage = () => {
@@ -202,20 +202,19 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
     });
   };
 
-  handleFilterSelection = (field: "selectedSizes" | "selectedTypes" | "selectedColors", id: number) => {
-    this.setState((prevState) => {
-      const isSelected = prevState[field].includes(id);
-      return {
-        [field]: isSelected
-          ? prevState[field].filter((item) => item !== id)
-          : [...prevState[field], id],
-      } as Pick<CatalogState, typeof field>;
-    });
-  };
+//   handleFilterSelection = (field: "selectedSizes" | "selectedTypes" | "selectedColors", id: number) => {
+//     this.setState((prevState) => {
+//       const isSelected = prevState[field].includes(id);
+//       return {
+//         [field]: isSelected
+//           ? prevState[field].filter((item) => item !== id)
+//           : [...prevState[field], id],
+//       } as Pick<CatalogState, typeof field>;
+//     });
+//   };
 
   render(): ReactNode {
-    const { loading, error, products } = this.props;
-    const { type, colors, sizes, selectedMin, selectedMax, currentPage, totalPages } = this.state;
+    const { loading, error, products, type, colors, sizes, currentPage, totalPages } = this.props;
 
     if (loading) return <SpinnerLoaderWrapperFixed />;
 
@@ -251,9 +250,9 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                   type.map((item) => (
                     <button
                       key={item.id}
-                      className={`${styles["filter-type-column"]} ${this.state.selectedTypes.includes(item.id) ? styles["active"] : ""
+                      className={`${styles["filter-type-column"]} ${this.props.selectedTypes.includes(item.id) ? styles["active"] : ""
                         }`}
-                      onClick={() => this.handleFilterSelection("selectedTypes", item.id)}
+                      onClick={() => this.props.handleFilterSelection("selectedTypes", item.id)}
                     >
                       {item.title}
                       <FontAwesomeIcon icon={faAngleRight} />
@@ -272,35 +271,38 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
 
                 <RangeSliderDual
                   step={1}
-                  min={this.state.min}
-                  max={this.state.max}
-                  values={[this.state.selectedMin, this.state.selectedMax]}
-                  setValues={(values) => this.setState(prevstate => ({
-                    ...prevstate,
-                    selectedMin: values[0],
-                    selectedMax: values[1]
-                  }))}
-
+                  min={this.props.min}
+                  max={this.props.max}
+                  values={[this.props.selectedMin, this.props.selectedMax]}
+                  setValues={(values) => this.props.setSelectedPriceMinMax(values)}
                 />
                 <div className={styles["price-filter-info-text-container"]}>
                   <label htmlFor="">
                     От
                     <input
                       type="number"
-                      value={selectedMin}
-                      onChange={(e) =>
-                        this.handlePriceInputChange("selectedMin", Number(e.target.value))
-                      }
+                      value={this.props.selectedMin}
+                      onChange={(e) => {
+                        const value: number = Number(e.target.value);
+                        if (value < this.props.min || value >= this.props.max) {
+                            return;
+                        }
+                        this.props.setSelectedMin(value);
+                      }}
                     />
                   </label>
                   <label htmlFor="">
                     До
                     <input
                       type="number"
-                      value={selectedMax}
-                      onChange={(e) =>
-                        this.handlePriceInputChange("selectedMax", Number(e.target.value))
-                      }
+                      value={this.props.selectedMax}
+                      onChange={(e) => {
+                        const value: number = Number(e.target.value);
+                        if (value > this.props.max || value <= this.props.min) {
+                            return;
+                        }
+                        this.props.setSelectedMax(value)
+                      }}
                     />
                   </label>
                 </div>
@@ -313,12 +315,12 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                     colors.map((item) => (
                       <button
                         key={item.id}
-                        className={`${styles["filters-color-column"]} ${this.state.selectedColors.includes(item.id) ? styles["active"] : ""
+                        className={`${styles["filters-color-column"]} ${this.props.selectedColors.includes(item.id) ? styles["active"] : ""
                           }`}
                         style={{
                           backgroundColor: item.color,
                         }}
-                        onClick={() => this.handleFilterSelection("selectedColors", item.id)}
+                        onClick={() => this.props.handleFilterSelection("selectedColors", item.id)}
                       ></button>
                     ))
                   ) : (
@@ -336,9 +338,9 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
                     sizes.map((item) => (
                       <button
                         key={item.id}
-                        className={`${styles["filters-sizes-column"]} ${this.state.selectedSizes.includes(item.id) ? styles["active"] : ""
+                        className={`${styles["filters-sizes-column"]} ${this.props.selectedSizes.includes(item.id) ? styles["active"] : ""
                           }`}
-                        onClick={() => this.handleFilterSelection("selectedSizes", item.id)}
+                        onClick={() => this.props.handleFilterSelection("selectedSizes", item.id)}
                       >
                         {item.size}
                       </button>
@@ -354,7 +356,7 @@ class CatalogList extends UIReact<ClothesListActions, CatalogState> {
               <div className={styles["add-to-cart-button-container"]}>
                 <button
                   className={styles["add-to-cart-button"]}
-                  onClick={this.debouncedLoadFilteredProducts}>Применить фильтры
+                  onClick={this.props.fetchFilteredProducts}>Применить фильтры
                 </button>
               </div>
             </div>
