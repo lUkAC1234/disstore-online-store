@@ -23,43 +23,13 @@ const lang: string = i18next.language;
 
 interface CatalogState {
   isFilterActive: boolean;
-  sizes: Size[];
-  type: Clothestypes[];
-  colors: Color[];
-  selectedSizes: number[];
-  selectedTypes: number[];
-  selectedColors: number[];
-  min: number;
-  max: number;
-  selectedMin: number;
-  selectedMax: number;
-  currentPage: number;
-  nextPage: string | null;
-  prevPage: string | null;
-  totalPages: number;
-  count: number;
 }
 
-interface CatalogListProps extends ClothesListActions, UserContextActions {}
+interface CatalogListProps extends ClothesListActions, UserContextActions { }
 
 class CatalogList extends UIReact<CatalogListProps, CatalogState> {
   state: CatalogState = {
-    selectedSizes: [],
-    selectedTypes: [],
-    selectedColors: [],
     isFilterActive: false,
-    sizes: [],
-    type: [],
-    colors: [],
-    min: 0,
-    max: 0,
-    selectedMin: 0,
-    selectedMax: 0,
-    currentPage: 1,
-    nextPage: null,
-    prevPage: null,
-    totalPages: 1,
-    count: 0,
   };
 
   componentDidMount() {
@@ -67,122 +37,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
     document.addEventListener("mousedown", this.filtersHandleClickOutside, {
       signal: this.controller.signal,
     });
-    // this.filterPrice()
-    // this.initializeFiltersAndPrices();
-    // this.setState((prevState) => ({
-    //   ...prevState,
-    //   totalPages: Math.ceil(this.state.count / this.props.products.length),
-    // }));
-    // this.debouncedLoadFilteredProducts()
   }
-
-  handleNextPage = () => {
-    const { currentPage, totalPages } = this.state;
-    if (currentPage < totalPages) {
-      this.setState((prevstate) => ({
-        ...prevstate,
-        currentPage: prevstate.currentPage + 1
-      }), () => this.debouncedLoadFilteredProducts());
-    }
-  };
-
-  handlePrevPage = () => {
-    const { currentPage } = this.state;
-    console.log("pagination start")
-    console.log(this.state)
-    if (currentPage > 1) {
-      this.setState((prevstate) => ({
-        ...prevstate,
-        currentPage: prevstate.currentPage - 1
-      }), () => {
-        this.debouncedLoadFilteredProducts()
-        console.log("pagination")
-      });
-    }
-  };
-
-  initializeFiltersAndPrices = async () => {
-    try {
-      const [sizes, type, colors] = await fetchFilters();
-      this.setState({
-        sizes,
-        type,
-        colors,
-      });
-    } catch (error) {
-      console.error("Error initializing filters and prices", error);
-    }
-  };
-
-  componentDidUpdate(prevProps: Readonly<ClothesListActions>, prevState: Readonly<CatalogState>): void {
-    if (prevProps.min !== this.props.min || prevProps.max !== this.props.max) {
-      this.filterPrice()
-    }
-    if (prevProps.products.length !== this.props.products.length) {
-      this.setState((prevState) => ({
-        ...prevState,
-        totalPages: Math.ceil(this.state.count / this.props.products.length),
-      }));
-    }
-    if (prevState.count !== this.state.count) {
-      console.log(this.state.count)
-      console.log(this.props.products)
-    }
-  }
-
-  filterPrice() {
-    this.setState({
-      min: this.props.min,
-      max: this.props.max,
-      selectedMin: this.props.min,
-      selectedMax: this.props.max,
-    });
-  }
-
-  resetFilters = () => {
-    this.setState(
-      {
-        selectedSizes: [],
-        selectedTypes: [],
-        selectedColors: [],
-        selectedMin: this.state.min,
-        selectedMax: this.state.max,
-      },
-      this.debouncedLoadFilteredProducts
-    );
-  };
-
-  debouncedLoadFilteredProducts = debounce(() => {
-    this.loadFilteredProducts();
-  }, 250);
-
-  loadFilteredProducts = async () => {
-    try {
-      this.props.setLoadingProducts(true);
-
-      const products = await fetchFilteredProducts(
-        this.state.selectedColors,
-        this.state.selectedSizes,
-        this.state.selectedTypes,
-        this.state.colors,
-        this.state.sizes,
-        this.state.type,
-        { min: this.state.selectedMin, max: this.state.selectedMax },
-        this.state.currentPage,
-      );
-
-      this.props.setProducts(products.results);
-      this.setState((prevState) => ({
-        ...prevState,
-        totalPages: Math.ceil(products.count / products.results.length),
-      }));
-      console.log(products.count)
-    } catch (error) {
-      console.error("Error loading filtered products", error);
-    } finally {
-      this.props.setLoadingProducts(false);
-    }
-  };
 
   toggleFilter = () => {
     this.setState((prevState) => ({ isFilterActive: !prevState.isFilterActive }));
@@ -194,27 +49,6 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
       this.setState({ isFilterActive: false });
     }
   };
-
-  handlePriceInputChange = (field: "selectedMin" | "selectedMax", value: number) => {
-    this.setState((prevState) => {
-      const correctedValue = Math.max(
-        0,
-        Math.min(prevState.max, value)
-      );
-      return { [field]: correctedValue } as Pick<CatalogState, typeof field>;
-    });
-  };
-
-//   handleFilterSelection = (field: "selectedSizes" | "selectedTypes" | "selectedColors", id: number) => {
-//     this.setState((prevState) => {
-//       const isSelected = prevState[field].includes(id);
-//       return {
-//         [field]: isSelected
-//           ? prevState[field].filter((item) => item !== id)
-//           : [...prevState[field], id],
-//       } as Pick<CatalogState, typeof field>;
-//     });
-//   };
 
   render(): ReactNode {
     const { loading, error, products, type, colors, sizes, currentPage, totalPages } = this.props;
@@ -280,7 +114,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
                   setValues={(values) => this.props.setSelectedPriceMinMax(values)}
                 />
                 <div className={styles["price-filter-info-text-container"]}>
-                  <label htmlFor="">
+                  <label>
                     От
                     <input
                       type="number"
@@ -288,13 +122,13 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
                       onChange={(e) => {
                         const value: number = Number(e.target.value);
                         if (value < this.props.min || value >= this.props.max) {
-                            return;
+                          return;
                         }
                         this.props.setSelectedMin(value);
                       }}
                     />
                   </label>
-                  <label htmlFor="">
+                  <label>
                     До
                     <input
                       type="number"
@@ -302,7 +136,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
                       onChange={(e) => {
                         const value: number = Number(e.target.value);
                         if (value > this.props.max || value <= this.props.min) {
-                            return;
+                          return;
                         }
                         this.props.setSelectedMax(value)
                       }}
@@ -359,7 +193,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
               <div className={styles["add-to-cart-button-container"]}>
                 <button
                   className={styles["add-to-cart-button"]}
-                  onClick={this.props.fetchFilteredProducts}>Применить фильтры
+                  onClick={this.props.setApplyFilters}>Применить фильтры
                 </button>
               </div>
             </div>
@@ -375,18 +209,6 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
                   </button>
                   <h1 className={styles["catalog-active-filter-title"]}>Каталог</h1>
                 </div>
-                <div className={styles["catalog-sort-container"]}>
-                  <h3 className={styles["sort-info-title"]}>Сортировать по:</h3>
-                  <select
-                    className={styles["catalog-sorting"]}
-                    name="sort"
-                    id="sort"
-                    defaultValue="price"
-                  >
-                    <option className={styles["sort-option"]} value="price">Популярности</option>
-                    <option className={styles["sort-option"]} value="newest">Новизне</option>
-                  </select>
-                </div>
               </div>
               {this.props.loadingProducts ? (
                 <SpinnerLoaderWrapper relativeCentered />
@@ -394,18 +216,18 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
                 <CatalogProducts products={products} />
               ) : (
                 <CatalogErrorPage
-                  resetFilters={this.resetFilters}
+                  resetFilters={this.props.resetFilters}
                   error={"К сожалению, данные отсутствуют"}
                 />
               )}
-              {this.state.totalPages > 1 ? (
+              {this.props.totalPages > 1 ? (
                 <>
                   <div className={styles["hr-line"]}></div>
                   <CatalogPagination
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    handlePrevPage={this.handlePrevPage}
-                    handleNextPage={this.handleNextPage}
+                    handlePrevPage={this.props.setPrevPage}
+                    handleNextPage={this.props.setNextPage}
                   />
                 </>
               ) : (

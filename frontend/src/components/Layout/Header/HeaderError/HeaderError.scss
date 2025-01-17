@@ -1,0 +1,42 @@
+.header-error-container {
+    margin-block: 5rem;
+    display: grid;
+    place-items: center;
+}
+
+.header-error-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 6rem;
+    height: 6rem;
+    background: var(--header-search-background);
+    border-radius: 50%;
+
+    svg {
+        font-size: 3rem;
+    }
+}
+
+.header-error-code {
+    margin-block: 1rem 0.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.header-error-description {
+    color: var(--text-p);
+    text-align: center;
+    font-size: 1rem;
+    width: min(100%, 40rem);
+}
+
+@media screen and (max-width: 600px) {
+    .header-error-code {
+        font-size: 1.25rem;
+    }
+    
+    .header-error-description {
+        font-size: 0.9rem;
+    }
+}

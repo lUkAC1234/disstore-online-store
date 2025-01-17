@@ -1,5 +1,6 @@
+import "./Header.scss"
 import { createRef, PureComponent, ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import LogoSvg from "assets/main/images/layout/logo.svg";
 import i18next from "i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,14 +18,13 @@ import { withContext } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import SpinnerLoader from "components/Loaders/SpinnerLoader";
-import { Clothestypes } from "components/Context/ClothesContext";
-import { origin } from "../../../../project.config.json";
+import HeaderError from "./HeaderError/HeaderError";
+import { activeClassNameObserver } from "utils/hooks/NavActiveClassObserver";
 
 const lang = i18next.language;
 
 interface HeaderState {
   activeLink: string | null;
-  type: Clothestypes[];
 }
 
 class Header extends PureComponent<ClothesListActions, HeaderState> {
@@ -33,23 +33,6 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
 
   state: Readonly<HeaderState> = {
     activeLink: null,
-    type: [],
-  };
-
-  async componentDidMount(): Promise<void> {
-    this.loadTypeData();
-  }
-
-  loadTypeData = async () => {
-    const type = JSON.parse(sessionStorage.getItem("types") || "[]");
-
-    if (type.length <= 0) {
-      const typeData = await fetch(`${origin}/clothes/types/`).then(res => res.json());
-      sessionStorage.setItem("types", JSON.stringify(typeData));
-      this.setState({ type: typeData });
-    } else {
-      this.setState({ type });
-    }
   };
 
   toggleSearchInput = () => {
@@ -114,9 +97,12 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
               <FontAwesomeIcon icon={faBars} />
             </button>
             <div className="header-logo-container">
-              <Link to="/">
+              <NavLink to={`/`}
+              className={() => {
+                return activeClassNameObserver(``, "");
+              }}>
                 <img src={LogoSvg} alt="Logo" />
-              </Link>
+              </NavLink>
             </div>
             <div className="header-content-container">
               <div
@@ -136,9 +122,12 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
                         }`}
                       onClick={() => this.handleLinkClick("catalog")}
                     >
-                      <Link
-                        to={`/${lang}/catalog`}>Каталог
-                      </Link>
+                      <NavLink
+                        to={`/${lang}/catalog`}
+                        className={() => {
+                          return activeClassNameObserver(`/catalog`, "");
+                        }}>Каталог
+                      </NavLink>
                       <span>
                         Каталог
                         <FontAwesomeIcon icon={faArrowRightLong} />
@@ -152,13 +141,15 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
                         >
                           <FontAwesomeIcon icon={faArrowLeftLong} />
                         </button>
-                        <Link
+                        <NavLink
                           to={`/${lang}/catalog`}
-                          className="header-link-extra-details-column first"
+                          className={() => {
+                            return activeClassNameObserver(`/${lang}/catalog`, "header-link-extra-details-column first");
+                          }}
                           onClick={this.closeEntireMenu}
                         >
                           Каталог
-                        </Link>
+                        </NavLink>
                         {this.linksMobile}
                       </div>
                     </div>
@@ -231,35 +222,41 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
   }
 
   get linksMobile(): ReactNode {
-    const { loading, error, products } = this.props;
+    const { loading, error } = this.props;
 
     if (loading) {
       return <SpinnerLoader />;
     }
 
     if (error) {
-      return <h4>Не удалось загрузить данные</h4>;
+      return <HeaderError 
+                error={"Не удалось загрузить данные"} 
+                error_details={"К сожалению, произошла ошибка при загрузке данных. Пожалуйста, перезагрузите страницу и попробуйте снова"} 
+              />;
     }
 
-    if (!products || products.length === 0) {
-      return <h4>Нету данных</h4>;
+    if (!this.props.type || this.props.type.length === 0) {
+      return <HeaderError 
+                error={"Не удалось загрузить данные"} 
+                error_details={"К сожалению, произошла ошибка при загрузке данных. Пожалуйста, перезагрузите страницу и попробуйте снова"} 
+              />;
     }
 
-    return this.state.type.map(item => (
-      <Link
+    return this.props.type.map(item => (
+      <NavLink
         key={item.id}
         to={`/${lang}/catalog`}
-        className="header-link-extra-details-column"
+        className={"header-link-extra-details-column"}
         onClick={() => {
-            this.closeEntireMenu();
-            this.props.setSelectedTypes([item.id], this.props.debouncedFetchFilteredProducts);
+          this.closeEntireMenu();
+          this.props.setSelectedTypes([item.id], this.props.setApplyFilters);
         }}
       >
         <div className="header-extra-link-image-container">
           <img src={item.image} alt={item.title} />
         </div>
         <h4 className="header-extra-link-title">{item.title}</h4>
-      </Link>
+      </NavLink>
     ));
   }
 }

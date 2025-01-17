@@ -2,17 +2,19 @@ import styles from "./404.module.scss"
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import i18next from "i18next";
+import ClothesHanger from "assets/main/images/layout/clothes-hanger.svg"
 const lang = i18next.language;
 
 export default function Error404(): ReactNode {
   return (
     <section className={styles["page-not-found-section"]}>
       <div className={styles["page-not-found-container"]}>
-        <h1 className={styles["page-not-found-error"]}>
-          <span className={styles["error-left-number"]}>4</span> 
-          <span className={styles["error-center-number"]}>0</span> 
-          <span className={styles["error-right-number"]}>4</span>
-        </h1>
+        <div className={styles["error-clothes-hanger-container"]}>
+          <img src={ClothesHanger} alt="image of clothes hanger" />
+        </div>
+        <div className={styles["error-code-container"]}>
+          <h1 className={styles["page-not-found-error"]}>404</h1>
+        </div>
         <h2 className={styles["page-not-found-error-subtitle"]}>Упс! Страница не найдена</h2>
         <p className={styles["page-not-found-info"]}>Страница, которую вы ищете, могла быть удалена или временно недоступна.</p>
         <div className={styles["page-not-found-links-container"]}>

@@ -1,10 +1,10 @@
-@import "./layout/_import";
-@import "./z-index-properties/_import_z_index";
-@import "./colors/_importcolorbackgound";
-@import "./fonts/_importfonts";
-@import "./helpers/_helpers";
-@import "./components/_components";
-@import "./positions/_positions";
+@use "./layout/_import";
+@use "./z-index-properties/_import_z_index";
+@use "./colors/_importcolorbackgound";
+@use "./fonts/_importfonts";
+@use "./helpers/_helpers";
+@use "./components/_components";
+@use "./positions/_positions";
 
 
 * {

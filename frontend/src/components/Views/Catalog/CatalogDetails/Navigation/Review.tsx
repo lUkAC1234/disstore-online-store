@@ -17,10 +17,13 @@ class ReviewSection extends PureComponent<ReviewProps, ReviewState> {
                     <h1>Review Section</h1>
                     {this.props.reviews && this.props.reviews.length > 0 ? (
                         this.props.reviews.map((review, index) => (
-                            <div key={index}>
-                                <h4>{review.user.username}</h4>
-                                <p>{review.text}</p>
-                            </div>
+                            review.is_allowed ? (
+                                <div key={index}>
+                                    <h4>{review.user.username}</h4>
+                                    <p>{review.text}</p>
+                                </div>
+                            ) : null
+
                         ))
                     ) : (
                         <p>Пока что нету отзывов</p>

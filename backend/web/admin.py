@@ -10,21 +10,24 @@ from .models import (
     ClothesFAQModel
 )
 from django.utils.translation import gettext_lazy as _
-# For saving html code
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from .forms import ClothesModelForm
-# from modeltranslation.admin import TranslationAdmin
-
-# --------------------------------------------------------------------------- #
-# User Model Admin
+from unfold.admin import ModelAdmin, TabularInline
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from import_export.admin import ImportExportModelAdmin
+from unfold.contrib.import_export.forms import ExportForm, ImportForm, SelectableFieldsExportForm
+from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
 @admin.register(UserModel)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(BaseUserAdmin, ModelAdmin):
     list_display = ['id', 'username']
     list_display_links = ['id', 'username']
     search_fields = ['username']
+    form = UserChangeForm
+    add_form = UserCreationForm
+    change_password_form = AdminPasswordChangeForm
     
-class ClothesImageInline(admin.TabularInline):
+class ClothesImageInline(TabularInline):
     model = ClothesImageModel
     extra = 4  
     fields = ['image', 'image_preview']
@@ -37,7 +40,7 @@ class ClothesImageInline(admin.TabularInline):
     image_preview.short_description = "Превью"
 
 @admin.register(ClothesModel)
-class ClothesModelAdmin(admin.ModelAdmin):
+class ClothesModelAdmin(ModelAdmin, ImportExportModelAdmin):
     form = ClothesModelForm
     list_display = ['id', 'title']
     list_display_links = ['id', 'title']
@@ -45,26 +48,35 @@ class ClothesModelAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title', )}
     readonly_fields = ['real_price']
     inlines = [ClothesImageInline]
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    list_filter = ['created_at', 'title']  
+    
+      
     
 @admin.register(ClothesColorModel)
-class ClothesColorModelAdmin(admin.ModelAdmin):
+class ClothesColorModelAdmin(ModelAdmin, ImportExportModelAdmin):
     list_display = ['id', 'hex', 'color']
     list_display_links = ['id', 'hex', 'color']
     search_fields = ['hex']
+    import_form_class = ImportForm
+    export_form_class = ExportForm
 
     def hex(self, obj):
         return mark_safe(
-            f"<div style='background-color: {obj.color}; width: 30px; height: 30px; border-radius: 50%; box-shadow: 0 5px 10px rgb(0 0 0 / 20%);'></div>")
+            f"<div style='background-color: {obj.color}; width: 3rem; height: 3rem; border-radius: 0.5rem;'></div>")
 
 
 @admin.register(ClothesSizeModel)
-class ClothesSizeModelAdmin(admin.ModelAdmin):
+class ClothesSizeModelAdmin(ModelAdmin, ImportExportModelAdmin):
     list_display = ['id', 'size']
     list_display_links = ['id', 'size']
     search_fields = ['size']
+    import_form_class = ImportForm
+    export_form_class = ExportForm
     
 @admin.register(ClothesImageModel)
-class ClothesImageModelAdmin(admin.ModelAdmin):
+class ClothesImageModelAdmin(ModelAdmin):
     list_display = ['id', 'product', 'image_preview']
     list_display_links = ['id', 'product']
     search_fields = ['product__title']
@@ -79,23 +91,22 @@ class ClothesImageModelAdmin(admin.ModelAdmin):
     
     
 @admin.register(TypesModel)
-class ClothesTypeModelAdmin(admin.ModelAdmin):
+class ClothesTypeModelAdmin(ModelAdmin, ImportExportModelAdmin):
     list_display = ['id', 'title']
     list_display_links = ['id', 'title']
     search_fields = ['title']
+    import_form_class = ImportForm
+    export_form_class = ExportForm
 
 @admin.register(ClothesReviewModel)
-class ClothesReviewModelAdmin(admin.ModelAdmin):
+class ClothesReviewModelAdmin(ModelAdmin):
     list_display = ['id', 'product', 'user']
     list_display_links = ['id', 'product', 'user']
     search_fields = ['product__title', 'user__username']
 
 @admin.register(ClothesFAQModel)
-class ClothesFAQModelAdmin(admin.ModelAdmin):
+class ClothesFAQModelAdmin(ModelAdmin):
     list_display = ['id', 'product']
     list_display_links = ['id', 'product']
     search_fields = ['product__title']
 
-
-admin.site.site_header = 'DISSTORE.UZ'
-admin.site.site_title = 'DISSTORE.UZ'

@@ -40,7 +40,7 @@ class ClothesModel(models.Model):
     )
     
     count = models.PositiveIntegerField(default=1, verbose_name=_('Количество'))
-    discount = models.PositiveIntegerField(default=0, verbose_name=_('Скидка'))
+    discount = models.PositiveIntegerField(default=0, verbose_name=_('Скидка, %'))
     price = models.PositiveIntegerField(_("Цена"))
     real_price = models.PositiveBigIntegerField(default=0, verbose_name=_('Реальная цена'))
     types = models.ManyToManyField(
@@ -50,6 +50,7 @@ class ClothesModel(models.Model):
     )
     
     long_description = RichTextField(verbose_name=_("Полное описание"))
+    created_at = models.DateTimeField(_("Дата создания"), auto_now_add=True)
     
     @property
     def is_discount(self):

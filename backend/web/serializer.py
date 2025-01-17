@@ -39,7 +39,7 @@ class ClothesReviewModelSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
         model = ClothesReviewModel
-        fields = ['id', 'product', 'user', 'text', 'created_at']
+        fields = ['id', 'product', 'user', 'text', 'created_at', 'is_allowed']
 
 class ClothesFAQModelSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,4 +1,4 @@
-@import "assets/main/styles/scss/components/_components";
+@use "assets/main/styles/scss/components/_components";
 
 .page-not-found-section {
     margin-block: 1rem;
@@ -7,33 +7,37 @@
 .page-not-found-container {
     display: grid;
     place-items: center;
-    padding: 5rem 1rem;
-    border: 0.1rem solid var(--welcome-border);
-    margin-inline: 1rem;
+    padding: 1rem;
+}
+
+.error-clothes-hanger-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 0.2rem solid var(--welcome-border);
+    width: min(100%, 50rem);
+    img {
+        width: 15rem;
+        margin-top: -1rem;
+    }
+}
+
+.error-code-container {
+    width: min(100%, 25rem);
+    background: var(--welcome-border);
+    padding: 2rem 1rem;
+    margin-block: -0.5rem 1rem;
 }
 
 .page-not-found-error {
-    display: inline-flex;
-    align-items: center;
+    font-size: 5rem;
+    text-align: center;
     font-weight: 900;
-    gap: 0.5rem;
-
-    span {
-        font-size: 7rem;
-    }
-
-    .error-center-number {
-        background: var(--text-black);
-        color: var(--text-white);
-        height: fit-content;
-        padding-inline: 1rem;
-        border-radius: 50%;
-        font-size: 5rem;
-    }
 }
 
 .page-not-found-error-subtitle {
     text-align: center;
+    font-size: 1.5rem;
 
     @media screen and (max-width: 600px) {
         font-size: 1.25rem;
@@ -57,28 +61,10 @@
 
 .page-not-found-link-home {
     @extend .primary-white-button;
-    font-size: 1rem;
 }
 
 .page-not-found-link-catalog {
     @extend .primary-button;
-    font-size: 1rem;
-}
-
-@media screen and (max-width: 992px) {
-    .page-not-found-error {
-        span {
-            font-size: 5rem;
-        }
-        .error-center-number {
-            font-size: 3.5rem;
-        }
-    }
-
-    .page-not-found-link-home,
-    .page-not-found-link-catalog {
-        font-size: 0.9rem;
-    }
 }
 
 @media screen and (max-width: 500px) {

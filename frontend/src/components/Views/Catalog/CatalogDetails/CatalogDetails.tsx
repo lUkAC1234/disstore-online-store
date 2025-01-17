@@ -166,12 +166,10 @@ class CatalogDetails extends UIReact<
   handleImageClick = (image: string): void => {
     this.setState({ selectedImage: image });
   };
-
   render(): ReactNode {
     if (this.props.loading) {
       return <SpinnerLoaderWrapperFixed />;
     }
-
     if (this.props.error) {
       return (
         <div className={styles["catalog-container"]}>

@@ -32,6 +32,7 @@ export interface Reviews {
   user: User[];
   text: string;
   created_at: string;
+  is_allowed: boolean;
 }
 
 export interface FAQs {

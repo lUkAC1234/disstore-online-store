@@ -1,4 +1,6 @@
 from pathlib import Path
+from django.urls import reverse_lazy
+from django.templatetags.static import static
 
 DEBUG = True
 
@@ -7,6 +9,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$x&!cxodt5vf4)d*#htykxm*_saw*w&!!aorhh@*7i$y@celji'
 
 INSTALLED_APPS = [
+    'unfold',
+    'unfold.contrib.import_export',
+    "unfold.contrib.forms",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -17,6 +22,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "corsheaders",
     'django_filters',
+    'import_export',
     
     'fontawesomefree',
 
@@ -40,10 +46,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny'
     ],
-    
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 2, 
-    
+
     # 'DEFAULT_FILTER_BACKENDS': [
     #     'django_filters.rest_framework.DjangoFilterBackend',
     # ],
@@ -75,6 +78,70 @@ TEMPLATES = [
     },
 ]
 
+UNFOLD = {
+    "SITE_TITLE": "disstore.uz",
+    "SITE_HEADER": "DISSTORE.UZ",
+    "SITE_URL": "/clothes/",
+    "SHOW_HISTORY": True, 
+    "SHOW_VIEW_ON_SITE": True,
+    "COLORS": {
+        "base": {
+            "50": "249 250 251",
+            "100": "243 244 246",
+            "200": "229 231 235",
+            "300": "209 213 219",
+            "400": "156 163 175",
+            "500": "107 114 128",
+            "600": "75 85 99",
+            "700": "55 65 81",
+            "800": "31 41 55",
+            "900": "17 24 39",
+            "950": "3 7 18",
+        },
+        "primary": {
+            "50": "255 255 255", 
+            "100": "255 255 255", 
+            "200": "255 255 255",
+            "300": "255 255 255", 
+            "400": "17 17 17",    
+            "500": "17 17 17",   
+            "600": "17 17 17",   
+            "700": "17 17 17",   
+            "800": "17 17 17",   
+            "900": "17 17 17",    
+        },
+        "font": {
+            "subtle-light": "var(--color-base-500)",  
+            "subtle-dark": "var(--color-base-400)", 
+            "default-light": "var(--color-base-600)", 
+            "default-dark": "var(--color-base-300)", 
+            "important-light": "var(--color-base-900)",  
+            "important-dark": "var(--color-base-100)", 
+        },
+    },
+    "STYLES": [
+        lambda request: static("main/admin/__admin.css"),
+    ],
+    "BORDER_RADIUS": "0.5rem",
+    "SIDEBAR": {
+        "show_search": True,
+        "navigation": [
+            {
+                "separator": True, 
+                "collapsible": True,
+                "title": "Главная навигация",
+                "items": [
+                    {
+                        "title": "Панель управления",
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:index"),
+                    },
+                ],
+            },
+        ],
+    },
+}
+
 WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
@@ -103,7 +170,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'EN-RU'
+LANGUAGE_CODE = 'ru'
 
 # gettext = lambda s: s
 

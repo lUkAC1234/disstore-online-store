@@ -73,6 +73,7 @@
 .header-link.button {
     background: none;
     border: none;
+    color: var(--text-black);
 
     span {
         display: none;
@@ -98,6 +99,10 @@
     box-shadow: 0 0.7rem 0.5rem rgba(0, 0, 0, 0.15);
     margin: 3rem 1rem 0.25rem;
     padding: 1rem;
+
+    &:has(.header-error-container) {
+        grid-template-columns: 1fr;
+    }
 }
 
 .header-link-extra-details-column {
@@ -145,6 +150,7 @@
         svg {
             font-size: 1rem;
             transition: all 0.3s ease;
+            color: var(--text-black);
         }
     }
 
@@ -177,8 +183,8 @@
 }
 
 .header-search-button {
-    border: none;
-    background: none;
+    background: transparent;
+    border: transparent;
     cursor: pointer;
 
     svg {
@@ -229,6 +235,7 @@
 
     svg {
         font-size: 1.25rem;
+        color: var(--text-black);
     }
 }
 
@@ -311,6 +318,7 @@
         svg {
             font-size: 1.25rem;
             transition: all 0.3s ease;
+            color: var(--text-black);
         }
     }
 
