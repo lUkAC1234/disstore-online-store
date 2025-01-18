@@ -7,6 +7,5 @@ export function activeClassNameObserver(pathname: string, className: string): st
         pathWithoutLang += `/${splitted[i]}`;
       }
     }
-    console.log(pathname, className)
     return (pathWithoutLang === pathname) ? `${className} active `: className;
 }

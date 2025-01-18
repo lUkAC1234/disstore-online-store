@@ -29,13 +29,25 @@ class ResultsSetPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
 
     def paginate_queryset(self, queryset, request, view=None):
-        try:
-            return super().paginate_queryset(queryset, request, view)
-        except NotFound:
+        if not hasattr(self, 'paginator'):
             self.paginator = self.django_paginator_class(queryset, self.get_page_size(request))
+        
+        try:
+            paginated_queryset = super().paginate_queryset(queryset, request, view)
+        except NotFound:
             self.page = self.paginator.page(self.paginator.num_pages)
             self.request = request
-            return list(self.page)
+
+        self.total_pages = self.paginator.num_pages
+        self.current_page = self.page.number
+        return list(self.page)
+
+    def get_paginated_response(self, data):
+        response = super().get_paginated_response(data)
+        response.data['total_pages'] = self.total_pages
+        response.data['current_page'] = self.current_page
+        return response
+
         
 class ClothesMainView(ListAPIView):
     serializer_class = ClothesModelSerializer

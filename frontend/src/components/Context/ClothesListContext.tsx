@@ -25,6 +25,7 @@ export interface ClothesListContextState {
     min: number;
     max: number;
     filtersApplied: boolean;
+    title: string;
 }
 
 export interface ClothesListContextProps extends PropsWithChildren { }
@@ -36,6 +37,8 @@ type ResponseTypeClothesFilter = {
     results: ClothItem[];
     price_min: number;
     price_max: number;
+    total_pages: number;
+    current_page: number;
 }
 
 export interface ClothesListActions extends ClothesListContextState {
@@ -46,10 +49,8 @@ export interface ClothesListActions extends ClothesListContextState {
     setLoadingProducts: (setLoadingProducts: boolean) => void;
     setSelectedMin: (value: number) => void;
     setSelectedMax: (value: number) => void;
-    setCurrentPage: (value: number) => void;
     setNextPage: () => void;
     setPrevPage: () => void;
-    setTotalPages: (value: number) => void;
     setCount: (value: number) => void;
     setMin: (value: number) => void;
     setMax: (value: number) => void;
@@ -60,6 +61,7 @@ export interface ClothesListActions extends ClothesListContextState {
     debouncedFetchFilteredProducts: () => Promise<void>;
     resetFilters: () => void;
     setApplyFilters: () => void;
+    setTitle: (value: string) => void;
 }
 
 class ClothesListProvider extends PureComponent<ClothesListContextProps, ClothesListContextState> {
@@ -84,6 +86,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
         prevPage: null,
         totalPages: 1,
         count: 0,
+        title: "",
     };
 
     render() {
@@ -98,10 +101,8 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
                     setLoadingProducts: this.setLoadingProducts,
                     setSelectedMin: this.setSelectedMin,
                     setSelectedMax: this.setSelectedMax,
-                    setCurrentPage: this.setCurrentPage,
                     setNextPage: this.setNextPage,
                     setPrevPage: this.setPrevPage,
-                    setTotalPages: this.setTotalPages,
                     setCount: this.setCount,
                     setMin: this.setMin,
                     setMax: this.setMax,
@@ -112,6 +113,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
                     debouncedFetchFilteredProducts: this.debouncedFetchFilteredProducts,
                     resetFilters: this.resetFilters,
                     setApplyFilters: this.setApplyFilters,
+                    setTitle: this.setTitle,
                 }}
             >
                 {this.props.children}
@@ -141,7 +143,8 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
                 max: data.price_max,
                 selectedMin: data.price_min,
                 selectedMax: data.price_max,
-                totalPages: Math.ceil(data.count / data.results.length),
+                totalPages: data.total_pages,
+                currentPage: data.current_page,
                 count: data.count,
                 nextPage: data.next,
                 prevPage: data.previous,
@@ -224,6 +227,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
                 selectedMin: min,
                 selectedMax: max,
                 currentPage: page,
+                title,
             } = this.state;
 
             const generateQueryString = <T extends { id: number }>(selectedItems: number[], allItems: T[], queryKey: string): string => {
@@ -238,8 +242,8 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
             const sizeQuery = generateQueryString(selectedSizes, sizes, "size");
             const typeQuery = generateQueryString(selectedTypes, types, "types");
             const priceQuery = `price_min=${min}&price_max=${max}`;
-
-            const queryString = [colorQuery, typeQuery, sizeQuery, priceQuery]
+            const titleQuery = `title=${title}`
+            const queryString = [colorQuery, typeQuery, sizeQuery, priceQuery, titleQuery]
                 .filter(Boolean)
                 .join("&");
 
@@ -255,6 +259,8 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
                 previous,
                 count,
                 results,
+                total_pages,
+                current_page,
             }: ResponseTypeClothesFilter = await response.json();
 
             this.setState(prevState => ({
@@ -263,7 +269,8 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
                 prevPage: previous,
                 count,
                 products: results,
-                totalPages: Math.ceil(count / prevState.products.length),
+                totalPages: total_pages,
+                currentPage: current_page,
             }));
 
         } catch (err) {
@@ -370,12 +377,12 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
         }));
     };
 
-    setCurrentPage = (value: number): void => {
+    setTitle = (value: string): void => {
         this.setState((prevState) => ({
             ...prevState,
-            currentPage: value,
+            title: value,
         }));
-    };
+    }
 
     setNextPage = (): void => {
         if (this.state.currentPage < this.state.totalPages) {
@@ -393,13 +400,6 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
                 currentPage: prevstate.currentPage - 1
             }), () => this.setApplyFilters());
         }
-    };
-
-    setTotalPages = (value: number): void => {
-        this.setState((prevState) => ({
-            ...prevState,
-            totalPages: value,
-        }));
     };
 
     setCount = (value: number): void => {

@@ -98,9 +98,9 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
             </button>
             <div className="header-logo-container">
               <NavLink to={`/`}
-              className={() => {
-                return activeClassNameObserver(``, "");
-              }}>
+                className={() => {
+                  return activeClassNameObserver(``, "");
+                }}>
                 <img src={LogoSvg} alt="Logo" />
               </NavLink>
             </div>
@@ -201,7 +201,14 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
                       type="search"
                       placeholder="Поиск по заголовку"
                       name="search"
+                      value={this.props.title}
+                      onChange={(evt) => {
+                        const value = evt.target.value
+                        this.props.setTitle(value)
+                        this.props.setApplyFilters()
+                      }}
                     />
+                    {this.SearchedProductsOverlay}
                   </div>
                 </div>
                 <Link to={`/${lang}/favorites`} className="header-like-link">
@@ -221,6 +228,31 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
     );
   }
 
+  get SearchedProductsOverlay(): ReactNode {
+    const { loading, error, title, products } = this.props;
+
+    if (loading) {
+      return <SpinnerLoader />;
+    }
+
+    if (error) {
+      return <HeaderError
+        error={"Не удалось загрузить данные"}
+        error_details={"К сожалению, произошла ошибка при загрузке данных. Пожалуйста, перезагрузите страницу и попробуйте снова"}
+      />;
+    }
+
+    if (title.length === 0) { return; }
+
+    return products
+      .filter((item) => item.title.toLowerCase().includes(title.toLowerCase()))
+      .map((item) => (
+        <div key={item.id}>
+          <h1>{item.title}</h1>
+        </div>
+      ));
+  }
+
   get linksMobile(): ReactNode {
     const { loading, error } = this.props;
 
@@ -229,17 +261,17 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
     }
 
     if (error) {
-      return <HeaderError 
-                error={"Не удалось загрузить данные"} 
-                error_details={"К сожалению, произошла ошибка при загрузке данных. Пожалуйста, перезагрузите страницу и попробуйте снова"} 
-              />;
+      return <HeaderError
+        error={"Не удалось загрузить данные"}
+        error_details={"К сожалению, произошла ошибка при загрузке данных. Пожалуйста, перезагрузите страницу и попробуйте снова"}
+      />;
     }
 
     if (!this.props.type || this.props.type.length === 0) {
-      return <HeaderError 
-                error={"Не удалось загрузить данные"} 
-                error_details={"К сожалению, произошла ошибка при загрузке данных. Пожалуйста, перезагрузите страницу и попробуйте снова"} 
-              />;
+      return <HeaderError
+        error={"Не удалось загрузить данные"}
+        error_details={"К сожалению, произошла ошибка при загрузке данных. Пожалуйста, перезагрузите страницу и попробуйте снова"}
+      />;
     }
 
     return this.props.type.map(item => (
