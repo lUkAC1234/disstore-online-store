@@ -35,23 +35,22 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
                             {item.discount > 0 && (
                                 <span className={styles["catalog-discount"]}>-{item.discount}%</span>
                             )}
-                            {item?.catalogImages?.[0]?.thumbnail ? (
+                            {item?.catalogImages?.[0]?.thumbnail && (
                                 <img
                                     src={item.catalogImages[0].thumbnail}
                                     alt={item.title || "Рисунок"}
                                     loading="lazy"
                                     decoding="async"
-                                    onLoad={(e) => {
-                                        const imgElement = e.target as HTMLImageElement;
+                                    onLoad={({ target }) => {
                                         const mainImage = item.catalogImages[0]?.image;
                                         if (mainImage) {
-                                            imgElement.src = mainImage;
+                                            const tempImage = new Image();
+                                            tempImage.src = mainImage;
+                                            tempImage.onload = () => (target as HTMLImageElement).src = mainImage;
                                         }
                                     }}
                                 />
-                            ) : (
-                                <SpinnerLoaderWrapper />
-                            )}
+                            ) || <SpinnerLoaderWrapper />}
                         </div>
                         <h2 className={styles["catalog-item-title"]}>
                             {item.title.length > 20 ? `${item.title.slice(0, 20)}...` : item.title}

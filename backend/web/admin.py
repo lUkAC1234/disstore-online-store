@@ -18,6 +18,18 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from import_export.admin import ImportExportModelAdmin
 from unfold.contrib.import_export.forms import ExportForm, ImportForm, SelectableFieldsExportForm
 from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
+from django.contrib.auth.models import Group
+from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
+
+admin.site.unregister(Group) 
+
+@admin.register(Group)
+class CustomGroupAdmin(BaseGroupAdmin, ModelAdmin):
+    pass
+
+
+
+
 @admin.register(UserModel)
 class UserAdmin(BaseUserAdmin, ModelAdmin):
     list_display = ['id', 'username']
@@ -49,7 +61,7 @@ class ClothesModelAdmin(ModelAdmin, ImportExportModelAdmin):
     readonly_fields = ['real_price']
     inlines = [ClothesImageInline]
     import_form_class = ImportForm
-    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
     list_filter = ['created_at', 'title']  
     
       

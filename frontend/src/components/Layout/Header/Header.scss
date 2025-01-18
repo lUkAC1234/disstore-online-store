@@ -57,7 +57,7 @@
         transition: all 0.3s ease;
     }
 
-    &.active::before {
+    &:has(.header-link.active)::before {
         transform: scaleX(1);
     }
 
@@ -143,7 +143,8 @@
         outline: none;
         cursor: pointer;
 
-        &:hover svg {
+        &:hover svg,
+        &.active svg {
             opacity: 0.8;
         }
 
@@ -160,6 +161,7 @@
 }
 
 .header-search-wrapper {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -216,9 +218,103 @@
     }
 }
 
+.header-searched-results-container {
+    position: absolute;
+    top: 4.5rem;
+    left: 0;
+    background-color: var(--text-white);
+    width: 100%;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s ease;
+    padding: 1rem 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    border: 0.075rem solid var(--welcome-border);
+    overflow-y: auto;
+    height: max-content;
+    max-height: 55vh;
+
+    &::-webkit-scrollbar {
+        width: 0.1rem;
+        height: 0.1rem;
+    }
+
+}
+
+.header-searched-item {
+    position: relative;
+    width: 100%;
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
+}
+
+
+.header-searched-link {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: var(--z-index-1);
+}
+
+
+.header-searched-item-image-container {
+    background-color: var(--clothes-image-background);
+    border-radius: 1rem;
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    img {
+        width: 100%;
+        object-fit: cover;
+        aspect-ratio: 1 / 1;
+        border-radius: 1rem;
+    }
+}
+
+.header-searched-item-title {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.header-searched-item-pricing {
+    display: grid;
+    margin-top: 1rem;
+}
+
+.header-searched-item-current-price {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.header-searched-item-original-price {
+    text-decoration: line-through;
+    color: var(--text-p);
+    font-size: 0.9rem;
+}
+
+.header-searched-item-discount {
+    color: var(--clothes-discount-number);
+    background: var(--clothes-discount-background);
+    font-size: 0.8rem;
+    width: fit-content;
+    border-radius: 1rem;
+    padding: 0.25rem 0.5rem;
+    margin-left: auto;
+}
+
 @media screen and (min-width: 650px) {
     .header-search-container:focus-within .header-search-wrapper {
         border-color: var(--text-black);
+        border-radius: 0.5rem;
+
+        .header-searched-results-container {
+            transform: scaleY(1);
+        }
     }
 
     .header-search-container:focus-within .header-search-button svg {
@@ -263,6 +359,7 @@
         box-shadow: -0.3rem 0 0.9rem rgba(0, 0, 0, 0.2);
         transform: translateX(-100%);
         transition: all 0.5s ease;
+        z-index: var(--z-index-1);
 
         @media screen and (max-width: 992px) {
             width: 70%;
@@ -276,13 +373,14 @@
             width: 100%;
         }
     }
-    
+
     .header-links-wrapper {
         gap: 0;
     }
 
     .header-link-list {
         border-bottom: 0.1rem solid var(--header-search-background);
+
         .header-link,
         span {
             padding: 1rem;
@@ -336,6 +434,7 @@
         text-align: start;
         cursor: pointer;
         padding: 0;
+
         span {
             display: flex;
             justify-content: space-between;
@@ -362,13 +461,13 @@
         transition: all 0.5s ease;
     }
 
-    body:has(.header-link.button.active) .header-link-extra-details-container {
+    body:has(.header-link.button.activated) .header-link-extra-details-container {
         opacity: 1;
         visibility: visible;
         transform: translateX(0);
         z-index: var(--z-index-7);
     }
-    
+
     .header-link-extra-details-wrapper {
         display: block;
         margin: 0;
@@ -376,7 +475,7 @@
         overflow-y: auto;
         padding: 0;
     }
-    
+
     .header-link-extra-details-column {
         position: relative;
         display: flex;
@@ -400,8 +499,8 @@
             transition: all 0.3s ease;
         }
 
-      
-        
+
+
         &:hover::before {
             transform: scaleX(1);
         }
@@ -410,8 +509,8 @@
             background: var(--header-search-background);
             display: block;
         }
-    }   
-    
+    }
+
     .header-extra-link-image-container {
         display: none;
     }

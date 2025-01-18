@@ -20,6 +20,7 @@ import { ClothesListActions } from "components/Context/ClothesListContext";
 import SpinnerLoader from "components/Loaders/SpinnerLoader";
 import HeaderError from "./HeaderError/HeaderError";
 import { activeClassNameObserver } from "utils/hooks/NavActiveClassObserver";
+import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 
 const lang = i18next.language;
 
@@ -84,6 +85,12 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
     this.setState({ activeLink: null });
   };
 
+  searchInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const value = evt.target.value;
+    this.props.setTitle(value);
+    this.props.setApplyFilters();
+  }
+
   render() {
     const { activeLink } = this.state;
     return (
@@ -118,14 +125,14 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
                 <ul className="header-links-wrapper">
                   <li className="header-link-list">
                     <button
-                      className={`header-link button ${activeLink === "catalog" ? "active" : ""
+                      className={`header-link button ${activeLink === "catalog" ? "activated" : ""
                         }`}
                       onClick={() => this.handleLinkClick("catalog")}
                     >
                       <NavLink
                         to={`/${lang}/catalog`}
                         className={() => {
-                          return activeClassNameObserver(`/catalog`, "");
+                          return activeClassNameObserver(`/catalog`, "header-link");
                         }}>Каталог
                       </NavLink>
                       <span>
@@ -143,10 +150,10 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
                         </button>
                         <NavLink
                           to={`/${lang}/catalog`}
-                          className={() => {
-                            return activeClassNameObserver(`/${lang}/catalog`, "header-link-extra-details-column first");
-                          }}
                           onClick={this.closeEntireMenu}
+                          className={() => {
+                            return activeClassNameObserver(`/catalog`, "header-link-extra-details-column first");
+                          }}
                         >
                           Каталог
                         </NavLink>
@@ -155,20 +162,24 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
                     </div>
                   </li>
                   <li className="header-link-list">
-                    <Link
-                      className="header-link"
+                    <NavLink
+                      className={() => {
+                        return activeClassNameObserver(`/contacts`, "header-link");
+                      }}
                       to={`/${lang}/contacts`}
                       onClick={this.closeEntireMenu}>
                       Контакты
-                    </Link>
+                    </NavLink>
                   </li>
                   <li className="header-link-list">
-                    <Link
-                      className="header-link"
+                    <NavLink
+                      className={() => {
+                        return activeClassNameObserver(`/about`, "header-link");
+                      }}
                       to={`/${lang}/about`}
                       onClick={this.closeEntireMenu}>
                       О нас
-                    </Link>
+                    </NavLink>
                   </li>
                 </ul>
               </div>
@@ -202,24 +213,37 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
                       placeholder="Поиск по заголовку"
                       name="search"
                       value={this.props.title}
-                      onChange={(evt) => {
-                        const value = evt.target.value
-                        this.props.setTitle(value)
-                        this.props.setApplyFilters()
-                      }}
+                      onChange={this.searchInputChange}
                     />
+                  </div>
+                  <div className="header-searched-results-container">
                     {this.SearchedProductsOverlay}
                   </div>
                 </div>
-                <Link to={`/${lang}/favorites`} className="header-like-link">
+                <NavLink
+                  to={`/${lang}/favorites`}
+                  className={() => {
+                    return activeClassNameObserver(`/favorites`, "header-like-link");
+                  }}
+                >
                   <FontAwesomeIcon icon={faHeart} />
-                </Link>
-                <Link to={`/${lang}/profile`} className="header-profile-link">
+                </NavLink>
+                <NavLink
+                  to={`/${lang}/profile`}
+                  className={() => {
+                    return activeClassNameObserver(`/profile`, "header-profile-link");
+                  }}
+                >
                   <FontAwesomeIcon icon={faUser} />
-                </Link>
-                <Link to={`/${lang}/cart`} className="header-shopping-cart-link">
+                </NavLink>
+                <NavLink
+                  to={`/${lang}/cart`}
+                  className={() => {
+                    return activeClassNameObserver(`/cart`, "header-shopping-cart-link");
+                  }}
+                >
                   <FontAwesomeIcon icon={faCartShopping} />
-                </Link>
+                </NavLink>
               </div>
             </div>
           </div>
@@ -242,14 +266,58 @@ class Header extends PureComponent<ClothesListActions, HeaderState> {
       />;
     }
 
-    if (title.length === 0) { return; }
+    if (title.length === 0) {
+      return <h4>Пожалуйста, введите запрос, чтобы найти подходящие товары.</h4>;
+    }
 
     return products
       .filter((item) => item.title.toLowerCase().includes(title.toLowerCase()))
       .map((item) => (
-        <div key={item.id}>
-          <h1>{item.title}</h1>
-        </div>
+        <>
+          <div className="header-searched-item">
+            <Link
+              className="header-searched-link"
+              to={`/${lang}/catalog/clothes/${item.slug}`}
+              key={item.id}
+            ></Link>
+            <div className="header-searched-item-image-container">
+              {item?.catalogImages?.[0]?.thumbnail && (
+                <img
+                  src={item.catalogImages[0].thumbnail}
+                  alt={item.title || "Рисунок"}
+                  loading="lazy"
+                  decoding="async"
+                  onLoad={({ target }) => {
+                    const mainImage = item.catalogImages[0]?.image;
+                    if (mainImage) {
+                      const tempImage = new Image();
+                      tempImage.src = mainImage;
+                      tempImage.onload = () => (target as HTMLImageElement).src = mainImage;
+                    }
+                  }}
+                />
+              ) || <SpinnerLoaderWrapper />}
+            </div>
+            <h4 className="header-searched-item-title">{item.title}</h4>
+            <div className={"header-searched-item-pricing"}>
+              <span className={"header-searched-item-current-price"}>
+                {item?.real_price.toLocaleString('en-US')} сум
+              </span>
+              {item?.discount > 0 ? (
+                <>
+                  <span className={"header-searched-item-original-price"}>
+                    {item?.price.toLocaleString('en-US')} сум
+                  </span>
+                  <span className={"header-searched-item-discount"}>
+                    -{item?.discount}%
+                  </span>
+                </>
+              ) : (
+                null
+              )}
+            </div>
+          </div>
+        </>
       ));
   }
 

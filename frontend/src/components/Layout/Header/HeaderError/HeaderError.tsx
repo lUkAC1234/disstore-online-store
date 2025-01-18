@@ -4,8 +4,8 @@ import { PureComponent, ReactNode } from "react";
 import { faImage } from "@fortawesome/free-regular-svg-icons";
 
 interface HeaderErrorState {
-    error: string;
-    error_details: string;
+    error?: string;
+    error_details?: string;
 }
 
 class HeaderError extends PureComponent<HeaderErrorState> {

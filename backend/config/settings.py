@@ -79,7 +79,7 @@ TEMPLATES = [
 ]
 
 UNFOLD = {
-    "SITE_TITLE": "disstore.uz",
+    "SITE_TITLE": "DISSTORE.UZ",
     "SITE_HEADER": "DISSTORE.UZ",
     "SITE_URL": "/clothes/",
     "SHOW_HISTORY": True, 
