@@ -160,44 +160,52 @@ class ClothesSizeModel(models.Model):
 
 class ClothesImageModel(models.Model):
     product = models.ForeignKey(
-        ClothesModel, 
-        on_delete=models.CASCADE, 
-        related_name='catalogImages', 
+        'ClothesModel',
+        on_delete=models.CASCADE,
+        related_name='catalogImages',
         verbose_name=_("Продукт")
     )
     image = models.ImageField(_("Изображение"), upload_to='clothes/images/%Y/%m/%d/')
     thumbnail = models.ImageField(_("Миниатюра"), upload_to='clothes/images/thumbnails/%Y/%m/%d/', blank=True, null=True)
 
     def save(self, *args, **kwargs):
+        self.image = self.convert_to_webp(self.image)
+
         if not self.thumbnail:
             self.thumbnail = self.make_thumbnail(self.image)
+
         super().save(*args, **kwargs)
+
+    def convert_to_webp(self, image):
+        img = Image.open(image)
+
+        for quality in range(95, 0, -5):
+            buffer = BytesIO()
+            img.save(buffer, format='WEBP', quality=quality)
+            size_in_kb = buffer.tell() / 1024
+            if size_in_kb <= 80: 
+                return ContentFile(buffer.getvalue(), name=f"{image.name.split('.')[0]}.webp")
+
+        buffer = BytesIO()
+        img.save(buffer, format='WEBP', quality=10)
+        return ContentFile(buffer.getvalue(), name=f"{image.name.split('.')[0]}.webp")
 
     def make_thumbnail(self, image):
         img = Image.open(image)
-        
-        if img.mode == 'RGBA':
-            background = Image.new('RGB', img.size, (255, 255, 255))  
-            background.paste(img, mask=img.split()[3]) 
-            img = background
-        elif img.mode != 'RGB':
-            img = img.convert('RGB')
-        
-        target_width = 10
+
+        target_width = 150
         aspect_ratio = img.width / img.height
         target_height = int(target_width / aspect_ratio)
-        
         img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
-        
+
         thumb_io = BytesIO()
-        img.save(thumb_io, format='JPEG', quality=10)  
-        thumbnail = ContentFile(thumb_io.getvalue(), name=f"thumb_{image.name}")
-        return thumbnail
+        img.save(thumb_io, format='WEBP', quality=80)
+        return ContentFile(thumb_io.getvalue(), name=f"thumb_{image.name.split('.')[0]}.webp")
+
 
     def __str__(self):
         return f"Рисунок для {self.product.title}"
-    
+
     class Meta:
         verbose_name = _("Изображение")
         verbose_name_plural = _("Изображения")
-        ordering = ('-id',)

@@ -10,6 +10,7 @@ import Footer from "../Footer/Footer";
 
 // Lazy-loaded components
 const Home = lazy(() => import("components/Views/Home/Home"));
+const Aboutus = lazy(() => import("components/Views/AboutUs/AboutUs"));
 const CatalogList = lazy(() => import("components/Views/Catalog/CatalogList"));
 const ClothesDetails = lazy(() => import("components/Views/Catalog/CatalogDetails/CatalogDetails"));
 const Error404 = lazy(() => import("components/Views/Errors/error404/404"));
@@ -36,6 +37,8 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
       ["/", { path: "/", element: <Navigate to={`/${this.props.i18n.language}`} />, index: true }],
       // Home page for each language
       ["/:lang", { path: "/:lang", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Home /></Suspense>, index: true }],
+      // About us page for each language
+      ["/:lang/about/us", { path: "/:lang/about/us", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Aboutus /></Suspense> }],
       // Catalog list page
       ["/:lang/catalog", { path: "/:lang/catalog", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><CatalogList /></Suspense> }],
       // Clothes details page
