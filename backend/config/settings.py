@@ -52,6 +52,9 @@ REST_FRAMEWORK = {
     # ],
 }
 
+FILE_CHARSET = "utf-8"
+DEFAULT_CHARSET = "utf-8"
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'

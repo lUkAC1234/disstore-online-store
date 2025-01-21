@@ -20,10 +20,15 @@ class ClothesModelFilter(django_filters.FilterSet):
         Generic filter for multiple IDs.
         Automatically determines the related field to filter.
         """
+        from urllib.parse import unquote
+
         param_values = self.request.GET.getlist(name)
         if param_values:
             try:
-                ids = [int(id.strip()) for id in param_values if id.strip().isdigit()]
+                # Decode URL-encoded values
+                decoded_values = [unquote(value).strip() for value in param_values]
+                ids = [int(id) for id in decoded_values if id.isdigit()]
+                
                 field_lookup = {
                     "color": "colors__id__in",
                     "size": "sizes__id__in",

@@ -14,6 +14,7 @@ const Aboutus = lazy(() => import("components/Views/AboutUs/AboutUs"));
 const CatalogList = lazy(() => import("components/Views/Catalog/CatalogList"));
 const ClothesDetails = lazy(() => import("components/Views/Catalog/CatalogDetails/CatalogDetails"));
 const Error404 = lazy(() => import("components/Views/Errors/error404/404"));
+const Cart = lazy(() => import("components/Views/Cart/Cart"));
 
 @COMPONENT<RouterView>({
   template: (_this) => {
@@ -43,6 +44,7 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
       ["/:lang/catalog", { path: "/:lang/catalog", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><CatalogList /></Suspense> }],
       // Clothes details page
       ["/:lang/catalog/clothes/:id", { path: "/:lang/catalog/clothes/:slug", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><ClothesDetails /></Suspense> }],
+      ["/:lang/cart", { path: "/:lang/cart", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Cart /></Suspense> }],
       // 404 page for unmatched routes
       ["/*", { path: "/*", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Error404 /></Suspense> }],
     ]),

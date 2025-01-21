@@ -1,0 +1,192 @@
+@use "assets/main/styles/scss/components/_components";
+
+.cart-container {
+    padding: 3rem 6rem;
+}
+
+.cart-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+}
+
+.cart-content-container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.cart-details {
+    border: 0.075rem solid var(--welcome-border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    width: 100%;
+}
+
+.cart-item {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.cart-item-title  {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.delete-from-cart-button {
+    position: absolute;
+    border: transparent;
+    background: transparent;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+
+    svg {
+        font-size: 1.25rem;
+        color: var(--clothes-discount-number);
+    }
+}
+
+.cart-item-image-container {
+    width: 7rem;
+    height: 7rem;
+    overflow: hidden;
+    background-color: var(--clothes-image-background);
+    border-radius: 0.5rem;
+    border: 0.075rem solid var(--clothes-image-background);
+
+    img {
+        width: 7rem;
+        height:7rem;
+        object-fit: cover;
+        border-radius: 0.5rem;
+    }
+}
+
+.cart-details-info-container {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.cart-details-item-related-fixes {
+    display: flex;
+    flex-flow: column;
+    margin-block: 0.5rem;
+}
+
+.related-fixes-name {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--text-price);
+
+    strong {
+        font-weight: 500;
+    }
+}
+
+.cart-item-price-quantity-container {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    align-items: end;
+    width: 100%;
+}
+
+.cart-item-price {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.hr-line {
+    height: 0.05rem;
+    background: var(--welcome-border);
+    margin-block: 1rem;
+}
+
+.cart-quantity-controller {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    background-color: var(--header-search-background);
+    padding: 0.5rem 1rem;
+    width: 6rem;
+    border-radius: 3.5rem;
+}
+
+.quantity-btn {
+    border: transparent;
+    background: transparent;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.quantity-value {
+    font-size: 0.9rem;
+}
+
+.cart-status-container {
+    padding: 1rem;
+    border: 0.075rem solid var(--welcome-border);
+    border-radius: 1.5rem;
+    height: max-content;
+    width: 30rem;
+}
+
+.cart-status-subtitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.cart-status-summary-container {
+    display: grid;
+    gap: 1rem;
+}
+
+.cart-status-summary-item {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+}
+
+.cart-status-summary-name {
+    font-size: 1rem;
+    color: var(--text-price);
+}
+
+.cart-status-summary-price {
+    font-size: 1.25rem;
+    font-weight: 600;
+
+    &.discount {
+        color: var(--clothes-discount-number);
+    }
+}
+
+.checkout-link {
+    @extend .primary-button;
+    text-align: center;
+    font-size: 1rem;
+}
+
+@media screen and (max-width: 2000px) {
+    .cart-container {
+        padding-inline: 1rem;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .cart-content-container {
+        flex-flow: column;
+    }
+
+    .cart-status-container {
+        width: 100%;
+    }
+}
+
+
