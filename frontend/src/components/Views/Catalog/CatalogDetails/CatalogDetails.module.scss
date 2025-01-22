@@ -53,6 +53,8 @@
     height: 28rem;
     background-color: var(--clothes-image-background);
     border-radius: 1.5rem;
+    overflow: hidden;
+    border: 0.1rem solid var(--welcome-border);
     img {
         width: 30rem;
         height: 28rem;

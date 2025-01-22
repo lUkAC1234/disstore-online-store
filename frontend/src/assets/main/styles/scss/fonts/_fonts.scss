@@ -1,8 +1,12 @@
 @use 'montserrat.scss';
+@use 'gteEstiPro.scss';
 
-$font: "Montserrat", serif;
+$Montserratfont: "Montserrat", serif;
+$boldFont: "GT Eesti Pro Display", arial, sans-serif;
+$textFont: "GT Eesti Pro Text", arial, sans-serif;
 
 :root {
-    --font: #{$font} !important;
+    --boldFont: #{$boldFont} !important;
+    --textFont: #{$textFont} !important;
 }
 

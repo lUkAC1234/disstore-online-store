@@ -1,0 +1,67 @@
+// Local Font Paths
+$font-path: 'assets/main/fonts/gteEstiPro/';
+
+// Font Variations Map
+$gteesti-fonts: (
+  'text': (
+    'thin-italic': ('woff2', 'woff', 'ttf'),
+    'medium': ('woff2', 'woff', 'ttf'),
+    'light-italic': ('woff2', 'woff', 'ttf'),
+    'bold': ('woff2', 'woff', 'ttf'),
+    'thin': ('woff2', 'woff', 'ttf'),
+    'regular': ('woff2', 'woff', 'ttf'),
+    'medium-italic': ('woff2', 'woff', 'ttf'),
+    'light': ('woff2', 'woff', 'ttf'),
+    'ultralight-italic': ('woff2', 'woff', 'ttf'),
+    'bold-italic': ('woff2', 'woff', 'ttf')
+  ),
+  'display': (
+    'bold': ('woff2', 'woff', 'ttf'),
+    'thin': ('woff2', 'woff', 'ttf'),
+    'light': ('woff2', 'woff', 'ttf'),
+    'medium': ('woff2', 'woff', 'ttf'),
+    'regular-italic': ('woff2', 'woff', 'ttf'),
+    'light-italic': ('woff2', 'woff', 'ttf'),
+    'ultralight': ('woff2', 'woff', 'ttf'),
+    'ultralight-italic': ('woff2', 'woff', 'ttf'),
+    'ultrabold': ('woff2', 'woff', 'ttf'),
+    'ultrabold-italic': ('woff2', 'woff', 'ttf'),
+    'bold-italic': ('woff2', 'woff', 'ttf')
+  )
+);
+
+// Font Weights Map
+$font-weights: (
+  thin: 100,
+  ultralight: 200,
+  light: 300,
+  regular: 400,
+  medium: 500,
+  bold: 700,
+  ultrabold: 800
+);
+
+// Generate Font Faces
+@each $category, $styles in $gteesti-fonts {
+  @each $style, $formats in $styles {
+    @font-face {
+      font-family: "GT Eesti Pro #{$category}";
+      src: url("#{$font-path}GTEestiPro#{$category}-#{$style}.eot");
+      src: local("GT Eesti Pro #{$category} #{$style}"),
+           local("GTEestiPro#{$category}-#{$style}"),
+           url("#{$font-path}GTEestiPro#{$category}-#{$style}.eot?#iefix") format("embedded-opentype"),
+           url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 1)}") format("#{nth($formats, 1)}"),
+           url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 2)}") format("#{nth($formats, 2)}"),
+           url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 3)}") format("#{nth($formats, 3)}");
+      font-weight: map-get(
+        $font-weights,
+        if(
+          str-index($style, '-') != null,
+          unquote(str-slice($style, 1, str-index($style, '-') - 1)),
+          unquote($style)
+        )
+      );
+      font-style: if(str-index($style, 'italic'), italic, normal);
+    }
+  }
+}

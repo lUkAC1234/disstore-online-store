@@ -302,15 +302,15 @@
 
 .catalog-image-container {
     position: relative;
-    overflow: hidden;
     width: 100%;
     aspect-ratio: 1 / 1;
     border-radius: 1.5rem;
     background: var(--clothes-image-background);
+    overflow: hidden;
 
     img {
         width: 100%;
-        aspect-ratio: 1 / 1;
+        height: 100%;
         border-radius: 1.5rem;
         object-fit: cover;
         background: var(--clothes-image-background);
