@@ -362,10 +362,10 @@
 }
 
 .catalog-real-price {
-    background: var(--text-black);
+    background: var(--clothes-discount-number);
     color: var(--text-white);
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 3.5rem;
 }
 
 .catalog-price {
@@ -376,8 +376,8 @@
 
 .catalog-discount {
     position: absolute;
-    color: var(--clothes-discount-number);
-    background: var(--clothes-discount-background);
+    color: var(--text-white);
+    background: var(--clothes-discount-number);
     padding: 0.25rem 1rem;
     border-radius: 3.5rem 0 0 3.5rem;
     font-size: 1.25rem;

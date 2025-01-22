@@ -201,7 +201,6 @@
     svg {
         width: 1.5rem;
         height: 1.5rem;
-        color: var(--text-icon);
         transition: all 0.3s ease;
     }
 
@@ -318,6 +317,7 @@
 
 .header-searched-item-current-price {
     font-weight: 600;
+    color: var(--clothes-discount-number);
 }
 
 .header-searched-discount-price-container {
@@ -333,8 +333,8 @@
 
 .header-searched-item-discount {
     margin-left: auto;
-    background: var(--clothes-discount-background);
-    color: var(--clothes-discount-number);
+    background: var(--clothes-discount-number);
+    color: var(--text-white);
     padding: 0.25rem 0.75rem;
     border-radius: 1.5rem;
 }
@@ -348,8 +348,8 @@
         border-color: var(--text-black);
     }
 
-    .header-search-container:focus-within .header-search-button svg {
-        color: var(--text-black);
+    .header-search-container:focus-within .header-search-button svg path {
+        fill: var(--text-black);
     }
 }
 
@@ -581,10 +581,10 @@
 
     .header-search-container {
 
-        a svg,
-        svg {
+        a svg path,
+        svg path {
             font-size: 1.25rem;
-            color: var(--text-black);
+            fill: var(--text-black);
         }
     }
 
@@ -599,6 +599,7 @@
         box-shadow: -0.3rem 0 0.9rem rgba(0, 0, 0, 0.2);
         transform: translateX(100%);
         transition: all 0.5s ease;
+        overflow-y: auto;
 
         @media screen and (max-width: 500px) {
             width: 100%;
