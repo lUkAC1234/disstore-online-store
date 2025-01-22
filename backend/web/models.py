@@ -137,7 +137,8 @@ class TypesModel(models.Model):
         ordering = ('-id',)
         
 class ClothesColorModel(models.Model):
-    color = models.CharField(_("Цвет"), max_length=100)
+    name= models.CharField(_("Названия цвета"), max_length=100)
+    color= models.CharField(_("Цвет"), max_length=100)
     
     def __str__(self):
         return self.color

@@ -183,13 +183,17 @@ class CatalogDetails extends UIReact<
         <section className={styles["catalog-section"]}>
           {this.props.loading ? (
             <SpinnerLoaderWrapperFixed />
-          ) : this.product}
+          ) :
+            <>
+              {this.product}
+              <NavigationSection
+                long_description={this.props.data?.long_description}
+                reviews={this.props.data?.reviews}
+                faqs={this.props.data?.faqs}
+              />
+            </>
+          }
         </section>
-        <NavigationSection
-          long_description={this.props.data?.long_description}
-          reviews={this.props.data?.reviews}
-          faqs={this.props.data?.faqs}
-        />
       </>
     );
   }

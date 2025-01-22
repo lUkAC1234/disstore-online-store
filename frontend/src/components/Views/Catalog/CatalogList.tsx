@@ -6,14 +6,11 @@ import UIReact from "utils/classes/UIReact";
 import { withContext } from "components/Context/ContextInjector";
 import { ClothesListContext, UserContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
-import { Size, Clothestypes, Color } from "components/Context/ClothesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
-import { fetchFilters, fetchFilteredProducts } from "./CatalogList.utils.ts";
 import RangeSliderDual from "components/RangeSlider/RangeSliderDual.tsx";
-import { debounce } from "utils/hooks/debounce.ts";
 import CatalogErrorPage from "./CatalogError/CatalogErrorPage.tsx";
 import CatalogPagination from "./CatalogPagination/CatalogPagination.tsx";
 import CatalogProducts from "./CatalogProductsList/Products.tsx";
@@ -23,6 +20,8 @@ const lang: string = i18next.language;
 
 interface CatalogState {
   isFilterActive: boolean;
+  activeColors: boolean;
+  activeSizes: boolean;
 }
 
 interface CatalogListProps extends ClothesListActions, UserContextActions { }
@@ -30,6 +29,8 @@ interface CatalogListProps extends ClothesListActions, UserContextActions { }
 class CatalogList extends UIReact<CatalogListProps, CatalogState> {
   state: CatalogState = {
     isFilterActive: false,
+    activeColors: true,
+    activeSizes: true,
   };
 
   componentDidMount() {
@@ -42,6 +43,14 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
   toggleFilter = () => {
     this.setState((prevState) => ({ isFilterActive: !prevState.isFilterActive }));
   };
+
+  toggleColors = () => {
+    this.setState((prevState) => ({ activeColors: !prevState.activeColors }));
+  }
+
+  toggleSizes = () => {
+    this.setState((prevState) => ({ activeSizes: !prevState.activeSizes }));
+  }
 
   filtersHandleClickOutside = (event) => {
     const filterContainer = document.querySelector(`.${styles["catalog-filter-container"]}`);
@@ -146,19 +155,40 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
               </div>
               <div className={styles["hr-line"]}></div>
               <div className={styles["filters-colors-list"]}>
-                <h3 className={styles["filters-colors-title"]}>Цвета</h3>
+                <button
+                  className={`${styles["filters-colors-head-button"]} ${this.state.activeColors ? styles["active"] : ""
+                    }`}
+                  onClick={() => this.toggleColors()}
+                >
+                  <h3 className={styles["filters-colors-title"]}>Цвета</h3>
+                  <FontAwesomeIcon icon={faAngleRight} />
+                </button>
                 <div className={styles["filters-color-wrapper"]}>
                   {colors.length > 0 ? (
                     colors.map((item) => (
                       <button
                         key={item.id}
-                        className={`${styles["filters-color-column"]} ${this.props.selectedColors.includes(item.id) ? styles["active"] : ""
-                          }`}
-                        style={{
-                          backgroundColor: item.color,
-                        }}
                         onClick={() => this.props.handleFilterSelection("selectedColors", item.id)}
-                      ></button>
+                        className={
+                          `
+                          ${styles["filters-color-button"]} 
+                          ${this.props.selectedColors.includes(item.id) ? styles["active"] : ""}
+                          `
+                        }
+                      >
+                        <div
+                          className={
+                            `
+                            ${styles["filters-color"]} 
+                            ${this.props.selectedColors.includes(item.id) ? styles["active"] : ""}
+                            `
+                          }
+                          style={{
+                            backgroundColor: item.color,
+                          }}>
+                        </div>
+                        <span className={styles['filters-color-name']}>{item.name}</span>
+                      </button>
                     ))
                   ) : (
                     <h4 className={styles["filter-error"]}>
@@ -169,7 +199,14 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
               </div>
               <div className={styles["hr-line"]}></div>
               <div className={styles["filters-sizes-list"]}>
-                <h3 className={styles["filters-sizes-title"]}>Размеры</h3>
+                <button
+                  className={`${styles["filters-sizes-head-button"]} ${this.state.activeSizes ? styles["active"] : ""
+                    }`}
+                  onClick={() => this.toggleSizes()}
+                >
+                  <h3 className={styles["filters-sizes-title"]}>Размеры</h3>
+                  <FontAwesomeIcon icon={faAngleRight} />
+                </button>
                 <div className={styles["filters-sizes-wrapper"]}>
                   {sizes.length > 0 ? (
                     sizes.map((item) => (

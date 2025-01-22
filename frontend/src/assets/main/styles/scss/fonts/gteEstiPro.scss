@@ -1,7 +1,8 @@
-// Local Font Paths
+@use "sass:map";
+@use "sass:string";
+
 $font-path: 'assets/main/fonts/gteEstiPro/';
 
-// Font Variations Map
 $gteesti-fonts: (
   'text': (
     'thin-italic': ('woff2', 'woff', 'ttf'),
@@ -30,7 +31,6 @@ $gteesti-fonts: (
   )
 );
 
-// Font Weights Map
 $font-weights: (
   thin: 100,
   ultralight: 200,
@@ -41,7 +41,6 @@ $font-weights: (
   ultrabold: 800
 );
 
-// Generate Font Faces
 @each $category, $styles in $gteesti-fonts {
   @each $style, $formats in $styles {
     @font-face {
@@ -53,15 +52,15 @@ $font-weights: (
            url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 1)}") format("#{nth($formats, 1)}"),
            url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 2)}") format("#{nth($formats, 2)}"),
            url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 3)}") format("#{nth($formats, 3)}");
-      font-weight: map-get(
+      font-weight: map.get(
         $font-weights,
         if(
-          str-index($style, '-') != null,
-          unquote(str-slice($style, 1, str-index($style, '-') - 1)),
-          unquote($style)
+          string.index($style, '-') != null,
+          string.unquote(string.slice($style, 1, string.index($style, '-') - 1)),
+          string.unquote($style)
         )
       );
-      font-style: if(str-index($style, 'italic'), italic, normal);
+      font-style: if(string.index($style, 'italic'), italic, normal);
     }
   }
 }

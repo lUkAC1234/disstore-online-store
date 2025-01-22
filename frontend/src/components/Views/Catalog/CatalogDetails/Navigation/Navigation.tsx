@@ -1,3 +1,4 @@
+import styles from './Navigation.module.scss';
 import { PureComponent, ReactNode } from "react";
 import Details from "./Details";
 import FAQs from "./FAQs";
@@ -19,23 +20,25 @@ class NavigationSection extends PureComponent<NavigationSectionProps, Navigation
     render(): ReactNode {
         const { long_description, reviews, faqs } = this.props;
         return (
-            <TransformTransition
-                fullwidth
-                list={[
-                    {
-                        title: "Details",
-                        content: <Details detailsText={long_description} />,
-                    },
-                    {
-                        title: "Review",
-                        content: <Review reviews={reviews} />,
-                    },
-                    {
-                        title: "FAQs",
-                        content: <FAQs faqs={faqs} />,
-                    },
-                ]}
-            />
+            <div className={styles["catalog-details-navigation-wrapper"]}>
+                <TransformTransition
+                    fullwidth
+                    list={[
+                        {
+                            title: "Полной описание",
+                            content: <Details detailsText={long_description} />,
+                        },
+                        {
+                            title: "Отзывы",
+                            content: <Review reviews={reviews} />,
+                        },
+                        {
+                            title: "Вопросы",
+                            content: <FAQs faqs={faqs} />,
+                        },
+                    ]}
+                />
+            </div>
         );
     }
 }

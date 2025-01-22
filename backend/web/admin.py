@@ -68,8 +68,8 @@ class ClothesModelAdmin(ModelAdmin, ImportExportModelAdmin):
     
 @admin.register(ClothesColorModel)
 class ClothesColorModelAdmin(ModelAdmin, ImportExportModelAdmin):
-    list_display = ['id', 'hex', 'color']
-    list_display_links = ['id', 'hex', 'color']
+    list_display = ['id', 'hex', 'name', 'color']
+    list_display_links = ['id', 'hex', 'name', 'color']
     search_fields = ['hex']
     import_form_class = ImportForm
     export_form_class = ExportForm

@@ -18,6 +18,11 @@
     border-radius: 1rem;
     padding: 3rem 1rem;
 
+
+    * {
+        font-family: var(--primary-font);
+    }
+
     &::-webkit-scrollbar {
         width: 0.15rem;
         height: 0.15rem;
@@ -92,24 +97,74 @@
     }
 }
 
-.filters-colors-title,
-.filters-sizes-title,
 .price-filter-subtitle {
     font-size: 1.125rem;
     margin-block: 1rem;
 }
 
+.filters-sizes-title,
+.filters-colors-title {
+    font-size: 1.125rem;
+}
+
+.filters-colors-head-button,
+.filters-sizes-head-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    border: transparent;
+    background-color: transparent;
+    cursor: pointer;
+
+    svg {
+        font-size: 1rem;
+    }
+
+    &.active svg {
+        transform: rotate(90deg);
+    }
+}
+
+.filters-colors-list:has(.filters-colors-head-button.active) .filters-color-wrapper {
+    display: flex;
+}
+
+.filters-sizes-list:has(.filters-sizes-head-button.active) .filters-sizes-wrapper {
+    display: flex !important;
+}
+
 .filters-color-wrapper,
 .filters-sizes-wrapper {
-    display: flex;
+    display: none;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.filters-color-column {
+.filters-color-wrapper {
+    flex-flow: column;
+}
+
+.filters-color-button {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border-radius: 0.5rem;
+    border: transparent;
+
+    &.active .filters-color-name {
+        color: var(--clothes-discount-number);
+    }
+}
+
+.filters-color {
     width: 2.5rem;
     height: 2.5rem;
-    border-radius: 0.5rem;
+    border-radius: 50%;
     border: 0.1rem solid var(--text-white);
     outline: 0.1rem solid var(--welcome-border);
     cursor: pointer;
@@ -120,6 +175,11 @@
     }
 }
 
+.filters-color-name {
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
 
 .filters-sizes-column {
     display: flex;
@@ -257,10 +317,7 @@
 
 .catalog-item-link {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     z-index: var(--z-index-1);
 }
 
@@ -327,6 +384,7 @@
 .catalog-item-description {
     margin-block: 0.5rem 1rem;
     font-size: 0.9rem;
+    font-family: var(--boldFont);
     color: var(--text-p);
 }
 
@@ -344,6 +402,7 @@
     color: var(--text-p);
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
+    font-family: var(--boldFont);
 
     .count {
         color: var(--text-black);
@@ -357,8 +416,9 @@
     align-items: center;
     width: 100%;
     gap: 0.1rem 1rem;
-    font-weight: 600;
     font-size: 1.25rem;
+    font-family: var(--boldFont);
+    font-weight: 900;
 }
 
 .catalog-real-price {
@@ -370,18 +430,20 @@
 
 .catalog-price {
     color: var(--text-price);
-    text-decoration: line-through;
     font-size: 1.125rem;
+    text-decoration: line-through;
 }
 
 .catalog-discount {
     position: absolute;
     color: var(--text-white);
     background: var(--clothes-discount-number);
+    font-family: var(--primary-font);
+    font-style: italic;
     padding: 0.25rem 1rem;
     border-radius: 3.5rem 0 0 3.5rem;
     font-size: 1.25rem;
-    font-weight: 500;
+    font-weight: 900;
     bottom: 3rem;
     right: 0;
     z-index: var(--z-index-1);

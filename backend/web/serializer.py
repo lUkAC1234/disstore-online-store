@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 class ClothesColorSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClothesColorModel
-        fields = ['id', 'color']
+        fields = ['id', 'color', 'name']
 
 class ClothesSizeSerializer(serializers.ModelSerializer):
     class Meta:
