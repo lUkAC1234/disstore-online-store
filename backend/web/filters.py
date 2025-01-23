@@ -2,6 +2,7 @@ import django_filters
 from django.core.exceptions import ValidationError
 from .models import ClothesModel
 from django.db.models import Min, Max
+from urllib.parse import unquote
 
 class ClothesModelFilter(django_filters.FilterSet):
     title = django_filters.CharFilter(lookup_expr='icontains', label='Title')
@@ -20,12 +21,10 @@ class ClothesModelFilter(django_filters.FilterSet):
         Generic filter for multiple IDs.
         Automatically determines the related field to filter.
         """
-        from urllib.parse import unquote
 
         param_values = self.request.GET.getlist(name)
         if param_values:
             try:
-                # Decode URL-encoded values
                 decoded_values = [unquote(value).strip() for value in param_values]
                 ids = [int(id) for id in decoded_values if id.isdigit()]
                 

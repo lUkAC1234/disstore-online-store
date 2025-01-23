@@ -61,6 +61,7 @@ $font-weights: (
         )
       );
       font-style: if(string.index($style, 'italic'), italic, normal);
+      font-display: swap;
     }
   }
 }
