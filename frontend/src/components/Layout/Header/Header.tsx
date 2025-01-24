@@ -101,8 +101,8 @@ class Header extends UIReact<ClothesListActions, HeaderState> {
 
     if (value.length > 1) {
       const filteredResults = this.props.products.filter((item) =>
-        item.title.toLowerCase().includes(value.toLowerCase())
-      );
+        encodeURIComponent(item.title.toLowerCase()).includes(encodeURIComponent(value.toLowerCase()))
+      )
 
       this.setState((prevState) => ({
         ...prevState,
@@ -313,7 +313,9 @@ class Header extends UIReact<ClothesListActions, HeaderState> {
           </div>
         ) : (
           products
-            .filter((item) => item.title.toLowerCase().includes(title.toLowerCase()))
+            .filter((item) =>
+              encodeURIComponent(item.title.toLowerCase()).includes(encodeURIComponent(title.toLowerCase()))
+            )
             .map((item) => (
               <div className="header-searched-item" key={item.id}>
                 <Link

@@ -1,11 +1,13 @@
 import django_filters
 from django.core.exceptions import ValidationError
 from .models import ClothesModel
-from django.db.models import Min, Max
 from urllib.parse import unquote
+from transliterate import translit
+from transliterate.exceptions import LanguageDetectionError
+from django.db.models import Q
 
 class ClothesModelFilter(django_filters.FilterSet):
-    title = django_filters.CharFilter(lookup_expr='icontains', label='Title')
+    title = django_filters.CharFilter(method='filter_title', label='Title')
     color = django_filters.CharFilter(method='filter_multiple', label='Colors')
     types = django_filters.CharFilter(method='filter_multiple', label='Types')
     size = django_filters.CharFilter(method='filter_multiple', label='Sizes')
@@ -15,7 +17,21 @@ class ClothesModelFilter(django_filters.FilterSet):
     class Meta:
         model = ClothesModel
         fields = ['title', 'color', 'types', 'size', 'price_min', 'price_max']
+        
+    def filter_title(self, queryset, name, value):
+        """
+        Filters the title field by transliterating the input if possible and
+        searching in both original and transliterated forms.
+        """
+        try:
+            transliterated_value = translit(value, language_code='ru').lower()
+        except LanguageDetectionError:
+            transliterated_value = value.lower()
 
+        return queryset.filter(
+            Q(title__icontains=transliterated_value) | Q(title__icontains=value.lower())
+        )
+        
     def filter_multiple(self, queryset, name, value):
         """
         Generic filter for multiple IDs.

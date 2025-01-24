@@ -7,7 +7,7 @@ import { withContext } from "components/Context/ContextInjector";
 import { ClothesListContext, UserContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faSliders, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faSliders } from "@fortawesome/free-solid-svg-icons";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 import RangeSliderDual from "components/RangeSlider/RangeSliderDual.tsx";
@@ -87,7 +87,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
                   className={styles["filters-title-button"]}
                   onClick={this.toggleFilter}
                 >
-                  <FontAwesomeIcon icon={this.state.isFilterActive ? faXmark : faSliders} />
+                  <FontAwesomeIcon icon={faSliders} />
                 </button>
               </div>
               <div className={styles["hr-line"]}></div>

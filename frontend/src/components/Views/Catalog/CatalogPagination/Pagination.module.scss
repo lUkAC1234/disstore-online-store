@@ -1,6 +1,9 @@
 .catalog-pagination {
     display: flex;
     justify-content: space-between;
+    * {
+        font-family: var(--primary-font);
+    }
 }
 
 .catalog-pagination-button {

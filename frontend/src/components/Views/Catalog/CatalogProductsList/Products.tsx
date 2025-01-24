@@ -3,8 +3,6 @@ import styles from "../CatalogList.module.scss"
 import { PureComponent, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ClothItem } from "components/Context/ClothesContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping, faHeart } from "@fortawesome/free-solid-svg-icons";
 import i18next from "i18next";
 const lang: string = i18next.language;
 
@@ -51,7 +49,8 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
                                         if (mainImage) {
                                             const tempImage = new Image();
                                             tempImage.src = mainImage;
-                                            tempImage.onload = () => (target as HTMLImageElement).src = mainImage;
+                                            tempImage.onload = () =>
+                                                (target as HTMLImageElement).src = mainImage;
                                         }
                                     }}
                                 />

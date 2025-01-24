@@ -242,7 +242,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
             const sizeQuery = generateQueryString(selectedSizes, sizes, "size");
             const typeQuery = generateQueryString(selectedTypes, types, "types");
             const priceQuery = `price_min=${min}&price_max=${max}`;
-            const titleQuery = `title=${title}`
+            const titleQuery = `title=${encodeURIComponent(title)}`
             const queryString = [colorQuery, typeQuery, sizeQuery, priceQuery, titleQuery]
                 .filter(Boolean)
                 .join("&");

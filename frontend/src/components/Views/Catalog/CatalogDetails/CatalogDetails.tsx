@@ -200,6 +200,7 @@ class CatalogDetails extends UIReact<
 
   get product(): ReactNode {
     const { selectedImage, selectedOptions } = this.state;
+    const { data } = this.props
     const maxAvailable = this.props.data?.count;
 
     return (
@@ -210,7 +211,7 @@ class CatalogDetails extends UIReact<
           <FontAwesomeIcon icon={faAngleRight} />
           <Link to={`/${lang}/catalog`}>Каталог</Link>
           <FontAwesomeIcon icon={faAngleRight} />
-          {this.props.data?.title}
+          {data?.title}
         </div>
         <div className={styles["catalog-wrapper"]}>
           <div className={styles["thumbnail-navigation"]}>
@@ -220,7 +221,7 @@ class CatalogDetails extends UIReact<
                   styles["swiper-navigation-buttons-catalog-container"]
                 }
                 style={{
-                  display: this.props.data?.catalogImages?.length > 3 ? "flex" : "none",
+                  display: data?.catalogImages?.length > 3 ? "flex" : "none",
                 }}
               >
                 <div className={`
@@ -259,42 +260,58 @@ class CatalogDetails extends UIReact<
                   },
                 }}
               >
-                {this.props.data?.catalogImages?.map(({ image }, index) => (
+                {data?.catalogImages?.map(({ thumbnail, image }, index) => (
                   <SwiperSlide
                     key={index}
                     onClick={() => this.handleImageClick(image)}
                     className={styles["thumbnail-slide"]}
                   >
                     <img
-                      src={image}
+                      src={thumbnail}
                       alt={`Thumbnail ${index + 1}`}
                       loading="lazy"
                       decoding="async"
                       className={`${styles["thumbnail"]} ${selectedImage === image ? styles["active"] : ""}`}
+                      onLoad={({ target }) => {
+                        const tempImage = new Image();
+                        tempImage.src = image;
+
+                        tempImage.onload = () => {
+                          (target as HTMLImageElement).src = image;
+                        };
+                      }}
                     />
                   </SwiperSlide>
                 ))}
+
               </Swiper>
               <div className={styles["catalog-main-image"]}>
-                {selectedImage ? (
-                  <a
-                    href={selectedImage}
-                    data-fancybox="gallery"
-                    data-src={selectedImage}
-                  >
+                <a
+                  href={selectedImage}
+                  data-fancybox="gallery"
+                  data-src={selectedImage}
+                >
+                  {data?.catalogImages?.[0]?.thumbnail && (
                     <img
-                      src={selectedImage}
-                      alt="Выбранный рисунок"
+                      src={data.catalogImages[0].thumbnail}
+                      alt={data.title || "Рисунок"}
                       loading="lazy"
                       decoding="async"
+                      onLoad={({ target }) => {
+                        const mainImage = selectedImage;
+                        if (mainImage) {
+                          const tempImage = new Image();
+                          tempImage.src = mainImage;
+                          tempImage.onload = () =>
+                            (target as HTMLImageElement).src = mainImage;
+                        }
+                      }}
                     />
-                  </a>
-                ) : (
-                  <SpinnerLoaderWrapper />
-                )}
+                  ) || <SpinnerLoaderWrapper />}
+                </a>
               </div>
               <div style={{ display: "none" }}>
-                {this.props.data?.catalogImages
+                {data?.catalogImages
                   ?.filter(({ image }) => image !== selectedImage)
                   ?.map(({ image }, index) => (
                     <a href={image} data-fancybox="gallery" key={index} />
@@ -304,25 +321,25 @@ class CatalogDetails extends UIReact<
           </div>
           <div className={styles["catalog-product-details"]}>
             <h1 className={styles["catalog-product-product-title"]}>
-              {this.props.data?.title}
+              {data?.title}
             </h1>
             <div className={styles["catalog-product-product-rating"]}>
               <img src={star5} alt="Rating" />
               <span>
-                {this.props.data?.count > 0 ? `В наличии: ${this.props.data.count}` : "Товар закончился"}
+                {data?.count > 0 ? `В наличии: ${data.count}` : "Товар закончился"}
               </span>
             </div>
             <bdi className={styles["catalog-product-product-pricing"]}>
               <span className={styles["catalog-product-current-price"]}>
-                {this.props.data?.real_price.toLocaleString('en-US')} сум
+                {data?.real_price.toLocaleString('en-US')} сум
               </span>
-              {this.props.data?.discount > 0 ? (
+              {data?.discount > 0 ? (
                 <>
                   <span className={styles["catalog-product-original-price"]}>
-                    {this.props.data?.price.toLocaleString('en-US')} сум
+                    {data?.price.toLocaleString('en-US')} сум
                   </span>
                   <span className={styles["catalog-product-discount"]}>
-                    -{this.props.data?.discount}%
+                    -{data?.discount}%
                   </span>
                 </>
               ) : (
@@ -330,14 +347,14 @@ class CatalogDetails extends UIReact<
               )}
             </bdi>
             <p className={styles["catalog-product-description"]}>
-              {this.props.data?.short_description}
+              {data?.short_description}
             </p>
             <div className={styles["hr-line"]}></div>
             <div className={styles["product-options"]}>
               <div className={styles["colors-section"]}>
                 <h4 className={styles["product-options-title"]}>Выберите цвет</h4>
                 <div className={styles["colors-container"]}>
-                  {this.props.data?.colors?.map(({ color }) => (
+                  {data?.colors?.map(({ color }) => (
                     <button
                       key={color}
                       className={`
@@ -363,7 +380,7 @@ class CatalogDetails extends UIReact<
               <div className={styles["sizes-section"]}>
                 <h4 className={styles["product-options-title"]}>Выберите размер</h4>
                 <div className={styles["sizes-container"]}>
-                  {this.props.data?.sizes?.map(({ size }) => (
+                  {data?.sizes?.map(({ size }) => (
                     <button
                       key={size}
                       className={`${styles["size-option"]} ${selectedOptions.size === size ? styles["selected"] : ""
@@ -398,7 +415,7 @@ class CatalogDetails extends UIReact<
                     </button>
                   </div>
 
-                  <button disabled={this.props.data?.count <= 0} className={styles["catalog-add-to-cart-btn"]}>
+                  <button disabled={data?.count <= 0} className={styles["catalog-add-to-cart-btn"]}>
                     Добавить в корзину
                   </button>
                 </div>

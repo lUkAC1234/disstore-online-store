@@ -43,24 +43,22 @@ $font-weights: (
 
 @each $category, $styles in $gteesti-fonts {
   @each $style, $formats in $styles {
+    $is-italic: string.index($style, 'italic') != null;
+    $base-style: if($is-italic, string.slice($style, 1, string.index($style, '-') - 1), $style);
+    $font-weight: map.get($font-weights, string.unquote($base-style));
+
     @font-face {
       font-family: "GT Eesti Pro #{$category}";
       src: url("#{$font-path}GTEestiPro#{$category}-#{$style}.eot");
-      src: local("GT Eesti Pro #{$category} #{$style}"),
-           local("GTEestiPro#{$category}-#{$style}"),
-           url("#{$font-path}GTEestiPro#{$category}-#{$style}.eot?#iefix") format("embedded-opentype"),
-           url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 1)}") format("#{nth($formats, 1)}"),
-           url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 2)}") format("#{nth($formats, 2)}"),
-           url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 3)}") format("#{nth($formats, 3)}");
-      font-weight: map.get(
-        $font-weights,
-        if(
-          string.index($style, '-') != null,
-          string.unquote(string.slice($style, 1, string.index($style, '-') - 1)),
-          string.unquote($style)
-        )
-      );
-      font-style: if(string.index($style, 'italic'), italic, normal);
+      src: 
+        local("GT Eesti Pro #{$category} #{$style}"),
+        local("GTEestiPro#{$category}-#{$style}"),
+        url("#{$font-path}GTEestiPro#{$category}-#{$style}.eot?#iefix") format("embedded-opentype"),
+        url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 1)}") format("#{nth($formats, 1)}"),
+        url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 2)}") format("#{nth($formats, 2)}"),
+        url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 3)}") format("#{nth($formats, 3)}");
+      font-weight: $font-weight;
+      font-style: if($is-italic, italic, normal);
       font-display: swap;
     }
   }
