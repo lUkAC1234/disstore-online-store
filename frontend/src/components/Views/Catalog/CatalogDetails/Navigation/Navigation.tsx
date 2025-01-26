@@ -1,8 +1,8 @@
 import styles from './Navigation.module.scss';
 import { PureComponent, ReactNode } from "react";
-import Details from "./Details";
-import FAQs from "./FAQs";
-import Review from "./Review";
+import Details from "./Details/Details";
+import FAQs from "./FAQ/FAQs";
+import Review from "./Review/Review";
 import TransformTransition from "components/TransformTransition/TransformTransition";
 ;
 
@@ -25,7 +25,7 @@ class NavigationSection extends PureComponent<NavigationSectionProps, Navigation
                     fullwidth
                     list={[
                         {
-                            title: "Полной описание",
+                            title: "Описание",
                             content: <Details detailsText={long_description} />,
                         },
                         {

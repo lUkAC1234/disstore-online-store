@@ -6,6 +6,7 @@ $welcome-background: #F2F0F1;
 $welcome-border: #0000001A;
 $clothes-discount-background: #FF33331A;
 $clothes-image-background: #F0EEED;
+$catalog-details-list-background: #F6F6F6;
 
 :root {
     --body-background: #{$body-background};
@@ -16,4 +17,5 @@ $clothes-image-background: #F0EEED;
     --welcome-border: #{$welcome-border};
     --clothes-discount-background: #{$clothes-discount-background};
     --clothes-image-background: #{$clothes-image-background};
+    --catalog-details-list-background: #{$catalog-details-list-background};
 }

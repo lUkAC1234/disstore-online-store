@@ -25,7 +25,7 @@ class DateComputed extends PureComponent<DateComputedProps, DateComputedState> {
 
     const { date } = this.state;
     const year = date.getFullYear();
-    const month = putZero(date.getMonth()+1);
+    const month = putZero(date.getMonth() + 1);
     const day = putZero(date.getDate());
     const hours = putZero(date.getHours());
     const minutes = putZero(date.getMinutes());
@@ -36,6 +36,9 @@ class DateComputed extends PureComponent<DateComputedProps, DateComputedState> {
       switch (this.props.order) {
         case "day/month/year":
           computedResult = `${day}${style}${month}${style}${year}`;
+          break;
+        case "month/day/year":
+          computedResult = `${month}${style}${day}${style}${year}`;
           break;
         case "year/day/month":
           computedResult = `${year}${style}${day}${style}${month}`;

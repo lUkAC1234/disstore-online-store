@@ -1,0 +1,209 @@
+.details-content-wrapper {
+    display: grid;
+    gap: 0.5rem;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    h1 strong,
+    h2 strong,
+    h3 strong,
+    h4 strong,
+    h5 strong,
+    h6 strong,
+    p strong {
+        font-weight: 600;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+    }
+
+    h3 {
+        font-size: 2rem;
+    }
+
+    h4 {
+        font-size: 1.5rem;
+    }
+
+    h5 {
+        font-size: 1.25rem;
+    }
+
+    h6 {
+        font-size: 1rem;
+    }
+
+    ul {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(10rem, 1fr));
+        border-radius: 1rem;
+        background-color: var(--catalog-details-list-background);
+        overflow-y: hidden;
+        overflow-x: auto;
+        margin-block: 1rem;
+    }
+
+    li {
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-right: 0.1rem solid var(--welcome-border);
+        border-bottom: 0.1rem solid var(--welcome-border);
+        font-size: 1rem;
+        word-wrap: keep-all !important;
+        word-break: keep-all !important;
+        text-align: center;
+    }
+
+    div:has(table) {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+
+    table {
+        width: 100% !important;
+        border-collapse: collapse;
+        border-radius: 1rem;
+        border: none;
+        outline: none;
+        background-color: var(--catalog-details-list-background);
+        border-spacing: 0;
+        margin-block: 1rem;
+    }
+
+    td,
+    th {
+        border: none;
+        outline: none;
+        width: 33.33%;
+    }
+
+    td {
+        padding: 2rem 1rem;
+        text-align: center;
+        border-right: 0.1rem solid var(--welcome-border);
+        border-bottom: 0.1rem solid var(--welcome-border);
+    }
+
+    tr td:last-child {
+        border-right: none;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    p,
+    span {
+        color: var(--text-p);
+    }
+
+    p {
+        line-height: 140%;
+    }
+
+
+    a {
+        color: var(--clothes-discount-number);
+    }
+
+    div:not(:has(table)) {
+        background-color: var(--catalog-details-list-background);
+        padding: 2rem;
+        border-radius: 1rem;
+    }    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+@media screen and (min-width: 701px) {
+    .details-content-wrapper {
+        li {
+            &:nth-child(3n) {
+                border-right: none;
+            }
+
+            &:nth-last-child(-n+3) {
+                border-bottom: none;
+            }
+        }
+    }
+}
+
+@media (max-width: 700px) {
+    .details-content-wrapper {
+        ul {
+            grid-template-columns: repeat(2, minmax(10rem, 1fr));
+        }
+
+        li {
+            padding: 1rem;
+            font-size: 0.9rem;
+
+            &:nth-child(2n) {
+                border-right: none;
+            }
+
+            &:nth-last-child(-n+2) {
+                border-bottom: none;
+            }
+        }
+
+
+        td {
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        div:not(:has(table)) {
+            padding: 1rem;
+        }    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+}

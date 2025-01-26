@@ -5,7 +5,8 @@ declare global {
     order?:
       | "day/month/year"
       | "year/month/day"
-      | "year/day/month";
+      | "year/day/month"
+      | "month/day/year";
     orderStyle?: string;
     includeTime?: boolean;
     timeOrder?:

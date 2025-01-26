@@ -2,6 +2,8 @@ import styles from "./Home.module.scss";
 import { PureComponent, ReactNode } from "react";
 import welcomeImage from "assets/main/images/main-page/welcomeImage.webp";
 import { Link } from "react-router-dom";
+import i18next from "i18next";
+const lang = i18next.language;
 
 class WelcomeSection extends PureComponent {
     render(): ReactNode {
@@ -17,7 +19,7 @@ class WelcomeSection extends PureComponent {
                             созданной одежды, разработанной, чтобы подчеркнуть вашу
                             индивидуальность и удовлетворить ваше чувство стиля
                         </p>
-                        <Link to={""} className={styles["welcome-link"]}>
+                        <Link to={`/${lang}/catalog`} className={styles["welcome-link"]}>
                             Купить сейчас
                         </Link>
                         <div className={styles["welcome-numbers-count-container"]}>

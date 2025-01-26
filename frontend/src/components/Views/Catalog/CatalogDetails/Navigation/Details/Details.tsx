@@ -1,5 +1,6 @@
+import styles from "./Details.module.scss"; 
+import NavigationError from "../../NavigationError/NavigationError";
 import { PureComponent, ReactNode } from "react";
-import styles from "./Navigation.module.scss"; 
 
 interface DetailsProps {
   detailsText?: ReactNode; 
@@ -12,17 +13,15 @@ class DetailsSection extends PureComponent<DetailsProps> {
     return (
       <section className={styles["details-section"]}>
         <div className={styles["details-container"]}>
-          <h2 className={styles["details-title"]}>Product Details</h2>
-          <div className={styles["details-content"]}>
           {detailsText ? (
               <div
+                className={styles["details-content-wrapper"]}
                 dangerouslySetInnerHTML={{ __html: String(detailsText) }}
               />
             ) : (
-              <p>Пока что нету полной описании</p>
+              <NavigationError error={"Пока что нету полной описании"} />
             )}
           </div>
-        </div>
       </section>
     );
   }

@@ -7,6 +7,14 @@ import Clothes from "assets/main/images/main-page/casual.webp"
 import EmptyCart from"./Empty/EmptyCart.tsx";
 
 class Cart extends PureComponent<CartProps, CartState> {
+  async componentDidMount(): Promise<void> {
+    if (document.documentElement.scrollTop > 0) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  }
   render(): ReactNode {
     return (
       <div className={styles["cart-container"]}>

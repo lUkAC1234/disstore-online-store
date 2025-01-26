@@ -1,5 +1,6 @@
+import styles from "./FAQ.module.scss";
+import NavigationError from "../../NavigationError/NavigationError";
 import { PureComponent, ReactNode } from "react";
-import styles from "./Navigation.module.scss";
 
 interface FAQsProps {
     faqs?: any[];
@@ -19,7 +20,7 @@ class FAQsSection extends PureComponent<FAQsProps> {
                             </div>
                         ))
                     ) : (
-                        <p>Пока что нету вопросов</p>
+                        <NavigationError error={"Пока что нету вопросов"} />
                     )}
                 </div>
             </section>

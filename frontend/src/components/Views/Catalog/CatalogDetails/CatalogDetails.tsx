@@ -365,11 +365,6 @@ class CatalogDetails extends UIReact<
                       onClick={() => this.handleOptionChange("color", color)}
                       aria-label={`Select ${color} color`}
                     >
-                      {selectedOptions.color === color && (
-                        <span className={styles["catalog-checkmark"]}>
-                          <FontAwesomeIcon icon={faCheck} />
-                        </span>
-                      )}
                     </button>
                   ))}
                 </div>

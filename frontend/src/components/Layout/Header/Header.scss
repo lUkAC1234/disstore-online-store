@@ -396,7 +396,7 @@
         box-shadow: -0.3rem 0 0.9rem rgba(0, 0, 0, 0.2);
         transform: translateX(-100%);
         transition: all 0.5s ease;
-        z-index: var(--z-index-1);
+        z-index: var(--z-index-6);
 
         @media screen and (max-width: 992px) {
             width: 70%;
@@ -606,6 +606,7 @@
         transform: translateX(100%);
         transition: all 0.5s ease;
         overflow-y: auto;
+        z-index: var(--z-index-5);
 
         @media screen and (max-width: 500px) {
             width: 100%;

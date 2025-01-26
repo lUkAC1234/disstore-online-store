@@ -54,7 +54,6 @@
     height: 28rem;
     background-color: var(--clothes-image-background);
     border-radius: 1.5rem;
-    overflow: hidden;
     border: 0.1rem solid var(--welcome-border);
     img {
         width: 30rem;
@@ -171,7 +170,6 @@
     color: var(--text-p);
     width: min(100%, 40rem);
     margin-top: 0.5rem;
-    font-weight: 500;
 }
 
 .hr-line {
@@ -183,7 +181,7 @@
 
 .product-options-title {
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 400;
     color: var(--text-p);
     margin-bottom: 0.5rem;
     font-family: var(--primary-font);
@@ -196,21 +194,16 @@
 }
 
 .color-option {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: 50%;
+    border: 0.1rem solid var(--text-white);
+    outline: 0.1rem solid var(--welcome-border);
     cursor: pointer;
-    transition: all 0.3s ease;
-    border: transparent;
-}
+    transition: outline-color 0.3s ease;
 
-.catalog-checkmark {
-    svg {
-        font-size: 0.85rem;
-        color: var(--text-white);
+    &.selected {
+        outline-color: var(--text-black);
     }
 }
 
@@ -401,7 +394,7 @@
 
     .thumbnail-swiper {
         width: 30rem;
-
+        height: max-content;
     }
 
     .thumbnail-slide img {
@@ -411,12 +404,17 @@
 
     .catalog-main-image {
         width: 100%;
-        height: 100%;
+        height: 30rem;
 
         img {
-            width: 30rem;
-            height: 30rem;
+            width: 100%;
+            height: 100%;
         }
+    }
+
+    .catalog-product-details {
+        width: min(100%, 30rem);
+        margin-inline: auto;
     }
 }
 
@@ -443,20 +441,13 @@
         width: 100%;
     }
 
-    .catalog-main-image {
-        img {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-        }
-    }
-
     .size-option {
         padding: 0.5rem;
         font-size: 0.75rem;
     }
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 420px) {
     .quantity-container {
         flex-flow: column;
     }
