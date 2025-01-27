@@ -57,7 +57,7 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
                             {item.short_description.length > 40 ? `${item.short_description.slice(0, 40)}...` : item.short_description}
                         </p>
                         {item.count > 0 ? (
-                            <p className={styles["catalog-item-count"]}>В наличии <strong className={styles["count"]}>({item.count})</strong></p>
+                            <p className={styles["catalog-item-count"]}>В наличии <strong className={styles["count"]}>({item.count} шт)</strong></p>
                         ) : (
                             <p className={styles["catalog-item-count"]}>Товар закончился</p>
                         )}

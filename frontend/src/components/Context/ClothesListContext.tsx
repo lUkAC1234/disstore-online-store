@@ -303,6 +303,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
                 selectedColors: [],
                 selectedMin: this.state.min,
                 selectedMax: this.state.max,
+                title: "",
             },
             this.debouncedFetchFilteredProducts
         );

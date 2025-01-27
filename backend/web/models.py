@@ -112,7 +112,7 @@ class ClothesFAQModel(models.Model):
         verbose_name=_("Продукт")
     )
     question = models.TextField(_("Вопрос"))
-    answer = models.TextField(_("Ответ"), blank=True, null=True)
+    answer = RichTextField(_("Ответ"), blank=True, null=True)
     created_at = models.DateTimeField(_("Дата создания"), auto_now_add=True)
     
     def __str__(self):

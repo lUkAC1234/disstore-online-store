@@ -5,7 +5,7 @@ class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
   async componentDidMount(): Promise<void> {
     if (document.documentElement.scrollTop > 0) {
       window.scrollTo({
-        top: 0,
+        top: 0, 
         behavior: "smooth",
       });
     }
