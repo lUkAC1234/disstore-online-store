@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import (
-    UserModel,
     ClothesModel, 
     ClothesColorModel, 
     ClothesSizeModel,
@@ -11,13 +10,10 @@ from .models import (
 )
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
-from django.utils.html import format_html
 from .forms import ClothesModelForm
 from unfold.admin import ModelAdmin, TabularInline
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from import_export.admin import ImportExportModelAdmin
 from unfold.contrib.import_export.forms import ExportForm, ImportForm, SelectableFieldsExportForm
-from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 
@@ -26,18 +22,6 @@ admin.site.unregister(Group)
 @admin.register(Group)
 class CustomGroupAdmin(BaseGroupAdmin, ModelAdmin):
     pass
-
-
-
-
-@admin.register(UserModel)
-class UserAdmin(BaseUserAdmin, ModelAdmin):
-    list_display = ['id', 'username']
-    list_display_links = ['id', 'username']
-    search_fields = ['username']
-    form = UserChangeForm
-    add_form = UserCreationForm
-    change_password_form = AdminPasswordChangeForm
     
 class ClothesImageInline(TabularInline):
     model = ClothesImageModel

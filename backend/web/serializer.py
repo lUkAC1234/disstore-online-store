@@ -1,19 +1,15 @@
 from rest_framework import serializers
 from .models import (
-    UserModel,
     ClothesModel, 
     ClothesColorModel, 
     ClothesSizeModel, 
     ClothesImageModel,
     TypesModel,
     ClothesReviewModel, 
-    ClothesFAQModel
+    ClothesFAQModel, 
+    WishlistModel
 )
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserModel
-        fields = ['id', 'username', 'email', 'first_name', 'last_name']
+from UserAuth.serializer import UserSerializer
 
 class ClothesColorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -116,3 +112,11 @@ class ClothesModelCreateUpdateSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+class WishlistSerializer(serializers.ModelSerializer):
+    product = ClothesModelSerializer(read_only=True)
+    product_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = WishlistModel
+        fields = ['id', 'product', 'product_id', 'created_at']

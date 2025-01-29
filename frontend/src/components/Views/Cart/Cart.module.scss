@@ -30,7 +30,7 @@
     padding-block: 1rem;
     width: 100%;
     &:not(:first-child) {
-        border-top: 0.05rem solid var(--welcome-border);
+        border-top: 0.075rem solid var(--welcome-border);
     }
 }
 
@@ -239,3 +239,6 @@
 }
 
 
+.hr-line {
+    border-top: 0.075rem solid var(--welcome-border);
+}

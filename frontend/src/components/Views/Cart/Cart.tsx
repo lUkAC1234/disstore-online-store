@@ -18,7 +18,7 @@ class Cart extends PureComponent<CartProps, CartState> {
   render(): ReactNode {
     return (
       <div className={styles["cart-container"]}>
-        {/* <h1 className={styles["cart-title"]}>Ваша Корзина</h1>
+        <h1 className={styles["cart-title"]}>Ваша Корзина</h1>
         <div className={styles["cart-content-container"]}>
           <div className={styles["cart-details"]}>
             <div className={styles["cart-item"]}>
@@ -157,8 +157,8 @@ class Cart extends PureComponent<CartProps, CartState> {
               <Link to={""} className={styles["checkout-link"]}>Перейти к оформлению</Link>
             </div>
           </div>
-        </div> */}
-        <EmptyCart />
+        </div>
+        {/* <EmptyCart /> */}
       </div>
     );
   }

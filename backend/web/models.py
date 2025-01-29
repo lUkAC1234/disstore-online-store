@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 from ckeditor.fields import RichTextField
@@ -7,6 +6,7 @@ import random, string
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
+from UserAuth.models import UserModel
 
 TRANSLIT_DICT = {
     'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh', 'З': 'Z', 'И': 'I',
@@ -20,9 +20,6 @@ TRANSLIT_DICT = {
 
 def transliterate_russian(text):
     return ''.join(TRANSLIT_DICT.get(c, c) for c in text)
-
-class UserModel(AbstractUser):
-    pass
 
 class ClothesModel(models.Model):
     title = models.CharField(_("Название"), max_length=100)
@@ -210,3 +207,27 @@ class ClothesImageModel(models.Model):
     class Meta:
         verbose_name = _("Изображение")
         verbose_name_plural = _("Изображения")
+        
+        
+class WishlistModel(models.Model):
+    user = models.ForeignKey(
+        UserModel,
+        on_delete=models.CASCADE,
+        related_name='wishlists',
+        verbose_name=_("Пользователь")
+    )
+    product = models.ForeignKey(
+        ClothesModel,
+        on_delete=models.CASCADE,
+        related_name='wishlists',
+        verbose_name=_("Продукт")
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Дата добавления"))
+
+    class Meta:
+        unique_together = ['user', 'product']
+        verbose_name = _("Список желаний")
+        verbose_name_plural = _("Списки желаний")
+
+    def __str__(self):
+        return f"{self.user} - {self.product}"
