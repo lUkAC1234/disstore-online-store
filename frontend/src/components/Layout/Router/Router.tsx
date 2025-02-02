@@ -16,6 +16,7 @@ const ClothesDetails = lazy(() => import("components/Views/Catalog/CatalogDetail
 const Error404 = lazy(() => import("components/Views/Errors/error404/404"));
 const Cart = lazy(() => import("components/Views/Cart/Cart"));
 const WishList = lazy(() => import("components/Views/WishList/WishList"));
+const Authentication = lazy(() => import("components/Views/Authentication/Authentication"));
 
 @COMPONENT<RouterView>({
   template: (_this) => {
@@ -35,19 +36,14 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
   state: Readonly<RouterViewState> = {
     pathname: location.pathname,
     routesMap: new Map([
-      // Redirect root to the default language
       ["/", { path: "/", element: <Navigate to={`/${this.props.i18n.language}`} />, index: true }],
-      // Home page for each language
       ["/:lang", { path: "/:lang", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Home /></Suspense>, index: true }],
-      // About us page for each language
       ["/:lang/about/us", { path: "/:lang/about/us", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Aboutus /></Suspense> }],
-      // Catalog list page
       ["/:lang/catalog", { path: "/:lang/catalog", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><CatalogList /></Suspense> }],
-      // Clothes details page
       ["/:lang/catalog/clothes/:id", { path: "/:lang/catalog/clothes/:slug", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><ClothesDetails /></Suspense> }],
       ["/:lang/cart", { path: "/:lang/cart", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Cart /></Suspense> }],
       ["/:lang/favorites", { path: "/:lang/favorites", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><WishList /></Suspense> }],
-      // 404 page for unmatched routes
+      ["/:lang/authentication", { path: "/:lang/authentication", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Authentication /></Suspense> }],
       ["/*", { path: "/*", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Error404 /></Suspense> }],
     ]),
   };

@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ckeditor',
     'rest_framework',
+    'rest_framework.authtoken',
     "corsheaders",
     'django_filters',
     'import_export',
@@ -48,9 +49,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny'
     ],
 
-    # 'DEFAULT_FILTER_BACKENDS': [
-    #     'django_filters.rest_framework.DjangoFilterBackend',
-    # ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
 }
 
 FILE_CHARSET = "utf-8"

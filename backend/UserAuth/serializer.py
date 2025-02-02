@@ -1,16 +1,18 @@
 from rest_framework import serializers
 from .models import UserModel
 
-class UserSerializer(serializers.ModelSerializer):
+class OTPSerializer(serializers.Serializer):
+    mobile_number = serializers.CharField()
+    otp = serializers.CharField(max_length=6, required=False)
+
+class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
-        fields = ('id', 'username', 'email', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ['mobile_number']
 
     def create(self, validated_data):
-        user = UserModel.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
-        return user
+        return UserModel.objects.create_user(**validated_data)
+    
+class LoginSerializer(serializers.Serializer):
+    mobile_number = serializers.CharField(required=True)
+    otp = serializers.CharField(required=True, style={'input_type': 'password'})

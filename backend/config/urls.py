@@ -10,8 +10,8 @@ from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('clothes/', include('web.urls')),
-    path('auth/', include('UserAuth.urls')),
+    path('api/clothes/', include('web.urls')),
+    path('api/auth/', include('UserAuth.urls')),
 ]
 
 urlpatterns += i18n_patterns(

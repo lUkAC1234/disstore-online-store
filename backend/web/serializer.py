@@ -9,7 +9,7 @@ from .models import (
     ClothesFAQModel, 
     WishlistModel
 )
-from UserAuth.serializer import UserSerializer
+from UserAuth.serializer import RegistrationSerializer
 
 class ClothesColorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,7 +32,7 @@ class ClothesTypeModelSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'image']
         
 class ClothesReviewModelSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = RegistrationSerializer(read_only=True)
     class Meta:
         model = ClothesReviewModel
         fields = ['id', 'product', 'user', 'text', 'created_at', 'is_allowed']
@@ -68,50 +68,6 @@ class ClothesModelSerializer(serializers.ModelSerializer):
                   'reviews',
                   'faqs'
                   ]
-
-class ClothesModelCreateUpdateSerializer(serializers.ModelSerializer):
-    colors = serializers.PrimaryKeyRelatedField(queryset=ClothesColorModel.objects.all(), many=True)
-    sizes = serializers.PrimaryKeyRelatedField(queryset=ClothesSizeModel.objects.all(), many=True)
-
-    class Meta:
-        model = ClothesModel
-        fields = [
-            'id', 
-            'title', 
-            'slug',
-            'short_description', 
-            'long_description',
-            'price', 
-            'discount', 
-            'real_price', 
-            'count',
-            'colors', 
-            'sizes', 
-            'types', 
-        ]
-
-    def create(self, validated_data):
-        colors = validated_data.pop('colors', [])
-        sizes = validated_data.pop('sizes', [])
-        clothes = ClothesModel.objects.create(**validated_data)
-        clothes.colors.set(colors)
-        clothes.sizes.set(sizes)
-        return clothes
-
-    def update(self, instance, validated_data):
-        colors = validated_data.pop('colors', None)
-        sizes = validated_data.pop('sizes', None)
-
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-
-        if colors is not None:
-            instance.colors.set(colors)
-        if sizes is not None:
-            instance.sizes.set(sizes)
-
-        instance.save()
-        return instance
 
 class WishlistSerializer(serializers.ModelSerializer):
     product = ClothesModelSerializer(read_only=True)
