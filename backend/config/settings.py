@@ -1,6 +1,8 @@
 from pathlib import Path
 from django.urls import reverse_lazy
 from django.templatetags.static import static
+from dotenv import load_dotenv
+import os
 
 DEBUG = True
 
@@ -29,7 +31,7 @@ INSTALLED_APPS = [
 
     'web',
     'UserAuth',
-
+    'Cart',
 ]
 
 MIDDLEWARE = [
@@ -199,7 +201,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-import os
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATICFILES_DIRS = BASE_DIR / 'assets',
@@ -223,5 +224,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'UserAuth.UserModel'
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
-
 # LOGIN_URL = 'main:login'
+
+load_dotenv()
+
+TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
+TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')

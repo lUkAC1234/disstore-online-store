@@ -38,6 +38,7 @@ class UserLoginView(APIView):
 
     def post(self, request):
         serializer = OTPSerializer(data=request.data)
+        
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -62,6 +63,7 @@ class UserLoginView(APIView):
 class SendOTPView(APIView):
     def post(self, request):
         serializer = OTPSerializer(data=request.data)
+        
         if serializer.is_valid():
             mobile_number = serializer.validated_data['mobile_number']
             
@@ -95,6 +97,6 @@ class VerifyOTPView(APIView):
                     'mobile_number': user.mobile_number
                 })
             
-            return Response({'error': 'Invalid or expired OTP'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Упс... Похоже, срок действия вашего OTP-кода истёк. Пожалуйста, запросите новый код, чтобы продолжить.'}, status=status.HTTP_400_BAD_REQUEST)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

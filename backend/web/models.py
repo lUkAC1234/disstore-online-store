@@ -191,7 +191,7 @@ class ClothesImageModel(models.Model):
     def make_thumbnail(self, image):
         img = Image.open(image)
 
-        target_width = 150
+        target_width = 50
         aspect_ratio = img.width / img.height
         target_height = int(target_width / aspect_ratio)
         img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
@@ -208,26 +208,4 @@ class ClothesImageModel(models.Model):
         verbose_name = _("Изображение")
         verbose_name_plural = _("Изображения")
         
-        
-class WishlistModel(models.Model):
-    user = models.ForeignKey(
-        UserModel,
-        on_delete=models.CASCADE,
-        related_name='wishlists',
-        verbose_name=_("Пользователь")
-    )
-    product = models.ForeignKey(
-        ClothesModel,
-        on_delete=models.CASCADE,
-        related_name='wishlists',
-        verbose_name=_("Продукт")
-    )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Дата добавления"))
-
-    class Meta:
-        unique_together = ['user', 'product']
-        verbose_name = _("Список желаний")
-        verbose_name_plural = _("Списки желаний")
-
-    def __str__(self):
-        return f"{self.user} - {self.product}"
+    

@@ -7,7 +7,6 @@ from .models import (
     TypesModel,
     ClothesReviewModel, 
     ClothesFAQModel, 
-    WishlistModel
 )
 from UserAuth.serializer import RegistrationSerializer
 
@@ -68,11 +67,3 @@ class ClothesModelSerializer(serializers.ModelSerializer):
                   'reviews',
                   'faqs'
                   ]
-
-class WishlistSerializer(serializers.ModelSerializer):
-    product = ClothesModelSerializer(read_only=True)
-    product_id = serializers.IntegerField(write_only=True)
-
-    class Meta:
-        model = WishlistModel
-        fields = ['id', 'product', 'product_id', 'created_at']

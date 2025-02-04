@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import i18next from "i18next";
 import UIReact from "utils/classes/UIReact";
 import { withContext } from "components/Context/ContextInjector";
-import { ClothesListContext, UserContext } from "components/Context/ContextCollection";
+import { ClothesListContext, UserContext, WishlistContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faSliders } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +15,7 @@ import CatalogPagination from "./CatalogPagination/CatalogPagination.tsx";
 import CatalogProducts from "./CatalogProductsList/Products.tsx";
 import { UserContextActions } from "components/Context/UserContext.tsx";
 import Filters from "./CatalogFilters/Filters.tsx";
+import { WishlistContextActions } from "components/Context/WishlistContext.tsx";
 
 const lang: string = i18next.language;
 
@@ -22,7 +23,7 @@ interface CatalogState {
   isFilterActive: boolean;
 }
 
-interface CatalogListProps extends ClothesListActions, UserContextActions { }
+interface CatalogListProps extends ClothesListActions, UserContextActions, WishlistContextActions { }
 
 class CatalogList extends UIReact<CatalogListProps, CatalogState> {
   catalogFiltersContainerRef = createRef<HTMLDivElement>();
@@ -96,7 +97,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
               {this.props.loadingProducts ? (
                 <SpinnerLoaderWrapper relativeCentered />
               ) : products && products.length > 0 ? (
-                <CatalogProducts products={products} />
+                <CatalogProducts products={products} addToWishList={this.props.addToWishlist} />
               ) : (
                 <CatalogErrorPage
                   resetFilters={this.props.resetFilters}
@@ -124,6 +125,6 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
   }
 }
 
-const UICatalogList = withContext(ClothesListContext, withContext(UserContext, CatalogList));
+const UICatalogList = withContext(ClothesListContext, withContext(UserContext, withContext(WishlistContext, CatalogList)));
 
 export default UICatalogList;

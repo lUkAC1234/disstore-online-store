@@ -1,8 +1,10 @@
-import { PropsWithChildren, PureComponent, ReactNode } from "react";
+import { PropsWithChildren, PureComponent } from "react";
 import { WishlistContext } from "./ContextCollection";
 import { ClothItem } from "./ClothesContext";
+import axios from "axios";
+import { origin } from "../../../project.config.json";
 
-export interface WishlistProviderProps extends PropsWithChildren {}
+export interface WishlistProviderProps extends PropsWithChildren { }
 
 export interface WishlistItem {
     id: number;
@@ -15,18 +17,81 @@ export interface WishlistContextState {
 }
 
 export interface WishlistContextActions extends WishlistContextState {
-    addToWishlist: (product: ClothItem) => Promise<void>;
-    removeFromWishlist: (productId: number) => Promise<void>;
+    addToWishlist: (productId: number) => Promise<void>;
+    removeFromWishlist: (wishlistItemId: number) => Promise<void>;
     fetchWishlist: () => Promise<void>;
 }
 
+const api = axios.create({
+    baseURL: origin,
+    headers: {
+        'Content-Type': 'application/json',
+    }
+});
+
+api.interceptors.request.use(config => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Token ${token}`;
+    }
+    return config;
+});
+
 class WishlistContextProvider extends PureComponent<WishlistProviderProps, WishlistContextState> {
     state: Readonly<WishlistContextState> = {
-        wishlistItems: [],
+        wishlistItems: JSON.parse(localStorage.getItem("wishlist") || "[]"),
         loading: false,
     };
 
-    render(): ReactNode {
+    fetchWishlist = async () => {
+        try {
+            this.setState({ loading: true });
+            const response = await api.get('orders/wishlist/');
+            this.setState({ wishlistItems: response.data });
+        } catch (error) {
+            console.error('Error fetching wishlist:', error);
+        } finally {
+            this.setState({ loading: false });
+        }
+    };
+
+    addToWishlist = async (productId: number) => {
+        try {
+            this.setState({ loading: true });
+            await api.post('orders/wishlist/', { product_id: productId });
+            await this.fetchWishlist();
+        } catch (error) {
+            console.error('Error adding to wishlist:', error);
+            throw error;
+        } finally {
+            this.setState({ loading: false });
+        }
+    };
+
+    removeFromWishlist = async (wishlistItemId: number) => {
+        try {
+            this.setState({ loading: true });
+            await api.delete(`orders/wishlist/${wishlistItemId}/`);
+            this.setState(prev => ({
+                wishlistItems: prev.wishlistItems.filter(item => item.id !== wishlistItemId)
+            }));
+        } catch (error) {
+            console.error('Error removing from wishlist:', error);
+            throw error;
+        } finally {
+            this.setState({ loading: false });
+        }
+    };
+
+    clearWishlist = (): void => {
+        this.setState({ wishlistItems: [] }, () => localStorage.removeItem("wishlist"));
+    };
+
+    // async componentDidMount() {
+    //     this.fetchWishlist();
+    // }
+
+    render() {
         return (
             <WishlistContext.Provider
                 value={{
@@ -38,70 +103,8 @@ class WishlistContextProvider extends PureComponent<WishlistProviderProps, Wishl
             >
                 {this.props.children}
             </WishlistContext.Provider>
-        )
+        );
     }
-
-    async componentDidMount() {
-        await this.fetchWishlist();
-    }
-
-    fetchWishlist = async () => {
-        this.setState({ loading: true });
-        try {
-            const response = await fetch('/api/wishlist/', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-                },
-            });
-            
-            if (response.ok) {
-                const data = await response.json();
-                this.setState({ wishlistItems: data });
-            }
-        } catch (error) {
-            console.error('Error fetching wishlist:', error);
-        } finally {
-            this.setState({ loading: false });
-        }
-    };
-
-    addToWishlist = async (product: ClothItem) => {
-        try {
-            const response = await fetch('/api/wishlist/', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ product_id: product.id }),
-            });
-
-            if (response.ok) {
-                await this.fetchWishlist();
-            }
-        } catch (error) {
-            console.error('Error adding to wishlist:', error);
-        }
-    };
-
-    removeFromWishlist = async (productId: number) => {
-        try {
-            const response = await fetch(`/api/wishlist/${productId}/`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-                },
-            });
-
-            if (response.ok) {
-                this.setState(prev => ({
-                    wishlistItems: prev.wishlistItems.filter(item => item.product.id !== productId)
-                }));
-            }
-        } catch (error) {
-            console.error('Error removing from wishlist:', error);
-        }
-    };
 }
 
 export default WishlistContextProvider;

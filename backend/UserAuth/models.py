@@ -39,6 +39,9 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
+    otp_attempts = models.IntegerField(default=0) 
+    last_otp_sent = models.DateTimeField(null=True, blank=True)  
+
     USERNAME_FIELD = 'mobile_number'
     REQUIRED_FIELDS = []
 
@@ -48,11 +51,34 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
         return self.mobile_number
 
     def generate_otp(self):
+        now = timezone.now()
+
+        # if self.last_otp_sent and (now - self.last_otp_sent).total_seconds() > 3600:
+        #     self.otp_attempts = 0
+
+        # if self.otp_attempts >= 3:
+        #     raise ValueError("Вы превысили лимит попыток. Повторите через 1 час.")
+
         self.otp = str(random.randint(100000, 999999))
-        self.otp_expiration = timezone.now() + timezone.timedelta(minutes=5)
+        self.otp_expiration = now + timezone.timedelta(minutes=5)
+        self.otp_attempts += 1
+        self.last_otp_sent = now
         self.save()
-        print(f"Generated OTP for {self.mobile_number}: {self.otp}")
-        
+
+        try:
+            from twilio.rest import Client
+            from django.conf import settings
+
+            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+            message = client.messages.create(
+                from_=settings.TWILIO_PHONE_NUMBER,
+                body=f'Ваш код для верификации в disstore.uz: {self.otp}',
+                to=self.mobile_number
+            )
+            print(f"SMS sent to {self.mobile_number}: {message.sid}")
+        except Exception as e:
+            print(f"Failed to send SMS: {str(e)}")
+
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"

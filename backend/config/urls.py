@@ -12,6 +12,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/clothes/', include('web.urls')),
     path('api/auth/', include('UserAuth.urls')),
+    path('api/orders/', include('Cart.urls')),
 ]
 
 urlpatterns += i18n_patterns(

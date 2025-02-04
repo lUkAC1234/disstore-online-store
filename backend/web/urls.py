@@ -5,8 +5,6 @@ from .views import (
     ClothesTypeMainView,
     ClothesColorsMainView,
     ClothesSizesMainView,
-    WishlistListView,
-    WishlistDetailView,
 )
 
 urlpatterns = [
@@ -15,6 +13,4 @@ urlpatterns = [
     path('colors/', ClothesColorsMainView.as_view(), name="colors_main"),
     path('sizes/', ClothesSizesMainView.as_view(), name="sizes_main"),
     path('<slug:slug>/', ClothesModelDetailView.as_view(), name="clothes_detail"),  
-    path('wishlist/', WishlistListView.as_view(), name='wishlist-list'),
-    path('wishlist/<int:product_id>/', WishlistDetailView.as_view(), name='wishlist-detail'),
 ]

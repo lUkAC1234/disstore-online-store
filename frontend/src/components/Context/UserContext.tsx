@@ -16,9 +16,9 @@ export interface UserContextActions extends UserContextState {
 
 class UserContextProvider extends PureComponent<UserProviderProps, UserContextState> {
     state: Readonly<UserContextState> = {
-        token: localStorage.getItem('token'),
-        mobileNumber: localStorage.getItem('mobileNumber'),
-        isAuthenticated: !!localStorage.getItem('token'),
+        token: localStorage.getItem("token") ?? null,
+        mobileNumber: localStorage.getItem("mobileNumber") ?? null,
+        isAuthenticated: !!localStorage.getItem("token"),
     };
 
     render(): ReactNode {
@@ -35,7 +35,7 @@ class UserContextProvider extends PureComponent<UserProviderProps, UserContextSt
         )
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const token = localStorage.getItem('authToken');
         const mobileNumber = localStorage.getItem('mobileNumber');
         if (token && mobileNumber) {

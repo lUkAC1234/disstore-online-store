@@ -1,19 +1,16 @@
-from rest_framework import status, generics, permissions, status
-from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from .models import (
     ClothesModel, 
     ClothesColorModel, 
     ClothesSizeModel, 
     TypesModel,
-    WishlistModel
 )
 from .serializer import (
     ClothesModelSerializer,
     ClothesColorSerializer,
     ClothesSizeSerializer,
     ClothesTypeModelSerializer,
-    WishlistSerializer,
 )
 
 from rest_framework.exceptions import NotFound
@@ -107,25 +104,3 @@ class ClothesColorsMainView(ListAPIView):
 class ClothesSizesMainView(ListAPIView):
     queryset = ClothesSizeModel.objects.all()
     serializer_class = ClothesSizeSerializer
-
-class WishlistListView(generics.ListCreateAPIView):
-    serializer_class = WishlistSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return WishlistModel.objects.filter(user=self.request.user).select_related('product')
-
-    def perform_create(self, serializer):
-        product_id = self.request.data.get('product_id')
-        if WishlistModel.objects.filter(user=self.request.user, product_id=product_id).exists():
-            raise serializer.ValidationError("Product already in wishlist")
-        serializer.save(user=self.request.user)
-
-class WishlistDetailView(generics.DestroyAPIView):
-    queryset = WishlistModel.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
-    lookup_field = 'product_id'
-
-    def get_queryset(self):
-        return super().get_queryset().filter(user=self.request.user)
-    
