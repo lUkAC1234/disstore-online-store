@@ -8,7 +8,7 @@ from .models import (
     ClothesReviewModel, 
     ClothesFAQModel, 
 )
-from UserAuth.serializer import RegistrationSerializer
+from UserAuth.serializer import RegisterSerializer
 
 class ClothesColorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,7 +31,7 @@ class ClothesTypeModelSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'image']
         
 class ClothesReviewModelSerializer(serializers.ModelSerializer):
-    user = RegistrationSerializer(read_only=True)
+    user = RegisterSerializer(read_only=True)
     class Meta:
         model = ClothesReviewModel
         fields = ['id', 'product', 'user', 'text', 'created_at', 'is_allowed']

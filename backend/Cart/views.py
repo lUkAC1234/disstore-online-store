@@ -1,31 +1,25 @@
-from django.shortcuts import render
-from .models import (
-    WishlistModel
-)
-
-from .serializer import (
-    WishlistSerializer,
-)
 from rest_framework import status, generics, permissions
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.authentication import SessionAuthentication
+from django.core.exceptions import PermissionDenied
+from web.models import ClothesModel
+from .models import WishlistModel
+from .serializer import WishlistSerializer
+from rest_framework.exceptions import ValidationError
 
 class WishlistListView(generics.ListCreateAPIView):
     serializer_class = WishlistSerializer
     permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
 
     def get_queryset(self):
         return WishlistModel.objects.filter(user=self.request.user).select_related('product')
 
-    def perform_create(self, serializer):
-        product_id = self.request.data.get('product_id')
-        if WishlistModel.objects.filter(user=self.request.user, product_id=product_id).exists():
-            raise serializer.ValidationError("Продукт уже добавлен в избранное")
-        serializer.save(user=self.request.user)
-        
-        
 class WishlistDetailView(generics.DestroyAPIView):
     queryset = WishlistModel.objects.all()
     serializer_class = WishlistSerializer
     permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
 
     def get_object(self):
         obj = super().get_object()

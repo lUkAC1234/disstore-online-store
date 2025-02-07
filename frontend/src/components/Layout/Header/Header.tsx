@@ -24,7 +24,6 @@ const lang = i18next.language;
 
 interface HeaderState {
   activeLink: string | null;
-  noResults: boolean,
 }
 
 interface HeaderProps extends ClothesListActions, UserContextActions { }
@@ -35,7 +34,6 @@ class Header extends UIReact<HeaderProps, HeaderState> {
 
   state: Readonly<HeaderState> = {
     activeLink: null,
-    noResults: false,
   };
 
   toggleSearchInput = () => {
@@ -94,31 +92,18 @@ class Header extends UIReact<HeaderProps, HeaderState> {
     const value = evt.target.value.trim();
     this.props.setTitle(value);
     if (value === "") {
-      this.setState((prevState) => ({
-        ...prevState,
-        noResults: false
-      }));
       this.props.resetFilters()
       return;
     }
 
     if (value.length > 1) {
-      const filteredResults = this.props.products.filter((item) =>
-        encodeURIComponent(item.title.toLowerCase()).includes(encodeURIComponent(value.toLowerCase()))
-      )
-
-      this.setState((prevState) => ({
-        ...prevState,
-        noResults: filteredResults.length === 0,
-      }));
-
       this.props.setApplyFilters();
     }
   };
 
   render() {
     const { activeLink } = this.state;
-    const { mobileNumber } = this.props
+    const { email } = this.props
     return (
       <header className="header" id="header">
         <nav className="navbar">
@@ -272,7 +257,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                   <svg width="1.25rem" height="1.25rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" clipRule="evenodd" d="M12 3C9.79086 3 8 4.79086 8 7V8C8 10.2091 9.79086 12 12 12C14.2091 12 16 10.2091 16 8V7C16 4.79086 14.2091 3 12 3ZM9.5 7C9.5 5.61929 10.6193 4.5 12 4.5C13.3807 4.5 14.5 5.61929 14.5 7V8C14.5 9.38071 13.3807 10.5 12 10.5C10.6193 10.5 9.5 9.38071 9.5 8V7ZM5.50232 19.3686C5.97321 16.2577 9.01803 14.5 12.0022 14.5C14.9858 14.5 18.031 16.2577 18.5019 19.3686C18.5046 19.3866 18.5025 19.3972 18.5 19.4048C18.497 19.4137 18.4903 19.4269 18.4759 19.442C18.4453 19.4741 18.3894 19.5039 18.3171 19.5039H5.68718C5.61487 19.5039 5.55898 19.4741 5.52838 19.442C5.51394 19.4269 5.50726 19.4137 5.50427 19.4048C5.50174 19.3972 5.49961 19.3865 5.50232 19.3686ZM12.0022 13C8.57321 13 4.64037 15.0404 4.01922 19.1441C3.85624 20.2208 4.75727 21.0039 5.68718 21.0039H18.3171C19.247 21.0039 20.148 20.2208 19.985 19.1441C19.3638 15.0404 15.4306 13 12.0022 13Z" fill="black"></path>
                   </svg>
-                  {mobileNumber}
+                  {email}
                 </NavLink>
                 <NavLink
                   to={`/${lang}/cart`}
@@ -312,15 +297,12 @@ class Header extends UIReact<HeaderProps, HeaderState> {
 
     return (
       <>
-        {this.state.noResults ? (
+        {products.length <= 0 ? (
           <div className="header-searched-item">
             <h4 className="header-searched-item-title">К сожалению товары по вашему запросу не найдены</h4>
           </div>
         ) : (
           products
-            .filter((item) =>
-              encodeURIComponent(item.title.toLowerCase()).includes(encodeURIComponent(title.toLowerCase()))
-            )
             .map((item) => (
               <div className="header-searched-item" key={item.id}>
                 <Link

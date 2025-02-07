@@ -21,7 +21,6 @@ class WishlistModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Дата добавления"))
 
     class Meta:
-        unique_together = ['user', 'product']
         verbose_name = _("Список желаний")
         verbose_name_plural = _("Списки желаний")
 

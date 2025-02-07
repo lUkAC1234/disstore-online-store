@@ -9,11 +9,15 @@ const lang: string = i18next.language;
 interface CatalogProductsProps {
     products: ClothItem[];
     addToWishList: (id: number) => void;
+    loadingWishlist: boolean;
 }
 
 class CatalogProducts extends PureComponent<CatalogProductsProps> {
     render(): ReactNode {
-        const { products, addToWishList } = this.props;
+        const { products, addToWishList, loadingWishlist } = this.props;
+
+        if (loadingWishlist) return <SpinnerLoaderWrapper />;
+        
         return (
             <div className={styles["catalog-items-wrapper"]}>
                 {products.map((item: ClothItem) => (

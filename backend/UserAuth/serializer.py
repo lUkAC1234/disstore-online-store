@@ -1,18 +1,63 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import UserModel
 
-class OTPSerializer(serializers.Serializer):
-    mobile_number = serializers.CharField()
-    otp = serializers.CharField(max_length=6, required=False)
+class LoginTokenObtainPairSerializer(TokenObtainPairSerializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
 
-class RegistrationSerializer(serializers.ModelSerializer):
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        user = UserModel.objects.filter(email=email).first()
+
+        if user and user.check_password(password):
+            refresh = self.get_token(user)
+
+            return {
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'access_expiration': refresh.access_token.payload['exp'],
+                'refresh_expiration': refresh.payload['exp'],
+                'user': {
+                    'id': user.id,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'email': user.email,
+                    'mobile_number': user.mobile_number
+                }
+            }
+        
+        raise serializers.ValidationError('Неверная почта или пароль')
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['id'] = user.id
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
+        token['email'] = user.email
+        token['mobile_number'] = user.mobile_number
+        return token
+
+    
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=6)
+    
     class Meta:
         model = UserModel
-        fields = ['mobile_number']
-
+        fields = ('id', 'email', 'password', 'first_name', 'last_name', 'mobile_number')
+        extra_kwargs = {
+            'first_name': {'required': False},
+            'last_name': {'required': False},
+        }
+  
     def create(self, validated_data):
-        return UserModel.objects.create_user(**validated_data)
-    
-class LoginSerializer(serializers.Serializer):
-    mobile_number = serializers.CharField(required=True)
-    otp = serializers.CharField(required=True, style={'input_type': 'password'})
+        return UserModel.objects.create_user(
+            email=validated_data['email'],
+            password=validated_data['password'],
+            first_name=validated_data.get('first_name', ''),
+            last_name=validated_data.get('last_name', ''),
+            mobile_number=validated_data.get('mobile_number', '')
+        )

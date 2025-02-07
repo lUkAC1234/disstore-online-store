@@ -1,24 +1,25 @@
 import { PropsWithChildren, PureComponent, ReactNode } from "react";
 import { UserContext } from "./ContextCollection";
+import Cookies from "utils/modules/Cookies";
 
 export interface UserProviderProps extends PropsWithChildren {}
 
 export interface UserContextState {
     token: string | null;
-    mobileNumber: string | null;
+    email: string | null;
     isAuthenticated: boolean;
 }
 
 export interface UserContextActions extends UserContextState {
-    setLogin: (token: string, mobileNumber: string) => void;
+    setLogin: (token: string, email: string) => void;
     setLogout: () => void;
 }
 
 class UserContextProvider extends PureComponent<UserProviderProps, UserContextState> {
     state: Readonly<UserContextState> = {
-        token: localStorage.getItem("token") ?? null,
-        mobileNumber: localStorage.getItem("mobileNumber") ?? null,
-        isAuthenticated: !!localStorage.getItem("token"),
+        token: Cookies.getCookie("token") ?? null,
+        email: Cookies.getCookie("email") ?? null,
+        isAuthenticated: !!Cookies.getCookie("token"),
     };
 
     render(): ReactNode {
@@ -32,36 +33,42 @@ class UserContextProvider extends PureComponent<UserProviderProps, UserContextSt
             >
                 {this.props.children}
             </UserContext.Provider>
-        )
+        );
     }
 
     async componentDidMount() {
-        const token = localStorage.getItem('authToken');
-        const mobileNumber = localStorage.getItem('mobileNumber');
-        if (token && mobileNumber) {
-            this.setState({ isAuthenticated: true, mobileNumber });
+        const token = Cookies.getCookie('token');
+        const email = Cookies.getCookie('email');
+        if (token && email) {
+            this.setState(prevState => ({
+                ...prevState,
+                token,
+                email,
+                isAuthenticated: true
+            }));
         }
     }
 
-    setLogin = (token: string, mobileNumber: string): void => {
-        localStorage.setItem('token', token);
-        localStorage.setItem('mobileNumber', mobileNumber);
-        this.setState({
+    setLogin = (token: string, email: string): void => {
+        Cookies.setCookie('token', token, 1);
+        Cookies.setCookie('email', email, 1);
+        this.setState(prevState => ({
+            ...prevState,
             token,
-            mobileNumber,
+            email,
             isAuthenticated: true
-        });
-    }
+        }));
+    };
 
     setLogout = (): void => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('mobileNumber');
+        Cookies.deleteCookie('token');
+        Cookies.deleteCookie('email');
         this.setState({
             token: null,
-            mobileNumber: null,
+            email: null,
             isAuthenticated: false
         });
-    }
+    };
 }
 
 export default UserContextProvider;

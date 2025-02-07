@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.templatetags.static import static
 from dotenv import load_dotenv
 import os
+import datetime
 
 DEBUG = True
 
@@ -23,6 +24,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     "corsheaders",
     'django_filters',
     'import_export',
@@ -51,9 +53,17 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny'
     ],
 
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ]
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 FILE_CHARSET = "utf-8"
@@ -227,7 +237,3 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 # LOGIN_URL = 'main:login'
 
 load_dotenv()
-
-TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
-TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
-TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')

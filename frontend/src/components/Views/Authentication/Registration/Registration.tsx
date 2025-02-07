@@ -8,9 +8,8 @@ import UIReact from "utils/classes/UIReact";
 import { Navigate } from "react-router-dom";
 
 interface RegistrationState {
-  mobileNumber: string;
-  otp: string;
-  step: 'input' | 'verify';
+  email: string;
+  password: string;
   error: string;
   loading: boolean;
   success: boolean;
@@ -20,18 +19,24 @@ interface RegistrationProps extends UserContextActions { }
 
 class Registration extends UIReact<RegistrationProps, RegistrationState> {
   state: RegistrationState = {
-    mobileNumber: '',
-    otp: '',
-    step: 'input',
+    email: '',
+    password: '',
     error: '',
     loading: false,
     success: false
   };
 
-  handleMobileSubmit = async () => {
-    const { mobileNumber } = this.state;
-    if (!/^\+998\d{9}$/.test(mobileNumber)) {
-      this.setState({ error: 'Invalid mobile number format' });
+  handleRegisterSubmit = async () => {
+    const { email, password } = this.state;
+
+    // Валидация email
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      this.setState({ error: 'Неверный формат email' });
+      return;
+    }
+    // Простейшая валидация пароля
+    if (password.length < 6) {
+      this.setState({ error: 'Пароль должен содержать не менее 6 символов' });
       return;
     }
 
@@ -40,56 +45,27 @@ class Registration extends UIReact<RegistrationProps, RegistrationState> {
       const response = await fetch(`${origin}/auth/register/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile_number: mobileNumber })
+        body: JSON.stringify({ email, password })
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        if (response.status === 400 && errorData.error.includes('already exists')) {
-          throw new Error('This mobile number is already registered. Please log in instead.');
-        }
-        throw new Error(errorData.error || 'Registration failed');
-      }
-
-      this.setState({ step: 'verify', error: '' });
-    } catch (error: any) {
-      this.setState({ error: error.message || 'Registration failed' });
-    } finally {
-      this.setState({ loading: false });
-    }
-  };
-
-  handleOtpSubmit = async () => {
-    const { mobileNumber, otp } = this.state;
-    this.setState({ loading: true, error: '' });
-
-    try {
-      const response = await fetch(`${origin}/auth/login/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          mobile_number: mobileNumber,
-          otp: otp
-        })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Invalid OTP');
+        throw new Error(errorData.error || 'Регистрация не удалась');
       }
 
       const data = await response.json();
-      this.props?.setLogin(data.token, mobileNumber);
+      // Ожидается, что API возвращает токен (data.access) и объект user с email
+      this.props?.setLogin(data.access, data.user.email);
       this.setState({ success: true });
     } catch (error: any) {
-      this.setState({ error: error.message || 'Invalid OTP' });
+      this.setState({ error: error.message || 'Регистрация не удалась' });
     } finally {
       this.setState({ loading: false });
     }
   };
 
   render(): ReactNode {
-    const { step, mobileNumber, otp, error, loading, success } = this.state;
+    const { email, password, error, loading, success } = this.state;
 
     if (success) {
       return <Navigate to="/" replace />;
@@ -97,37 +73,29 @@ class Registration extends UIReact<RegistrationProps, RegistrationState> {
 
     return (
       <div className={styles.registrationContainer}>
-        {step === 'input' ? (
-          <>
-            <input
-              type="tel"
-              placeholder="+998XXXXXXXXX"
-              value={mobileNumber}
-              onChange={(e) => this.setState({ mobileNumber: e.target.value })}
-            />
-            <button
-              onClick={this.handleMobileSubmit}
-              disabled={loading}
-            >
-              {loading ? 'Registering...' : 'Register'}
-            </button>
-          </>
-        ) : (
-          <>
-            <input
-              type="number"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => this.setState({ otp: e.target.value })}
-            />
-            <button
-              onClick={this.handleOtpSubmit}
-              disabled={loading}
-            >
-              {loading ? 'Verifying...' : 'Verify OTP'}
-            </button>
-          </>
-        )}
+        <div className={styles.formGroup}>
+          <input
+            type="email"
+            placeholder="Введите email"
+            value={email}
+            onChange={(e) => this.setState({ email: e.target.value })}
+            className={styles.inputField}
+          />
+          <input
+            type="password"
+            placeholder="Введите пароль"
+            value={password}
+            onChange={(e) => this.setState({ password: e.target.value })}
+            className={styles.inputField}
+          />
+          <button
+            onClick={this.handleRegisterSubmit}
+            disabled={loading}
+            className={styles.submitButton}
+          >
+            {loading ? 'Регистрация...' : 'Зарегистрироваться'}
+          </button>
+        </div>
         {error && <div className={styles.error}>{error}</div>}
       </div>
     );

@@ -7,22 +7,27 @@ from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationFo
 
 @admin.register(UserModel)
 class UserAdmin(BaseUserAdmin, ModelAdmin):
-    list_display = ['id', 'mobile_number', 'is_verified', 'date_joined']
-    list_display_links = ['id', 'mobile_number']
-    search_fields = ['mobile_number']
-    ordering= ['mobile_number']
+    list_display = ['id', 'username', 'mobile_number', 'date_joined']
+    list_display_links = ['id', 'username', 'mobile_number']
+    search_fields = ['username', 'mobile_number']
+    ordering = ['username', 'mobile_number']
     form = UserChangeForm
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
+    readonly_fields = ('date_joined',)
+
     fieldsets = (
-        (None, {'fields': ('mobile_number', 'password')}),
-        ('Permissions', {'fields': ('is_staff', 'is_superuser', 'is_verified')}),
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'mobile_number')}),
+        (_('Permissions'), {
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+        }),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('mobile_number', 'password1', 'password2', 'is_staff', 'is_superuser', 'is_verified'),
+            'fields': ('username', 'mobile_number', 'password1', 'password2'),
         }),
     )
-    readonly_fields = ('date_joined',)
