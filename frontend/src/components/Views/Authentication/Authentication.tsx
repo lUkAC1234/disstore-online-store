@@ -24,26 +24,37 @@ class Authentication extends UIReact<AuthenticationProps, AuthenticationState> {
 
     render(): ReactNode {
         const { isLoginView } = this.state;
+        const { isAuthenticated } = this.props;
 
         return (
             <section className={styles["auth-section"]}>
                 <div className={styles["auth-container"]}>
-                    <div className={styles.toggleContainer}>
-                        <button
-                            className={isLoginView ? styles.active : ''}
-                            onClick={() => this.setState({ isLoginView: true })}
-                        >
-                            Login
-                        </button>
-                        <button
-                            className={!isLoginView ? styles.active : ''}
-                            onClick={() => this.setState({ isLoginView: false })}
-                        >
-                            Register
-                        </button>
-                    </div>
-                    
-                    {isLoginView ? <Login /> : <Registration />}
+                    {isAuthenticated ? (
+                        <div>
+                            <h2>Вы уже авторизованы</h2>
+                            <button onClick={this.props.setLogout}>Выйти</button>
+                        </div>
+                    ) : (
+                        <>
+                            <div className={styles.toggleContainer}>
+                                <button
+                                    className={isLoginView ? styles.active : ''}
+                                    onClick={() => this.setState({ isLoginView: true })}
+                                >
+                                    Login
+                                </button>
+                                <button
+                                    className={!isLoginView ? styles.active : ''}
+                                    onClick={() => this.setState({ isLoginView: false })}
+                                >
+                                    Register
+                                </button>
+                            </div>
+
+                            {isLoginView ? <Login /> : <Registration />}
+                        </>
+                    )}
+
                 </div>
             </section>
         );
