@@ -50,8 +50,8 @@ class UserContextProvider extends PureComponent<UserProviderProps, UserContextSt
     }
 
     setLogin = (token: string, email: string): void => {
-        Cookies.setCookie('token', token, 1);
-        Cookies.setCookie('email', email, 1);
+        Cookies.setCookie('token', token, 7);
+        Cookies.setCookie('email', email, 7);
         this.setState(prevState => ({
             ...prevState,
             token,

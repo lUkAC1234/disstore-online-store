@@ -54,7 +54,6 @@ class Registration extends UIReact<RegistrationProps, RegistrationState> {
       }
 
       const data = await response.json();
-      // Ожидается, что API возвращает токен (data.access) и объект user с email
       this.props?.setLogin(data.access, data.user.email);
       this.setState({ success: true });
     } catch (error: any) {

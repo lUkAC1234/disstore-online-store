@@ -663,3 +663,28 @@ body:has(.header-links-container.active),
 body:has(.header-search-input-container.active) {
     overflow-y: hidden;
 }
+
+.header-like-link,
+.header-shopping-cart-link {
+    position: relative;
+}
+
+.header-orders-count-container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: -0.25rem;
+    right: -0.5rem;
+    background: var(--clothes-discount-number);
+    color: var(--text-white);
+    font-weight: 900;
+    padding: 0;
+    height: 0.75rem;
+    width: 0.75rem;
+    border-radius: 50%;
+}
+
+.header-orders-count-number {
+    font-size: 0.5rem;
+}

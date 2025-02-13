@@ -30,3 +30,9 @@ class UserRegistrationView(APIView):
                 'last_name': user.last_name
             }
         }, status=status.HTTP_201_CREATED)
+        
+# views.py
+from django.http import JsonResponse
+
+def ping(request):
+    return JsonResponse({'status': 'ok'})
