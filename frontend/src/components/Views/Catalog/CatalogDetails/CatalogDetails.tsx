@@ -4,7 +4,7 @@ import "swiper/css/navigation";
 import { ReactNode } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import { faAngleRight, faCheck, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import star5 from "assets/main/images/main-page/5star.png";
 import { Link } from "react-router-dom";
@@ -166,6 +166,7 @@ class CatalogDetails extends UIReact<
   handleImageClick = (image: string): void => {
     this.setState({ selectedImage: image });
   };
+
   render(): ReactNode {
     if (this.props.loading) {
       return <SpinnerLoaderWrapperFixed />;

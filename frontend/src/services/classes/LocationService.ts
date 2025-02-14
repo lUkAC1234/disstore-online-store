@@ -1,3 +1,4 @@
+import { supportedLanguages } from "i18n/constants";
 import IService from "./IService";
 
 export function withoutLangPathname(): string {
@@ -9,6 +10,10 @@ export function withoutLangPathname(): string {
     if (i > 1) {
       finalPathname += `/${path}`;
     }
+  }
+
+  if (finalPathname === "") {
+    return "/";
   }
 
   return finalPathname;
@@ -24,11 +29,21 @@ class LocationService<CTX> extends IService<CTX> {
   }
 
   get langPath(): string {
-    return this.splittedPathname[1];
+    const langPathIndex: number = this.splittedPathname.findIndex(lng => supportedLanguages.includes(lng));
+    if (langPathIndex === -1) return;
+    return this.splittedPathname[langPathIndex];
   }
 
   get withoutLangPathname(): string {
     return withoutLangPathname();
+  }
+
+  get isHttp(): boolean {
+    return location.protocol === "http:";
+  }
+
+  get isHttps(): boolean {
+    return location.protocol === "https:";
   }
 }
 

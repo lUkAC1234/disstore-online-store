@@ -1,6 +1,6 @@
 import { PureComponent } from "react";
 import { putZero } from "./DateComputed.utils";
-import { COMPONENT } from "services/utils/Injectors";
+import { COMPONENT } from "decorators/Component";
 
 @COMPONENT<DateComputed>({
   template: (_this) => {

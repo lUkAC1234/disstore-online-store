@@ -38,6 +38,7 @@
       "types/*": ["./src/types/*"],
       "utils/*": ["./src/utils/*"],
       "services/*": ["./src/services/*"],
+      "decorators/*": ["./src/decorators/*"],
       "web-components/*": ["./src/web-components/*"],
     },
 

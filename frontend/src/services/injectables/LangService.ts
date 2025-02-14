@@ -14,15 +14,15 @@ class LangService<P extends WithTranslation> {
   }
 
   t(key: string | TemplateStringsArray | (string | TemplateStringsArray)[]): string {
+    if (!this?.props) {
+      console.warn("There is no props property");
+      return;
+    }
     return this.props.t(key);
   }
 
   changeLanguage(lng: string, callback?: () => void): void {
     this.props.i18n.changeLanguage(lng, callback);
-  }
-
-  CLEANUP_langService = (): void => {
-    console.log("clean up of lang service");
   }
 }
 

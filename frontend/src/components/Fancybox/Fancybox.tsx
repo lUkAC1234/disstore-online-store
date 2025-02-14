@@ -3,7 +3,7 @@ import { OptionsType } from "@fancyapps/ui/types/Fancybox/options";
 import { withContext } from "components/Context/ContextInjector";
 import { GlobalContext } from "components/Context/GlobalContext";
 import { PureComponent, RefObject, createRef } from "react";
-import { COMPONENT } from "services/utils/Injectors";
+import { COMPONENT } from "decorators/Component";
 
 @COMPONENT<UIFancybox>({
   template: (_this) => {

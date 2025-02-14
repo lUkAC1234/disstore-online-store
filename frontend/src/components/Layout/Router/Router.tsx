@@ -2,7 +2,7 @@ import { lazy, ReactNode, Suspense } from "react";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { supportedLanguages } from "i18n/constants";
 import { getWithTranslation } from "i18n/hooks";
-import { COMPONENT } from "services/utils/Injectors";
+import { COMPONENT } from "decorators/Component";
 import UIReact from "utils/classes/UIReact";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 import Header from "../Header/Header";

@@ -43,6 +43,7 @@ export default defineConfig({
       types: path.resolve(root, "types"),
       utils: path.resolve(root, "utils"),
       services: path.resolve(root, "services"),
+      decorators: path.resolve(root, "decorators"),
       "web-components": path.resolve(root, "web-components")
     },
   },

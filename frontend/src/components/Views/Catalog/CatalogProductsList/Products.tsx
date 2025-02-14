@@ -3,13 +3,18 @@ import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import { PureComponent, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ClothItem } from "components/Context/ClothesContext";
-import i18next from "i18next";
 import { WishlistItem } from "components/Context/WishlistContext";
 import { CartItem } from "components/Context/CartContext"; // Import CartItem type
+import { withContext } from "components/Context/ContextInjector";
+import { ProductModalContext } from "components/Context/ContextCollection";
+import { ProductModalActions } from "components/Context/ProductModal";
+import { getWithTranslation } from "i18n/hooks";
+import { WithTranslation } from "react-i18next";
+import { createPortal } from "react-dom";
+import UICatalogModal from "../CatalogDetails/CatalogDetailsModal";
+import Modal from "components/Modal/Modal";
 
-const lang: string = i18next.language;
-
-interface CatalogProductsProps {
+interface CatalogProductsProps extends ProductModalActions, WithTranslation {
   products: ClothItem[];
   wishlistItems?: WishlistItem[];
   cartItems?: CartItem[];
@@ -20,30 +25,53 @@ interface CatalogProductsProps {
 }
 
 class CatalogProducts extends PureComponent<CatalogProductsProps> {
+  get lang(): string {
+    return this.props.i18n.language;
+  }
+
+  get portalContent(): ReactNode {
+    return (
+      <Modal>
+        <button
+          type="button"
+          onClick={this.closeModal}
+        >Close modal</button>
+        {this.props.modalChildren}
+      </Modal>
+    );
+  }
+
+  get portalContainer(): ReactNode {
+    return this.props.isModalActive
+      ? createPortal(this.portalContent, document.body)
+      : null;
+  }
+
   render(): ReactNode {
     const {
       products,
       addToWishList,
       removeFromWishlist,
-      toggleCartItem,
+      // toggleCartItem,
       wishlistItems = [],
       cartItems = [],
     } = this.props;
 
     return (
       <div className={styles["catalog-items-wrapper"]}>
+        {this.portalContainer}
         {products.map((item: ClothItem) => {
           const wishlistItem = wishlistItems.find(
             (wItem) => wItem.product.id === item.id
           );
           const inWishlist = Boolean(wishlistItem);
-          const inCart = cartItems.some((ci) => ci.product.id === item.id);
+          // const inCart = cartItems.some((ci) => ci.product.id === item.id);
 
           return (
             <div key={item.id} className={styles["catalog-item"]}>
               <Link
                 className={styles["catalog-item-link"]}
-                to={`/${lang}/catalog/clothes/${item.slug}`}
+                to={`/${this.lang}/catalog/clothes/${item.slug}`}
               />
               <div className={styles["catalog-item-wishlist-container"]}>
                 <button
@@ -141,9 +169,7 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
                 </bdi>
                 <button
                   className={styles["catalog-add-cart-link"]}
-                  onClick={() => {
-                    toggleCartItem(item.id)
-                  }}
+                  onClick={() => this.onCartAdd(item.slug)}
                 >
                   {cartItems.some((ci) => ci.product.id === item.id) ? (
                     <span>Remove from Cart</span>
@@ -174,6 +200,38 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
       </div>
     );
   }
+
+  componentDidMount(): void {
+    window.addEventListener("keydown", this.onEscapeHandler);
+  }
+
+  componentWillUnmount(): void {
+    window.removeEventListener("keydown", this.onEscapeHandler);
+  }
+
+  onEscapeHandler = (evt: KeyboardEvent): void => {
+    if (evt.key === "Escape" && this.props.isModalActive) {
+      this.closeModal();
+    }
+  }
+
+  onCartAdd = (slug: string): void => {
+    this.props.toggleModal(() => {
+      if (this.props.isModalActive) {
+        this.props.setModalChildren(<UICatalogModal productSlug={slug} />);
+      } else {
+        this.props.setModalChildren(null);
+      }
+    });
+  }
+
+  closeModal = (): void => {
+    this.props.toggleModal(() => {
+      this.props.setModalChildren(null);
+    });
+  }
 }
 
-export default CatalogProducts;
+const UICatalogProduct = getWithTranslation(withContext(ProductModalContext, CatalogProducts));
+
+export default UICatalogProduct;
