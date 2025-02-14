@@ -15,7 +15,7 @@ interface RegistrationState {
   success: boolean;
 }
 
-interface RegistrationProps extends UserContextActions { }
+interface RegistrationProps extends UserContextActions {}
 
 class Registration extends UIReact<RegistrationProps, RegistrationState> {
   state: RegistrationState = {
@@ -23,20 +23,55 @@ class Registration extends UIReact<RegistrationProps, RegistrationState> {
     password: '',
     error: '',
     loading: false,
-    success: false
+    success: false,
+  };
+
+  // Validate password by checking each criterion and return an array of missing requirements.
+  validatePassword = (password: string): string[] => {
+    const errors: string[] = [];
+
+    // Check minimum length
+    if (password.length < 6) {
+      errors.push("Пароль должен содержать не менее 6 символов");
+    }
+
+    // Check for at least one uppercase letter (without regex)
+    let hasUpperCase = false;
+    for (const char of password) {
+      if (char >= "A" && char <= "Z") {
+        hasUpperCase = true;
+        break;
+      }
+    }
+    if (!hasUpperCase) {
+      errors.push("Пароль должен содержать хотя бы одну заглавную букву");
+    }
+
+    // Check if the password is too common
+    const commonPasswords = [
+      "password", "123456", "qwerty", "111111", "12345678",
+      "abc123", "1234567", "password1", "12345"
+    ];
+    if (commonPasswords.includes(password.toLowerCase())) {
+      errors.push("Пароль слишком простой");
+    }
+
+    return errors;
   };
 
   handleRegisterSubmit = async () => {
     const { email, password } = this.state;
 
-    // Валидация email
+    // Email validation
     if (!/^\S+@\S+\.\S+$/.test(email)) {
       this.setState({ error: 'Неверный формат email' });
       return;
     }
-    // Простейшая валидация пароля
-    if (password.length < 6) {
-      this.setState({ error: 'Пароль должен содержать не менее 6 символов' });
+
+    // Validate password with detailed requirements
+    const passwordErrors = this.validatePassword(password);
+    if (passwordErrors.length > 0) {
+      this.setState({ error: passwordErrors.join(". ") });
       return;
     }
 
@@ -45,19 +80,21 @@ class Registration extends UIReact<RegistrationProps, RegistrationState> {
       const response = await fetch(`${origin}/auth/register/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Регистрация не удалась');
+        throw new Error(errorData.email || 'Регистрация не удалась');
       }
 
       const data = await response.json();
-      this.props?.setLogin(data.access, data.user.email);
+      // Pass the complete user object to setLogin so that context gets all details.
+      this.props?.setLogin(data.access, data.user);
       this.setState({ success: true });
     } catch (error: any) {
-      this.setState({ error: error.message || 'Регистрация не удалась' });
+      this.setState({ error: error.message });
+      console.log(error.message)
     } finally {
       this.setState({ loading: false });
     }
@@ -69,6 +106,9 @@ class Registration extends UIReact<RegistrationProps, RegistrationState> {
     if (success) {
       return <Navigate to="/" replace />;
     }
+
+    // Get missing password requirements (if any)
+    const passwordRequirements = this.validatePassword(password);
 
     return (
       <div className={styles.registrationContainer}>
@@ -96,11 +136,20 @@ class Registration extends UIReact<RegistrationProps, RegistrationState> {
           </button>
         </div>
         {error && <div className={styles.error}>{error}</div>}
+        {password && passwordRequirements.length > 0 && (
+          <div className={styles.passwordRequirements}>
+            <p>Для надежности пароль должен соответствовать следующим требованиям:</p>
+            <ul>
+              {passwordRequirements.map((req, idx) => (
+                <li key={idx}>{req}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     );
   }
 }
 
 const UIRegistration = withContext(UserContext, Registration);
-
 export default UIRegistration;

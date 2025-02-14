@@ -46,7 +46,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "UserAuth.middleware.TrackUserActivityMiddleware",
 ]
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  
@@ -239,6 +238,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'UserAuth.UserModel'
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 # LOGIN_URL = 'main:login'
 
 load_dotenv()

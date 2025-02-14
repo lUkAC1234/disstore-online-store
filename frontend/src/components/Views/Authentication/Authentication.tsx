@@ -32,6 +32,10 @@ class Authentication extends UIReact<AuthenticationProps, AuthenticationState> {
                     {isAuthenticated ? (
                         <div>
                             <h2>Вы уже авторизованы</h2>
+                            <p>{this.props.user?.email}</p>
+                            <p>{this.props.user?.first_name}</p>
+                            <p>{this.props.user?.last_name}</p>
+                            <p>{this.props.user?.mobile_number}</p>
                             <button onClick={this.props.setLogout}>Выйти</button>
                         </div>
                     ) : (

@@ -1,7 +1,6 @@
 import { PropsWithChildren, PureComponent } from "react";
 import { CartContext } from "./ContextCollection";
 import { ClothItem } from "./ClothesContext";
-import axios from "axios";
 import { origin } from "../../../project.config.json";
 import Cookies from "utils/modules/Cookies";
 
@@ -24,10 +23,11 @@ export interface CartData {
 export interface CartContextState {
   cart: CartData | null;
   loadingCart: boolean;
-  currentToken: string | null;
 }
 
-export interface CartContextActions extends Omit<CartContextState, 'currentToken'> {
+export interface CartContextActions {
+  cart: CartData | null;
+  loadingCart: boolean;
   addToCart: (productId: number) => Promise<void>;
   removeFromCart: (cartItemId: number) => Promise<void>;
   fetchCart: () => Promise<void>;
@@ -36,110 +36,110 @@ export interface CartContextActions extends Omit<CartContextState, 'currentToken
   updateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
 }
 
-function getUserIdFromToken(token: string): string {
-  try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
-    );
-    const payload = JSON.parse(jsonPayload);
-    return payload.id ? String(payload.id) : "";
-  } catch (error) {
-    console.error("Error decoding token", error);
-    return "";
-  }
-}
-
-function getCartCookieKey(): string {
-  const token = Cookies.getCookie("token");
-  if (token) {
-    const userId = getUserIdFromToken(token);
-    return userId ? `cart_${userId}` : "cart";
-  }
-  return "cart";
-}
-
-const api = axios.create({
-  baseURL: origin,
-  headers: {
-    "Content-Type": "application/json",
-  }
-});
-
-api.interceptors.request.use((config) => {
-  const token = Cookies.getCookie("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
 class CartContextProvider extends PureComponent<CartProviderProps, CartContextState> {
   state: Readonly<CartContextState> = {
     cart: null,
     loadingCart: false,
-    currentToken: Cookies.getCookie("token"),
   };
 
-  componentDidUpdate(prevProps: CartProviderProps, prevState: CartContextState) {
-    const newToken = Cookies.getCookie("token");
-    if (prevState.currentToken !== newToken) {
-      this.setState({ currentToken: newToken });
-      if (newToken) {
-        this.fetchCart();
-      } else {
-        this.clearCart();
-      }
+  private tokenInterval: NodeJS.Timeout | null = null;
+
+  private getHeaders(): Record<string, string> {
+    const token = Cookies.getCookie("token");
+    return {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+  }
+
+  private async executeWithLoading<T>(
+    action: () => Promise<T>,
+    errorMessage?: string
+  ): Promise<T> {
+    this.setState({ loadingCart: true });
+    try {
+      return await action();
+    } catch (error) {
+      console.error(errorMessage || "Error:", error);
+      throw error;
+    } finally {
+      this.setState({ loadingCart: false });
     }
   }
 
-  fetchCart = async () => {
-    try {
-      this.setState({ loadingCart: true });
-      const response = await api.get("orders/cart/");
-      // Ожидаем, что бэкенд возвращает объект корзины с summary-полями
-      this.setState({ cart: response.data });
-      Cookies.setCookie(getCartCookieKey(), JSON.stringify(response.data.cartItems), 1);
-    } catch (error) {
-      console.error("Error fetching cart:", error);
-    } finally {
-      this.setState({ loadingCart: false });
+  componentDidMount() {
+    this.checkTokenAndUpdate();
+    this.tokenInterval = setInterval(this.checkTokenAndUpdate, 2000);
+  }
+
+  componentWillUnmount() {
+    if (this.tokenInterval) {
+      clearInterval(this.tokenInterval);
     }
+  }
+
+  checkTokenAndUpdate = async () => {
+    const token = Cookies.getCookie("token");
+    if (!token && this.state.cart !== null) {
+      this.clearCart();
+    } else if (token && this.state.cart === null) {
+      await this.fetchCart();
+    }
+  };
+
+  fetchCart = async () => {
+    await this.executeWithLoading(
+      async () => {
+        const response = await fetch(`${origin}/orders/cart/`, {
+          method: "GET",
+          headers: this.getHeaders(),
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data: CartData = await response.json();
+        this.setState({ cart: data });
+      },
+      "Error fetching cart:"
+    );
   };
 
   addToCart = async (productId: number) => {
-    try {
-      this.setState({ loadingCart: true });
-      await api.post("orders/cart/items/", { product_id: productId, quantity: 1 });
-      await this.fetchCart();
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-      throw error;
-    } finally {
-      this.setState({ loadingCart: false });
-    }
+    await this.executeWithLoading(
+      async () => {
+        const response = await fetch(`${origin}/orders/cart/items/`, {
+          method: "POST",
+          headers: this.getHeaders(),
+          body: JSON.stringify({ product_id: productId, quantity: 1 }),
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        await this.fetchCart();
+      },
+      "Error adding to cart:"
+    );
   };
 
   removeFromCart = async (cartItemId: number) => {
-    try {
-      this.setState({ loadingCart: true });
-      await api.delete(`orders/cart/items/${cartItemId}/`);
-      await this.fetchCart();
-    } catch (error) {
-      console.error("Error removing from cart:", error);
-      throw error;
-    } finally {
-      this.setState({ loadingCart: false });
-    }
+    await this.executeWithLoading(
+      async () => {
+        const response = await fetch(`${origin}/orders/cart/items/${cartItemId}/`, {
+          method: "DELETE",
+          headers: this.getHeaders(),
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        await this.fetchCart();
+      },
+      "Error removing from cart:"
+    );
   };
 
   toggleCartItem = async (productId: number) => {
-    const cartItems = this.state.cart?.items || [];
-    const existingItem = cartItems.find(item => item.product.id === productId);
+    const items = this.state.cart?.items || [];
+    const existingItem = items.find((item) => item.product.id === productId);
     if (existingItem) {
       await this.removeFromCart(existingItem.id);
     } else {
@@ -148,20 +148,24 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
   };
 
   updateCartItem = async (cartItemId: number, quantity: number) => {
-    try {
-      this.setState({ loadingCart: true });
-      await api.patch(`orders/cart/items/${cartItemId}/`, { quantity });
-      await this.fetchCart();
-    } catch (error) {
-      console.error("Error updating cart item:", error);
-      throw error;
-    } finally {
-      this.setState({ loadingCart: false });
-    }
+    await this.executeWithLoading(
+      async () => {
+        const response = await fetch(`${origin}/orders/cart/items/${cartItemId}/`, {
+          method: "PATCH",
+          headers: this.getHeaders(),
+          body: JSON.stringify({ quantity }),
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        await this.fetchCart();
+      },
+      "Error updating cart item:"
+    );
   };
 
   clearCart = (): void => {
-    this.setState({ cart: null }, () => Cookies.deleteCookie(getCartCookieKey()));
+    this.setState({ cart: null });
   };
 
   render() {

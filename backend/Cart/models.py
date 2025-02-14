@@ -36,6 +36,10 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"Cart of {self.user.email}"
+    
+    class Meta: 
+        verbose_name = _("Корзина")
+        verbose_name_plural = _("Корзина")
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
@@ -46,6 +50,8 @@ class CartItem(models.Model):
     class Meta:
         unique_together = ('cart', 'product')
         ordering = ['-created_at']
+        verbose_name = _("Товары корзины")
+        verbose_name_plural = _("Товары корзины")
 
     def __str__(self):
         return f"{self.product} x {self.quantity}"

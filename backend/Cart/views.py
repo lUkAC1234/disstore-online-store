@@ -1,17 +1,14 @@
-from rest_framework import status, generics, permissions
+from rest_framework import generics, permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.authentication import SessionAuthentication
 from django.core.exceptions import PermissionDenied
-from web.models import ClothesModel
 from .models import WishlistModel, Cart, CartItem
 from .serializer import WishlistSerializer, CartSerializer, CartItemSerializer
-from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 
 class WishlistListView(generics.ListCreateAPIView):
     serializer_class = WishlistSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
         return WishlistModel.objects.filter(user=self.request.user).select_related('product')
@@ -20,7 +17,7 @@ class WishlistDetailView(generics.DestroyAPIView):
     queryset = WishlistModel.objects.all()
     serializer_class = WishlistSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication, SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
 
     def get_object(self):
         obj = super().get_object()

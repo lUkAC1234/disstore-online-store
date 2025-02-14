@@ -11,7 +11,7 @@ import {
   faArrowLeftLong,
 } from "@fortawesome/free-solid-svg-icons";
 import { withContext } from "components/Context/ContextInjector";
-import { ClothesListContext, UserContext, WishlistContext } from "components/Context/ContextCollection";
+import { CartContext, ClothesListContext, UserContext, WishlistContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import SpinnerLoader from "components/Loaders/SpinnerLoader";
 import HeaderError from "./HeaderError/HeaderError";
@@ -20,6 +20,7 @@ import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import UIReact from "utils/classes/UIReact";
 import { UserContextActions } from "components/Context/UserContext";
 import { WishlistContextActions } from "components/Context/WishlistContext";
+import { CartContextActions } from "components/Context/CartContext";
 
 const lang = i18next.language;
 
@@ -27,7 +28,12 @@ interface HeaderState {
   activeLink: string | null;
 }
 
-interface HeaderProps extends ClothesListActions, UserContextActions, WishlistContextActions { }
+interface HeaderProps extends 
+ClothesListActions, 
+UserContextActions, 
+WishlistContextActions, 
+CartContextActions 
+{ }
 
 class Header extends UIReact<HeaderProps, HeaderState> {
   searchInputContainerRef = createRef<HTMLDivElement>();
@@ -104,7 +110,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
 
   render() {
     const { activeLink } = this.state;
-    const { email, wishlistItems } = this.props
+    const { cart, wishlistItems } = this.props
     return (
       <header className="header" id="header">
         <nav className="navbar">
@@ -272,10 +278,10 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                     return activeClassNameObserver(`/cart`, "header-shopping-cart-link");
                   }}
                 >
-                  {wishlistItems.length > 0 ? 
+                  {cart?.items?.length > 0 ? 
                   (
                     <div className="header-orders-count-container">
-                      <span className="header-orders-count-number">{wishlistItems.length}</span>
+                      <span className="header-orders-count-number">{cart?.items?.length}</span>
                     </div>
                   ) : null}
                   <svg width="1.25rem" height="1.25rem" viewBox="0 0 24 24" fill="var(--text-black)" xmlns="http://www.w3.org/2000/svg">
@@ -411,6 +417,11 @@ class Header extends UIReact<HeaderProps, HeaderState> {
   }
 }
 
-const UIHeader = withContext(ClothesListContext, withContext(UserContext, withContext(WishlistContext, Header)));
+const UIHeader = 
+withContext(ClothesListContext, 
+withContext(UserContext, 
+withContext(WishlistContext, 
+withContext(CartContext, Header
+))));
 
 export default UIHeader;

@@ -17,7 +17,6 @@ class Cart extends PureComponent<CartProps> {
     if (document.documentElement.scrollTop > 0) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-    this.props.fetchCart();
   }
 
   handleIncrease = async (cartItem: CartItem) => {
@@ -42,7 +41,7 @@ class Cart extends PureComponent<CartProps> {
 
   renderCartItems(): ReactNode {
     const { cart } = this.props;
-    return cart.items.map((item) => (
+    return cart?.items?.map((item) => (
       <div key={item.id} className={styles["cart-item"]}>
         <button
           className={styles["delete-from-cart-button"]}
@@ -113,7 +112,7 @@ class Cart extends PureComponent<CartProps> {
 
     return (
       <div className={styles["cart-container"]}>
-        {!cart || !cart.items || cart.items.length === 0 ? (<EmptyCart />) :
+        {!cart || !cart?.items || cart?.items?.length === 0 ? (<EmptyCart />) :
           <>
             <h1 className={styles["cart-title"]}>Ваша Корзина</h1>
             <div className={styles["cart-content-container"]}>

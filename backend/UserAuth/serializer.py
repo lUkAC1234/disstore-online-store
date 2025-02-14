@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import UserModel
+from rest_framework.exceptions import ValidationError
+from django.db import IntegrityError
 
 class LoginTokenObtainPairSerializer(TokenObtainPairSerializer):
     email = serializers.EmailField()
@@ -28,7 +30,6 @@ class LoginTokenObtainPairSerializer(TokenObtainPairSerializer):
                     'mobile_number': user.mobile_number
                 }
             }
-        
         raise serializers.ValidationError('Неверная почта или пароль')
 
     @classmethod
@@ -51,13 +52,27 @@ class RegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'first_name': {'required': False},
             'last_name': {'required': False},
+            'mobile_number': {'required': False},
         }
+        
+    def validate_email(self, value):
+        email = value.lower()
+        if UserModel.objects.filter(email=email).exists():
+            raise serializers.ValidationError(
+                "Пользователь с таким email уже существует. Пожалуйста, залогиньтесь."
+            )
+        return email
+
   
     def create(self, validated_data):
-        return UserModel.objects.create_user(
-            email=validated_data['email'],
-            password=validated_data['password'],
-            first_name=validated_data.get('first_name', ''),
-            last_name=validated_data.get('last_name', ''),
-            mobile_number=validated_data.get('mobile_number', '')
-        )
+        try:
+            return UserModel.objects.create_user(
+                email=validated_data['email'],
+                password=validated_data['password'],
+                first_name=validated_data.get('first_name', ''),
+                last_name=validated_data.get('last_name', ''),
+                mobile_number=validated_data.get('mobile_number', '')
+            )
+        except IntegrityError:
+            # In case the database throws an integrity error (duplicate email)
+            raise ValidationError("Пользователь с таким email уже существует. Пожалуйста, залогиньтесь.")

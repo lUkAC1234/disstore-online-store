@@ -28,7 +28,7 @@ class Login extends UIReact<LoginProps, LoginState> {
 
     handleLoginSubmit = async () => {
         const { email, password } = this.state;
-
+    
         if (!/^\S+@\S+\.\S+$/.test(email)) {
             this.setState({ error: 'Неверный формат email' });
             return;
@@ -37,7 +37,7 @@ class Login extends UIReact<LoginProps, LoginState> {
             this.setState({ error: 'Пароль обязателен' });
             return;
         }
-
+    
         this.setState({ loading: true, error: '' });
         try {
             const response = await fetch(`${origin}/auth/login/`, {
@@ -45,16 +45,16 @@ class Login extends UIReact<LoginProps, LoginState> {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
             });
-
+    
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.error || 'Неверный email или пароль');
             }
             
             const data = await response.json();
-            this.props?.setLogin(data.access, data.user.email);
+            this.props?.setLogin(data.access, data.user);
             this.setState({ success: true });
-            console.log(data)
+            console.log(data);
         } catch (error: any) {
             this.setState({ error: error.message || 'Неверный email или пароль' });
         } finally {
