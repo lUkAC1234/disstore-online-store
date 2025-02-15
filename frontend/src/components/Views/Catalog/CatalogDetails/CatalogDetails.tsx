@@ -1,216 +1,62 @@
+// CatalogDetails.tsx
+import React, { ReactNode } from "react";
 import styles from "./CatalogDetails.module.scss";
 import "swiper/css";
 import "swiper/css/navigation";
-import { ReactNode } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import { faAngleRight, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import star5 from "assets/main/images/main-page/5star.png";
-import { Link } from "react-router-dom";
-import i18next from "i18next";
-import InjectedUIFancybox from "components/Fancybox/Fancybox";
 import NavigationSection from "./Navigation/Navigation";
-import { origin } from "../../../../../project.config.json";
-import UIReact from "utils/classes/UIReact";
-import {
-  ClothesContextActions,
-  ClothItem,
-} from "components/Context/ClothesContext";
+import i18next from "i18next";
 import { withContext } from "components/Context/ContextInjector";
 import { ClothesContext, ClothesListContext } from "components/Context/ContextCollection";
-import { debounce } from "utils/hooks/debounce";
-import { ClothesListActions } from "components/Context/ClothesListContext";
-import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
+import BaseCatalogDetails, { BaseCatalogState } from "./BaseCatalogDetails";
+import "swiper/css";
+import "swiper/css/navigation";
+import star5 from "assets/main/images/main-page/5star.png";
+import { WithTranslation } from "react-i18next";
+import { getWithTranslation } from "i18n/hooks";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleRight, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import InjectedUIFancybox from "components/Fancybox/Fancybox";
+import { Navigation } from "swiper/modules";
+import { SwiperSlide } from "swiper/react";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
-const lang: string = i18next.language;
 
-interface ProductOptionsState {
-  selectedOptions: {
-    color: string;
-    size: string;
-    quantity: number;
-  };
-  selectedImage: string | null;
-}
+import { Swiper as OriginalSwiper } from "swiper/react";
+const Swiper = OriginalSwiper as unknown as React.FC<any>;
 
-class CatalogDetails extends UIReact<
-  ClothesContextActions & ClothesListActions,
-  ProductOptionsState
-> {
-
-  state: ProductOptionsState = {
-    selectedImage: null,
-    selectedOptions: {
-      color: "",
-      size: "",
-      quantity: this.props.data?.count <= 0 ? 0 : 1,
-    },
-  };
-
-  get slashOfSlug(): string {
+class CatalogDetails extends BaseCatalogDetails<BaseCatalogState> {
+  getProductSlug(): string {
     const pathname: string = location.pathname;
     const splittedPathname: string[] = pathname.split("/");
-    const slashOfID: string = splittedPathname[4];
-    return slashOfID;
+    return splittedPathname[4];
   }
 
+  get lang(): string {
+    return i18next.language;
+  }
 
-  async componentDidMount(): Promise<void> {
+  componentDidMount = async (): Promise<void> => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-
-
-    await this.fetchData();
-
-    window.addEventListener("popstate", this.fetchData, {
-      signal: this.controller.signal,
-    });
-    window.addEventListener("pushstate", this.fetchData, {
-      signal: this.controller.signal,
-    });
-    window.addEventListener("replacestate", this.fetchData, {
-      signal: this.controller.signal,
-    });
-  }
-
-  componentWillUnmount(): void {
-    super.componentWillUnmount();
-    this.props.setData(null);
-  }
-
-  componentDidUpdate(prevProps: Readonly<ClothesContextActions>): void {
-    if (prevProps.data !== this.props.data && this.props.data) {
-      const { colors, sizes, catalogImages } = this.props.data;
-      this.setState((prevState) => ({
-        selectedOptions: {
-          color: prevState.selectedOptions.color || colors?.[0]?.color || "",
-          size: prevState.selectedOptions.size || sizes?.[0]?.size || "",
-          quantity: this.props.data?.count <= 0 ? 0 : prevState.selectedOptions.quantity,
-        },
-        selectedImage: prevState.selectedImage || catalogImages?.[0]?.image || null,
-      }));
-    }
-  }
-
-  fetchData = debounce(
-    async () => {
-      await this.fetchDataProduct(this.slashOfSlug);
-    }, 100
-  );
-
-  async fetchDataProduct(productSlug: string): Promise<void> {
-    try {
-      const cachedData = sessionStorage.getItem(productSlug);
-
-      if (cachedData) {
-        const data: ClothItem = JSON.parse(cachedData);
-        this.props.setData(data);
-        return;
-      }
-
-      const response: Response = await fetch(`${origin}/clothes/${productSlug}/`, {
-        signal: this.controller.signal,
-      });
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          window.location.href = `/${lang}/page-not-found-404`;
-          return;
-        }
-        throw new Error("Не удалось загрузить данные");
-      }
-
-      const data: ClothItem = await response.json();
-      sessionStorage.setItem(productSlug, JSON.stringify(data));
-      this.props.setData(data);
-    } catch (err) {
-      return;
-    }
-  }
-
-
-  setSelectedImage(url: string): void {
-    this.setState(
-      (prevState) => ({
-        ...prevState,
-        selectedImage: url,
-      }),
-    );
-  }
-
-  handleOptionChange = (optionType: string, value: string | number) => {
-    this.setState((prevState) => ({
-      selectedOptions: {
-        ...prevState.selectedOptions,
-        [optionType]: value,
-      },
-    }));
+    await super.componentDidMount();
+    window.addEventListener("popstate", this.fetchData, { signal: this.controller.signal });
+    window.addEventListener("pushstate", this.fetchData, { signal: this.controller.signal });
+    window.addEventListener("replacestate", this.fetchData, { signal: this.controller.signal });
   };
 
-  handleQuantityChange = (type: "increase" | "decrease", maxAvailable: number): void => {
-    this.setState(({ selectedOptions }) => ({
-      selectedOptions: {
-        ...selectedOptions,
-        quantity: Math.min(
-          Math.max(type === "increase" ? selectedOptions.quantity + 1 : selectedOptions.quantity - 1, 1),
-          maxAvailable,
-          100
-        ),
-      },
-    }));
-  };
-
-  handleImageClick = (image: string): void => {
-    this.setState({ selectedImage: image });
-  };
-
-  render(): ReactNode {
-    if (this.props.loading) {
-      return <SpinnerLoaderWrapperFixed />;
-    }
-    if (this.props.error) {
-      return (
-        <div className={styles["catalog-container"]}>
-          <h2>Ойй, что-то пошло не так !</h2>
-        </div>
-      );
-    }
-
-    return (
-      <>
-        <section className={styles["catalog-section"]}>
-          {this.props.loading ? (
-            <SpinnerLoaderWrapperFixed />
-          ) :
-            <>
-              {this.product}
-              <NavigationSection
-                long_description={this.props.data?.long_description}
-                reviews={this.props.data?.reviews}
-                faqs={this.props.data?.faqs}
-              />
-            </>
-          }
-        </section>
-      </>
-    );
-  }
-
-  get product(): ReactNode {
+  // Provide the unique UI for the full-page catalog details.
+  renderContent(): ReactNode {
     const { selectedImage, selectedOptions } = this.state;
     const { data } = this.props
     const maxAvailable = this.props.data?.count;
-
     return (
-
       <div className={styles["catalog-container"]}>
         <div className="catalog-link-way">
-          <Link to={`/${lang}/`}>Главная</Link>
+          <Link to={`/${this.lang}/`}>Главная</Link>
           <FontAwesomeIcon icon={faAngleRight} />
-          <Link to={`/${lang}/catalog`}>Каталог</Link>
+          <Link to={`/${this.lang}/catalog`}>Каталог</Link>
           <FontAwesomeIcon icon={faAngleRight} />
           {data?.title}
         </div>
@@ -226,12 +72,12 @@ class CatalogDetails extends UIReact<
                 }}
               >
                 <div className={`
-                    swiper-button-prev
-                    ${styles["navigation-button-catalog-prev"]}`}>
+                  swiper-button-prev
+                  ${styles["navigation-button-catalog-prev"]}`}>
                 </div>
                 <div className={`
-                    swiper-button-next
-                    ${styles["navigation-button-catalog-next"]}`}>
+                  swiper-button-next
+                  ${styles["navigation-button-catalog-next"]}`}>
                 </div>
               </div>
               <Swiper
@@ -359,9 +205,9 @@ class CatalogDetails extends UIReact<
                     <button
                       key={color}
                       className={`
-                        ${styles["color-option"]}
-                        ${selectedOptions.color === color ? styles["selected"] : ""}
-                      `}
+                      ${styles["color-option"]}
+                      ${selectedOptions.color === color ? styles["selected"] : ""}
+                    `}
                       style={{ backgroundColor: color }}
                       onClick={() => this.handleOptionChange("color", color)}
                       aria-label={`Select ${color} color`}
@@ -426,6 +272,9 @@ class CatalogDetails extends UIReact<
   }
 }
 
-const UICatalog = withContext(ClothesListContext, withContext(ClothesContext, CatalogDetails));
+const UICatalog = withContext(
+  ClothesListContext,
+  withContext(ClothesContext, CatalogDetails)
+);
 
 export default UICatalog;
