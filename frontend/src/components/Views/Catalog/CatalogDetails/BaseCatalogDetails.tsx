@@ -6,6 +6,7 @@ import { debounce } from "utils/hooks/debounce";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import { origin } from "../../../../../project.config.json";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
+import { CartContextActions } from "components/Context/CartContext";
 
 export interface BaseCatalogState {
   selectedOptions: {
@@ -16,12 +17,14 @@ export interface BaseCatalogState {
   selectedImage: string | null;
 }
 
+interface BaseCatalogProps extends ClothesContextActions, ClothesListActions, CartContextActions {}
+
 /**
  * This abstract class extends UIReact using the same generic signature as before.
  * Props: ClothesContextActions & ClothesListActions & P (defaulting to {}).
  * State: ProductOptionsState.
  */
-abstract class BaseCatalogDetails<P = {}> extends UIReact<ClothesContextActions & ClothesListActions & P, BaseCatalogState> {
+abstract class BaseCatalogDetails<P = {}> extends UIReact<BaseCatalogProps & P, BaseCatalogState> {
   state: BaseCatalogState = {
     selectedImage: null,
     selectedOptions: {

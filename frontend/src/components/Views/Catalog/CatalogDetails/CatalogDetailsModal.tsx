@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+// CatalogDetailsModal.tsx
+import React, { ReactNode } from "react";
 import styles from "./CatalogDetails.module.scss";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -35,8 +36,9 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
 
   renderContent(): ReactNode {
     const { selectedImage, selectedOptions } = this.state;
-    const { data } = this.props
-    const maxAvailable = this.props.data?.count;
+    const { data } = this.props;
+    const maxAvailable = data?.count;
+
     return (
       <div className={styles["catalog-container"]}>
         <div className="catalog-link-way">
@@ -50,21 +52,11 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
           <div className={styles["thumbnail-navigation"]}>
             <InjectedUIFancybox className={styles["Fancybox-container"]}>
               <div
-                className={
-                  styles["swiper-navigation-buttons-catalog-container"]
-                }
-                style={{
-                  display: data?.catalogImages?.length > 3 ? "flex" : "none",
-                }}
+                className={styles["swiper-navigation-buttons-catalog-container"]}
+                style={{ display: data?.catalogImages?.length > 3 ? "flex" : "none" }}
               >
-                <div className={`
-                  swiper-button-prev
-                  ${styles["navigation-button-catalog-prev"]}`}>
-                </div>
-                <div className={`
-                  swiper-button-next
-                  ${styles["navigation-button-catalog-next"]}`}>
-                </div>
+                <div className={`swiper-button-prev ${styles["navigation-button-catalog-prev"]}`} />
+                <div className={`swiper-button-next ${styles["navigation-button-catalog-next"]}`} />
               </div>
               <Swiper
                 direction="vertical"
@@ -79,18 +71,9 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
                   prevEl: `.${styles["navigation-button-catalog-prev"]}`,
                 }}
                 breakpoints={{
-                  0: {
-                    slidesPerView: 2,
-                    direction: "horizontal",
-                  },
-                  361: {
-                    slidesPerView: 3,
-                    direction: "horizontal",
-                  },
-                  1101: {
-                    direction: "vertical",
-                    slidesPerView: 3,
-                  },
+                  0: { slidesPerView: 2, direction: "horizontal" },
+                  361: { slidesPerView: 3, direction: "horizontal" },
+                  1101: { direction: "vertical", slidesPerView: 3 },
                 }}
               >
                 {data?.catalogImages?.map(({ thumbnail, image }, index) => (
@@ -106,41 +89,33 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
                       decoding="async"
                       className={`${styles["thumbnail"]} ${selectedImage === image ? styles["active"] : ""}`}
                       onLoad={({ target }) => {
-                        const tempImage = new Image();
-                        tempImage.src = image;
-
-                        tempImage.onload = () => {
-                          (target as HTMLImageElement).src = image;
-                        };
+                        const temp = new Image();
+                        temp.src = image;
+                        temp.onload = () => (target as HTMLImageElement).src = image;
                       }}
                     />
                   </SwiperSlide>
                 ))}
-
               </Swiper>
               <div className={styles["catalog-main-image"]}>
-                <a
-                  href={selectedImage}
-                  data-fancybox="gallery"
-                  data-src={selectedImage}
-                >
-                  {data?.catalogImages?.[0]?.thumbnail && (
+                <a href={selectedImage} data-fancybox="gallery" data-src={selectedImage}>
+                  {data?.catalogImages?.[0]?.thumbnail ? (
                     <img
                       src={data.catalogImages[0].thumbnail}
                       alt={data.title || "Рисунок"}
                       loading="lazy"
                       decoding="async"
                       onLoad={({ target }) => {
-                        const mainImage = selectedImage;
-                        if (mainImage) {
-                          const tempImage = new Image();
-                          tempImage.src = mainImage;
-                          tempImage.onload = () =>
-                            (target as HTMLImageElement).src = mainImage;
+                        if (selectedImage) {
+                          const temp = new Image();
+                          temp.src = selectedImage;
+                          temp.onload = () => (target as HTMLImageElement).src = selectedImage;
                         }
                       }}
                     />
-                  ) || <SpinnerLoaderWrapper />}
+                  ) : (
+                    <SpinnerLoaderWrapper />
+                  )}
                 </a>
               </div>
               <div style={{ display: "none" }}>
@@ -153,9 +128,7 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
             </InjectedUIFancybox>
           </div>
           <div className={styles["catalog-product-details"]}>
-            <h1 className={styles["catalog-product-product-title"]}>
-              {data?.title}
-            </h1>
+            <h1 className={styles["catalog-product-product-title"]}>{data?.title}</h1>
             <div className={styles["catalog-product-product-rating"]}>
               <img src={star5} alt="Rating" />
               <span>
@@ -164,25 +137,21 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
             </div>
             <bdi className={styles["catalog-product-product-pricing"]}>
               <span className={styles["catalog-product-current-price"]}>
-                {data?.real_price.toLocaleString('en-US')} сум
+                {data?.real_price.toLocaleString("en-US")} сум
               </span>
-              {data?.discount > 0 ? (
+              {data?.discount > 0 && (
                 <>
                   <span className={styles["catalog-product-original-price"]}>
-                    {data?.price.toLocaleString('en-US')} сум
+                    {data?.price.toLocaleString("en-US")} сум
                   </span>
                   <span className={styles["catalog-product-discount"]}>
                     -{data?.discount}%
                   </span>
                 </>
-              ) : (
-                null
               )}
             </bdi>
-            <p className={styles["catalog-product-description"]}>
-              {data?.short_description}
-            </p>
-            <div className={styles["hr-line"]}></div>
+            <p className={styles["catalog-product-description"]}>{data?.short_description}</p>
+            <div className={styles["hr-line"]} />
             <div className={styles["product-options"]}>
               <div className={styles["colors-section"]}>
                 <h4 className={styles["product-options-title"]}>Выберите цвет</h4>
@@ -190,21 +159,16 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
                   {data?.colors?.map(({ color }) => (
                     <button
                       key={color}
-                      className={`
-                      ${styles["color-option"]}
-                      ${selectedOptions.color === color ? styles["selected"] : ""}
-                    `}
+                      className={`${styles["color-option"]} ${selectedOptions.color === color ? styles["selected"] : ""
+                        }`}
                       style={{ backgroundColor: color }}
                       onClick={() => this.handleOptionChange("color", color)}
                       aria-label={`Select ${color} color`}
-                    >
-                    </button>
+                    />
                   ))}
                 </div>
               </div>
-
-              <div className={styles["hr-line"]}></div>
-
+              <div className={styles["hr-line"]} />
               <div className={styles["sizes-section"]}>
                 <h4 className={styles["product-options-title"]}>Выберите размер</h4>
                 <div className={styles["sizes-container"]}>
@@ -220,9 +184,7 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
                   ))}
                 </div>
               </div>
-
-              <div className={styles["hr-line"]}></div>
-
+              <div className={styles["hr-line"]} />
               <div className={styles["quantity-section"]}>
                 <div className={styles["quantity-container"]}>
                   <div className={styles["quantity-wrapper"]}>
@@ -242,17 +204,19 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
                       <FontAwesomeIcon icon={faPlus} />
                     </button>
                   </div>
-
                   <button disabled={data?.count <= 0} className={styles["catalog-add-to-cart-btn"]}>
                     Добавить в корзину
                   </button>
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
+        <NavigationSection
+          long_description={this.props.data?.long_description}
+          reviews={this.props.data?.reviews}
+          faqs={this.props.data?.faqs}
+        />
       </div>
     );
   }
@@ -262,10 +226,9 @@ export type CatalogDetailsModalExternalProps = {
   productSlug: string;
 };
 
-const WithTranslationCatalogDetailsModal = getWithTranslation(CatalogDetailsModal);
-const WithClothesContext = withContext(ClothesContext, WithTranslationCatalogDetailsModal);
-const WithClothesListContext = withContext(ClothesListContext, WithClothesContext);
-
-const UICatalogModal = WithClothesListContext as React.ComponentType<CatalogDetailsModalExternalProps>;
+const UICatalogDetailsModal = getWithTranslation(
+  withContext(ClothesContext, withContext(ClothesListContext, CatalogDetailsModal))
+);
+const UICatalogModal = UICatalogDetailsModal as React.ComponentType<CatalogDetailsModalExternalProps>;
 
 export default UICatalogModal;
