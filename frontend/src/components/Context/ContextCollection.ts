@@ -5,7 +5,7 @@ import { ClothesListActions } from "./ClothesListContext";
 import { UserContextActions } from "./UserContext";
 import { WishlistContextActions } from "./WishlistContext";
 import { CartContextActions } from "./CartContext";
-import { ProductModalActions } from "./ProductModal";
+import { ProductModalActions } from "./ProductModalContext";
 
 export const GlobalContext: Context<GlobalContextStateWithActions> = createContext<GlobalContextStateWithActions>(null);
 export const ClothesContext: Context<ClothesContextActions> = createContext<ClothesContextActions>(null);

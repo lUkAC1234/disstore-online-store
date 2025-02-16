@@ -1,6 +1,5 @@
 import { PropsWithChildren, PureComponent, ReactNode } from "react";
 import { ProductModalContext } from "./ContextCollection";
-import { createPortal } from "react-dom";
 
 export interface ProductModalState {
   isModalActive: boolean;
@@ -19,12 +18,6 @@ class ProductModalProvider extends PureComponent<ProductModalProps, ProductModal
     isModalActive: false,
     modalChildren: null,
   };
-
-  get portalContent(): ReactNode {
-    return this.state.isModalActive
-      ? createPortal(this.state.modalChildren, document.body)
-      : null;
-  }
 
   render(): ReactNode {
     return (

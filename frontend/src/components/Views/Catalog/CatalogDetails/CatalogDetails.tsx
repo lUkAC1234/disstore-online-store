@@ -1,57 +1,78 @@
-// CatalogDetails.tsx
 import React, { ReactNode } from "react";
 import styles from "./CatalogDetails.module.scss";
 import "swiper/css";
 import "swiper/css/navigation";
 import NavigationSection from "./Navigation/Navigation";
-import i18next from "i18next";
 import { withContext } from "components/Context/ContextInjector";
-import { CartContext, ClothesContext, ClothesListContext } from "components/Context/ContextCollection";
-import BaseCatalogDetails, { BaseCatalogState } from "./BaseCatalogDetails";
+import {
+  CartContext,
+  ClothesContext,
+  ClothesListContext,
+} from "components/Context/ContextCollection";
+import BaseCatalogDetails from "./Base/BaseCatalogDetails";
 import star5 from "assets/main/images/main-page/5star.png";
 import { WithTranslation } from "react-i18next";
 import { getWithTranslation } from "i18n/hooks";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import InjectedUIFancybox from "components/Fancybox/Fancybox";
 import { Navigation } from "swiper/modules";
 import { SwiperSlide } from "swiper/react";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
-
 import { Swiper as OriginalSwiper } from "swiper/react";
+import ColorSelector from "./SelectedOptions/Colors/ColorSelector";
+import SizeSelector from "./SelectedOptions/Sizes/SizeSelector";
+import QuantitySelector from "./SelectedOptions/Quantity/QuantitySelector";
+import BlockLoader from "components/BlockLoaders/BlockLoader";
 const Swiper = OriginalSwiper as unknown as React.FC<any>;
 
-interface CatalogDetailsProps extends BaseCatalogState, WithTranslation { }
+interface CatalogDetailsProps extends WithTranslation {}
 
 class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
-  // Extract product slug from URL
   getProductSlug(): string {
     const { pathname } = location;
     const parts = pathname.split("/");
     return parts[4];
   }
 
-  // Use current language from i18next
   get lang(): string {
     return this.props.i18n.language;
   }
 
-  // Enhance componentDidMount for smooth scroll and attach events
   componentDidMount = async (): Promise<void> => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     await super.componentDidMount();
-    // Attach events with the controller signal to auto-abort if needed
     window.addEventListener("popstate", this.fetchData, { signal: this.controller.signal });
     window.addEventListener("pushstate", this.fetchData, { signal: this.controller.signal });
     window.addEventListener("replacestate", this.fetchData, { signal: this.controller.signal });
   };
 
-  // Render the full-page catalog UI
   renderContent(): ReactNode {
-    const { selectedImage, selectedOptions } = this.state;
-    const { data } = this.props;
+    const { selectedOptions, data } = this.props;
     const maxAvailable = data?.count;
+    const globalQuantity = this.getGlobalQuantity();
+
+    const loaderStyle = {
+      width: "9rem",
+      height: "9rem",
+      borderRadius: "1rem",
+      margin: "0",
+    };
+    
+    const emptyLoaderSlides = [0, 1, 2].map((index) => {
+      const imageAvailable = !!data?.catalogImages?.[index]?.image;
+      return (
+        !imageAvailable && (
+          <SwiperSlide key={index}>
+            <BlockLoader
+              isLoaded={imageAvailable}
+              containerStyle={loaderStyle}
+            />
+          </SwiperSlide>
+        )
+      );
+    });
 
     return (
       <div className={styles["catalog-container"]}>
@@ -101,7 +122,9 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
                       alt={`Thumbnail ${index + 1}`}
                       loading="lazy"
                       decoding="async"
-                      className={`${styles["thumbnail"]} ${selectedImage === image ? styles["active"] : ""}`}
+                      className={`${styles["thumbnail"]} ${
+                        selectedOptions.selectedImage === image ? styles["active"] : ""
+                      }`}
                       onLoad={({ target }) => {
                         const temp = new Image();
                         temp.src = image;
@@ -112,9 +135,14 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
                     />
                   </SwiperSlide>
                 ))}
+                {emptyLoaderSlides}
               </Swiper>
               <div className={styles["catalog-main-image"]}>
-                <a href={selectedImage} data-fancybox="gallery" data-src={selectedImage}>
+                <a
+                  href={selectedOptions.selectedImage || ""}
+                  data-fancybox="gallery"
+                  data-src={selectedOptions.selectedImage || ""}
+                >
                   {data?.catalogImages?.[0]?.thumbnail ? (
                     <img
                       src={data.catalogImages[0].thumbnail}
@@ -122,10 +150,11 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
                       loading="lazy"
                       decoding="async"
                       onLoad={({ target }) => {
-                        if (selectedImage) {
+                        if (selectedOptions.selectedImage) {
                           const temp = new Image();
-                          temp.src = selectedImage;
-                          temp.onload = () => (target as HTMLImageElement).src = selectedImage;
+                          temp.src = selectedOptions.selectedImage;
+                          temp.onload = () =>
+                            (target as HTMLImageElement).src = selectedOptions.selectedImage;
                         }
                       }}
                     />
@@ -136,7 +165,7 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
               </div>
               <div style={{ display: "none" }}>
                 {data?.catalogImages
-                  ?.filter(({ image }) => image !== selectedImage)
+                  ?.filter(({ image }) => image !== selectedOptions.selectedImage)
                   ?.map(({ image }, index) => (
                     <a href={image} data-fancybox="gallery" key={index} />
                   ))}
@@ -169,74 +198,44 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
             <p className={styles["catalog-product-description"]}>{data?.short_description}</p>
             <div className={styles["hr-line"]} />
             <div className={styles["product-options"]}>
-              <div className={styles["colors-section"]}>
-                <h4 className={styles["product-options-title"]}>Выберите цвет</h4>
-                <div className={styles["colors-container"]}>
-                  {data?.colors?.map(({ color }) => (
-                    <button
-                      key={color}
-                      className={`${styles["color-option"]} ${selectedOptions.color === color ? styles["selected"] : ""
-                        }`}
-                      style={{ backgroundColor: color }}
-                      onClick={() => this.handleOptionChange("color", color)}
-                      aria-label={`Select ${color} color`}
-                    />
-                  ))}
-                </div>
-              </div>
+              <ColorSelector
+                data={data}
+                selectedOptions={selectedOptions}
+                handleOptionChange={this.handleOptionChange}
+              />
               <div className={styles["hr-line"]} />
-              <div className={styles["sizes-section"]}>
-                <h4 className={styles["product-options-title"]}>Выберите размер</h4>
-                <div className={styles["sizes-container"]}>
-                  {data?.sizes?.map(({ size }) => (
-                    <button
-                      key={size}
-                      className={`${styles["size-option"]} ${selectedOptions.size === size ? styles["selected"] : ""
-                        }`}
-                      onClick={() => this.handleOptionChange("size", size)}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <SizeSelector
+                data={data}
+                selectedOptions={selectedOptions}
+                handleOptionChange={this.handleOptionChange}
+              />
               <div className={styles["hr-line"]} />
-              <div className={styles["quantity-section"]}>
-                <div className={styles["quantity-container"]}>
-                  <div className={styles["quantity-wrapper"]}>
-                    <button
-                      className={styles["quantity-btn"]}
-                      onClick={() => this.handleQuantityChange("decrease", maxAvailable)}
-                    >
-                      <FontAwesomeIcon icon={faMinus} />
-                    </button>
-                    <span className={styles["quantity-value"]}>
-                      {this.state.selectedOptions.quantity}
-                    </span>
-                    <button
-                      className={styles["quantity-btn"]}
-                      onClick={() => this.handleQuantityChange("increase", maxAvailable)}
-                    >
-                      <FontAwesomeIcon icon={faPlus} />
-                    </button>
-                  </div>
-                  <button onClick={() => this.props.addToCart(data.id)}  disabled={data?.count <= 0} className={styles["catalog-add-to-cart-btn"]}>
-                    Добавить в корзину
-                  </button>
-                </div>
-              </div>
+              <QuantitySelector
+                data={data}
+                maxAvailable={maxAvailable}
+                globalQuantity={globalQuantity}
+                addToCart={this.handleAddToCart}
+                selectedOptions={selectedOptions}
+                handleOptionChange={this.handleOptionChange}
+              />
             </div>
           </div>
         </div>
         <NavigationSection
-          long_description={this.props.data?.long_description}
-          reviews={this.props.data?.reviews}
-          faqs={this.props.data?.faqs}
+          long_description={data?.long_description}
+          reviews={data?.reviews}
+          faqs={data?.faqs}
         />
       </div>
     );
   }
 }
 
-const UICatalog = getWithTranslation(withContext(ClothesListContext, withContext(ClothesContext, withContext(CartContext, CatalogDetails))));
+const UICatalog = getWithTranslation(
+  withContext(
+    ClothesListContext,
+    withContext(ClothesContext, withContext(CartContext, CatalogDetails))
+  )
+);
+
 export default UICatalog;

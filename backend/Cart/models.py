@@ -45,10 +45,13 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(ClothesModel, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    selected_color = models.CharField(max_length=50, blank=True, default="")
+    selected_size = models.CharField(max_length=50, blank=True, default="")
+    selected_image = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('cart', 'product')
+        unique_together = ('cart', 'product', 'selected_color', 'selected_size', 'selected_image')
         ordering = ['-created_at']
         verbose_name = _("Товары корзины")
         verbose_name_plural = _("Товары корзины")

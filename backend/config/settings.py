@@ -7,6 +7,8 @@ import datetime
 
 DEBUG = True
 
+ALLOWED_HOSTS = ["*"]
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-$x&!cxodt5vf4)d*#htykxm*_saw*w&!!aorhh@*7i$y@celji'

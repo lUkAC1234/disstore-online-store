@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import i18next from "i18next";
 import UIReact from "utils/classes/UIReact";
 import { withContext } from "components/Context/ContextInjector";
-import { CartContext, ClothesListContext, WishlistContext } from "components/Context/ContextCollection";
+import { ClothesListContext, WishlistContext } from "components/Context/ContextCollection";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faSliders } from "@fortawesome/free-solid-svg-icons";
@@ -15,7 +15,6 @@ import CatalogPagination from "./CatalogPagination/CatalogPagination.tsx";
 import CatalogProducts from "./CatalogProductsList/Products.tsx";
 import Filters from "./CatalogFilters/Filters.tsx";
 import { WishlistContextActions } from "components/Context/WishlistContext.tsx";
-import { CartContextActions } from "components/Context/CartContext.tsx";
 
 const lang: string = i18next.language;
 
@@ -23,7 +22,7 @@ interface CatalogState {
   isFilterActive: boolean;
 }
 
-interface CatalogListProps extends ClothesListActions, WishlistContextActions, CartContextActions { }
+interface CatalogListProps extends ClothesListActions, WishlistContextActions { }
 
 class CatalogList extends UIReact<CatalogListProps, CatalogState> {
   catalogFiltersContainerRef = createRef<HTMLDivElement>();
@@ -55,7 +54,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
   };
 
   render(): ReactNode {
-    const { wishlistItems, loadingWishlist, loading, error, products, currentPage, totalPages, addToWishlist, removeFromWishlist, toggleCartItem } = this.props;
+    const { wishlistItems, loadingWishlist, loading, error, products, currentPage, totalPages, addToWishlist, removeFromWishlist } = this.props;
 
     if (loading) return <SpinnerLoaderWrapperFixed />;
 
@@ -103,7 +102,6 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
                 products={products} 
                 addToWishList={addToWishlist} 
                 removeFromWishlist={removeFromWishlist} 
-                toggleCartItem={toggleCartItem}
                 />
               ) : (
                 <CatalogErrorPage
@@ -132,6 +130,6 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
   }
 }
 
-const UICatalogList = withContext(ClothesListContext, withContext(WishlistContext, withContext(CartContext, CatalogList)));
+const UICatalogList = withContext(ClothesListContext, withContext(WishlistContext,  CatalogList));
 
 export default UICatalogList;

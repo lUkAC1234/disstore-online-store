@@ -6,12 +6,19 @@ export interface SpinnerLoaderWrapperProps {
   destroy?: boolean;
   fixedPosition?: boolean;
   relativeCentered?: boolean;
+  smallWrapper?: boolean;
 }
 
 class SpinnerLoaderWrapper extends PureComponent<SpinnerLoaderWrapperProps> {
   get fixedCentered(): string {
     if (this.props.fixedPosition) {
       return "spinner-loader-wrapper--fixed";
+    }
+  }
+
+  get smallWrapper(): string {
+    if (this.props.smallWrapper) {
+      return "spinner-loader-wrapper--small";
     }
   }
 
@@ -28,7 +35,7 @@ class SpinnerLoaderWrapper extends PureComponent<SpinnerLoaderWrapperProps> {
   }
 
   get spinnerLoaderWrapperClass(): string {
-    return `spinner-loader-wrapper ${this.fixedCentered} ${this.relativeCentered} ${this.destroy}`;
+    return `spinner-loader-wrapper ${this.fixedCentered} ${this.relativeCentered} ${this.destroy} ${this.smallWrapper}`;
   }
 
   render(): ReactNode {

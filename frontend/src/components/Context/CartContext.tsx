@@ -4,6 +4,13 @@ import { ClothItem } from "./ClothesContext";
 import { origin } from "../../../project.config.json";
 import Cookies from "utils/modules/Cookies";
 
+export interface SelectedOptions {
+  color: string;
+  size: string;
+  quantity: number;
+  selectedImage: string | null;
+}
+
 export interface CartProviderProps extends PropsWithChildren {}
 
 export interface CartItem {
@@ -20,26 +27,44 @@ export interface CartData {
   discount_percentage: string;
 }
 
-export interface CartContextState {
-  cart: CartData | null;
-  loadingCart: boolean;
+export interface AddToCartPayload {
+  product_id: number;
+  quantity: number;
+  selected_color: string;
+  selected_size: string;
+  selected_image: string | null;
 }
+
 
 export interface CartContextActions {
   cart: CartData | null;
   loadingCart: boolean;
-  addToCart: (productId: number) => Promise<void>;
+  addToCart: (payload: AddToCartPayload) => Promise<void>;
   removeFromCart: (cartItemId: number) => Promise<void>;
   fetchCart: () => Promise<void>;
   clearCart: () => void;
   toggleCartItem: (productId: number) => Promise<void>;
   updateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
+  selectedOptions: SelectedOptions;
+  setSelectedOptions: (options: Partial<SelectedOptions>) => void;
+}
+
+export interface CartContextState {
+  cart: CartData | null;
+  loadingCart: boolean;
+  selectedOptions: SelectedOptions;
 }
 
 class CartContextProvider extends PureComponent<CartProviderProps, CartContextState> {
   state: Readonly<CartContextState> = {
     cart: null,
     loadingCart: false,
+    selectedOptions: {
+      color: "",
+      size: "",
+      quantity: 1,
+      selectedImage: null,
+    },
   };
 
   private tokenInterval: NodeJS.Timeout | null = null;
@@ -104,13 +129,13 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
     );
   };
 
-  addToCart = async (productId: number) => {
+  addToCart = async (payload: AddToCartPayload) => {
     await this.executeWithLoading(
       async () => {
         const response = await fetch(`${origin}/orders/cart/items/`, {
           method: "POST",
           headers: this.getHeaders(),
-          body: JSON.stringify({ product_id: productId, quantity: 1 }),
+          body: JSON.stringify(payload),
         });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -143,7 +168,13 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
     if (existingItem) {
       await this.removeFromCart(existingItem.id);
     } else {
-      await this.addToCart(productId);
+      await this.addToCart({
+        product_id: productId,
+        quantity: 1,
+        selected_color: "",
+        selected_size: "",
+        selected_image: null,
+      });
     }
   };
 
@@ -168,6 +199,12 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
     this.setState({ cart: null });
   };
 
+  setSelectedOptions = (options: Partial<SelectedOptions>) => {
+    this.setState((prevState) => ({
+      selectedOptions: { ...prevState.selectedOptions, ...options },
+    }));
+  };
+
   render() {
     return (
       <CartContext.Provider
@@ -180,6 +217,8 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
           clearCart: this.clearCart,
           toggleCartItem: this.toggleCartItem,
           updateCartItem: this.updateCartItem,
+          selectedOptions: this.state.selectedOptions,
+          setSelectedOptions: this.setSelectedOptions,
         }}
       >
         {this.props.children}

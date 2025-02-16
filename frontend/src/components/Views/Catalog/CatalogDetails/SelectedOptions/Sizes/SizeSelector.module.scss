@@ -1,0 +1,40 @@
+.sizes-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.size-option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border: transparent;
+    background-color: var(--header-search-background);
+    color: var(--text-p);
+    border-radius: 3.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+    font-size: 0.9rem;
+    font-family: var(--primary-font);
+
+    &.selected {
+        background: var(--text-black);
+        color: var(--text-white);
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    .size-option {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+.product-options-title {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-p);
+    margin-bottom: 0.5rem;
+    font-family: var(--primary-font);
+}

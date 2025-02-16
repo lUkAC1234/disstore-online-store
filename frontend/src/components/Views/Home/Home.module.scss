@@ -32,8 +32,9 @@
 
     img {
         width: 30rem;
-        height: 35rem;
+        aspect-ratio: 1 / 1;
         object-fit: cover;
+        mix-blend-mode: multiply;
     }
 
     &::before {
@@ -41,7 +42,7 @@
         position: absolute;
         width: 3rem;
         height: 3rem;
-        background-image: url(../../images/main-page/star.webp);
+        background-image: url('assets/main/images/main-page/star.webp');
         background-size: cover;
         background-repeat: no-repeat;
         top: 15rem;
@@ -53,7 +54,7 @@
         position: absolute;
         width: 4rem;
         height: 4rem;
-        background-image: url(../../images/main-page/star.webp);
+        background-image: url('assets/main/images/main-page/star.webp');
         background-size: cover;
         background-repeat: no-repeat;
         top: 5rem;
@@ -100,12 +101,6 @@
     }
 
     .welcome-image-column {
-        img {
-            width: 25rem;
-            height: 30rem;
-            object-fit: cover;
-        }
-
         &::before {
             width: 2.5rem;
             height: 2.5rem;
@@ -202,7 +197,6 @@
 
         img {
             width: min(100%, 25rem);
-            height: min(100%, 30rem);
             object-fit: cover;
         }
 

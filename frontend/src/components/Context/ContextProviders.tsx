@@ -5,7 +5,7 @@ import ClothesListProvider from "./ClothesListContext";
 import UserContextProvider from "./UserContext";
 import WishlistContextProvider from "./WishlistContext";
 import CartContextProvider from "./CartContext";
-import ProductModalProvider from "./ProductModal";
+import ProductContextModalProvider from "./ProductModalContext";
 
 export interface ContextProvidersProps extends PropsWithChildren {}
 
@@ -16,7 +16,7 @@ const providers = [
     UserContextProvider,
     WishlistContextProvider,
     CartContextProvider,
-    ProductModalProvider,
+    ProductContextModalProvider,
 ];
 
 function ContextProviders({ children }: ContextProvidersProps): ReactNode {

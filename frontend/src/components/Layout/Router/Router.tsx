@@ -11,7 +11,7 @@ import Footer from "../Footer/Footer";
 // Lazy-loaded components
 const Home = lazy(() => import("components/Views/Home/Home"));
 const Aboutus = lazy(() => import("components/Views/AboutUs/AboutUs"));
-const CatalogList = lazy(() => import("components/Views/Catalog/CatalogList"));
+const CatalogList = lazy(() => import("components/Views/Catalog/CatalogList/CatalogList"));
 const ClothesDetails = lazy(() => import("components/Views/Catalog/CatalogDetails/CatalogDetails"));
 const Error404 = lazy(() => import("components/Views/Errors/error404/404"));
 const Cart = lazy(() => import("components/Views/Cart/Cart"));

@@ -1,4 +1,4 @@
-@use "assets/main/styles/scss/components/_components";
+
 .catalog-container {
     padding: 2rem 6rem;
 }
@@ -16,13 +16,19 @@
     width: 41rem;
 }
 
-.thumbnail-swiper {
+.thumbnail-swiper,
+.image-attributes-null-container {
     width: 10rem;
     height: 28rem;
 
     .swiper-wrapper {
         margin: 0;
     }
+}
+
+.image-attributes-null-container {
+    display: grid;
+    gap: 0.5rem;
 }
 
 .thumbnail-slide {
@@ -55,6 +61,7 @@
     background-color: var(--clothes-image-background);
     border-radius: 1.5rem;
     border: 0.1rem solid var(--welcome-border);
+    overflow: hidden;
     img {
         width: 30rem;
         height: 28rem;
@@ -177,100 +184,6 @@
     height: 0.05rem;
     background: var(--welcome-border);
     margin-block: 1rem;
-}
-
-.product-options-title {
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--text-p);
-    margin-bottom: 0.5rem;
-    font-family: var(--primary-font);
-}
-
-.colors-container,
-.sizes-container {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.color-option {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    border: 0.1rem solid var(--text-white);
-    outline: 0.1rem solid var(--welcome-border);
-    cursor: pointer;
-    transition: outline-color 0.3s ease;
-
-    &.selected {
-        outline-color: var(--text-black);
-    }
-}
-
-.size-option {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    border: transparent;
-    background-color: var(--header-search-background);
-    color: var(--text-p);
-    border-radius: 3.5rem;
-    cursor: pointer;
-    transition: background 0.3s ease, color 0.3s ease;
-    font-size: 0.9rem;
-    font-family: var(--primary-font);
-
-    &.selected {
-        background: var(--text-black);
-        color: var(--text-white);
-    }
-}
-
-.quantity-container {
-    display: flex;
-    gap: 1rem;
-}
-
-.quantity-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background-color: var(--header-search-background);
-    border-radius: 3.5rem;
-    width: 10rem;
-}
-
-.quantity-btn {
-    border: transparent;
-    background: transparent;
-    cursor: pointer;
-
-    svg {
-        font-size: 1rem;
-    }
-}
-
-.quantity-value {
-    font-size: 1.125rem;
-}
-
-.catalog-add-to-cart-btn {
-    @extend .primary-button;
-    width: min(100%, 30rem);
-    background: var(--clothes-discount-number);
-    font-size: 1rem;
-
-    &:disabled {
-        opacity: 0.75;
-        cursor: unset;
-    }
-
-    &:hover {
-        opacity: 0.75;
-    }
 }
 
 // MEDIA QUERIES
@@ -440,27 +353,5 @@
     .thumbnail-swiper {
         width: 100%;
     }
-
-    .size-option {
-        padding: 0.5rem;
-        font-size: 0.75rem;
-    }
 }
 
-@media screen and (max-width: 420px) {
-    .quantity-container {
-        flex-flow: column;
-    }
-    
-    .quantity-wrapper {
-        width: 100%;
-    }
-    
-    .quantity-value {
-        font-size: 1.125rem;
-    }
-    
-    .catalog-add-to-cart-btn {
-        padding: 0.75rem 1.5rem;
-    }
-}

@@ -2,7 +2,7 @@ import styles from "./Filters.module.scss";
 import { PureComponent, ReactNode, RefObject } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import RangeSliderDual from "../../../RangeSlider/RangeSliderDual"; 
+import RangeSliderDual from "../../../../RangeSlider/RangeSliderDual"; 
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import { withContext } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";

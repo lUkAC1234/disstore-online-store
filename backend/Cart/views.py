@@ -13,7 +13,7 @@ class WishlistListView(generics.ListCreateAPIView):
     def get_queryset(self):
         return WishlistModel.objects.filter(user=self.request.user).select_related('product')
 
-class WishlistDetailView(generics.DestroyAPIView):
+class WishlistDeleteView(generics.DestroyAPIView):
     queryset = WishlistModel.objects.all()
     serializer_class = WishlistSerializer
     permission_classes = [permissions.IsAuthenticated]

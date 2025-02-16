@@ -4,24 +4,21 @@ import { PureComponent, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ClothItem } from "components/Context/ClothesContext";
 import { WishlistItem } from "components/Context/WishlistContext";
-import { CartItem } from "components/Context/CartContext"; // Import CartItem type
 import { withContext } from "components/Context/ContextInjector";
 import { ProductModalContext } from "components/Context/ContextCollection";
-import { ProductModalActions } from "components/Context/ProductModal";
+import { ProductModalActions } from "components/Context/ProductModalContext";
 import { getWithTranslation } from "i18n/hooks";
 import { WithTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
-import UICatalogModal from "../CatalogDetails/CatalogDetailsModal";
+import UICatalogModal from "../../CatalogDetails/CatalogModal/CatalogDetailsModal";
 import Modal from "components/Modal/Modal";
 
 interface CatalogProductsProps extends ProductModalActions, WithTranslation {
   products: ClothItem[];
   wishlistItems?: WishlistItem[];
-  cartItems?: CartItem[];
   addToWishList: (productId: number) => Promise<void>;
   removeFromWishlist: (wishlistItemId: number) => Promise<void>;
   loadingWishlist: boolean;
-  toggleCartItem: (productId: number) => Promise<void>;
 }
 
 class CatalogProducts extends PureComponent<CatalogProductsProps> {
@@ -33,9 +30,13 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
     return (
       <Modal>
         <button
+          className={styles["close-catalog-modal-button"]}
           type="button"
           onClick={this.closeModal}
-        >Close modal</button>
+        ><svg width="1.5rem" height="1.5rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" clipRule="evenodd" d="M8.28033 7.21967C7.98744 6.92678 7.51256 6.92678 7.21967 7.21967C6.92678 7.51256 6.92678 7.98744 7.21967 8.28033L10.9393 12L7.21967 15.7197C6.92678 16.0126 6.92678 16.4874 7.21967 16.7803C7.51256 17.0732 7.98744 17.0732 8.28033 16.7803L12 13.0607L15.7197 16.7803C16.0126 17.0732 16.4874 17.0732 16.7803 16.7803C17.0732 16.4874 17.0732 16.0126 16.7803 15.7197L13.0607 12L16.7803 8.28033C17.0732 7.98744 17.0732 7.51256 16.7803 7.21967C16.4874 6.92678 16.0126 6.92678 15.7197 7.21967L12 10.9393L8.28033 7.21967Z" fill="#4E5155"></path>
+          </svg>
+          </button>
         {this.props.modalChildren}
       </Modal>
     );
@@ -52,9 +53,7 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
       products,
       addToWishList,
       removeFromWishlist,
-      // toggleCartItem,
       wishlistItems = [],
-      cartItems = [],
     } = this.props;
 
     return (
@@ -65,7 +64,6 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
             (wItem) => wItem.product.id === item.id
           );
           const inWishlist = Boolean(wishlistItem);
-          // const inCart = cartItems.some((ci) => ci.product.id === item.id);
 
           return (
             <div key={item.id} className={styles["catalog-item"]}>
@@ -171,11 +169,6 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
                   className={styles["catalog-add-cart-link"]}
                   onClick={() => this.onCartAdd(item.slug)}
                 >
-                  {cartItems.some((ci) => ci.product.id === item.id) ? (
-                    <span>Remove from Cart</span>
-                  ) : (
-                    <span>Add to Cart</span>
-                  )}
                   <svg
                     width="1.75rem"
                     height="1.75rem"

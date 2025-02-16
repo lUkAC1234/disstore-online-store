@@ -1,6 +1,6 @@
 import styles from "./Home.module.scss";
 import { PureComponent, ReactNode } from "react";
-import welcomeImage from "assets/main/images/main-page/welcomeImage.webp";
+import welcomeImage from "assets/main/images/main-page/models2.webp";
 import { Link } from "react-router-dom";
 import i18next from "i18next";
 const lang = i18next.language;

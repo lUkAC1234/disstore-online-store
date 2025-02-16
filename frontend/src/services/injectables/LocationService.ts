@@ -1,5 +1,15 @@
-import { indexOfLangPath } from "i18n/hooks";
 import { withoutLangPathname } from "services/classes/LocationService";
+
+function indexOfLangPath(): number {
+  const segments = location.pathname.split("/");
+  const supportedLanguages = ["en", "ru"];
+  for (let i = 0; i < segments.length; i++) {
+    if (segments[i] && supportedLanguages.includes(segments[i])) {
+      return i;
+    }
+  }
+  return -1;
+}
 
 class LocationService {
   get pathname(): string {
@@ -12,7 +22,7 @@ class LocationService {
 
   get langPath(): string {
     const langPathIndex: number = indexOfLangPath();
-    if (langPathIndex === -1) return;
+    if (langPathIndex === -1) return "";
     return this.splittedPathname[langPathIndex];
   }
 

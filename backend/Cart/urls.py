@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     WishlistListView,
-    WishlistDetailView,
+    WishlistDeleteView,
     CartView, 
     CartItemListCreateView, 
     CartItemUpdateDestroyView
@@ -9,7 +9,7 @@ from .views import (
 
 urlpatterns = [
     path('wishlist/', WishlistListView.as_view(), name='wishlist-list'),
-    path('wishlist/<int:pk>/', WishlistDetailView.as_view(), name='wishlist-detail'),
+    path('wishlist/<int:pk>/', WishlistDeleteView.as_view(), name='wishlist-detail'),
     
     path('cart/', CartView.as_view(), name='cart-detail'),
     path('cart/items/', CartItemListCreateView.as_view(), name='cart-items'),

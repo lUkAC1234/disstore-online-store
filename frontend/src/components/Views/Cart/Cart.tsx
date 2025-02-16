@@ -7,10 +7,17 @@ import EmptyCart from "./Empty/EmptyCart";
 import { withContext } from "components/Context/ContextInjector";
 import { CartContext } from "components/Context/ContextCollection";
 import { CartContextActions, CartItem } from "components/Context/CartContext";
-import i18next from "i18next";
-const lang: string = i18next.language;
+import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
+import { WithTranslation } from "react-i18next";
+import { getWithTranslation } from "i18n/hooks";
 
-interface CartProps extends CartContextActions { }
+interface ExtendedCartItem extends CartItem {
+  selected_color?: string;
+  selected_size?: string;
+  selected_image?: string;
+}
+
+interface CartProps extends CartContextActions, WithTranslation {}
 
 class Cart extends PureComponent<CartProps> {
   async componentDidMount(): Promise<void> {
@@ -19,7 +26,11 @@ class Cart extends PureComponent<CartProps> {
     }
   }
 
-  handleIncrease = async (cartItem: CartItem) => {
+  get lang(): string {
+    return this.props.i18n.language;
+  }
+
+  handleIncrease = async (cartItem: ExtendedCartItem) => {
     try {
       await this.props.updateCartItem(cartItem.id, cartItem.quantity + 1);
     } catch (error) {
@@ -27,7 +38,7 @@ class Cart extends PureComponent<CartProps> {
     }
   };
 
-  handleDecrease = async (cartItem: CartItem) => {
+  handleDecrease = async (cartItem: ExtendedCartItem) => {
     try {
       if (cartItem.quantity > 1) {
         await this.props.updateCartItem(cartItem.id, cartItem.quantity - 1);
@@ -41,66 +52,110 @@ class Cart extends PureComponent<CartProps> {
 
   renderCartItems(): ReactNode {
     const { cart } = this.props;
-    return cart?.items?.map((item) => (
-      <div key={item.id} className={styles["cart-item"]}>
-        <button
-          className={styles["delete-from-cart-button"]}
-          onClick={() => this.props.removeFromCart(item.id)}
-        >
-          <svg width="1.25rem" height="1.25rem" viewBox="0 0 24 24" fill="none">
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M9.75 3.5C9.33579 3.5 9 3.83579 9 4.25V5H15V4.25C15 3.83579 14.6642 3.5 14.25 3.5H9.75ZM7.5 4.25V5H3.75C3.33579 5 3 5.33579 3 5.75C3 6.16421 3.33579 6.5 3.75 6.5H4.30005L5.62088 19.9681C5.73386 21.1202 6.70255 21.9985 7.86014 21.9985H16.1399C17.2975 21.9985 18.2661 21.1202 18.3791 19.9681L19.7 6.5H20.25C20.6642 6.5 21 6.16421 21 5.75C21 5.33579 20.6642 5 20.25 5H16.5V4.25C16.5 3.00736 15.4926 2 14.25 2H9.75C8.50736 2 7.5 3.00736 7.5 4.25ZM11 9.75C11 9.33579 10.6642 9 10.25 9C9.83579 9 9.5 9.33579 9.5 9.75V17.25C9.5 17.6642 9.83579 18 10.25 18C10.6642 18 11 17.6642 11 17.25V9.75ZM14.5 9.75C14.5 9.33579 14.1642 9 13.75 9C13.3358 9 13 9.33579 13 9.75V17.25C13 17.6642 13.3358 18 13.75 18C14.1642 18 14.5 17.6642 14.5 17.25V9.75Z"
-              fill="black"
+    return cart?.items?.map((item) => {
+      const extendedItem = item as ExtendedCartItem;
+      return (
+        <div key={extendedItem.id} className={styles["cart-item"]}>
+          <button
+            className={styles["delete-from-cart-button"]}
+            onClick={() => this.props.removeFromCart(extendedItem.id)}
+          >
+            <svg width="1.25rem" height="1.25rem" viewBox="0 0 24 24" fill="none">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M9.75 3.5C9.33579 3.5 9 3.83579 9 4.25V5H15V4.25C15 3.83579 14.6642 3.5 14.25 3.5H9.75ZM7.5 4.25V5H3.75C3.33579 5 3 5.33579 3 5.75C3 6.16421 3.33579 6.5 3.75 6.5H4.30005L5.62088 19.9681C5.73386 21.1202 6.70255 21.9985 7.86014 21.9985H16.1399C17.2975 21.9985 18.2661 21.1202 18.3791 19.9681L19.7 6.5H20.25C20.6642 6.5 21 6.16421 21 5.75C21 5.33579 20.6642 5 20.25 5H16.5V4.25C16.5 3.00736 15.4926 2 14.25 2H9.75C8.50736 2 7.5 3.00736 7.5 4.25ZM11 9.75C11 9.33579 10.6642 9 10.25 9C9.83579 9 9.5 9.33579 9.5 9.75V17.25C9.5 17.6642 9.83579 18 10.25 18C10.6642 18 11 17.6642 11 17.25V9.75ZM14.5 9.75C14.5 9.33579 14.1642 9 13.75 9C13.3358 9 13 9.33579 13 9.75V17.25C13 17.6642 13.3358 18 13.75 18C14.1642 18 14.5 17.6642 14.5 17.25V9.75Z"
+                fill="black"
+              />
+            </svg>
+          </button>
+          <div className={styles["cart-item-image-container"]}>
+            {extendedItem.selected_image ? (
+              <img
+                src={extendedItem.selected_image}
+                alt={extendedItem.product.title}
+              />
+            ) : (extendedItem.product.catalogImages[0]?.image ||
+                extendedItem.product.catalogImages[0]?.thumbnail) ? (
+              <img
+                src={
+                  extendedItem.product.catalogImages[0].image ||
+                  extendedItem.product.catalogImages[0].thumbnail
+                }
+                alt={extendedItem.product.title}
+              />
+            ) : (
+              <SpinnerLoaderWrapper smallWrapper />
+            )}
+            <Link
+              className={styles["cart-item-link"]}
+              to={`/${this.lang}/catalog/clothes/${extendedItem.product.slug}`}
             />
-          </svg>
-        </button>
-        <div className={styles["cart-item-image-container"]}>
-          <img src={item.product.catalogImages[0]?.image || item.product.catalogImages[0]?.thumbnail} alt={item.product.title} />
-          <Link
-            className={styles["cart-item-link"]}
-            to={`/${lang}/catalog/clothes/${item.product.slug}`}
-          />
-        </div>
-        <div className={styles["cart-details-info-container"]}>
-          <h4 className={styles["cart-item-title"]}>
-            <Link className={styles["cart-item-link"]} to={`/${lang}/catalog/clothes/${item.product.slug}`} />
-            {item.product.title}
-          </h4>
-          
-          <div className={styles["cart-item-price-quantity-container"]}>
-            <div className={styles["cart-item-price-container"]}>
-              {item.product.discount > 0 ? (
-                <>
+          </div>
+          <div className={styles["cart-details-info-container"]}>
+            <h4 className={styles["cart-item-title"]}>
+              <Link
+                className={styles["cart-item-link"]}
+                to={`/${this.lang}/catalog/clothes/${extendedItem.product.slug}`}
+              >
+                {extendedItem.product.title}
+              </Link>
+            </h4>
+            {/* Display selected options if they exist */}
+            {(extendedItem.selected_color || extendedItem.selected_size) && (
+              <div className={styles["cart-item-options"]}>
+                {extendedItem.selected_color && (
+                  <span className={styles["cart-item-option"]}>
+                    Цвет: {extendedItem.selected_color}
+                  </span>
+                )}
+                {extendedItem.selected_size && (
+                  <span className={styles["cart-item-option"]}>
+                    Размер: {extendedItem.selected_size}
+                  </span>
+                )}
+              </div>
+            )}
+            <div className={styles["cart-item-price-quantity-container"]}>
+              <div className={styles["cart-item-price-container"]}>
+                {extendedItem.product.discount > 0 ? (
+                  <>
+                    <span className={styles["cart-item-price"]}>
+                      {extendedItem.product.real_price.toLocaleString("en-US")} сум
+                    </span>
+                    <span className={styles["cart-item-previous-price"]}>
+                      {extendedItem.product.price.toLocaleString("en-US")} сум
+                    </span>
+                  </>
+                ) : (
                   <span className={styles["cart-item-price"]}>
-                    {item.product.real_price.toLocaleString("en-US")} сум
+                    {extendedItem.product.price.toLocaleString("en-US")} сум
                   </span>
-                  <span className={styles["cart-item-previous-price"]}>
-                    {item.product.price.toLocaleString("en-US")} сум
-                  </span>
-                </>
-              ) : (
-                <span className={styles["cart-item-price"]}>
-                  {item.product.price.toLocaleString("en-US")} сум
+                )}
+              </div>
+              <div className={styles["cart-quantity-controller"]}>
+                <button
+                  className={styles["quantity-btn"]}
+                  onClick={() => this.handleDecrease(extendedItem)}
+                >
+                  <FontAwesomeIcon icon={faMinus} />
+                </button>
+                <span className={styles["quantity-value"]}>
+                  {extendedItem.quantity}
                 </span>
-              )
-              }
-
-            </div>
-            <div className={styles["cart-quantity-controller"]}>
-              <button className={styles["quantity-btn"]} onClick={() => this.handleDecrease(item)}>
-                <FontAwesomeIcon icon={faMinus} />
-              </button>
-              <span className={styles["quantity-value"]}>{item.quantity}</span>
-              <button className={styles["quantity-btn"]} onClick={() => this.handleIncrease(item)}>
-                <FontAwesomeIcon icon={faPlus} />
-              </button>
+                <button
+                  className={styles["quantity-btn"]}
+                  onClick={() => this.handleIncrease(extendedItem)}
+                  disabled={extendedItem.quantity >= extendedItem.product.count} 
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    ));
+      );
+    });
   }
 
   render(): ReactNode {
@@ -112,17 +167,21 @@ class Cart extends PureComponent<CartProps> {
 
     return (
       <div className={styles["cart-container"]}>
-        {!cart || !cart?.items || cart?.items?.length === 0 ? (<EmptyCart />) :
+        {(!cart || !cart.items || cart.items.length === 0) ? (
+          <EmptyCart />
+        ) : (
           <>
             <h1 className={styles["cart-title"]}>Ваша Корзина</h1>
             <div className={styles["cart-content-container"]}>
-              <div className={styles["cart-details"]}>{this.renderCartItems()}</div>
+              <div className={styles["cart-details"]}>
+                {this.renderCartItems()}
+              </div>
               <div className={styles["cart-status-container"]}>
                 <h2 className={styles["cart-status-subtitle"]}>Ваш заказ</h2>
                 <div className={styles["cart-status-summary-container"]}>
                   <div className={styles["cart-status-summary-item"]}>
                     <span className={styles["cart-status-summary-name"]}>
-                      Товары ({cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0})
+                      Товары ({cart.items.reduce((sum, item) => sum + item.quantity, 0)})
                     </span>
                     <span className={styles["cart-status-summary-price"]}>
                       {subtotal.toLocaleString("en-US")} сум
@@ -154,11 +213,10 @@ class Cart extends PureComponent<CartProps> {
               </div>
             </div>
           </>
-        }
-
+        )}
       </div>
     );
   }
 }
 
-export default withContext(CartContext, Cart);
+export default getWithTranslation(withContext(CartContext, Cart));

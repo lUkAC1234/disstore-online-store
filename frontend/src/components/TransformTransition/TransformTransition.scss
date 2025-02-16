@@ -3,16 +3,7 @@
   flex-flow: column;
   width: 100%;
   overflow-x: hidden;
-  padding-inline: 7rem;
-  margin-block: 3rem;
-
-  @media screen and (max-width: 2000px) {
-    padding-inline: 1rem;
-  }
-
-  @media screen and (max-width: 600px) {
-    padding-inline: 0rem;
-  }
+  margin-block: 6rem 3rem;
 }
 
 .transform-transition__hr {

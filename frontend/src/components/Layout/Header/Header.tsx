@@ -347,7 +347,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                       }}
                     />
                   ) : (
-                    <SpinnerLoaderWrapper />
+                    <SpinnerLoaderWrapper smallWrapper />
                   )}
                 </div>
                 <div className="header-searched-item-content">
