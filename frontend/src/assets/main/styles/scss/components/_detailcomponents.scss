@@ -1,9 +1,18 @@
 .catalog-link-way {
-    display: inline-flex;
-    flex-wrap: wrap;
+    display: flex;
     gap: 0.5rem;
     margin-bottom: 3rem;
     font-size: 1rem;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow-x: auto;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     a {
         position: relative;

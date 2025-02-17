@@ -66,7 +66,7 @@ export default defineConfig({
               if (regexChecker(/\.(jpg|jpeg)$/, chunkInfoName)) return "assets/jpg/[name].[hash].[ext]";
               if (regexChecker(/\.(png)$/, chunkInfoName)) return "assets/png/[name].[hash].[ext]";
               if (regexChecker(/\.(gif)$/, chunkInfoName)) return "assets/gif/[name].[hash].[ext]";
-              if (regexChecker(/\.(woff|woff2)$/, chunkInfoName)) return "assets/fonts/[name].[hash].[ext]";
+              if (regexChecker(/\.(woff|woff2|ttf|eot)$/, chunkInfoName)) return "assets/fonts/[name].[hash].[ext]";
               if (regexChecker(/\.(worker)\.(js)$/, chunkInfoName)) return "js/[name].[hash].js";
             }
           }

@@ -5,61 +5,56 @@ $font-path: 'assets/main/fonts/gteEstiPro/';
 
 $gteesti-fonts: (
   'text': (
-    'ThinItalic': ('woff2', 'woff', 'ttf'),
-    'Medium': ('woff2', 'woff', 'ttf'),
-    'LightItalic': ('woff2', 'woff', 'ttf'),
-    'Bold': ('woff2', 'woff', 'ttf'),
-    'Thin': ('woff2', 'woff', 'ttf'),
-    'Regular': ('woff2', 'woff', 'ttf'),
-    'MediumItalic': ('woff2', 'woff', 'ttf'),
-    'Light': ('woff2', 'woff', 'ttf'),
-    'UltralightItalic': ('woff2', 'woff', 'ttf'),
-    'BoldItalic': ('woff2', 'woff', 'ttf')
+    'thin': ('woff2', 'woff', 'ttf', 'eot'),
+    'medium': ('woff2', 'woff', 'ttf', 'eot'),
+    'bold': ('woff2', 'woff', 'ttf', 'eot'),
+    'regular': ('woff2', 'woff', 'ttf', 'eot'),
+    'light': ('woff2', 'woff', 'ttf', 'eot')
   ),
   'display': (
-    'Bold': ('woff2', 'woff', 'ttf'),
-    'Thin': ('woff2', 'woff', 'ttf'),
-    'Light': ('woff2', 'woff', 'ttf'),
-    'Medium': ('woff2', 'woff', 'ttf'),
-    'RegularItalic': ('woff2', 'woff', 'ttf'),
-    'LightItalic': ('woff2', 'woff', 'ttf'),
-    'Ultralight': ('woff2', 'woff', 'ttf'),
-    'UltralightItalic': ('woff2', 'woff', 'ttf'),
-    'Ultrabold': ('woff2', 'woff', 'ttf'),
-    'UltraboldItalic': ('woff2', 'woff', 'ttf'),
-    'BoldItalic': ('woff2', 'woff', 'ttf')
+    'bold': ('woff2', 'woff', 'ttf', 'eot'),
+    'regular': ('woff2', 'woff', 'ttf', 'eot'),
+    'thin': ('woff2', 'woff', 'ttf', 'eot'),
+    'light': ('woff2', 'woff', 'ttf', 'eot'),
+    'medium': ('woff2', 'woff', 'ttf', 'eot'),
+    'ultralight': ('woff2', 'woff', 'ttf', 'eot'),
+    'ultrabold': ('woff2', 'woff', 'ttf', 'eot')
   )
 );
 
 $font-weights: (
-  thin: 100,
-  ultralight: 200,
-  light: 300,
-  regular: 400,
-  medium: 500,
-  bold: 700,
-  ultrabold: 800
+  "thin": 100,
+  "ultralight": 200,
+  "light": 300,
+  "regular": 400,
+  "medium": 500,
+  "bold": 700,
+  "ultrabold": 800
 );
 
 @each $category, $styles in $gteesti-fonts {
   @each $style, $formats in $styles {
-    $is-italic: string.index($style, 'italic') != null;
-    $base-style: if($is-italic, string.slice($style, 1, string.index($style, '-') - 1), $style);
-    $font-weight: map.get($font-weights, string.unquote($base-style));
+    $normalized-style: string.to-lower-case(string.unquote($style));
 
-    @font-face {
-      font-family: "GT Eesti Pro #{$category}";
-      src: url("#{$font-path}GTEestiPro#{$category}-#{$style}.eot");
-      src: 
-        local("GT Eesti Pro #{$category} #{$style}"),
-        local("GTEestiPro#{$category}-#{$style}"),
-        url("#{$font-path}GTEestiPro#{$category}-#{$style}.eot?#iefix") format("embedded-opentype"),
-        url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 1)}") format("#{nth($formats, 1)}"),
-        url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 2)}") format("#{nth($formats, 2)}"),
-        url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 3)}") format("#{nth($formats, 3)}");
-      font-weight: $font-weight;
-      font-style: if($is-italic, italic, normal);
-      font-display: swap;
+    @if map.has-key($font-weights, $normalized-style) {
+      $font-weight: map.get($font-weights, $normalized-style);
+
+      @font-face {
+        font-family: "GT Eesti Pro #{$category} #{$style}";
+        src: url("#{$font-path}GTEestiPro#{$category}-#{$style}.eot");
+        src: 
+          local("GT Eesti Pro #{$category} #{$style}"),
+          local("GTEestiPro#{$category}-#{$style}"),
+          url("#{$font-path}GTEestiPro#{$category}-#{$style}.eot?#iefix") format("embedded-opentype"),
+          url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 1)}") format("#{nth($formats, 1)}"),
+          url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 2)}") format("#{nth($formats, 2)}"),
+          url("#{$font-path}GTEestiPro#{$category}-#{$style}.#{nth($formats, 3)}") format("#{nth($formats, 3)}");
+        font-weight: $font-weight;
+        font-style: normal;
+        font-display: swap;
+      }
+    } @else {
+      @warn "⚠️ Undefined font-weight for #{$style} in GT Eesti Pro #{$category}";
     }
   }
 }

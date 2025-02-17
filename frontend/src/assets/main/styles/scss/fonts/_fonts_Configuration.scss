@@ -1,10 +1,16 @@
-h1,
-h2,
+h1 {
+    font-family: var(--boldFont);
+}
+
+h2 {
+    font-family: var(--GteboldFontWeak);
+    letter-spacing: 0.0125rem;
+}
 h3,
 h4,
 h5,
 h6 {
-    font-family: var(--boldFont);
+    font-family: var(--GteMediumFont);
 }
 
 p,
@@ -12,4 +18,3 @@ a,
 div {
     font-family: var(--primary-font);
 }
-

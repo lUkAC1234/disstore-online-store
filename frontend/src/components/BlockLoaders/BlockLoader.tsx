@@ -3,17 +3,18 @@ import { PureComponent, ReactNode, CSSProperties } from "react";
 
 export interface BlockLoaderProps {
     isLoaded: boolean;
-    loadingMessage?: string;
+    loadingMessage?: any;
     children?: ReactNode;
     containerStyle?: CSSProperties;
+    className?: string;
 }
 
 class BlockLoader extends PureComponent<BlockLoaderProps> {
     render() {
-        const { isLoaded, loadingMessage, children, containerStyle } = this.props;
+        const { isLoaded, loadingMessage, children, containerStyle, className } = this.props;
         if (!isLoaded) {
             return (
-                <div style={containerStyle} className={styles.loadingBanner}>
+                <div style={containerStyle} className={className || styles.loadingBanner}>
                     {loadingMessage}
                 </div>
             );

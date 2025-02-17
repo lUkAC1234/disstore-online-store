@@ -36,8 +36,7 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
   }
 
   renderContent(): ReactNode {
-    const { selectedOptions } = this.props;
-    const { data } = this.props;
+    const { selectedOptions, data } = this.props;
     const maxAvailable = data?.count;
 
     return (
@@ -86,11 +85,11 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
             >
               <h2 className={styles["catalog-modal-title"]}>{data?.title}</h2>
             </BlockLoader>
-            <BlockLoader isLoaded={!!data?.count} containerStyle={{ height: "2rem" }}>
+            <BlockLoader isLoaded={maxAvailable >= 0} containerStyle={{ height: "2rem" }}>
               <div className={styles["catalog-modal-product-rating"]}>
                 <img src={star5} alt="Rating" />
                 <span>
-                  {data?.count > 0
+                  {maxAvailable > 0
                     ? `В наличии: ${data.count}`
                     : "Товар закончился"}
                 </span>
@@ -143,7 +142,7 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
                 />
               </BlockLoader>
               <BlockLoader
-                isLoaded={!!data?.count}
+                isLoaded={maxAvailable >= 0}
                 containerStyle={{ height: "4rem" }}
               >
                 <QuantitySelector

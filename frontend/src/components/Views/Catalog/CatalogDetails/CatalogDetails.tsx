@@ -15,7 +15,7 @@ import { WithTranslation } from "react-i18next";
 import { getWithTranslation } from "i18n/hooks";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faImage } from "@fortawesome/free-solid-svg-icons";
 import InjectedUIFancybox from "components/Fancybox/Fancybox";
 import { Navigation } from "swiper/modules";
 import { SwiperSlide } from "swiper/react";
@@ -27,7 +27,7 @@ import QuantitySelector from "./SelectedOptions/Quantity/QuantitySelector";
 import BlockLoader from "components/BlockLoaders/BlockLoader";
 const Swiper = OriginalSwiper as unknown as React.FC<any>;
 
-interface CatalogDetailsProps extends WithTranslation {}
+interface CatalogDetailsProps extends WithTranslation { }
 
 class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
   getProductSlug(): string {
@@ -51,15 +51,7 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
   renderContent(): ReactNode {
     const { selectedOptions, data } = this.props;
     const maxAvailable = data?.count;
-    const globalQuantity = this.getGlobalQuantity();
 
-    const loaderStyle = {
-      width: "9rem",
-      height: "9rem",
-      borderRadius: "1rem",
-      margin: "0",
-    };
-    
     const emptyLoaderSlides = [0, 1, 2].map((index) => {
       const imageAvailable = !!data?.catalogImages?.[index]?.image;
       return (
@@ -67,8 +59,11 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
           <SwiperSlide key={index}>
             <BlockLoader
               isLoaded={imageAvailable}
-              containerStyle={loaderStyle}
-            />
+              className={styles["catalog-details-swiper-loader"]}
+              loadingMessage={<FontAwesomeIcon icon={faImage} />}
+            >
+              
+            </BlockLoader>
           </SwiperSlide>
         )
       );
@@ -76,13 +71,16 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
 
     return (
       <div className={styles["catalog-container"]}>
-        <div className="catalog-link-way">
-          <Link to={`/${this.lang}/`}>Главная</Link>
-          <FontAwesomeIcon icon={faAngleRight} />
-          <Link to={`/${this.lang}/catalog`}>Каталог</Link>
-          <FontAwesomeIcon icon={faAngleRight} />
-          {data?.title}
-        </div>
+        <BlockLoader isLoaded={!!data} containerStyle={{ width: "min(100%, 30rem)", height: "2rem", marginBottom: "3rem", marginLeft: "0.75rem" }}>
+          <div className="catalog-link-way" style={{ marginLeft: "0.5rem" }}>
+            <Link to={`/${this.lang}/`}>Главная</Link>
+            <FontAwesomeIcon icon={faAngleRight} />
+            <Link to={`/${this.lang}/catalog`}>Каталог</Link>
+            <FontAwesomeIcon icon={faAngleRight} />
+            {data?.title}
+          </div>
+        </BlockLoader>
+
         <div className={styles["catalog-wrapper"]}>
           <div className={styles["thumbnail-navigation"]}>
             <InjectedUIFancybox className={styles["Fancybox-container"]}>
@@ -122,9 +120,8 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
                       alt={`Thumbnail ${index + 1}`}
                       loading="lazy"
                       decoding="async"
-                      className={`${styles["thumbnail"]} ${
-                        selectedOptions.selectedImage === image ? styles["active"] : ""
-                      }`}
+                      className={`${styles["thumbnail"]} ${selectedOptions.selectedImage === image ? styles["active"] : ""
+                        }`}
                       onLoad={({ target }) => {
                         const temp = new Image();
                         temp.src = image;
@@ -173,51 +170,81 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
             </InjectedUIFancybox>
           </div>
           <div className={styles["catalog-product-details"]}>
-            <h1 className={styles["catalog-product-product-title"]}>{data?.title}</h1>
-            <div className={styles["catalog-product-product-rating"]}>
-              <img src={star5} alt="Rating" />
-              <span>
-                {data?.count > 0 ? `В наличии: ${data.count}` : "Товар закончился"}
-              </span>
-            </div>
-            <bdi className={styles["catalog-product-product-pricing"]}>
-              <span className={styles["catalog-product-current-price"]}>
-                {data?.real_price.toLocaleString("en-US")} сум
-              </span>
-              {data?.discount > 0 && (
-                <>
-                  <span className={styles["catalog-product-original-price"]}>
-                    {data?.price.toLocaleString("en-US")} сум
-                  </span>
-                  <span className={styles["catalog-product-discount"]}>
-                    -{data?.discount}%
-                  </span>
-                </>
-              )}
-            </bdi>
-            <p className={styles["catalog-product-description"]}>{data?.short_description}</p>
-            <div className={styles["hr-line"]} />
+            <BlockLoader
+              isLoaded={!!data?.title}
+              containerStyle={{ height: "4rem" }}
+            >
+              <h1 className={styles["catalog-product-product-title"]}>{data?.title}</h1>
+            </BlockLoader>
+            <BlockLoader isLoaded={maxAvailable >= 0} containerStyle={{ height: "2rem" }}>
+              <div className={styles["catalog-product-product-rating"]}>
+                <img src={star5} alt="Rating" />
+                <span>
+                  {maxAvailable > 0 ? `В наличии: ${data.count}` : "Товар закончился"}
+                </span>
+              </div>
+            </BlockLoader>
+
+            <BlockLoader isLoaded={!!data?.price} containerStyle={{ height: "4rem" }}>
+              <bdi className={styles["catalog-product-product-pricing"]}>
+                <span className={styles["catalog-product-current-price"]}>
+                  {data?.real_price.toLocaleString("en-US")} сум
+                </span>
+                {data?.discount > 0 && (
+                  <>
+                    <span className={styles["catalog-product-original-price"]}>
+                      {data?.price.toLocaleString("en-US")} сум
+                    </span>
+                    <span className={styles["catalog-product-discount"]}>
+                      -{data?.discount}%
+                    </span>
+                  </>
+                )}
+              </bdi>
+            </BlockLoader>
+
+            <BlockLoader isLoaded={!!data?.short_description} containerStyle={{ height: "2rem" }}>
+              <p className={styles["catalog-product-description"]}>{data?.short_description}</p>
+              <div className={styles["hr-line"]} />
+            </BlockLoader>
+
+
             <div className={styles["product-options"]}>
-              <ColorSelector
-                data={data}
-                selectedOptions={selectedOptions}
-                handleOptionChange={this.handleOptionChange}
-              />
-              <div className={styles["hr-line"]} />
-              <SizeSelector
-                data={data}
-                selectedOptions={selectedOptions}
-                handleOptionChange={this.handleOptionChange}
-              />
-              <div className={styles["hr-line"]} />
-              <QuantitySelector
-                data={data}
-                maxAvailable={maxAvailable}
-                globalQuantity={globalQuantity}
-                addToCart={this.handleAddToCart}
-                selectedOptions={selectedOptions}
-                handleOptionChange={this.handleOptionChange}
-              />
+              <BlockLoader
+                isLoaded={!!data?.colors}
+                containerStyle={{ height: "4rem" }}
+              >
+                <ColorSelector
+                  data={data}
+                  selectedOptions={selectedOptions}
+                  handleOptionChange={this.handleOptionChange}
+                />
+                <div className={styles["hr-line"]} />
+              </BlockLoader>
+              <BlockLoader
+                isLoaded={!!data?.sizes}
+                containerStyle={{ height: "4rem" }}
+              >
+                <SizeSelector
+                  data={data}
+                  selectedOptions={selectedOptions}
+                  handleOptionChange={this.handleOptionChange}
+                />
+                <div className={styles["hr-line"]} />
+              </BlockLoader>
+              <BlockLoader
+                isLoaded={maxAvailable >= 0}
+                containerStyle={{ height: "4.25rem" }}
+              >
+                <QuantitySelector
+                  data={data}
+                  maxAvailable={maxAvailable}
+                  globalQuantity={this.getGlobalQuantity()}
+                  addToCart={this.handleAddToCart}
+                  selectedOptions={selectedOptions}
+                  handleOptionChange={this.handleOptionChange}
+                />
+              </BlockLoader>
             </div>
           </div>
         </div>

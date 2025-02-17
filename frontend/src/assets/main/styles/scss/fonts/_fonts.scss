@@ -2,12 +2,23 @@
 @use 'gteEstiPro.scss';
 
 $Montserratfont: "Montserrat", serif;
-$boldFont: "GT Eesti Pro Display", arial, sans-serif;
-$textFont: "GT Eesti Pro Text", arial, sans-serif;
+$GteboldFont: "GT Eesti Pro Display UltraBold", Arial, sans-serif;
+$GteboldFontWeak: "GT Eesti Pro Display Bold", Arial, sans-serif;
+$GteboldRegular: "GT Eesti Pro Display Regular", Arial, sans-serif;
+$GteThinFont: "GT Eesti Pro Display Thin", Arial, sans-serif;
+$GteLightFont: "GT Eesti Pro Display Light", Arial, sans-serif;
+$GteMediumFont: "GT Eesti Pro Display Medium", Arial, sans-serif;
+$GteUltraLightFont: "GT Eesti Pro Display UltraLight", Arial, sans-serif;
+$textFont: "GT Eesti Pro Text", Arial, sans-serif;
 
 :root {
     --primary-font: #{$Montserratfont} !important;
-    --boldFont: #{$boldFont} !important;
+    --boldFont: #{$GteboldFont} !important;
+    --GteboldFontWeak: #{$GteboldFontWeak} !important;
+    --GteboldRegular: #{$GteboldRegular} !important;
+    --GteThinFont: #{$GteThinFont} !important;
+    --GteLightFont: #{$GteLightFont} !important;
+    --GteMediumFont: #{$GteMediumFont} !important;
+    --GteUltraLightFont: #{$GteUltraLightFont} !important;
     --textFont: #{$textFont} !important;
 }
-
