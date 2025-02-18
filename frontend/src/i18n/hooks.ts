@@ -44,3 +44,9 @@ export const getLanguageFromPath = (): string => {
   const supported: boolean = supportedLanguages.includes(lang);
   return supported ? lang : "";
 }
+
+export function indexOfLangPath(): number {
+  const splittedPathList: string[] = location.pathname.split("/");
+  const indexOfLangPath: number = splittedPathList.findIndex(lng => supportedLanguages.includes(lng));
+  return indexOfLangPath;
+}

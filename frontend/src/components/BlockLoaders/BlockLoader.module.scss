@@ -4,7 +4,6 @@
     align-items: center;
     justify-content: center;
     background-color: var(--header-search-background);
-    padding: 1rem;
     border-radius: 0.5rem;
     font-size: 1rem;
     font-weight: 600;
@@ -37,4 +36,10 @@
     100% {
         transform: translateX(100%);
     }
+}
+
+.loading-message-children-container {
+    opacity: 0;
+    visibility: hidden;
+    z-index: -1;
 }

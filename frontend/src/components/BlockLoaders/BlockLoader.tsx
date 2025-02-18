@@ -16,6 +16,9 @@ class BlockLoader extends PureComponent<BlockLoaderProps> {
             return (
                 <div style={containerStyle} className={className || styles.loadingBanner}>
                     {loadingMessage}
+                    <div className={styles["loading-message-children-container"]}>
+                        {this.props.children}
+                    </div>
                 </div>
             );
         }

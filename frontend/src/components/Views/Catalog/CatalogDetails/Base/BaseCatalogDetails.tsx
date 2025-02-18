@@ -75,7 +75,7 @@ abstract class BaseCatalogDetails<P = {}>
     }
   }
 
-  getGlobalQuantity(): number {
+  get getGlobalQuantity(): number {
     const { cart, data } = this.props;
     return (
       cart?.items

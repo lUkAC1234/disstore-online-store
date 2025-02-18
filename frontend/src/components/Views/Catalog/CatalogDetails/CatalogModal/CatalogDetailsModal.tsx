@@ -81,7 +81,6 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
           <div className={styles["catalog-modal-content"]}>
             <BlockLoader
               isLoaded={!!data?.title}
-              containerStyle={{ height: "2rem" }}
             >
               <h2 className={styles["catalog-modal-title"]}>{data?.title}</h2>
             </BlockLoader>
@@ -95,7 +94,7 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
                 </span>
               </div>
             </BlockLoader>
-            <BlockLoader isLoaded={!!data?.price} containerStyle={{ height: "6rem" }}>
+            <BlockLoader isLoaded={!!data?.price}>
               <div className={styles["hr-line"]} />
               <bdi className={styles["catalog-modal-product-pricing"]}>
                 <span
@@ -123,7 +122,6 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
             <div className={styles["product-options"]}>
               <BlockLoader
                 isLoaded={!!data?.colors}
-                containerStyle={{ height: "3rem" }}
               >
                 <ColorSelector
                   data={data}
@@ -133,7 +131,6 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
               </BlockLoader>
               <BlockLoader
                 isLoaded={!!data?.sizes}
-                containerStyle={{ height: "3rem" }}
               >
                 <SizeSelector
                   data={data}
@@ -143,12 +140,11 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
               </BlockLoader>
               <BlockLoader
                 isLoaded={maxAvailable >= 0}
-                containerStyle={{ height: "4rem" }}
               >
                 <QuantitySelector
                   data={data}
                   maxAvailable={maxAvailable}
-                  globalQuantity={this.getGlobalQuantity()}
+                  globalQuantity={this.getGlobalQuantity}
                   addToCart={this.handleAddToCart}
                   selectedOptions={selectedOptions}
                   handleOptionChange={this.handleOptionChange}

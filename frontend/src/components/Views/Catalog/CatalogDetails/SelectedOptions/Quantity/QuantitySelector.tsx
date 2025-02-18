@@ -22,50 +22,52 @@ interface QuantitySelectorProps {
 }
 
 class QuantitySelector extends PureComponent<QuantitySelectorProps> {
-  handleQuantityChange = (type: "increase" | "decrease") => {
+  handleQuantityChange = (type: 'increase' | 'decrease') => {
     const { selectedOptions, maxAvailable, globalQuantity, handleOptionChange } = this.props;
-    const currentQuantity = selectedOptions.quantity;
+    const { quantity } = selectedOptions;
+    const totalQuantity = globalQuantity + quantity;
     
-    if (type === "increase") {
-      if (globalQuantity < maxAvailable) {
-        handleOptionChange("quantity", currentQuantity + 1);
+    if (type === 'increase') {
+      if (totalQuantity < maxAvailable) {
+        handleOptionChange('quantity', quantity + 1);
       }
     } else {
-      if (currentQuantity > 1) {
-        handleOptionChange("quantity", currentQuantity - 1);
+      if (quantity > 1) {
+        handleOptionChange('quantity', quantity - 1);
       }
     }
   };
 
   render() {
     const { data, maxAvailable, globalQuantity, addToCart, selectedOptions } = this.props;
-    const disableIncrease = globalQuantity >= maxAvailable;
-    
+    const { quantity } = selectedOptions;
+    const totalQuantity = globalQuantity + quantity;
+    const disableIncrease = totalQuantity >= maxAvailable;
+    const disableAddToCart = totalQuantity > maxAvailable;
+
     return (
-      <div className={styles["quantity-section"]}>
-        <div className={styles["quantity-container"]}>
-          <div className={styles["quantity-wrapper"]}>
+      <div className={styles['quantity-section']}>
+        <div className={styles['quantity-container']}>
+          <div className={styles['quantity-wrapper']}>
             <button
-              className={styles["quantity-btn"]}
-              onClick={() => this.handleQuantityChange("decrease")}
+              className={styles['quantity-btn']}
+              onClick={() => this.handleQuantityChange('decrease')}
             >
               <FontAwesomeIcon icon={faMinus} />
             </button>
-            <span className={styles["quantity-value"]}>
-              {selectedOptions.quantity}
-            </span>
+            <span className={styles['quantity-value']}>{quantity}</span>
             <button
-              className={styles["quantity-btn"]}
-              onClick={() => this.handleQuantityChange("increase")}
+              className={styles['quantity-btn']}
+              onClick={() => this.handleQuantityChange('increase')}
               disabled={disableIncrease}
             >
               <FontAwesomeIcon icon={faPlus} />
             </button>
           </div>
           <button
-            onClick={() => addToCart(data?.id)}
-            disabled={data?.count <= 0 || disableIncrease}
-            className={styles["catalog-add-to-cart-btn"]}
+            onClick={() => addToCart(data.id)}
+            disabled={data?.count <= 0 || disableAddToCart}
+            className={styles['catalog-add-to-cart-btn']}
           >
             Добавить в корзину
           </button>

@@ -41,8 +41,8 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
   }
 
   componentDidMount = async (): Promise<void> => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
     await super.componentDidMount();
+    window.scrollTo({ top: 0, behavior: "smooth" });
     window.addEventListener("popstate", this.fetchData, { signal: this.controller.signal });
     window.addEventListener("pushstate", this.fetchData, { signal: this.controller.signal });
     window.addEventListener("replacestate", this.fetchData, { signal: this.controller.signal });
@@ -172,11 +172,10 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
           <div className={styles["catalog-product-details"]}>
             <BlockLoader
               isLoaded={!!data?.title}
-              containerStyle={{ height: "4rem" }}
             >
               <h1 className={styles["catalog-product-product-title"]}>{data?.title}</h1>
             </BlockLoader>
-            <BlockLoader isLoaded={maxAvailable >= 0} containerStyle={{ height: "2rem" }}>
+            <BlockLoader isLoaded={maxAvailable >= 0}>
               <div className={styles["catalog-product-product-rating"]}>
                 <img src={star5} alt="Rating" />
                 <span>
@@ -185,7 +184,7 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
               </div>
             </BlockLoader>
 
-            <BlockLoader isLoaded={!!data?.price} containerStyle={{ height: "4rem" }}>
+            <BlockLoader isLoaded={!!data?.price}>
               <bdi className={styles["catalog-product-product-pricing"]}>
                 <span className={styles["catalog-product-current-price"]}>
                   {data?.real_price.toLocaleString("en-US")} сум
@@ -203,7 +202,7 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
               </bdi>
             </BlockLoader>
 
-            <BlockLoader isLoaded={!!data?.short_description} containerStyle={{ height: "2rem" }}>
+            <BlockLoader isLoaded={!!data?.short_description}>
               <p className={styles["catalog-product-description"]}>{data?.short_description}</p>
               <div className={styles["hr-line"]} />
             </BlockLoader>
@@ -212,7 +211,6 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
             <div className={styles["product-options"]}>
               <BlockLoader
                 isLoaded={!!data?.colors}
-                containerStyle={{ height: "4rem" }}
               >
                 <ColorSelector
                   data={data}
@@ -223,7 +221,6 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
               </BlockLoader>
               <BlockLoader
                 isLoaded={!!data?.sizes}
-                containerStyle={{ height: "4rem" }}
               >
                 <SizeSelector
                   data={data}
@@ -234,12 +231,11 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
               </BlockLoader>
               <BlockLoader
                 isLoaded={maxAvailable >= 0}
-                containerStyle={{ height: "4.25rem" }}
               >
                 <QuantitySelector
                   data={data}
                   maxAvailable={maxAvailable}
-                  globalQuantity={this.getGlobalQuantity()}
+                  globalQuantity={this.getGlobalQuantity}
                   addToCart={this.handleAddToCart}
                   selectedOptions={selectedOptions}
                   handleOptionChange={this.handleOptionChange}
