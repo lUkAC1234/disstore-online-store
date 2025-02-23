@@ -1,9 +1,9 @@
-import React, { ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import styles from "./CatalogDetails.module.scss";
 import "swiper/css";
 import "swiper/css/navigation";
 import NavigationSection from "./Navigation/Navigation";
-import { withContext } from "components/Context/ContextInjector";
+import { withContextSelector } from "components/Context/ContextInjector";
 import {
   CartContext,
   ClothesContext,
@@ -25,9 +25,11 @@ import ColorSelector from "./SelectedOptions/Colors/ColorSelector";
 import SizeSelector from "./SelectedOptions/Sizes/SizeSelector";
 import QuantitySelector from "./SelectedOptions/Quantity/QuantitySelector";
 import BlockLoader from "components/BlockLoaders/BlockLoader";
-const Swiper = OriginalSwiper as unknown as React.FC<any>;
+const Swiper = OriginalSwiper as unknown as FC<any>;
 
-interface CatalogDetailsProps extends WithTranslation { }
+interface CatalogDetailsProps extends WithTranslation {
+  
+}
 
 class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
   getProductSlug(): string {
@@ -62,7 +64,7 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
               className={styles["catalog-details-swiper-loader"]}
               loadingMessage={<FontAwesomeIcon icon={faImage} />}
             >
-              
+
             </BlockLoader>
           </SwiperSlide>
         )
@@ -239,6 +241,7 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
                   addToCart={this.handleAddToCart}
                   selectedOptions={selectedOptions}
                   handleOptionChange={this.handleOptionChange}
+                  positionStatic
                 />
               </BlockLoader>
             </div>
@@ -254,11 +257,33 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
   }
 }
 
-const UICatalog = getWithTranslation(
-  withContext(
-    ClothesListContext,
-    withContext(ClothesContext, withContext(CartContext, CatalogDetails))
-  )
+
+const __UICatalog = withContextSelector(
+  CartContext,
+  CatalogDetails,
+  (context) => ({
+    setSelectedOptions: context.setSelectedOptions,
+    cart: context.cart,
+    selectedOptions: context.selectedOptions,
+    addToCart: context.addToCart,
+  })
 );
 
-export default UICatalog;
+const _UICatalog = withContextSelector(
+  ClothesContext,
+  __UICatalog,
+  (context) => ({
+    data: context.data,
+    setData: context.setData,
+  })
+);
+
+const UICatalog = withContextSelector(
+  ClothesListContext,
+  _UICatalog,
+  (context) => ({
+    error: context.error,
+  })
+);
+
+export default getWithTranslation(UICatalog);

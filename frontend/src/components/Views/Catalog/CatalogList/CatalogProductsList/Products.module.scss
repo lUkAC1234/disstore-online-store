@@ -297,21 +297,3 @@
         }
     }
 }
-
-.close-catalog-modal-button {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    border: transparent;
-    cursor: pointer;
-    height: max-content;
-    border-radius: 50%;
-    width: 1.5rem;
-    height: 1.5rem;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-
-    &:hover {
-        opacity: 1;
-    }
-}

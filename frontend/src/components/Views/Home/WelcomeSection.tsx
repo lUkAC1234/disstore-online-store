@@ -3,6 +3,7 @@ import { PureComponent, ReactNode } from "react";
 import welcomeImage from "assets/main/images/main-page/models2.webp";
 import { Link } from "react-router-dom";
 import i18next from "i18next";
+import BlockLoader from "components/BlockLoaders/BlockLoader";
 const lang = i18next.language;
 
 class WelcomeSection extends PureComponent {
@@ -49,14 +50,19 @@ class WelcomeSection extends PureComponent {
                             </div>
                         </div>
                     </div>
-                    <div className={styles["welcome-image-column"]}>
-                        <img
-                            src={welcomeImage}
-                            alt="Fashion people"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </div>
+                    <BlockLoader
+                        isLoaded={!!welcomeImage}
+                        containerStyle={{ background: "#ababab1a" }}
+                    >
+                        <div className={styles["welcome-image-column"]}>
+                            <img
+                                src={welcomeImage}
+                                alt="Fashion people"
+                                loading="lazy"
+                                decoding="async"
+                            />
+                        </div>
+                    </BlockLoader>
                 </div>
             </section>
         )

@@ -1,10 +1,9 @@
 import styles from "./CatalogList.module.scss";
 import { createRef, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import i18next from "i18next";
 import UIReact from "utils/classes/UIReact";
 import { withContextSelector } from "components/Context/ContextInjector";
-import { ClothesListContext, WishlistContext } from "components/Context/ContextCollection";
+import { ClothesListContext } from "components/Context/ContextCollection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faSliders } from "@fortawesome/free-solid-svg-icons";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
@@ -14,15 +13,14 @@ import CatalogPagination from "./CatalogPagination/CatalogPagination.tsx";
 import CatalogProducts from "./CatalogProductsList/Products.tsx";
 import Filters from "./CatalogFilters/Filters.tsx";
 import { ClothItem } from "components/Context/ClothesContext.tsx";
-import { WishlistItem } from "components/Context/WishlistContext.tsx";
-
-const lang: string = i18next.language;
+import { WithTranslation } from "react-i18next";
+import { getWithTranslation } from "i18n/hooks.ts";
 
 interface CatalogState {
   isFilterActive: boolean;
 }
 
-interface CatalogListProps {
+interface CatalogListProps extends WithTranslation {
   loading: boolean; 
   error: boolean;
   products: ClothItem[];
@@ -32,15 +30,13 @@ interface CatalogListProps {
   resetFilters: () => void;
   setNextPage: () => void;
   setPrevPage: () => void;
-
-  // Wishlist
-  wishlistItems: WishlistItem[];
-  loadingWishlist: boolean;
-  addToWishlist: (productId: number) => Promise<void>;
-  removeFromWishlist: (wishlistItemId: number) => Promise<void>;
 }
 
 class CatalogList extends UIReact<CatalogListProps, CatalogState> {
+  get lang(): string {
+    return this.props.i18n.language;
+  }
+
   catalogFiltersContainerRef = createRef<HTMLDivElement>();
   state: CatalogState = {
     isFilterActive: false,
@@ -71,15 +67,11 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
 
   render(): ReactNode {
     const { 
-      wishlistItems, 
-      loadingWishlist, 
       loading, 
       error, 
       products, 
       currentPage, 
       totalPages, 
-      addToWishlist, 
-      removeFromWishlist,
       loadingProducts,
       resetFilters,
       setPrevPage,
@@ -98,7 +90,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
       <section className={styles["catalog-section"]}>
         <div className={styles["catalog-container"]}>
           <div className="catalog-link-way">
-            <Link to={`/${lang}/`}>Главная</Link>
+            <Link to={`/${this.lang}/`}>Главная</Link>
             <FontAwesomeIcon icon={faAngleRight} />
             Каталог
           </div>
@@ -126,13 +118,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
               {loadingProducts ? (
                 <SpinnerLoaderWrapper relativeCentered />
               ) : products && products.length > 0 ? (
-                <CatalogProducts 
-                wishlistItems={wishlistItems}
-                loadingWishlist={loadingWishlist} 
-                products={products} 
-                addToWishList={addToWishlist} 
-                removeFromWishlist={removeFromWishlist} 
-                />
+                <CatalogProducts products={products} />
               ) : (
                 <CatalogErrorPage
                   resetFilters={resetFilters}
@@ -160,7 +146,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogState> {
   }
 }
 
-const _UICatalogList = withContextSelector(ClothesListContext, CatalogList, (context) => ({
+const UICatalogList = withContextSelector(ClothesListContext, CatalogList, (context) => ({
   loading: context.loading, 
   error: context.error,
   products: context.products,
@@ -172,11 +158,4 @@ const _UICatalogList = withContextSelector(ClothesListContext, CatalogList, (con
   setPrevPage: context.setPrevPage,
 }));
 
-const UICatalogList = withContextSelector(WishlistContext, _UICatalogList, (context) => ({
-  wishlistItems: context.wishlistItems, 
-  loadingWishlist: context.loadingWishlist, 
-  addToWishlist: context.addToWishlist, 
-  removeFromWishlist: context.removeFromWishlist,
-}));
-  
-export default UICatalogList;
+export default getWithTranslation(UICatalogList);

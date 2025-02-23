@@ -3,6 +3,16 @@
 .quantity-container {
     display: flex;
     gap: 1rem;
+
+    @media screen and (max-width: 520px) {
+        &:has(.posed-static) {
+            flex-flow: column;
+
+            .quantity-wrapper {
+                width: 100%;
+            }
+        }
+    }
 }
 
 .quantity-wrapper {
@@ -30,11 +40,19 @@
     font-size: 1.125rem;
 }
 
+.ordering-buttons-container {
+    display: grid;
+    grid-template-columns: 1fr 3.5rem;
+    gap: 0.5rem;
+    width: 100%;
+}
+
 .catalog-add-to-cart-btn {
     @extend .primary-button;
     width: min(100%, 30rem);
     background: var(--clothes-discount-number);
     font-size: 1rem;
+    text-align: center;
 
     &:disabled {
         opacity: 0.75;
@@ -46,20 +64,88 @@
     }
 }
 
-@media screen and (max-width: 420px) {
+.catalog-add-wishlist-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: var(--text-white);
+    border: 0.1rem solid var(--welcome-border);
+    transition: background 0.3s ease;
+    padding: 0;
+    margin: 0;
+
+    &:hover {
+        background-color: var(--header-search-background);
+    }
+
+    svg {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .ordering-buttons-container {
+        &.not-posed-static {
+            grid-template-columns: 1fr;
+        }
+
+        &.posed-static {
+            grid-template-columns: 1fr 3.5rem;
+        }
+    }
+
+    .catalog-add-wishlist-link {
+        &.not-posed-static {
+            position: absolute;
+            top: 3.25rem;
+            right: 0.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+
+            svg {
+                width: 1.125rem;
+                height: 1.125rem;
+            }
+
+            @media screen and (max-width: 800px) {
+                top: 0.5rem;
+                left: 1rem;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 450px) {
     .quantity-container {
         flex-flow: column;
     }
-    
+
     .quantity-wrapper {
         width: 100%;
     }
-    
+
     .quantity-value {
         font-size: 1.125rem;
     }
+
+    .ordering-buttons-container {
+        &.not-posed-static { grid-template-columns: 1fr 3.5rem; }
+    }
+
+    .catalog-add-wishlist-link {
+        &.not-posed-static {
+            position: static;
+            width: 3.5rem;
+            height: 3.5rem;
     
-    .catalog-add-to-cart-btn {
-        padding: 0.75rem 1.5rem;
+            svg {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
     }
 }

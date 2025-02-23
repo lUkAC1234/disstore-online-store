@@ -6,6 +6,7 @@
   height: 100%;
   transition: transform 1s ease;
   transform: scale(1);
+  z-index: 100000;
 
   &--destroyed {
     transform: scale(0);
@@ -30,5 +31,16 @@
       width: 2rem;
       border-width: 0.05rem;
     }
+  }
+
+  &--white {
+    .spinner-loader {
+      border-color: var(--text-white);
+      border-bottom-color: transparent;
+    }
+  }
+
+  &--with-background {
+    background-color: var(--text-white);
   }
 }

@@ -4,6 +4,7 @@ from django.templatetags.static import static
 from dotenv import load_dotenv
 import os
 import datetime
+load_dotenv()
 
 DEBUG = True
 
@@ -11,7 +12,7 @@ ALLOWED_HOSTS = ["*"]
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-$x&!cxodt5vf4)d*#htykxm*_saw*w&!!aorhh@*7i$y@celji'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 INSTALLED_APPS = [
     'unfold',
@@ -35,7 +36,7 @@ INSTALLED_APPS = [
 
     'web',
     'UserAuth',
-    'Cart',
+    "Cart.apps.CartConfig",
 ]
 
 MIDDLEWARE = [
@@ -170,11 +171,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'disstore',
-        'USER': 'postgres',
-        'PASSWORD': 'dimatop12',
-        'HOST': 'localhost',
-        'PORT': '5432'
+        'NAME': os.environ.get('NAME'),
+        'USER': os.environ.get('USER'),
+        'PASSWORD': os.environ.get('PASSWORD'),
+        'HOST': os.environ.get('HOST'),
+        'PORT': os.environ.get('PORT'),
     }
 }
 
@@ -241,6 +242,3 @@ AUTH_USER_MODEL = 'UserAuth.UserModel'
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
-# LOGIN_URL = 'main:login'
-
-load_dotenv()

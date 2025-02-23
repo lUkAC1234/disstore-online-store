@@ -1,9 +1,13 @@
 import { PureComponent, ReactNode } from "react";
 import SpinnerLoaderWrapper from "./SpinnerLoaderWrapper";
 
-class SpinnerLoaderWrapperFixed extends PureComponent {
+interface SpinnerLoaderWrapperFixedProps {
+  withBackground?: boolean;
+}
+
+class SpinnerLoaderWrapperFixed extends PureComponent<SpinnerLoaderWrapperFixedProps> {
   render(): ReactNode {
-    return <SpinnerLoaderWrapper fixedPosition />;
+    return <SpinnerLoaderWrapper fixedPosition withBackground={this.props.withBackground} />;
   }
 }
 

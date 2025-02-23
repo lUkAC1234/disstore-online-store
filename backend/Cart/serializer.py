@@ -1,6 +1,12 @@
 from rest_framework import serializers
 from web.serializer import ClothesModelSerializer
-from .models import WishlistModel, Cart, CartItem
+from .models import (
+    WishlistModel, 
+    Cart, 
+    CartItem,
+    Order,
+    OrderItem
+)
 from web.models import ClothesModel
 
 class WishlistSerializer(serializers.ModelSerializer):
@@ -32,7 +38,6 @@ class WishlistSerializer(serializers.ModelSerializer):
 class CartItemSerializer(serializers.ModelSerializer):
     product_id = serializers.IntegerField(write_only=True)
     product = ClothesModelSerializer(read_only=True)
-    # Include the new fields with defaults:
     selected_color = serializers.CharField(required=False, allow_blank=True, default="")
     selected_size = serializers.CharField(required=False, allow_blank=True, default="")
     selected_image = serializers.URLField(required=False, allow_null=True, default=None)
@@ -47,9 +52,6 @@ class CartItemSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'product', 'created_at']
         
     def create(self, validated_data):
-        # Debug: show raw validated_data before popping
-        print("Raw validated_data:", repr(validated_data))
-        
         request = self.context.get('request')
         user = request.user
         product_id = validated_data.pop('product_id')
@@ -60,16 +62,12 @@ class CartItemSerializer(serializers.ModelSerializer):
         except ClothesModel.DoesNotExist:
             raise serializers.ValidationError("Product not found.")
         
-        # Pop the extra fields so they are removed from validated_data.
-        # If not provided (or provided as None), use our defaults.
         selected_color = validated_data.pop('selected_color', "") or ""
         selected_size = validated_data.pop('selected_size', "") or ""
-        selected_image = validated_data.pop('selected_image', None)  # Let None remain None.
+        selected_image = validated_data.pop('selected_image', None) 
         
-        # Debug: print sanitized values with repr to see empty strings vs None
         print("Sanitized options:", repr(selected_color), repr(selected_size), repr(selected_image))
         
-        # Create or update the cart item.
         cart_item, created = CartItem.objects.get_or_create(
             cart=cart,
             product=product,
@@ -82,9 +80,6 @@ class CartItemSerializer(serializers.ModelSerializer):
             cart_item.quantity += validated_data.get('quantity', 1)
             cart_item.save()
         return cart_item
-
-
-
 
 class CartSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True, read_only=True)
@@ -124,3 +119,32 @@ class CartSerializer(serializers.ModelSerializer):
         if original > 0:
             return round((total_discount / original) * 100, 2)
         return 0
+    
+# Order
+class ShippingDetailsSerializer(serializers.Serializer):
+    fullName = serializers.CharField(max_length=255)
+    address = serializers.CharField()
+    phone = serializers.CharField(max_length=50)
+    email = serializers.EmailField()
+
+class CheckoutSerializer(serializers.Serializer):
+    shipping_details = ShippingDetailsSerializer()
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = [
+            'id', 'product', 'quantity',
+            'selected_color', 'selected_size', 'selected_image',
+            'unit_price', 'total_price'
+        ]
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = OrderItemSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'user', 'full_name', 'address', 'phone', 'email',
+            'status', 'created_at', 'items'
+        ]

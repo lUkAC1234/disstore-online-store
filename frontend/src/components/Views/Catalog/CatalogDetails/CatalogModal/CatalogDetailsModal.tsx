@@ -1,14 +1,14 @@
-// CatalogDetailsModal.tsx
 import styles from "./CatalogModal.module.scss";
 import { ReactNode, ComponentType } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import star5 from "assets/main/images/main-page/5star.png";
-import { withContext } from "components/Context/ContextInjector";
+import { withContextSelector } from "components/Context/ContextInjector";
 import {
   CartContext,
   ClothesContext,
   ClothesListContext,
+  ProductModalContext,
 } from "components/Context/ContextCollection";
 import { WithTranslation } from "react-i18next";
 import { getWithTranslation } from "i18n/hooks";
@@ -163,9 +163,29 @@ export type CatalogDetailsModalExternalProps = {
   productSlug: string;
 };
 
-const UICatalogDetailsModal = getWithTranslation(
-  withContext(ClothesContext, withContext(ClothesListContext, withContext(CartContext, CatalogDetailsModal)))
-);
-const UICatalogModal = UICatalogDetailsModal as ComponentType<CatalogDetailsModalExternalProps>;
+const ___UICatalogDetailsModal = withContextSelector(ClothesListContext, CatalogDetailsModal, (context) => ({
+  error: context.error,
+}));
+
+const __UICatalogDetailsModal = withContextSelector(ProductModalContext, ___UICatalogDetailsModal, (context) => ({
+  toggleModal: context.toggleModal,
+  setModalChildren: context.setModalChildren,
+  isModalActive: context.isModalActive,
+  modalChildren: context.modalChildren,
+}));
+
+const _UICatalogDetailsModal = withContextSelector(ClothesContext, __UICatalogDetailsModal, (context) => ({
+  data: context.data,
+  setData: context.setData,
+}));
+
+const UICatalogDetailsModal = withContextSelector(CartContext, _UICatalogDetailsModal, (context) => ({
+  setSelectedOptions: context.setSelectedOptions,
+  cart: context.cart,
+  selectedOptions: context.selectedOptions,
+  addToCart: context.addToCart,
+}));
+
+const UICatalogModal = getWithTranslation(UICatalogDetailsModal) as ComponentType<CatalogDetailsModalExternalProps>;
 
 export default UICatalogModal;

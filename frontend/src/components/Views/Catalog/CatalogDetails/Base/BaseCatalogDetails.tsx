@@ -1,22 +1,31 @@
-// BaseCatalogDetails.tsx
 import { ReactNode } from "react";
-import { ClothesContextActions } from "components/Context/ClothesContext";
+import { ClothItem } from "components/Context/ClothesContext";
 import UIReact from "utils/classes/UIReact";
 import { debounce } from "utils/hooks/debounce";
-import { ClothesListActions } from "components/Context/ClothesListContext";
 import { origin } from "../../../../../../project.config.json";
-import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 import {
   AddToCartPayload,
-  CartContextActions,
+  CartData,
+  SelectedOptions,
 } from "components/Context/CartContext";
 
 export interface BaseCatalogState { }
 
 export interface BaseCatalogProps
-  extends ClothesContextActions,
-  ClothesListActions,
-  CartContextActions { }
+{
+  // ClothesContextActions
+  data: ClothItem;
+  setData: (data: ClothItem) => void;
+
+  // ClothesListActions
+  error: boolean
+
+  // CartContextActions
+  setSelectedOptions: (options: Partial<SelectedOptions>) => void;
+  cart: CartData | null;
+  selectedOptions: SelectedOptions;
+  addToCart: (payload: AddToCartPayload) => Promise<void>;
+}
 
 abstract class BaseCatalogDetails<P = {}>
   extends UIReact<BaseCatalogProps & P, BaseCatalogState> {
@@ -117,10 +126,8 @@ abstract class BaseCatalogDetails<P = {}>
 
 
   render(): ReactNode {
-    const { loading, error } = this.props;
-    if (loading) {
-      return <SpinnerLoaderWrapperFixed />;
-    }
+    const { error } = this.props;
+   
     if (error) {
       return (
         <div>

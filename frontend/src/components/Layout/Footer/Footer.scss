@@ -1,6 +1,7 @@
 .footer {
     background-color: var(--header-search-background);
     padding: 3rem 2rem;
+    z-index: var(--z-index-4);
 }
 
 .footer-container {
@@ -15,6 +16,7 @@
 .footer-logo {
     font-weight: 900;
     font-size: 3rem;
+    font-family: var(--primary-font);
 }
 
 .footer-description {

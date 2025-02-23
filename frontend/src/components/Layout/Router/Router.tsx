@@ -17,6 +17,7 @@ const Error404 = lazy(() => import("components/Views/Errors/error404/404"));
 const Cart = lazy(() => import("components/Views/Cart/Cart"));
 const WishList = lazy(() => import("components/Views/WishList/WishList"));
 const Authentication = lazy(() => import("components/Views/Authentication/Authentication"));
+const Checkout = lazy(() => import("components/Views/Checkout/Checkout"));
 
 @COMPONENT<RouterView>({
   template: (_this) => {
@@ -37,14 +38,15 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
     pathname: location.pathname,
     routesMap: new Map([
       ["/", { path: "/", element: <Navigate to={`/${this.props.i18n.language}`} />, index: true }],
-      ["/:lang", { path: "/:lang", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Home /></Suspense>, index: true }],
-      ["/:lang/about/us", { path: "/:lang/about/us", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Aboutus /></Suspense> }],
-      ["/:lang/catalog", { path: "/:lang/catalog", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><CatalogList /></Suspense> }],
-      ["/:lang/catalog/clothes/:id", { path: "/:lang/catalog/clothes/:slug", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><ClothesDetails /></Suspense> }],
-      ["/:lang/cart", { path: "/:lang/cart", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Cart /></Suspense> }],
-      ["/:lang/favorites", { path: "/:lang/favorites", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><WishList /></Suspense> }],
-      ["/:lang/authentication", { path: "/:lang/authentication", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Authentication /></Suspense> }],
-      ["/*", { path: "/*", element: <Suspense fallback={<SpinnerLoaderWrapperFixed />}><Error404 /></Suspense> }],
+      ["/:lang", { path: "/:lang", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Home /></Suspense>, index: true }],
+      ["/:lang/about/us", { path: "/:lang/about/us", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Aboutus /></Suspense> }],
+      ["/:lang/catalog", { path: "/:lang/catalog", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><CatalogList /></Suspense> }],
+      ["/:lang/catalog/clothes/:id", { path: "/:lang/catalog/clothes/:slug", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><ClothesDetails /></Suspense> }],
+      ["/:lang/cart", { path: "/:lang/cart", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Cart /></Suspense> }],
+      ["/:lang/checkout", { path: "/:lang/checkout", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Checkout /></Suspense> }],
+      ["/:lang/favorites", { path: "/:lang/favorites", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><WishList /></Suspense> }],
+      ["/:lang/authentication", { path: "/:lang/authentication", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Authentication /></Suspense> }],
+      ["/*", { path: "/*", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Error404 /></Suspense> }],
     ]),
   };
 

@@ -1,66 +1,51 @@
 import styles from "./Products.module.scss";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
-import { PureComponent, ReactNode } from "react";
+import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ClothItem } from "components/Context/ClothesContext";
 import { WishlistItem } from "components/Context/WishlistContext";
-import { withContext } from "components/Context/ContextInjector";
-import { ProductModalContext } from "components/Context/ContextCollection";
-import { ProductModalActions } from "components/Context/ProductModalContext";
+import { withContextSelector } from "components/Context/ContextInjector";
+import { ProductModalContext, UserContext, WishlistContext } from "components/Context/ContextCollection";
 import { getWithTranslation } from "i18n/hooks";
 import { WithTranslation } from "react-i18next";
-import { createPortal } from "react-dom";
+import { ModalHandler } from "components/Modal/Modal.utils";
 import UICatalogModal from "../../CatalogDetails/CatalogModal/CatalogDetailsModal";
-import Modal from "components/Modal/Modal";
+import Authentication from "components/Views/Authentication/Authentication";
 
-interface CatalogProductsProps extends ProductModalActions, WithTranslation {
+interface CatalogProductsProps extends WithTranslation {
   products: ClothItem[];
   wishlistItems?: WishlistItem[];
-  addToWishList: (productId: number) => Promise<void>;
-  removeFromWishlist: (wishlistItemId: number) => Promise<void>;
-  loadingWishlist: boolean;
+  addToWishList?: (productId: number) => Promise<void>;
+  removeFromWishlist?: (wishlistItemId: number) => Promise<void>;
+  loadingWishlist?: boolean;
+
+  // Modal props injected via ProductModalContext
+  toggleModal: (callback: () => void) => void;
+  setModalChildren: (children: ReactNode) => void;
+  isModalActive: boolean;
+  modalChildren: ReactNode;
+
+  isAuthenticated: boolean;
 }
 
-class CatalogProducts extends PureComponent<CatalogProductsProps> {
+class CatalogProducts extends ModalHandler<CatalogProductsProps> {
   get lang(): string {
     return this.props.i18n.language;
   }
-
-  get portalContent(): ReactNode {
-    return (
-      <Modal>
-        <button
-          className={styles["close-catalog-modal-button"]}
-          type="button"
-          onClick={this.closeModal}
-        ><svg width="1.5rem" height="1.5rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" clipRule="evenodd" d="M8.28033 7.21967C7.98744 6.92678 7.51256 6.92678 7.21967 7.21967C6.92678 7.51256 6.92678 7.98744 7.21967 8.28033L10.9393 12L7.21967 15.7197C6.92678 16.0126 6.92678 16.4874 7.21967 16.7803C7.51256 17.0732 7.98744 17.0732 8.28033 16.7803L12 13.0607L15.7197 16.7803C16.0126 17.0732 16.4874 17.0732 16.7803 16.7803C17.0732 16.4874 17.0732 16.0126 16.7803 15.7197L13.0607 12L16.7803 8.28033C17.0732 7.98744 17.0732 7.51256 16.7803 7.21967C16.4874 6.92678 16.0126 6.92678 15.7197 7.21967L12 10.9393L8.28033 7.21967Z" fill="#4E5155"></path>
-          </svg>
-          </button>
-        {this.props.modalChildren}
-      </Modal>
-    );
-  }
-
-  get portalContainer(): ReactNode {
-    return this.props.isModalActive
-      ? createPortal(this.portalContent, document.body)
-      : null;
-  }
-
   render(): ReactNode {
-    const {
-      products,
-      addToWishList,
-      removeFromWishlist,
-      wishlistItems = [],
-    } = this.props;
+    const { products, isAuthenticated } = this.props;
+    const wishlistProps = {
+      wishlistItems: this.props.wishlistItems || [],
+      loadingWishlist: this.props.loadingWishlist || false,
+      addToWishList: this.props.addToWishList || (async () => { }),
+      removeFromWishlist: this.props.removeFromWishlist || (async () => { }),
+    };
 
     return (
       <div className={styles["catalog-items-wrapper"]}>
-        {this.portalContainer}
+        {this.renderModal()}
         {products.map((item: ClothItem) => {
-          const wishlistItem = wishlistItems.find(
+          const wishlistItem = wishlistProps.wishlistItems.find(
             (wItem) => wItem.product.id === item.id
           );
           const inWishlist = Boolean(wishlistItem);
@@ -73,13 +58,17 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
               />
               <div className={styles["catalog-item-wishlist-container"]}>
                 <button
-                  onClick={() => {
-                    if (inWishlist && wishlistItem) {
-                      removeFromWishlist(wishlistItem.id);
-                    } else {
-                      addToWishList(item.id);
-                    }
-                  }}
+                  onClick={
+                    isAuthenticated
+                      ? () => {
+                        if (inWishlist && wishlistItem) {
+                          wishlistProps.removeFromWishlist(wishlistItem.id);
+                        } else {
+                          wishlistProps.addToWishList(item.id);
+                        }
+                      }
+                      : () => this.openModal(<Authentication />)
+                  }
                   className={styles["catalog-add-wishlist-link"]}
                 >
                   {inWishlist ? (
@@ -167,7 +156,12 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
                 </bdi>
                 <button
                   className={styles["catalog-add-cart-link"]}
-                  onClick={() => this.onCartAdd(item.slug)}
+                  onClick={() =>
+                    this.openModal(
+                      <UICatalogModal productSlug={item.slug} />,
+                      <Authentication />
+                    )
+                  }
                 >
                   <svg
                     width="1.75rem"
@@ -189,42 +183,30 @@ class CatalogProducts extends PureComponent<CatalogProductsProps> {
               </div>
             </div>
           );
-        })}
-      </div>
+        })
+        }
+      </div >
     );
-  }
-
-  componentDidMount(): void {
-    window.addEventListener("keydown", this.onEscapeHandler);
-  }
-
-  componentWillUnmount(): void {
-    window.removeEventListener("keydown", this.onEscapeHandler);
-  }
-
-  onEscapeHandler = (evt: KeyboardEvent): void => {
-    if (evt.key === "Escape" && this.props.isModalActive) {
-      this.closeModal();
-    }
-  }
-
-  onCartAdd = (slug: string): void => {
-    this.props.toggleModal(() => {
-      if (this.props.isModalActive) {
-        this.props.setModalChildren(<UICatalogModal productSlug={slug} />);
-      } else {
-        this.props.setModalChildren(null);
-      }
-    });
-  }
-
-  closeModal = (): void => {
-    this.props.toggleModal(() => {
-      this.props.setModalChildren(null);
-    });
   }
 }
 
-const UICatalogProduct = getWithTranslation(withContext(ProductModalContext, CatalogProducts));
+const __UICatalogProduct = withContextSelector(UserContext, CatalogProducts, (context) => ({
+  isAuthenticated: context.isAuthenticated
+}));
 
-export default UICatalogProduct;
+
+const _UICatalogProduct = withContextSelector(ProductModalContext, __UICatalogProduct, (context) => ({
+  toggleModal: context.toggleModal,
+  setModalChildren: context.setModalChildren,
+  isModalActive: context.isModalActive,
+  modalChildren: context.modalChildren,
+}));
+
+const UICatalogProduct = withContextSelector(WishlistContext, _UICatalogProduct, (context) => ({
+  wishlistItems: context.wishlistItems,
+  loadingWishlist: context.loadingWishlist,
+  addToWishList: context.addToWishlist,
+  removeFromWishlist: context.removeFromWishlist,
+}));
+
+export default getWithTranslation(UICatalogProduct);

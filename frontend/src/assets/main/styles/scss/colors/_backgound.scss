@@ -1,5 +1,6 @@
 $body-background: #f3f3f3;
-$error-background: #E57373;
+$error-background: rgb(254 226 226 / 1);
+$error-color: rgb(220 38 38 / 1);
 $button-background: #F6F6F6;
 $header-search-background: #F0F0F0;
 $welcome-background: #F2F0F1;
@@ -11,6 +12,7 @@ $catalog-details-list-background: #F6F6F6;
 :root {
     --body-background: #{$body-background};
     --error-background: #{$error-background};
+    --error-color: #{$error-color};
     --button-background: #{$button-background};
     --header-search-background: #{$header-search-background};
     --welcome-background: #{$welcome-background};

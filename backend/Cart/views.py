@@ -1,9 +1,11 @@
-from rest_framework import generics, permissions
+from rest_framework import status, generics, permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.exceptions import PermissionDenied
-from .models import WishlistModel, Cart, CartItem
-from .serializer import WishlistSerializer, CartSerializer, CartItemSerializer
+from .models import WishlistModel, Cart, CartItem, Order, OrderItem
+from .serializer import WishlistSerializer, CartSerializer, CartItemSerializer, CheckoutSerializer, OrderSerializer
 from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 class WishlistListView(generics.ListCreateAPIView):
     serializer_class = WishlistSerializer
@@ -72,3 +74,49 @@ class CartItemUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         queryset = self.get_queryset()
         item_id = self.kwargs.get(self.lookup_url_kwarg)
         return get_object_or_404(queryset, id=item_id)
+    
+class CheckoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        serializer = CheckoutSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        shipping_details = serializer.validated_data['shipping_details']
+
+        try:
+            cart = Cart.objects.get(user=request.user)
+        except Cart.DoesNotExist:
+            return Response({"detail": "Cart not found."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not cart.items.exists():
+            return Response({"detail": "Cart is empty."}, status=status.HTTP_400_BAD_REQUEST)
+
+        order = Order.objects.create(
+            user=request.user,
+            full_name=shipping_details['fullName'],
+            address=shipping_details['address'],
+            phone=shipping_details['phone'],
+            email=shipping_details['email'],
+        )
+
+        cart_items = cart.items.all().select_related('product')
+        for item in cart_items:
+            unit_price = item.product.real_price  
+            total_price = unit_price * item.quantity
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                selected_color=item.selected_color,
+                selected_size=item.selected_size,
+                selected_image=item.selected_image,
+                unit_price=unit_price,
+                total_price=total_price,
+            )
+
+        cart.items.all().delete()
+
+
+        order_serializer = OrderSerializer(order)
+        return Response(order_serializer.data, status=status.HTTP_201_CREATED)

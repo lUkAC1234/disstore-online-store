@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import EmptyCart from "./Empty/EmptyCart";
-import { withContext } from "components/Context/ContextInjector";
+import { withContextSelector } from "components/Context/ContextInjector";
 import { CartContext } from "components/Context/ContextCollection";
-import { CartContextActions, CartItem } from "components/Context/CartContext";
+import { CartData, CartItem } from "components/Context/CartContext";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import { WithTranslation } from "react-i18next";
 import { getWithTranslation } from "i18n/hooks";
@@ -17,7 +17,11 @@ interface ExtendedCartItem extends CartItem {
   selected_image?: string;
 }
 
-interface CartProps extends CartContextActions, WithTranslation {}
+interface CartProps extends WithTranslation {
+  cart: CartData | null;
+  removeFromCart: (cartItemId: number) => Promise<void>;
+  updateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
+}
 
 class Cart extends PureComponent<CartProps> {
   async componentDidMount(): Promise<void> {
@@ -76,7 +80,7 @@ class Cart extends PureComponent<CartProps> {
                 alt={extendedItem.product.title}
               />
             ) : (extendedItem.product.catalogImages[0]?.image ||
-                extendedItem.product.catalogImages[0]?.thumbnail) ? (
+              extendedItem.product.catalogImages[0]?.thumbnail) ? (
               <img
                 src={
                   extendedItem.product.catalogImages[0].image ||
@@ -94,19 +98,17 @@ class Cart extends PureComponent<CartProps> {
           </div>
           <div className={styles["cart-details-info-container"]}>
             <h4 className={styles["cart-item-title"]}>
+              {extendedItem.product.title}
               <Link
                 className={styles["cart-item-link"]}
                 to={`/${this.lang}/catalog/clothes/${extendedItem.product.slug}`}
-              >
-                {extendedItem.product.title}
-              </Link>
+              />
             </h4>
-            {/* Display selected options if they exist */}
             {(extendedItem.selected_color || extendedItem.selected_size) && (
               <div className={styles["cart-item-options"]}>
                 {extendedItem.selected_color && (
                   <span className={styles["cart-item-option"]}>
-                    Цвет: {extendedItem.selected_color}
+                    Цвет: <div style={{ backgroundColor: extendedItem.selected_color }}></div>
                   </span>
                 )}
                 {extendedItem.selected_size && (
@@ -146,7 +148,7 @@ class Cart extends PureComponent<CartProps> {
                 <button
                   className={styles["quantity-btn"]}
                   onClick={() => this.handleIncrease(extendedItem)}
-                  disabled={extendedItem.quantity >= extendedItem.product.count} 
+                  disabled={extendedItem.quantity >= extendedItem.product.count}
                 >
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
@@ -206,7 +208,7 @@ class Cart extends PureComponent<CartProps> {
                       {finalTotal.toLocaleString("en-US")} сум
                     </span>
                   </div>
-                  <Link to="/checkout" className={styles["checkout-link"]}>
+                  <Link to={`/${this.lang}/checkout`} className={styles["checkout-link"]}>
                     Перейти к оформлению
                   </Link>
                 </div>
@@ -219,4 +221,10 @@ class Cart extends PureComponent<CartProps> {
   }
 }
 
-export default getWithTranslation(withContext(CartContext, Cart));
+const UICart = getWithTranslation(withContextSelector(CartContext, Cart, (context) => ({
+  cart: context.cart,
+  removeFromCart: context.removeFromCart,
+  updateCartItem: context.updateCartItem,
+})));
+
+export default UICart;

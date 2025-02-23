@@ -7,35 +7,37 @@ export interface SpinnerLoaderWrapperProps {
   fixedPosition?: boolean;
   relativeCentered?: boolean;
   smallWrapper?: boolean;
+  whiteLoader?: boolean;
+  withBackground?: boolean;
 }
 
 class SpinnerLoaderWrapper extends PureComponent<SpinnerLoaderWrapperProps> {
   get fixedCentered(): string {
-    if (this.props.fixedPosition) {
-      return "spinner-loader-wrapper--fixed";
-    }
+    return this.props.fixedPosition ? "spinner-loader-wrapper--fixed" : "";
   }
 
   get smallWrapper(): string {
-    if (this.props.smallWrapper) {
-      return "spinner-loader-wrapper--small";
-    }
+    return this.props.smallWrapper ? "spinner-loader-wrapper--small" : "";
+  }
+
+  get whiteLoader(): string {
+    return this.props.whiteLoader ? "spinner-loader-wrapper--white" : "";
   }
 
   get relativeCentered(): string {
-    if (this.props.relativeCentered) {
-      return "spinner-loader-wrapper--relative-centered";
-    }
+    return this.props.relativeCentered ? "spinner-loader-wrapper--relative-centered" : "";
   }
 
   get destroy(): string {
-    if (this.props.destroy) {
-      return "spinner-loader-wrapper--destroyed";
-    }
+    return this.props.destroy ? "spinner-loader-wrapper--destroyed" : "";
+  }
+  
+  get withBackground(): string {
+    return this.props.withBackground ? "spinner-loader-wrapper--with-background" : "";
   }
 
   get spinnerLoaderWrapperClass(): string {
-    return `spinner-loader-wrapper ${this.fixedCentered} ${this.relativeCentered} ${this.destroy} ${this.smallWrapper}`;
+    return `spinner-loader-wrapper ${this.fixedCentered} ${this.relativeCentered} ${this.destroy} ${this.smallWrapper} ${this.whiteLoader} ${this.withBackground}`;
   }
 
   render(): ReactNode {
