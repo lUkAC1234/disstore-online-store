@@ -1,0 +1,72 @@
+@use "assets/main/styles/scss/components/_components";
+
+.helper-title {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.helper-text {
+    margin-block: 0.25rem 1.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.formGroup-container {
+    display: grid;
+    gap: 0.5rem;
+    width: 20rem;
+}
+
+.form-group {
+    display: grid;
+    gap: 0.25rem;
+}
+
+.input-container {
+    display: flex;
+    gap: 0.5rem;
+    border: 0.1rem solid var(--welcome-border);
+    padding-inline: 1rem;
+    transition: border 0.3s ease;
+    border-radius: 0.25rem;
+
+    &:has(:focus-within) {
+        border-color: var(--text-black);
+    }
+}
+
+label {
+    margin-left: 0.25rem;
+}
+
+.inputField {
+    padding: 0.75rem 0;
+    font-size: 1rem;
+    border: transparent;
+    width: 100%;
+    border-radius: 0.25rem;
+
+    &::placeholder {
+        font-size: 0.9rem;
+    }
+}
+
+.togglePasswordButton {
+    width: max-content;
+    background: transparent;
+    border: transparent;
+    cursor: pointer;
+
+    svg {
+        color: var(--text-black);
+        font-size: 1rem;
+        height: 1rem;
+        width: 1rem;
+    }
+}
+
+.submitButton {
+    @extend .primary-button;
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+}

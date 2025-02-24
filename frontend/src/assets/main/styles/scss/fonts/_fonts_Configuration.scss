@@ -6,6 +6,7 @@ h2 {
     font-family: var(--GteboldFontWeak);
     letter-spacing: 0.0125rem;
 }
+
 h3,
 h4,
 h5,
@@ -17,4 +18,14 @@ p,
 a,
 div {
     font-family: var(--primary-font);
+}
+
+label {
+    font-family: var(--GteThinFont);
+    font-weight: 600;
+}
+
+input {
+    font-family: var(--primary-font);
+    font-weight: 400;
 }

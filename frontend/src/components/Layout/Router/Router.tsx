@@ -21,18 +21,21 @@ const Checkout = lazy(() => import("components/Views/Checkout/Checkout"));
 
 @COMPONENT<RouterView>({
   template: (_this) => {
+    const segments = _this.state.pathname.split("/");
+    const hideLayout = segments[2] === "authentication";
     return (
       <>
-        <Header />
-        <main className="main">
+        {!hideLayout && <Header />}
+        <main className={`main ${hideLayout ? "no-header" : ""}`}>
           <Routes>{_this.routes}</Routes>
           <Outlet />
         </main>
-        <Footer />
+        {!hideLayout && <Footer />}
       </>
     );
   },
 })
+
 class RouterView extends UIReact<RouterViewProps, RouterViewState> {
   state: Readonly<RouterViewState> = {
     pathname: location.pathname,

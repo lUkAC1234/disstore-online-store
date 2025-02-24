@@ -69,6 +69,10 @@ body #app {
   background: var(--background-white);
   overflow-x: hidden !important;
   margin-top: 6rem;
+
+  &.no-header {
+    margin-top: 0;
+  }
 }
 
 .footer {
