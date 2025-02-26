@@ -65,6 +65,7 @@ export interface ClothItem {
   catalogImages: CatalogImage[];
   reviews: Reviews[];
   faqs: FAQs[];
+  created_at: string;
 }
 
 

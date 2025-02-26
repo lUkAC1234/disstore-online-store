@@ -2,7 +2,6 @@ import "./Header.scss"
 import { createRef, ReactNode } from "react";
 import { Link, NavLink } from "react-router-dom";
 import LogoSvg from "assets/main/images/layout/logo.svg";
-import i18next from "i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faXmark,
@@ -21,8 +20,8 @@ import UIReact from "utils/classes/UIReact";
 import { UserContextActions } from "components/Context/UserContext";
 import { WishlistContextActions } from "components/Context/WishlistContext";
 import { CartContextActions } from "components/Context/CartContext";
-
-const lang = i18next.language;
+import { WithTranslation } from "react-i18next";
+import { getWithTranslation } from "i18n/hooks";
 
 interface HeaderState {
   activeLink: string | null;
@@ -32,7 +31,8 @@ interface HeaderProps extends
 ClothesListActions, 
 UserContextActions, 
 WishlistContextActions, 
-CartContextActions 
+CartContextActions,
+WithTranslation
 { }
 
 class Header extends UIReact<HeaderProps, HeaderState> {
@@ -42,6 +42,10 @@ class Header extends UIReact<HeaderProps, HeaderState> {
   state: Readonly<HeaderState> = {
     activeLink: null,
   };
+
+  get lang(): string {
+    return this.props.i18n.language;
+  }
 
   toggleSearchInput = () => {
     if (this.searchInputContainerRef.current) {
@@ -145,7 +149,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                       onClick={() => this.handleLinkClick("catalog")}
                     >
                       <NavLink
-                        to={`/${lang}/catalog`}
+                        to={`/${this.lang}/catalog`}
                         className={() => {
                           return activeClassNameObserver(`/catalog`, "header-link");
                         }}>Каталог
@@ -164,7 +168,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                           <FontAwesomeIcon icon={faArrowLeftLong} />
                         </button>
                         <NavLink
-                          to={`/${lang}/catalog`}
+                          to={`/${this.lang}/catalog`}
                           onClick={this.closeEntireMenu}
                           className={() => {
                             return activeClassNameObserver(`/catalog`, "header-link-extra-details-column first");
@@ -181,7 +185,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                       className={() => {
                         return activeClassNameObserver(`/contacts`, "header-link");
                       }}
-                      to={`/${lang}/contacts`}
+                      to={`/${this.lang}/contacts`}
                       onClick={this.closeEntireMenu}>
                       Контакты
                     </NavLink>
@@ -191,7 +195,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                       className={() => {
                         return activeClassNameObserver(`/about/us`, "header-link");
                       }}
-                      to={`/${lang}/about/us`}
+                      to={`/${this.lang}/about/us`}
                       onClick={this.closeEntireMenu}>
                       О нас
                     </NavLink>
@@ -246,7 +250,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
 
                 </div>
                 <NavLink
-                  to={`/${lang}/favorites`}
+                  to={`/${this.lang}/favorites`}
                   className={() => {
                     return activeClassNameObserver(`/favorites`, "header-like-link");
                   }}
@@ -263,9 +267,9 @@ class Header extends UIReact<HeaderProps, HeaderState> {
 
                 </NavLink>
                 <NavLink
-                  to={`/${lang}/authentication`}
+                  to={this.props?.isAuthenticated ? `/${this.lang}/profile` : `/${this.lang}/authentication`}
                   className={() => {
-                    return activeClassNameObserver(`/authentication`, "header-profile-link");
+                    return activeClassNameObserver(`/profile`, "header-profile-link");
                   }}
                 >
                   <svg width="1.25rem" height="1.25rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -273,7 +277,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                   </svg>
                 </NavLink>
                 <NavLink
-                  to={`/${lang}/cart`}
+                  to={`/${this.lang}/cart`}
                   className={() => {
                     return activeClassNameObserver(`/cart`, "header-shopping-cart-link");
                   }}
@@ -326,7 +330,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
               <div className="header-searched-item" key={item.id}>
                 <Link
                   className="header-searched-link"
-                  to={`/${lang}/catalog/clothes/${item.slug}`}
+                  to={`/${this.lang}/catalog/clothes/${item.slug}`}
                   onClick={this.closeSearchInput}
                 ></Link>
                 <div className="header-searched-item-image-container">
@@ -401,7 +405,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
     return this.props.type.map(item => (
       <NavLink
         key={item.id}
-        to={`/${lang}/catalog`}
+        to={`/${this.lang}/catalog`}
         className={"header-link-extra-details-column"}
         onClick={() => {
           this.closeEntireMenu();
@@ -417,11 +421,6 @@ class Header extends UIReact<HeaderProps, HeaderState> {
   }
 }
 
-const UIHeader = 
-withContext(ClothesListContext, 
-withContext(UserContext, 
-withContext(WishlistContext, 
-withContext(CartContext, Header
-))));
+const UIHeader = getWithTranslation(withContext(ClothesListContext, withContext(UserContext, withContext(WishlistContext, withContext(CartContext, Header)))));
 
 export default UIHeader;

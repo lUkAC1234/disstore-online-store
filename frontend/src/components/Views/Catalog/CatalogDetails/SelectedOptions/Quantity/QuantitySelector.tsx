@@ -92,7 +92,7 @@ class QuantitySelector extends ModalHandler<QuantitySelectorProps> {
                   ? () => {
                     addToCart(data.id)
                   }
-                  : () => this.openModal(<Authentication />)
+                  : () => this.openModal(<Authentication smallVersion />)
               }
               disabled={data?.count <= 0 || disableAddToCart}
               className={styles['catalog-add-to-cart-btn']}
@@ -109,7 +109,7 @@ class QuantitySelector extends ModalHandler<QuantitySelectorProps> {
                       addToWishList(Number(data.id));
                     }
                   }
-                  : () => this.openModal(<Authentication />)
+                  : () => this.openModal(<Authentication smallVersion />)
               }
               className={`${styles["catalog-add-wishlist-link"]} ${this.props.positionStatic ? styles["posed-static"] : styles["not-posed-static"]} `}
             >

@@ -12,10 +12,12 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 interface LoginState {
     email: string;
     password: string;
-    error: string;
+    emailError: boolean;
+    passwordError: boolean | string;
     loading: boolean;
     success: boolean;
-    showPassword: boolean; // New state to toggle password visibility
+    showPassword: boolean; 
+    error: string;
 }
 
 interface LoginProps extends UserContextActions { }
@@ -24,30 +26,35 @@ class Login extends UIReact<LoginProps, LoginState> {
     state: LoginState = {
         email: '',
         password: '',
-        error: '',
+        emailError: false,
+        passwordError: false,
         loading: false,
         success: false,
-        showPassword: false 
+        showPassword: false,
+        error: '',
     };
 
-    // Toggle function to change password visibility
     togglePasswordVisibility = () => {
         this.setState(prevState => ({ showPassword: !prevState.showPassword }));
     };
 
     handleLoginSubmit = async () => {
         const { email, password } = this.state;
+        let emailError = false;
+        let passwordError = false;
 
         if (!/^\S+@\S+\.\S+$/.test(email)) {
-            this.setState({ error: 'Неверный формат email' });
-            return;
+            emailError = true;
         }
         if (!password) {
-            this.setState({ error: 'Пароль обязателен' });
+            passwordError = true;
+        }
+        if (emailError || passwordError) {
+            this.setState({ emailError, passwordError });
             return;
         }
 
-        this.setState({ loading: true, error: '' });
+        this.setState({ loading: true, emailError: false, passwordError: false });
         try {
             const response = await fetch(`${origin}/auth/login/`, {
                 method: 'POST',
@@ -56,23 +63,22 @@ class Login extends UIReact<LoginProps, LoginState> {
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Неверный email или пароль');
+                this.setState({ emailError: true, passwordError: true, error: 'Неверный email или пароль'});
+                return;
             }
 
             const data = await response.json();
             this.props?.setLogin(data.access, data.user);
             this.setState({ success: true });
-            console.log(data);
         } catch (error: any) {
-            this.setState({ error: error.message || 'Неверный email или пароль' });
+            this.setState({ emailError: true, passwordError: error.message, error: error.message});
         } finally {
             this.setState({ loading: false });
         }
     };
 
     render(): ReactNode {
-        const { email, password, error, loading, success, showPassword } = this.state;
+        const { email, password, emailError, passwordError, loading, success, showPassword, error } = this.state;
 
         if (success) {
             return <Navigate to="/" replace />;
@@ -85,12 +91,12 @@ class Login extends UIReact<LoginProps, LoginState> {
                 <div className={styles["formGroup-container"]}>
                     <div className={styles["form-group"]}>
                         <label htmlFor="address">Почта</label>
-                        <div className={styles["input-container"]}>
+                        <div className={`${styles["input-container"]} ${email ? (emailError ? styles.error : styles.success) : ''}`}>
                             <input
                                 type="email"
                                 name="example@email.com"
                                 value={email}
-                                onChange={(e) => this.setState({ email: e.target.value })}
+                                onChange={(e) => this.setState({ email: e.target.value, emailError: false })}
                                 required
                                 placeholder="example@gmail.com"
                                 className={styles["inputField"]}
@@ -99,12 +105,12 @@ class Login extends UIReact<LoginProps, LoginState> {
                     </div>
                     <div className={styles["form-group"]}>
                         <label htmlFor="password">Пароль</label>
-                        <div className={styles["input-container"]}>
+                        <div className={`${styles["input-container"]} ${password ? (passwordError ? styles.error : styles.success) : ''}`}>
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="••••••"
                                 value={password}
-                                onChange={(e) => this.setState({ password: e.target.value })}
+                                onChange={(e) => this.setState({ password: e.target.value, passwordError: false })}
                                 className={styles["inputField"]}
                                 required
                                 name="password"
@@ -114,7 +120,7 @@ class Login extends UIReact<LoginProps, LoginState> {
                                 onClick={this.togglePasswordVisibility}
                                 className={styles["togglePasswordButton"]}
                             >
-                                {showPassword ? <FontAwesomeIcon icon={faEyeSlash} /> :<FontAwesomeIcon icon={faEye} />}
+                                {showPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
                             </button>
                         </div>
                     </div>
@@ -126,8 +132,9 @@ class Login extends UIReact<LoginProps, LoginState> {
                     >
                         {loading ? 'Вход...' : 'Войти'}
                     </button>
+
+                    {error && <div className={styles["errorMessage"]}>{error}</div>}
                 </div>
-                {error && <div className={styles["errorMessage"]}>{error}</div>}
             </div>
         );
     }

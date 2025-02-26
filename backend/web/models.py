@@ -49,6 +49,8 @@ class ClothesModel(models.Model):
     long_description = RichTextField(verbose_name=_("Полное описание"))
     created_at = models.DateTimeField(_("Дата создания"), auto_now_add=True)
     
+    popularity = models.PositiveIntegerField(default=0, verbose_name=_("Популярность"))
+    
     @property
     def is_discount(self):
         return self.discount != 0
@@ -74,7 +76,7 @@ class ClothesModel(models.Model):
     class Meta:
         verbose_name = _("Одежда")
         verbose_name_plural = _("Одежды")
-        ordering = ('-id',)
+        ordering = ('-popularity', '-id',)
         
 # Clothes Reviews & FAQs models
 class ClothesReviewModel(models.Model):

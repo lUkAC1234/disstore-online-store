@@ -65,5 +65,7 @@ class ClothesModelSerializer(serializers.ModelSerializer):
                   'types', 
                   'catalogImages',
                   'reviews',
-                  'faqs'
+                  'faqs',
+                  'created_at',
+                  'popularity',
                   ]

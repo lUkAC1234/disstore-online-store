@@ -80,6 +80,22 @@ class ClothesMainView(ListAPIView):
             'price_max': price_range['price_max'],
             'results': serializer.data
         })
+        
+class NewClothesView(ListAPIView):
+    serializer_class = ClothesModelSerializer
+    pagination_class = ResultsSetPagination
+
+    def get_queryset(self):
+        return ClothesModel.objects.prefetch_related('colors', 'sizes', 'types', 'catalogImages')\
+            .order_by('-created_at')[:9]
+
+class PopularClothesView(ListAPIView):
+    serializer_class = ClothesModelSerializer
+    pagination_class = ResultsSetPagination
+
+    def get_queryset(self):
+        return ClothesModel.objects.prefetch_related('colors', 'sizes', 'types', 'catalogImages')\
+            .order_by('-popularity', '-id')
 
 class ClothesModelDetailView(RetrieveAPIView):
     queryset = ClothesModel.objects.prefetch_related('colors', 'sizes', 'catalogImages').all()
@@ -88,7 +104,10 @@ class ClothesModelDetailView(RetrieveAPIView):
 
     def get_object(self):
         try:
-            return self.queryset.get(slug=self.kwargs.get(self.lookup_field))
+            obj = self.queryset.get(slug=self.kwargs.get(self.lookup_field))
+            obj.popularity += 1
+            obj.save(update_fields=['popularity'])
+            return obj
         except ClothesModel.DoesNotExist:
             raise NotFound(detail="Clothes not found", code=404)
         

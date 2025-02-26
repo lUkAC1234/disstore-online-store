@@ -9,12 +9,8 @@
 .portal-catalog-modal-wrapper {
   position: fixed;
   left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  width: calc(min(100%, 60rem) - 2rem);
-  height: min(80dvh, 100%);
-  background: var(--text-white);
-  border-radius: 1rem 1rem 0 0;
+  top: 50%;
+  transform: translate(-50%, -50%);
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -23,6 +19,7 @@
 
   @media screen and (max-width: 500px) {
     width: 100%;
+    padding-inline: 1rem;
   }
 }
 
@@ -41,5 +38,9 @@
 
   &:hover {
       opacity: 1;
+  }
+
+  @media screen and (max-width: 500px) {
+    right: 2rem;
   }
 }

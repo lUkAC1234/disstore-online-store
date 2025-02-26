@@ -18,6 +18,7 @@ const Cart = lazy(() => import("components/Views/Cart/Cart"));
 const WishList = lazy(() => import("components/Views/WishList/WishList"));
 const Authentication = lazy(() => import("components/Views/Authentication/Authentication"));
 const Checkout = lazy(() => import("components/Views/Checkout/Checkout"));
+const Profile = lazy(() => import("components/Views/Authentication/Profile/Profile"));
 
 @COMPONENT<RouterView>({
   template: (_this) => {
@@ -49,6 +50,7 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
       ["/:lang/checkout", { path: "/:lang/checkout", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Checkout /></Suspense> }],
       ["/:lang/favorites", { path: "/:lang/favorites", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><WishList /></Suspense> }],
       ["/:lang/authentication", { path: "/:lang/authentication", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Authentication /></Suspense> }],
+      ["/:lang/profile", { path: "/:lang/profile", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Profile /></Suspense> }],
       ["/*", { path: "/*", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Error404 /></Suspense> }],
     ]),
   };

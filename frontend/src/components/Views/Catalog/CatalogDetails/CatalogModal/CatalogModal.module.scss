@@ -3,14 +3,28 @@
     grid-template-columns: 1fr 2fr;
     gap: 2rem;
     padding: 2rem;
+    background: var(--text-white);
+    border-radius: 1rem;
+    width: 60rem;
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 1200px) {
+        width: 50rem;
+    }
+
+    @media screen and (max-width: 950px) {
+        width: 45rem;
+    }
+
+    @media screen and (max-width: 830px) {
         grid-template-columns: 1fr;
         padding-block: 3.5rem 1rem;
+        width: 100%;
+        min-width: 30rem;
     }
 
     @media screen and (max-width: 500px) {
         padding-inline: 1rem;
+        min-width: unset;
     }
 }
 
