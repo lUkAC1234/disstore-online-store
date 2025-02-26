@@ -40,6 +40,9 @@ class Authentication extends UIReact<AuthenticationProps, AuthenticationState> {
         const { isAuthenticated, smallVersion } = this.props;
 
         if (isAuthenticated) {
+            if (location.pathname.includes("catalog")) {
+                return;
+            }
             return <Navigate to={`/${this.lang}/profile`} />;
         }
 

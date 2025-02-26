@@ -51,12 +51,21 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
 
     async fetchNewClothes(): Promise<void> {
         try {
+            // Check if data is already cached in sessionStorage
+            const cached = sessionStorage.getItem("newClothes");
+            if (cached) {
+                const products: ClothItem[] = JSON.parse(cached);
+                this.setState({ products, loading: false });
+                return;
+            }
+
             const response = await fetch(`${origin}/clothes/new/`);
             if (!response.ok) {
                 throw new Error("Failed to fetch new clothes");
             }
             const data = await response.json();
             const products: ClothItem[] = data.results ? data.results : data;
+            sessionStorage.setItem("newClothes", JSON.stringify(products));
             this.setState({ products, loading: false });
         } catch (error: any) {
             this.setState({ error: error.message, loading: false });
@@ -77,10 +86,12 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
         }
 
         if (error) {
-            return <HeaderError
-            error={"Не удалось загрузить данные"}
-            error_details={"К сожалению, произошла ошибка при загрузке данных. Пожалуйста, перезагрузите страницу и попробуйте снова"}
-          />;
+            return (
+                <HeaderError
+                    error={"Не удалось загрузить данные"}
+                    error_details={"К сожалению, произошла ошибка при загрузке данных. Пожалуйста, перезагрузите страницу и попробуйте снова"}
+                />
+            );
         }
 
         return (

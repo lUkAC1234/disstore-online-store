@@ -227,7 +227,6 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
                 selectedMin: min,
                 selectedMax: max,
                 currentPage: page,
-                title,
             } = this.state;
 
             const generateQueryString = <T extends { id: number }>(selectedItems: number[], allItems: T[], queryKey: string): string => {
@@ -242,8 +241,7 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
             const sizeQuery = generateQueryString(selectedSizes, sizes, "size");
             const typeQuery = generateQueryString(selectedTypes, types, "types");
             const priceQuery = `price_min=${min}&price_max=${max}`;
-            const titleQuery = `title=${encodeURIComponent(title)}`
-            const queryString = [colorQuery, typeQuery, sizeQuery, priceQuery, titleQuery]
+            const queryString = [colorQuery, typeQuery, sizeQuery, priceQuery]
                 .filter(Boolean)
                 .join("&");
 
@@ -303,7 +301,6 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
                 selectedColors: [],
                 selectedMin: this.state.min,
                 selectedMax: this.state.max,
-                title: "",
             },
             this.debouncedFetchFilteredProducts
         );

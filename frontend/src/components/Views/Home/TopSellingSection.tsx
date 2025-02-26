@@ -51,12 +51,19 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
 
     async fetchPopularClothes(): Promise<void> {
         try {
+            const cached = sessionStorage.getItem("popularClothes");
+            if (cached) {
+                const products: ClothItem[] = JSON.parse(cached);
+                this.setState({ products, loading: false });
+                return;
+            }
             const response = await fetch(`${origin}/clothes/popular/`);
             if (!response.ok) {
                 throw new Error("Failed to fetch popular clothes");
             }
             const data = await response.json();
             const products: ClothItem[] = data.results ? data.results : data;
+            sessionStorage.setItem("popularClothes", JSON.stringify(products));
             this.setState({ products, loading: false });
         } catch (error: any) {
             this.setState({ error: error.message, loading: false });
@@ -77,10 +84,12 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
         }
 
         if (error) {
-            return <HeaderError
-            error={"Не удалось загрузить данные"}
-            error_details={"К сожалению, произошла ошибка при загрузке данных. Пожалуйста, перезагрузите страницу и попробуйте снова"}
-          />;
+            return (
+                <HeaderError
+                    error={"Не удалось загрузить данные"}
+                    error_details={"К сожалению, произошла ошибка при загрузке данных. Пожалуйста, перезагрузите страницу и попробуйте снова"}
+                />
+            );
         }
 
         return (

@@ -21,7 +21,7 @@ from rest_framework.pagination import PageNumberPagination
 
 
 class ResultsSetPagination(PageNumberPagination):
-    page_size = 9
+    page_size = 1
     page_size_query_param = 'page_size'
 
     def paginate_queryset(self, queryset, request, view=None):
@@ -81,9 +81,14 @@ class ClothesMainView(ListAPIView):
             'results': serializer.data
         })
         
+class SearchingClothesView(ListAPIView):
+    serializer_class = ClothesModelSerializer
+
+    def get_queryset(self):
+        return ClothesModel.objects.prefetch_related('colors', 'sizes', 'types', 'catalogImages')
+        
 class NewClothesView(ListAPIView):
     serializer_class = ClothesModelSerializer
-    pagination_class = ResultsSetPagination
 
     def get_queryset(self):
         return ClothesModel.objects.prefetch_related('colors', 'sizes', 'types', 'catalogImages')\
@@ -91,7 +96,6 @@ class NewClothesView(ListAPIView):
 
 class PopularClothesView(ListAPIView):
     serializer_class = ClothesModelSerializer
-    pagination_class = ResultsSetPagination
 
     def get_queryset(self):
         return ClothesModel.objects.prefetch_related('colors', 'sizes', 'types', 'catalogImages')\

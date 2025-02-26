@@ -108,7 +108,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
     }
 
     if (value.length > 1) {
-      this.props.setApplyFilters();
+      
     }
   };
 
