@@ -79,6 +79,6 @@ export class ModalHandler<P extends ModalHandlerProps, S = {}> extends Component
   }
 
   render(): ReactNode {
-    return null;
+    return this.renderModal();
   }
 }

@@ -1,7 +1,7 @@
 import styles from './Home.module.scss';
 import { PureComponent, ReactNode, lazy } from "react";
 import "swiper/css";
-import { ProductModalContext, UserContext, WishlistContext } from 'components/Context/ContextCollection';
+import { UserContext, WishlistContext } from 'components/Context/ContextCollection';
 import { withContextSelector } from 'components/Context/ContextInjector';
 import { WithTranslation } from 'react-i18next';
 import { getWithTranslation } from 'i18n/hooks';
@@ -20,10 +20,6 @@ interface HomeProps extends WithTranslation {
   addToWishList?: (productId: number) => Promise<void>;
   removeFromWishlist?: (wishlistItemId: number) => Promise<void>;
   loadingWishlist?: boolean;
-  toggleModal: (callback: () => void) => void;
-  setModalChildren: (children: ReactNode) => void;
-  isModalActive: boolean;
-  modalChildren: ReactNode;
   isAuthenticated: boolean;
 }
 
@@ -47,10 +43,6 @@ class MainPage extends PureComponent<HomeProps> {
           addToWishList={this.props.addToWishList}
           removeFromWishlist={this.props.removeFromWishlist}
           loadingWishlist={this.props.loadingWishlist}
-          toggleModal={this.props.toggleModal}
-          setModalChildren={this.props.setModalChildren}
-          isModalActive={this.props.isModalActive}
-          modalChildren={this.props.modalChildren}
           isAuthenticated={this.props.isAuthenticated}
         />
         <div className={styles["hr-line"]}></div>
@@ -59,10 +51,6 @@ class MainPage extends PureComponent<HomeProps> {
           addToWishList={this.props.addToWishList}
           removeFromWishlist={this.props.removeFromWishlist}
           loadingWishlist={this.props.loadingWishlist}
-          toggleModal={this.props.toggleModal}
-          setModalChildren={this.props.setModalChildren}
-          isModalActive={this.props.isModalActive}
-          modalChildren={this.props.modalChildren}
           isAuthenticated={this.props.isAuthenticated}
         />
         <ExtraOffer />
@@ -74,22 +62,11 @@ class MainPage extends PureComponent<HomeProps> {
 }
 
 
-const __UIHome = withContextSelector(
+const _UIHome = withContextSelector(
   UserContext,
   MainPage,
   (context) => ({
     isAuthenticated: context.isAuthenticated,
-  })
-);
-
-const _UIHome = withContextSelector(
-  ProductModalContext,
-  __UIHome,
-  (context) => ({
-    toggleModal: context.toggleModal,
-    setModalChildren: context.setModalChildren,
-    isModalActive: context.isModalActive,
-    modalChildren: context.modalChildren,
   })
 );
 

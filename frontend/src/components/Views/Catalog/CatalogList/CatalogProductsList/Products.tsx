@@ -42,7 +42,6 @@ class CatalogProducts extends ModalHandler<CatalogProductsProps> {
 
     return (
       <div className={styles["catalog-items-wrapper"]}>
-        {this.renderModal()}
         {products.map((item: ClothItem) => {
           const wishlistItem = wishlistProps.wishlistItems.find(
             (wItem) => wItem.product.id === item.id

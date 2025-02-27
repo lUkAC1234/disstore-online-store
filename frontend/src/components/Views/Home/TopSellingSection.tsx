@@ -15,6 +15,8 @@ import { WishlistItem } from "components/Context/WishlistContext";
 import { ModalHandler } from 'components/Modal/Modal.utils';
 import { origin } from "../../../../project.config.json";
 import HeaderError from 'components/Layout/Header/HeaderError/HeaderError';
+import { withContextSelector } from 'components/Context/ContextInjector';
+import { ProductModalContext } from 'components/Context/ContextCollection';
 
 interface TopSellingProps extends WithTranslation {
     wishlistItems?: WishlistItem[];
@@ -94,7 +96,6 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
 
         return (
             <section className={`swiper-section ${styles["top-selling-section"]}`}>
-                {this.renderModal()}
                 <div className={`swiper-main-container ${styles["top-selling-container"]}`}>
                     <h2 className={`swiper-subtitle ${styles["top-selling-subtitle"]} fade fadeInDown`}>
                         Популярное
@@ -184,4 +185,15 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
     }
 }
 
-export default getWithTranslation(TopSelling);
+const UITopSelling = withContextSelector(
+  ProductModalContext,
+  TopSelling,
+  (context) => ({
+    toggleModal: context.toggleModal,
+    setModalChildren: context.setModalChildren,
+    isModalActive: context.isModalActive,
+    modalChildren: context.modalChildren,
+  })
+);
+
+export default getWithTranslation(UITopSelling);

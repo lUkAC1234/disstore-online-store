@@ -67,7 +67,6 @@ class QuantitySelector extends ModalHandler<QuantitySelectorProps> {
 
     return (
       <div className={styles['quantity-section']}>
-        {!isAuthenticated && this.renderModal()}
         <div className={styles['quantity-container']}>
           <div className={styles['quantity-wrapper']}>
             <button

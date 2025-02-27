@@ -15,6 +15,9 @@ import { WishlistItem } from "components/Context/WishlistContext";
 import { ModalHandler } from 'components/Modal/Modal.utils';
 import { origin } from "../../../../project.config.json";
 import HeaderError from 'components/Layout/Header/HeaderError/HeaderError';
+import { ProductModalContext } from 'components/Context/ContextCollection';
+import { withContextSelector } from 'components/Context/ContextInjector';
+import SpinnerLoaderWrapper from 'components/Loaders/SpinnerLoaderWrapper';
 
 interface NewClothesProps extends WithTranslation {
     wishlistItems?: WishlistItem[];
@@ -82,7 +85,7 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
         const { products, loading, error } = this.state;
 
         if (loading) {
-            return <div>Loading new clothes...</div>;
+            return <SpinnerLoaderWrapper smallWrapper wrapperStyle={{ height: "25rem" }} />;
         }
 
         if (error) {
@@ -96,7 +99,6 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
 
         return (
             <section className={`swiper-section ${styles["new-clothes-section"]}`}>
-                {this.renderModal()}
                 <div className={`swiper-main-container ${styles["new-clothes-container"]}`}>
                     <h2 className={`swiper-subtitle ${styles["new-clothes-subtitle"]} fade fadeInDown`}>
                         Новинки
@@ -186,4 +188,15 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
     }
 }
 
-export default getWithTranslation(NewClothes);
+const UINewClothes = withContextSelector(
+  ProductModalContext,
+  NewClothes,
+  (context) => ({
+    toggleModal: context.toggleModal,
+    setModalChildren: context.setModalChildren,
+    isModalActive: context.isModalActive,
+    modalChildren: context.modalChildren,
+  })
+);
+
+export default getWithTranslation(UINewClothes);

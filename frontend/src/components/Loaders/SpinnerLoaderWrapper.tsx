@@ -1,4 +1,4 @@
-import { PureComponent, ReactNode } from "react";
+import { CSSProperties, PureComponent, ReactNode } from "react";
 import SpinnerLoader from "./SpinnerLoader";
 import "./SpinnerLoaderWrapper.scss";
 
@@ -9,6 +9,7 @@ export interface SpinnerLoaderWrapperProps {
   smallWrapper?: boolean;
   whiteLoader?: boolean;
   withBackground?: boolean;
+  wrapperStyle?: CSSProperties;
 }
 
 class SpinnerLoaderWrapper extends PureComponent<SpinnerLoaderWrapperProps> {
@@ -41,8 +42,9 @@ class SpinnerLoaderWrapper extends PureComponent<SpinnerLoaderWrapperProps> {
   }
 
   render(): ReactNode {
+    const wrapperStyle = this.props.wrapperStyle || {}; 
     return (
-      <div className={this.spinnerLoaderWrapperClass}>
+      <div className={this.spinnerLoaderWrapperClass} style={wrapperStyle}>
         <SpinnerLoader />
       </div>
     );

@@ -6,6 +6,12 @@
     background: var(--text-white);
     border-radius: 1rem;
     width: 60rem;
+    max-height: 46rem;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 0;
+    }
 
     @media screen and (max-width: 1200px) {
         width: 50rem;
@@ -34,12 +40,12 @@
     border-radius: 0.25rem;
     background-color: var(--clothes-image-background);
     overflow: hidden;
+    border: 0.1rem solid var(--welcome-border);
 
     img {
         width: 100%;
         aspect-ratio: 1 / 1;
         object-fit: cover;
-        border-radius: 0.25rem;
     }
 }
 
