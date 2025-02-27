@@ -7,7 +7,6 @@ import UIReact from "utils/classes/UIReact";
 import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import GlobalModal from "components/Modal/GlobalModal";
 
 // Lazy-loaded components
 const Home = lazy(() => import("components/Views/Home/Home"));
@@ -33,7 +32,6 @@ const Profile = lazy(() => import("components/Views/Authentication/Profile/Profi
           <Outlet />
         </main>
         {!hideLayout && <Footer />}
-        <GlobalModal />
       </>
     );
   },

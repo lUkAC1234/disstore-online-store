@@ -35,6 +35,7 @@ interface NewClothesState {
     products: ClothItem[];
     loading: boolean;
     error: string | null;
+    pathname: string;
 }
 
 class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
@@ -42,6 +43,7 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
         products: [],
         loading: true,
         error: null,
+        pathname: location.pathname,
     };
 
     get lang(): string {
@@ -70,7 +72,7 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
             const products: ClothItem[] = data.results ? data.results : data;
             sessionStorage.setItem("newClothes", JSON.stringify(products));
             this.setState({ products, loading: false });
-        } catch (error: any) {
+        } catch (error) {
             this.setState({ error: error.message, loading: false });
         }
     }

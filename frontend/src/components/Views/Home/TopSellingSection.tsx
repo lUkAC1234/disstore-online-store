@@ -34,6 +34,7 @@ interface TopSellingState {
     products: ClothItem[];
     loading: boolean;
     error: string | null;
+    pathname: string;
 }
 
 class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
@@ -41,6 +42,7 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
         products: [],
         loading: true,
         error: null,
+        pathname: location.pathname,
     };
 
     get lang(): string {
@@ -67,7 +69,7 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
             const products: ClothItem[] = data.results ? data.results : data;
             sessionStorage.setItem("popularClothes", JSON.stringify(products));
             this.setState({ products, loading: false });
-        } catch (error: any) {
+        } catch (error) {
             this.setState({ error: error.message, loading: false });
         }
     }

@@ -1,11 +1,9 @@
 import { ReactNode } from "react";
 import styles from "./WishList.module.scss";
-import { Link } from "react-router-dom";
 import { WishlistItem } from "components/Context/WishlistContext";
 import { ProductModalContext, WishlistContext } from "components/Context/ContextCollection";
 import { withContextSelector } from "components/Context/ContextInjector";
 import WishlistEmpty from "./WishListEmpty/WishlistEmpty";
-import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import { ModalHandler } from "components/Modal/Modal.utils";
 import { getWithTranslation } from "i18n/hooks";
 import { WithTranslation } from "react-i18next";
@@ -22,7 +20,11 @@ interface WishListProps extends WithTranslation {
   removeFromWishlist: (wishlistItemId: number) => Promise<void>;
 }
 
-class WishList extends ModalHandler<WishListProps, WishListState> {
+class WishList extends ModalHandler<WishListProps, { pathname: string }> {
+  state: Readonly<{ pathname: string; }> = {
+    pathname: location.pathname,
+  };
+
   get lang(): string {
     return this.props.i18n.language
   }

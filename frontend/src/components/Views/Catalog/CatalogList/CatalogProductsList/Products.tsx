@@ -3,13 +3,13 @@ import { ClothItem } from "components/Context/ClothesContext";
 import { WishlistItem } from "components/Context/WishlistContext";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { ProductModalContext, UserContext, WishlistContext } from "components/Context/ContextCollection";
-import { getWithTranslation } from "i18n/hooks";
-import { WithTranslation } from "react-i18next";
 import { ModalHandler } from "components/Modal/Modal.utils";
 import UICatalogModal from "../../CatalogDetails/CatalogModal/CatalogDetailsModal";
 import Authentication from "components/Views/Authentication/Authentication";
 import CatalogItem from "./CatalogItem/CatalogItem";
 import styles from "./Products.module.scss";
+import { getWithTranslation } from "i18n/hooks";
+import { WithTranslation } from "react-i18next";
 
 interface CatalogProductsProps extends WithTranslation {
   products: ClothItem[];
@@ -26,11 +26,7 @@ interface CatalogProductsProps extends WithTranslation {
   isAuthenticated: boolean;
 }
 
-class CatalogProducts extends ModalHandler<CatalogProductsProps> {
-  get lang(): string {
-    return this.props.i18n.language;
-  }
-
+class CatalogProducts extends ModalHandler<CatalogProductsProps, { pathname: string }> {
   render(): ReactNode {
     const { products, isAuthenticated } = this.props;
     const wishlistProps = {
@@ -52,7 +48,7 @@ class CatalogProducts extends ModalHandler<CatalogProductsProps> {
             <CatalogItem
               key={item.id}
               item={item}
-              lang={this.lang}
+              lang={this.props.i18n.language}
               isInWishlist={inWishlist}
               onWishlistClick={(item: ClothItem) => {
                 if (isAuthenticated) {
@@ -82,17 +78,19 @@ class CatalogProducts extends ModalHandler<CatalogProductsProps> {
   }
 }
 
-const __UICatalogProduct = withContextSelector(
+const CatalogTrans = getWithTranslation(CatalogProducts);
+
+const ___UICatalogProduct = withContextSelector(
   UserContext,
-  CatalogProducts,
+  CatalogTrans,
   (context) => ({
     isAuthenticated: context.isAuthenticated,
   })
 );
 
-const _UICatalogProduct = withContextSelector(
+const __UICatalogProduct = withContextSelector(
   ProductModalContext,
-  __UICatalogProduct,
+  ___UICatalogProduct,
   (context) => ({
     toggleModal: context.toggleModal,
     setModalChildren: context.setModalChildren,
@@ -101,9 +99,9 @@ const _UICatalogProduct = withContextSelector(
   })
 );
 
-const UICatalogProduct = withContextSelector(
+const _UICatalogProduct = withContextSelector(
   WishlistContext,
-  _UICatalogProduct,
+  __UICatalogProduct,
   (context) => ({
     wishlistItems: context.wishlistItems,
     loadingWishlist: context.loadingWishlist,
@@ -112,4 +110,4 @@ const UICatalogProduct = withContextSelector(
   })
 );
 
-export default getWithTranslation(UICatalogProduct);
+export default _UICatalogProduct;

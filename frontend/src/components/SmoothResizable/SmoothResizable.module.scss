@@ -1,0 +1,17 @@
+:root {
+  --smooth-resizable-height-transition: 300ms;
+}
+
+.main {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: height var(--smooth-resizable-height-transition), width var(--smooth-resizable-height-transition);
+  overflow-y: hidden;
+}
+
+.wrapper {
+  display: block;
+  position: relative;
+  transition: width var(--smooth-resizable-height-transition);
+}

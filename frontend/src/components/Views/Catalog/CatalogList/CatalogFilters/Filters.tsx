@@ -2,10 +2,11 @@ import styles from "./Filters.module.scss";
 import { PureComponent, ReactNode, RefObject } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import RangeSliderDual from "../../../../RangeSlider/RangeSliderDual"; 
+import RangeSliderDual from "../../../../RangeSlider/RangeSliderDual";
 import { ClothesListActions } from "components/Context/ClothesListContext";
 import { withContext } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
+import SmoothResizable from "components/SmoothResizable/SmoothResizable";
 
 interface CatalogFiltersProps {
   isFilterActive: boolean;
@@ -152,33 +153,35 @@ class Filters extends PureComponent<CatalogFiltersProps, FiltersState> {
             <h3 className={styles["filters-colors-title"]}>Цвета</h3>
             <FontAwesomeIcon icon={faAngleRight} />
           </button>
-          <div className={styles["filters-color-wrapper"]}>
-            {colors.length > 0 ? (
-              colors.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleFilterSelection("selectedColors", item.id)}
-                  className={`${styles["filters-color-button"]} ${
-                    selectedColors.includes(item.id) ? styles["active"] : ""
-                  }`}
-                >
-                  <div
-                    className={`${styles["filters-color"]} ${
+          <SmoothResizable>
+            <div className={styles["filters-color-wrapper"]}>
+              {colors.length > 0 ? (
+                colors.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleFilterSelection("selectedColors", item.id)}
+                    className={`${styles["filters-color-button"]} ${
                       selectedColors.includes(item.id) ? styles["active"] : ""
                     }`}
-                    style={{ backgroundColor: item.color }}
-                  ></div>
-                  <span className={styles["filters-color-name"]}>
-                    {item.name}
-                  </span>
-                </button>
-              ))
-            ) : (
-              <h4 className={styles["filter-error"]}>
-                Пока что нету никаких цветов одежды
-              </h4>
-            )}
-          </div>
+                  >
+                    <div
+                      className={`${styles["filters-color"]} ${
+                        selectedColors.includes(item.id) ? styles["active"] : ""
+                      }`}
+                      style={{ backgroundColor: item.color }}
+                    ></div>
+                    <span className={styles["filters-color-name"]}>
+                      {item.name}
+                    </span>
+                  </button>
+                ))
+              ) : (
+                <h4 className={styles["filter-error"]}>
+                  Пока что нету никаких цветов одежды
+                </h4>
+              )}
+            </div>
+          </SmoothResizable>
         </div>
         <div className={styles["hr-line"]}></div>
 
@@ -192,25 +195,27 @@ class Filters extends PureComponent<CatalogFiltersProps, FiltersState> {
             <h3 className={styles["filters-sizes-title"]}>Размеры</h3>
             <FontAwesomeIcon icon={faAngleRight} />
           </button>
-          <div className={styles["filters-sizes-wrapper"]}>
-            {sizes.length > 0 ? (
-              sizes.map((item) => (
-                <button
-                  key={item.id}
-                  className={`${styles["filters-sizes-column"]} ${
-                    selectedSizes.includes(item.id) ? styles["active"] : ""
-                  }`}
-                  onClick={() => handleFilterSelection("selectedSizes", item.id)}
-                >
-                  {item.size}
-                </button>
-              ))
-            ) : (
-              <h4 className={styles["filter-error"]}>
-                Пока что нету никаких размеров одежды
-              </h4>
-            )}
-          </div>
+          <SmoothResizable>
+            <div className={styles["filters-sizes-wrapper"]}>
+              {sizes.length > 0 ? (
+                sizes.map((item) => (
+                  <button
+                    key={item.id}
+                    className={`${styles["filters-sizes-column"]} ${
+                      selectedSizes.includes(item.id) ? styles["active"] : ""
+                    }`}
+                    onClick={() => handleFilterSelection("selectedSizes", item.id)}
+                  >
+                    {item.size}
+                  </button>
+                ))
+              ) : (
+                <h4 className={styles["filter-error"]}>
+                  Пока что нету никаких размеров одежды
+                </h4>
+              )}
+            </div>
+          </SmoothResizable>
         </div>
         <div className={styles["hr-line"]}></div>
 

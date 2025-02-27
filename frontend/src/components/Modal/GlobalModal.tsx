@@ -2,7 +2,7 @@
 import { ReactNode } from "react";
 import { ProductModalContext } from "components/Context/ContextCollection";
 import { withContextSelector } from "components/Context/ContextInjector";
-import { ModalHandler } from "./Modal.utils";
+import { ModalHandler, ModalHandlerState } from "./Modal.utils";
 
 interface GlobalModalProps {
   toggleModal: (callback: () => void) => void;
@@ -11,7 +11,7 @@ interface GlobalModalProps {
   modalChildren: ReactNode;
 }
 
-class GlobalModal extends ModalHandler<GlobalModalProps> {
+class _GlobalModal extends ModalHandler<GlobalModalProps, ModalHandlerState> {
   handleClose = () => {
     const { isModalActive, setModalChildren, toggleModal } = this.props;
     if (isModalActive) {
@@ -21,15 +21,17 @@ class GlobalModal extends ModalHandler<GlobalModalProps> {
   };
 
   render() {
-    const { isModalActive, modalChildren } = this.props;
+    const { isModalActive } = this.props;
     if (!isModalActive) return null;
     return this.renderModal();
   }
 }
 
-export default withContextSelector(ProductModalContext, GlobalModal, (context) => ({
+const GlobalModal = withContextSelector(ProductModalContext, _GlobalModal, (context) => ({
   toggleModal: context.toggleModal,
   setModalChildren: context.setModalChildren,
   isModalActive: context.isModalActive,
   modalChildren: context.modalChildren,
 }));
+
+export default GlobalModal;

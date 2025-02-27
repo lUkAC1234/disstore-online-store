@@ -35,14 +35,37 @@ class Authentication extends UIReact<AuthenticationProps, AuthenticationState> {
         return this.props.i18n.language;
     }
 
+    pathlist = [
+        "authentication",
+    ]
+
+    get splittedPathname(): string[] {
+        return location.pathname.split("/");
+    }
+
     render(): ReactNode {
         const { isLoginView } = this.state;
         const { isAuthenticated, smallVersion } = this.props;
+        let navigateToProfile: boolean = false;
 
         if (isAuthenticated) {
-            if (location.pathname.includes("catalog")) {
+            for (let i = 0; i < this.splittedPathname.length; ++i) {
+                const pathname: string = this.splittedPathname[i];
+                console.log(pathname);
+
+                for (let j = 0; j < this.pathlist.length; ++j) {
+                    const pathListItem: string = this.pathlist[j];
+
+                    if (pathname.includes(pathListItem)) {
+                        navigateToProfile = true;
+                    }
+                }
+            }
+
+            if (!navigateToProfile) {
                 return;
             }
+
             return <Navigate to={`/${this.lang}/profile`} />;
         }
 
