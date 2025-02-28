@@ -196,20 +196,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-# gettext = lambda s: s
-
-# LANGUAGES = [
-#     ('en', gettext('English')),
-#     ('ru', gettext('Russian')),
-# ]
-
-# LOCALE_PATHS = [
-#     BASE_DIR / "web" / "locale"
-# ]
-
-# MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
-
-
 TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
@@ -242,3 +228,14 @@ AUTH_USER_MODEL = 'UserAuth.UserModel'
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST="smtp.gmail.com"
+EMAIL_PORT=465
+EMAIL_HOST_USER=os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD=os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_USE_SSL=True
+
+DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
+SERVER_EMAIL=EMAIL_HOST_USER
+EMAIL_ADMIN=EMAIL_HOST_USER

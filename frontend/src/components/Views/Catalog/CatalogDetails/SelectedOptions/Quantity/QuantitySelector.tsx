@@ -38,7 +38,7 @@ interface QuantitySelectorProps extends WithTranslation {
   modalChildren: ReactNode;
 }
 
-class QuantitySelector extends ModalHandler<QuantitySelectorProps> {
+class QuantitySelector extends ModalHandler<QuantitySelectorProps, { pathname: string }> {
   get lang(): string {
     return this.props.i18n.language;
   }

@@ -133,7 +133,7 @@ class TypesModel(models.Model):
     class Meta:
         verbose_name = _("Тип одежды")
         verbose_name_plural = _("Типы одежды")
-        ordering = ('-id',)
+        ordering = ('id',)
         
 class ClothesColorModel(models.Model):
     name= models.CharField(_("Названия цвета"), max_length=100)

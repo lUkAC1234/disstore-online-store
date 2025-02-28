@@ -78,11 +78,11 @@ class CatalogProducts extends ModalHandler<CatalogProductsProps, { pathname: str
   }
 }
 
-const CatalogTrans = getWithTranslation(CatalogProducts);
+const TranslatedCatalog = getWithTranslation(CatalogProducts);
 
 const ___UICatalogProduct = withContextSelector(
   UserContext,
-  CatalogTrans,
+  TranslatedCatalog,
   (context) => ({
     isAuthenticated: context.isAuthenticated,
   })

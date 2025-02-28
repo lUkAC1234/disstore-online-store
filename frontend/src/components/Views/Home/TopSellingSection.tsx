@@ -1,7 +1,7 @@
 import styles from './Home.module.scss';
 import { ReactNode } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Keyboard, Navigation } from "swiper/modules";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from 'react-router-dom';
@@ -104,10 +104,15 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
                     </h2>
                     <Swiper
                         className={styles["mySwiper-top-selling"]}
-                        modules={[Navigation]}
+                        modules={[Navigation, Keyboard]}
                         navigation={{
                             nextEl: `.${styles["loop-button-top-selling-next"]}`,
                             prevEl: `.${styles["loop-button-top-selling-prev"]}`,
+                        }}
+                        keyboard={{
+                            enabled: true,      
+                            onlyInViewport: true,
+                            pageUpDown: true,
                         }}
                         slidesPerView={4}
                         initialSlide={0}

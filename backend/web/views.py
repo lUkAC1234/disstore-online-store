@@ -16,12 +16,12 @@ from .serializer import (
 from rest_framework.exceptions import NotFound
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Min, Max
-from .filters import ClothesModelFilter
+from .filters import ClothesModelFilter, SearchTitle
 from rest_framework.pagination import PageNumberPagination
 
 
 class ResultsSetPagination(PageNumberPagination):
-    page_size = 1
+    page_size = 9
     page_size_query_param = 'page_size'
 
     def paginate_queryset(self, queryset, request, view=None):
@@ -83,6 +83,8 @@ class ClothesMainView(ListAPIView):
         
 class SearchingClothesView(ListAPIView):
     serializer_class = ClothesModelSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = SearchTitle
 
     def get_queryset(self):
         return ClothesModel.objects.prefetch_related('colors', 'sizes', 'types', 'catalogImages')

@@ -84,6 +84,11 @@ label {
     @extend .primary-button;
     margin-top: 0.5rem;
     border-radius: 0.25rem;
+
+    &:disabled {
+        opacity: 0.75;
+        cursor: unset;
+    }
 }
 
 .errorMessage {

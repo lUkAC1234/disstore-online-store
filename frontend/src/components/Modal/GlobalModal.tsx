@@ -1,4 +1,3 @@
-// GlobalModal.tsx
 import { ReactNode } from "react";
 import { ProductModalContext } from "components/Context/ContextCollection";
 import { withContextSelector } from "components/Context/ContextInjector";

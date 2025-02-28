@@ -1,7 +1,7 @@
 import styles from './Home.module.scss';
 import { ReactNode } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Keyboard, Navigation } from "swiper/modules";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from 'react-router-dom';
@@ -56,7 +56,6 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
 
     async fetchNewClothes(): Promise<void> {
         try {
-            // Check if data is already cached in sessionStorage
             const cached = sessionStorage.getItem("newClothes");
             if (cached) {
                 const products: ClothItem[] = JSON.parse(cached);
@@ -107,10 +106,15 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
                     </h2>
                     <Swiper
                         className={styles["mySwiper-new-clothes"]}
-                        modules={[Navigation]}
+                        modules={[Navigation, Keyboard]}
                         navigation={{
                             nextEl: `.${styles["loop-button-new-clothes-next"]}`,
                             prevEl: `.${styles["loop-button-new-clothes-prev"]}`,
+                        }}
+                        keyboard={{
+                            enabled: true,      
+                            onlyInViewport: true,
+                            pageUpDown: true,
                         }}
                         slidesPerView={4}
                         initialSlide={0}
@@ -191,14 +195,14 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
 }
 
 const UINewClothes = withContextSelector(
-  ProductModalContext,
-  NewClothes,
-  (context) => ({
-    toggleModal: context.toggleModal,
-    setModalChildren: context.setModalChildren,
-    isModalActive: context.isModalActive,
-    modalChildren: context.modalChildren,
-  })
+    ProductModalContext,
+    NewClothes,
+    (context) => ({
+        toggleModal: context.toggleModal,
+        setModalChildren: context.setModalChildren,
+        isModalActive: context.isModalActive,
+        modalChildren: context.modalChildren,
+    })
 );
 
 export default getWithTranslation(UINewClothes);

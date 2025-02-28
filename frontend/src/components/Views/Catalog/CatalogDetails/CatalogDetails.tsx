@@ -247,11 +247,13 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
             </div>
           </div>
         </div>
-        <NavigationSection
-          long_description={data?.long_description}
-          reviews={data?.reviews}
-          faqs={data?.faqs}
-        />
+        <BlockLoader isLoaded={!!data}>
+          <NavigationSection
+            long_description={data?.long_description}
+            reviews={data?.reviews}
+            faqs={data?.faqs}
+          />
+        </BlockLoader>
       </div>
     );
   }

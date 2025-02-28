@@ -21,6 +21,10 @@
       display: none;
     }
   }
+
+  @media screen and (max-width: 992px) {
+    overflow-y: auto;
+  }
 }
 
 .authentication-image-container {

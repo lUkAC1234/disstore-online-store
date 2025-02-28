@@ -2,8 +2,16 @@ import styles from "./Home.module.scss";
 import { PureComponent, ReactNode } from "react";
 import extraoffer from "assets/main/images/main-page/extraoffer.webp";
 import { Link } from "react-router-dom";
+import { WithTranslation } from "react-i18next";
+import { getWithTranslation } from "i18n/hooks";
 
-class ExtraOffer extends PureComponent {
+interface ExtraOfferProps extends WithTranslation {}
+
+class ExtraOffer extends PureComponent<ExtraOfferProps> {
+    get lang(): string {
+        return this.props.i18n.language;
+    }
+    
     render(): ReactNode {
         return (
             <section className={styles["extra-offer-section"]}>
@@ -17,7 +25,7 @@ class ExtraOffer extends PureComponent {
                             уникальными скидками и создайте стильный гардероб, который будет
                             вдохновлять каждый день
                         </p>
-                        <Link to={""} className={styles["extra-offer-link"]}>
+                        <Link to={`/${this.lang}/catalog`} className={styles["extra-offer-link"]}>
                             Купить сейчас
                         </Link>
                     </div>
@@ -35,4 +43,6 @@ class ExtraOffer extends PureComponent {
     }
 }
 
-export default ExtraOffer;
+const TranslatedExtraOffer = getWithTranslation(ExtraOffer);
+
+export default TranslatedExtraOffer;

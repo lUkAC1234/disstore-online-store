@@ -25,7 +25,6 @@ export interface ClothesListContextState {
     min: number;
     max: number;
     filtersApplied: boolean;
-    title: string;
 }
 
 export interface ClothesListContextProps extends PropsWithChildren { }
@@ -61,7 +60,6 @@ export interface ClothesListActions extends ClothesListContextState {
     debouncedFetchFilteredProducts: () => Promise<void>;
     resetFilters: () => void;
     setApplyFilters: () => void;
-    setTitle: (value: string) => void;
 }
 
 class ClothesListProvider extends PureComponent<ClothesListContextProps, ClothesListContextState> {
@@ -86,7 +84,6 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
         prevPage: null,
         totalPages: 1,
         count: 0,
-        title: "",
     };
 
     render() {
@@ -113,7 +110,6 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
                     debouncedFetchFilteredProducts: this.debouncedFetchFilteredProducts,
                     resetFilters: this.resetFilters,
                     setApplyFilters: this.setApplyFilters,
-                    setTitle: this.setTitle,
                 }}
             >
                 {this.props.children}
@@ -374,13 +370,6 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
             selectedMax: value,
         }));
     };
-
-    setTitle = (value: string): void => {
-        this.setState((prevState) => ({
-            ...prevState,
-            title: value,
-        }));
-    }
 
     setNextPage = (): void => {
         if (this.state.currentPage < this.state.totalPages) {

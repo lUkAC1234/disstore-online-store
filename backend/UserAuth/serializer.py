@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import UserModel
+from .models import UserModel, OTPVerification
 from rest_framework.exceptions import ValidationError
 from django.db import IntegrityError
+from django.core.mail import send_mail
+import random, string, datetime
+from django.utils import timezone
 
 class LoginTokenObtainPairSerializer(TokenObtainPairSerializer):
     email = serializers.EmailField()
@@ -74,5 +77,141 @@ class RegisterSerializer(serializers.ModelSerializer):
                 mobile_number=validated_data.get('mobile_number', '')
             )
         except IntegrityError:
-            # In case the database throws an integrity error (duplicate email)
             raise ValidationError("Пользователь с таким email уже существует. Пожалуйста, залогиньтесь.")
+        
+# Email Verification Serializer
+
+class OTPRequestSerializer(serializers.Serializer):
+    PURPOSE_CHOICES = (
+        ('registration', 'Registration'),
+        ('login', 'Login'),
+    )
+    email = serializers.EmailField()
+    password = serializers.CharField(required=False, write_only=True)
+    first_name = serializers.CharField(required=False, allow_blank=True)
+    last_name = serializers.CharField(required=False, allow_blank=True)
+    mobile_number = serializers.CharField(required=False, allow_blank=True)
+    purpose = serializers.ChoiceField(choices=PURPOSE_CHOICES)
+
+    def validate(self, attrs):
+        purpose = attrs.get('purpose')
+        email = attrs.get('email').lower()
+        password = attrs.get('password')
+        if purpose == 'registration':
+            if UserModel.objects.filter(email=email).exists():
+                raise serializers.ValidationError("Пользователь с таким email уже существует.")
+        elif purpose == 'login':
+            user = UserModel.objects.filter(email=email).first()
+            if not user:
+                raise serializers.ValidationError("Пользователь не найден.")
+            if not password:
+                raise serializers.ValidationError("Пароль обязателен для логина.")
+            if not user.check_password(password):
+                raise serializers.ValidationError("Неверный пароль.")
+        attrs['email'] = email
+        return attrs
+
+    def create(self, validated_data):
+        email = validated_data['email']
+        purpose = validated_data['purpose']
+        now = timezone.now()
+        expires_at = now + datetime.timedelta(minutes=10)  
+        otp_code = ''.join(random.choices(string.digits, k=6))
+        
+        otp_instance = OTPVerification.objects.filter(email=email, purpose=purpose).order_by('-created_at').first()
+        if otp_instance and not otp_instance.is_expired():
+            time_diff = now - otp_instance.last_sent
+            if otp_instance.resend_count == 1 and time_diff < datetime.timedelta(minutes=1):
+                raise serializers.ValidationError("Подождите 1 минуту для повторной отправки кода.")
+            elif otp_instance.resend_count == 2 and time_diff < datetime.timedelta(minutes=5):
+                raise serializers.ValidationError("Подождите 5 минут для повторной отправки кода.")
+            elif otp_instance.resend_count >= 3 and time_diff < datetime.timedelta(minutes=30):
+                raise serializers.ValidationError("Подождите 30 минут для повторной отправки кода.")
+            elif otp_instance.resend_count >= 4 and time_diff < datetime.timedelta(hours=1):
+                raise serializers.ValidationError("Подождите 1 час для повторной отправки кода.")
+            otp_instance.code = otp_code
+            otp_instance.expires_at = expires_at
+            otp_instance.resend_count += 1
+            otp_instance.last_sent = now
+            if purpose == 'registration':
+                otp_instance.data = validated_data  
+            otp_instance.save()
+        else:
+            otp_instance = OTPVerification.objects.create(
+                email=email,
+                purpose=purpose,
+                code=otp_code,
+                expires_at=expires_at,
+                resend_count=0,
+                last_sent=now,
+                data=validated_data if purpose == 'registration' else None
+            )
+        subject = "Ваш OTP код"
+        message = f"Ваш код подтверждения: {otp_code}. Он действителен 10 минут."
+        send_mail(
+            subject,
+            message,
+            None,  
+            [email],
+            fail_silently=False,
+        )
+        return otp_instance
+
+# -------------------------------------------------------------
+# OTP Verification Serializer
+# -------------------------------------------------------------
+class OTPVerifySerializer(serializers.Serializer):
+    PURPOSE_CHOICES = (
+        ('registration', 'Registration'),
+        ('login', 'Login'),
+    )
+    email = serializers.EmailField()
+    code = serializers.CharField(max_length=6)
+    purpose = serializers.ChoiceField(choices=PURPOSE_CHOICES)
+
+    def validate(self, attrs):
+        email = attrs.get('email').lower()
+        code = attrs.get('code')
+        purpose = attrs.get('purpose')
+        try:
+            otp_instance = OTPVerification.objects.filter(email=email, purpose=purpose).latest('created_at')
+        except OTPVerification.DoesNotExist:
+            raise serializers.ValidationError("Код не найден. Запросите код повторно.")
+        if otp_instance.is_expired():
+            raise serializers.ValidationError("Код истек. Запросите новый код.")
+        if otp_instance.code != code:
+            raise serializers.ValidationError("Неверный код.")
+        attrs['otp_instance'] = otp_instance
+        return attrs
+
+    def create(self, validated_data):
+        otp_instance = validated_data.get('otp_instance')
+        email = validated_data.get('email')
+        purpose = validated_data.get('purpose')
+        otp_instance.delete()
+        if purpose == 'registration':
+            data = otp_instance.data or {}
+            user = UserModel.objects.create_user(
+                email=email,
+                password=data.get('password'),
+                first_name=data.get('first_name', ''),
+                last_name=data.get('last_name', ''),
+                mobile_number=data.get('mobile_number', '')
+            )
+        else:  
+            user = UserModel.objects.filter(email=email).first()
+        from rest_framework_simplejwt.tokens import RefreshToken
+        refresh = RefreshToken.for_user(user)
+        return {
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'access_expiration': refresh.access_token.payload['exp'],
+            'refresh_expiration': refresh.payload['exp'],
+            'user': {
+                'id': user.id,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'mobile_number': user.mobile_number
+            }
+        }
