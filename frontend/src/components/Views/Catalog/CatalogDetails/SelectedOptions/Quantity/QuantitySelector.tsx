@@ -3,17 +3,20 @@ import { ReactNode } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { withContextSelector } from 'components/Context/ContextInjector';
-import { ProductModalContext, UserContext, WishlistContext } from 'components/Context/ContextCollection';
+import { CartContext, ProductModalContext, UserContext, WishlistContext } from 'components/Context/ContextCollection';
 import { getWithTranslation } from 'i18n/hooks';
 import { WithTranslation } from 'react-i18next';
 import { WishlistItem } from 'components/Context/WishlistContext';
 import Authentication from "components/Views/Authentication/Authentication";
 import { ModalHandler } from 'components/Modal/Modal.utils';
+import { CartItem } from 'components/Context/CartContext';
 
 
 interface DataProps {
   id: string | number;
   count: number;
+  title?: string;
+
 }
 
 interface SelectedOptions {
@@ -36,6 +39,8 @@ interface QuantitySelectorProps extends WithTranslation {
   setModalChildren: (children: ReactNode) => void;
   isModalActive: boolean;
   modalChildren: ReactNode;
+
+  setSuccess: (success: boolean, cartItem?: CartItem) => void;
 }
 
 class QuantitySelector extends ModalHandler<QuantitySelectorProps, { pathname: string }> {
@@ -56,7 +61,7 @@ class QuantitySelector extends ModalHandler<QuantitySelectorProps, { pathname: s
   };
 
   render() {
-    const { data, maxAvailable, globalQuantity, addToCart, selectedOptions, isAuthenticated, addToWishList, removeFromWishlist, wishlistItems } = this.props;
+    const { data, maxAvailable, globalQuantity, addToCart, selectedOptions, isAuthenticated, addToWishList, removeFromWishlist, wishlistItems, setSuccess} = this.props;
     const { quantity } = selectedOptions;
     const totalQuantity = globalQuantity + quantity;
     const disableIncrease = totalQuantity >= maxAvailable;
@@ -90,6 +95,7 @@ class QuantitySelector extends ModalHandler<QuantitySelectorProps, { pathname: s
                 isAuthenticated
                   ? () => {
                     addToCart(data.id)
+                    setSuccess(true, { id: data.id, product: { id: data.id, title: data.title } as DataProps, quantity: totalQuantity } as CartItem)
                   }
                   : () => this.openModal(<Authentication smallVersion />)
               }
@@ -146,7 +152,11 @@ class QuantitySelector extends ModalHandler<QuantitySelectorProps, { pathname: s
   }
 }
 
-const __UIQuantitySelector = withContextSelector(WishlistContext, QuantitySelector, (context) => ({
+const ___UIQuantitySelector = withContextSelector(CartContext, QuantitySelector, (context) => ({
+  setSuccess: context.setSuccess,
+}));
+
+const __UIQuantitySelector = withContextSelector(WishlistContext, ___UIQuantitySelector, (context) => ({
   addToWishList: context.addToWishlist,
   removeFromWishlist: context.removeFromWishlist,
   wishlistItems: context.wishlistItems,

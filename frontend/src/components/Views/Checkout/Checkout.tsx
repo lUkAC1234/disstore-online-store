@@ -1,6 +1,6 @@
 import { PureComponent, ChangeEvent, FormEvent } from "react";
 import { withContext } from "components/Context/ContextInjector";
-import { CartContext } from "components/Context/ContextCollection";
+import { CartContext, UserContext } from "components/Context/ContextCollection";
 import { CartContextActions, CartItem } from "components/Context/CartContext";
 import { WithTranslation } from "react-i18next";
 import { getWithTranslation } from "i18n/hooks";
@@ -11,8 +11,9 @@ import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import styles from "./Checkout.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { UserContextActions } from "components/Context/UserContext";
 
-interface CheckoutProps extends CartContextActions, WithTranslation { }
+interface CheckoutProps extends CartContextActions, WithTranslation, UserContextActions { }
 
 interface ExtendedCartItem extends CartItem {
   selected_color?: string;
@@ -121,6 +122,13 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
     this.setState({ phone: formattedPhone, rawDigits: newDigits });
   };
 
+  // handleFullNameChange = (evt: ChangeEvent<HTMLInputElement>): void => {
+  //   this.setState((prevState) => {
+  //     const fullName = this.props.user.first_name || this.props.user.last_name ? `${this.props.user.first_name} ${this.props.user.last_name}` : prevState.fullName;
+  //     return { fullName: evt.target.value || fullName };
+  //   })
+  // };
+
   handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -133,7 +141,8 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
 
   handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { fullName, address, phone, email } = this.state;
+    const { fullName, address, phone } = this.state;
+    const { email } = this.props.user;
     const { cart } = this.props;
 
     if (!fullName || !address || !phone || !email) {
@@ -177,8 +186,9 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
         throw new Error(errData.detail || `Ошибка: ${response.status}`);
       }
       this.props.clearCart();
+      this.props.setSuccess(true);
       this.setState({ success: true });
-    } catch (error: any) {
+    } catch (error) {
       console.error("Checkout error:", error);
       this.setErrorMessage(error.message || "Ошибка при оформлении заказа.");
     } finally {
@@ -186,8 +196,13 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
     }
   };
 
+  get fullName(): string {
+    return this.props.user.first_name || this.props.user.last_name ? `${this.props.user.first_name} ${this.props.user.last_name}` : this.state.fullName;
+  }
+
   render() {
-    const { fullName, address, phone, email, processing, error, success } = this.state;
+    const { fullName, address, phone, processing, error, success } = this.state;
+    const { user } = this.props
     const { cart } = this.props;
     if (success) {
       return <Navigate to="/order-confirmation" />;
@@ -242,7 +257,7 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
                   type="tel"
                   id="phone"
                   name="phone"
-                  value={phone}
+                  value={phone || user.mobile_number}
                   onChange={this.handleChange}
                   required
                   placeholder="+998 (__) ___ __ __"
@@ -254,7 +269,8 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
                   type="email"
                   id="email"
                   name="email"
-                  value={email}
+                  value={user.email}
+                  disabled
                   onChange={this.handleInputChange}
                   required
                   placeholder="Введите вашу почту"
@@ -307,7 +323,7 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
                 </div>
               </div>
             </div>
-            <div className={styles["order-submission-block"]}>
+            <nav className={styles["order-submission-block"]}>
               <div className={styles["order-submission-container"]}>
                 <div className={styles["order-summary"]}>
                   <h2 className={styles["order-status-summary"]}>Сводка заказа</h2>
@@ -340,7 +356,7 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
                   {processing ? <SpinnerLoaderWrapper smallWrapper whiteLoader /> : "Оформить заказ"}
                 </button>
               </div>
-            </div>
+            </nav>
 
           </form>
 
@@ -350,4 +366,4 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
   }
 }
 
-export default getWithTranslation(withContext(CartContext, Checkout));
+export default getWithTranslation(withContext(CartContext, withContext(UserContext, Checkout)));

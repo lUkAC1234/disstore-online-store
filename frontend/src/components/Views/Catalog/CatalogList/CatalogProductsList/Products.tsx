@@ -32,8 +32,8 @@ class CatalogProducts extends ModalHandler<CatalogProductsProps, { pathname: str
     const wishlistProps = {
       wishlistItems: this.props.wishlistItems || [],
       loadingWishlist: this.props.loadingWishlist || false,
-      addToWishList: this.props.addToWishList || (async () => {}),
-      removeFromWishlist: this.props.removeFromWishlist || (async () => {}),
+      addToWishList: this.props.addToWishList || (async () => { }),
+      removeFromWishlist: this.props.removeFromWishlist || (async () => { }),
     };
 
     return (
@@ -81,12 +81,12 @@ class CatalogProducts extends ModalHandler<CatalogProductsProps, { pathname: str
 const TranslatedCatalog = getWithTranslation(CatalogProducts);
 
 const ___UICatalogProduct = withContextSelector(
-  UserContext,
-  TranslatedCatalog,
-  (context) => ({
-    isAuthenticated: context.isAuthenticated,
-  })
-);
+    UserContext,
+    TranslatedCatalog,
+    (context) => ({
+      isAuthenticated: context.isAuthenticated,
+    })
+  );
 
 const __UICatalogProduct = withContextSelector(
   ProductModalContext,

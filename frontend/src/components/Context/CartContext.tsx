@@ -47,17 +47,47 @@ export interface CartContextActions {
   updateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
   selectedOptions: SelectedOptions;
   setSelectedOptions: (options: Partial<SelectedOptions>) => void;
+  setSuccess: (success: boolean, cartItem?: CartItem) => void;
+  successCart: boolean;
+  cartItem: CartItem | null;
 }
 
 export interface CartContextState {
   cart: CartData | null;
+  cartItem: CartItem | null;
   loadingCart: boolean;
   selectedOptions: SelectedOptions;
+  successCart: boolean;
 }
 
 class CartContextProvider extends PureComponent<CartProviderProps, CartContextState> {
+  render() {
+    return (
+      <CartContext.Provider
+        value={{
+          cart: this.state.cart,
+          loadingCart: this.state.loadingCart,
+          addToCart: this.addToCart,
+          removeFromCart: this.removeFromCart,
+          fetchCart: this.fetchCart,
+          clearCart: this.clearCart,
+          toggleCartItem: this.toggleCartItem,
+          updateCartItem: this.updateCartItem,
+          selectedOptions: this.state.selectedOptions,
+          setSelectedOptions: this.setSelectedOptions,
+          setSuccess: this.setSuccess,
+          successCart: this.state.successCart,
+          cartItem: this.state.cartItem,
+        }}
+      >
+        {this.props.children}
+      </CartContext.Provider>
+    );
+  }
+
   state: Readonly<CartContextState> = {
     cart: null,
+    cartItem: null,
     loadingCart: false,
     selectedOptions: {
       color: "",
@@ -65,6 +95,7 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
       quantity: 1,
       selectedImage: null,
     },
+    successCart: false,
   };
 
   private tokenInterval: NodeJS.Timeout | null = null;
@@ -178,6 +209,15 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
     }
   };
 
+  setSuccess = (successCart: boolean, cartItem?: CartItem | null) => {
+    console.log("successCart", successCart);
+    this.setState((prevState) => ({
+      ...prevState,
+      successCart,
+      cartItem,
+    }), () => { setTimeout(() => this.setState({ successCart: false, cartItem: null }), 3000); });
+  };
+
   updateCartItem = async (cartItemId: number, quantity: number) => {
     await this.executeWithLoading(
       async () => {
@@ -204,27 +244,6 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
       selectedOptions: { ...prevState.selectedOptions, ...options },
     }));
   };
-
-  render() {
-    return (
-      <CartContext.Provider
-        value={{
-          cart: this.state.cart,
-          loadingCart: this.state.loadingCart,
-          addToCart: this.addToCart,
-          removeFromCart: this.removeFromCart,
-          fetchCart: this.fetchCart,
-          clearCart: this.clearCart,
-          toggleCartItem: this.toggleCartItem,
-          updateCartItem: this.updateCartItem,
-          selectedOptions: this.state.selectedOptions,
-          setSelectedOptions: this.setSelectedOptions,
-        }}
-      >
-        {this.props.children}
-      </CartContext.Provider>
-    );
-  }
 }
 
 export default CartContextProvider;

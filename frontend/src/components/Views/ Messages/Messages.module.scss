@@ -1,0 +1,14 @@
+/* Styles for  Messages component */
+.messages-container {
+  position: fixed;
+  top: 0;
+  z-index: var(--z-index-11);
+  width: 100%;
+  height: 20rem;
+  visibility: hidden;
+
+  &--active {
+    visibility: visible;
+    background: #fff;
+  }
+}

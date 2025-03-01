@@ -10,6 +10,7 @@ export interface CatalogItemProps {
   isInWishlist?: boolean;
   onWishlistClick?: (item: ClothItem) => void;
   onCartClick?: (item: ClothItem) => void;
+
 }
 
 class CatalogItem extends PureComponent<CatalogItemProps> {
@@ -27,7 +28,7 @@ class CatalogItem extends PureComponent<CatalogItemProps> {
 
   handleCartClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const { onCartClick, item } = this.props;
+    const { onCartClick, item} = this.props;
     if (onCartClick) {
       onCartClick(item);
     }
@@ -154,5 +155,6 @@ class CatalogItem extends PureComponent<CatalogItemProps> {
     );
   }
 }
+
 
 export default CatalogItem;
