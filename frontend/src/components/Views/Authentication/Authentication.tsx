@@ -4,7 +4,7 @@ import styles from "./Authentication.module.scss";
 import Registration from "./Registration/Registration";
 import Login from "./Login/Login";
 import OTPVerification from "./OTPVerification/OTPVerification";
-import { UserContextActions } from "components/Context/UserContext";
+import { TokenData, UserContextActions } from "components/Context/UserContext";
 import { UserContext } from "components/Context/ContextCollection";
 import { withContext } from "components/Context/ContextInjector";
 import UIReact from "utils/classes/UIReact";
@@ -86,7 +86,7 @@ class Authentication extends UIReact<AuthenticationProps, AuthenticationState> {
       if (!response.ok) {
         const errorData = await response.json();
         const msg = this.parseErrorMessage(errorData);
-        throw new Error(msg || "OTP request error");
+        throw new Error(msg || "Запрос провалился");
       }
       this.setState({
         otpMode: true,
@@ -96,12 +96,12 @@ class Authentication extends UIReact<AuthenticationProps, AuthenticationState> {
       });
       return true;
     } catch (error) {
-      console.error("OTP request failed", error);
+      console.error("Запрос провалился", error);
       throw error;
     }
   };
 
-  handleOTPSuccess = async (tokenData: any) => {
+  handleOTPSuccess = async (tokenData: TokenData) => {
     this.props.setLogin(tokenData.access, tokenData.user);
     this.setState({ otpMode: false });
   };
@@ -109,35 +109,36 @@ class Authentication extends UIReact<AuthenticationProps, AuthenticationState> {
   render(): ReactNode {
     const { isLoginView, otpMode, otpEmail, otpPurpose, otpPassword } = this.state;
     const { isAuthenticated, smallVersion } = this.props;
-    let navigateToProfile = false;
+
     if (isAuthenticated) {
-      for (let i = 0; i < this.splittedPathname.length; i++) {
-        const pathname = this.splittedPathname[i];
-        for (let j = 0; j < this.pathlist.length; j++) {
-          if (pathname.includes(this.pathlist[j])) {
-            navigateToProfile = true;
-          }
-        }
-      }
-      if (!navigateToProfile) return null;
-      return <Navigate to={`/${this.lang}/profile`} />;
+      const shouldNavigate = this.splittedPathname.some(segment =>
+        this.pathlist.some(path => segment.includes(path))
+      );
+      return shouldNavigate ? <Navigate to={`/${this.lang}/profile`} /> : null;
     }
     return (
       <section className={styles["auth-section"]}>
         <div className={styles["auth-container"]}>
           <div className={`${styles["authentication-wrapper"]} ${smallVersion ? styles.small : ""}`}>
-            <div className={styles["authentication-image-container"]}>
-              <img src={auth} alt="" />
-            </div>
+            {!smallVersion && (
+              <div className={styles["authentication-image-container"]}>
+                <img src={auth} alt="" />
+              </div>
+            )}
+
             <div className={styles["authentication-content"]}>
-              <div className={styles["authentication-logo-container"]}>
-                <img src={logo} alt="" />
-              </div>
-              <div className={styles["authentication-back-link-container"]}>
-                <Link to={`/${this.lang}`}>
-                  <FontAwesomeIcon icon={faArrowLeftLong} />
-                </Link>
-              </div>
+              {!smallVersion && (
+                <>
+                  <div className={styles["authentication-logo-container"]}>
+                    <img src={logo} alt="" />
+                  </div>
+                  <div className={styles["authentication-back-link-container"]}>
+                    <Link to={`/${this.lang}`}>
+                      <FontAwesomeIcon icon={faArrowLeftLong} />
+                    </Link>
+                  </div>
+                </>
+              )}
               {otpMode ? (
                 <OTPVerification
                   email={otpEmail}

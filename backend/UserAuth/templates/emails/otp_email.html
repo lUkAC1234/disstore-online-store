@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Подтверждение OTP</title>
+    <style type="text/css">
+        body {
+            font-family: "Montserrat", serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            display: grid;
+            place-content: center;
+            place-items: center;
+            max-width: 40rem;
+            margin: 3rem auto;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #111111;
+            margin-bottom: 1.5rem;
+        }
+
+        .instruction {
+            font-size: 1rem;
+            color: #00000099;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .otp-wrapper {
+            display: flex;
+            justify-content: center !important;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            margin-inline: auto;
+            width: max-content;
+        }
+
+        .otp-digit {
+            width: 3rem;
+            height: 3rem;
+            line-height: 3rem;
+            font-size: 1.5rem;
+            border: 0.0625rem solid #ddd;
+            border-radius: 0.25rem;
+            background-color: #fafafa;
+            text-align: center;
+        }
+
+        .note {
+            font-size: 0.9rem;
+            color: #DC2626;
+            background-color: #FEE2E2;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+        }
+
+        .footer {
+            font-size: 0.8rem;
+            color: #6c757d;
+            border-top: 0.0625rem solid #e9ecef;
+            padding-top: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            {% if purpose == 'registration' %}
+            Подтверждение регистрации
+            {% else %}
+            Подтверждение входа
+            {% endif %}
+        </div>
+        <div class="instruction">
+            Пожалуйста, введите следующий код в приложении, чтобы продолжить:
+        </div>
+        <center>
+            <div class="otp-wrapper">
+                {% for digit in otp_code %}
+                <div class="otp-digit">{{ digit }}</div>
+                {% endfor %}
+            </div>
+        </center>
+        <div class="instruction">
+            Код действителен в течение 10 минут.
+        </div>
+        <div class="note">
+            Если вы не запрашивали этот код, проигнорируйте это письмо.
+        </div>
+        <div class="footer">
+            &copy; {% now "Y" %} <a href="https://disstore.uz">disstore.uz</a>. Все права защищены.
+        </div>
+    </div>
+</body>
+
+</html>

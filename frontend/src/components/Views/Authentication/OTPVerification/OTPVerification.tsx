@@ -1,11 +1,12 @@
 import styles from "./OTPVerification.module.scss";
 import { PureComponent, RefObject, createRef } from "react";
 import { origin } from "../../../../../project.config.json";
+import { TokenData } from "components/Context/UserContext";
 
 interface OTPVerificationProps {
   email: string;
   purpose: "registration" | "login";
-  onSuccess: (tokenData: any) => void;
+  onSuccess: (tokenData: TokenData) => void;
   onChangeData?: () => void;
   password?: string;
 }

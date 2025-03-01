@@ -78,17 +78,22 @@
 .cart-item-image-container {
     position: relative;
     width: 7rem;
-    height: 7rem;
+    aspect-ratio: 1 / 1;
     background-color: var(--clothes-image-background);
     border-radius: 0.5rem;
     border: 0.075rem solid var(--clothes-image-background);
+    overflow: hidden;
 
     img {
-        width: 7rem;
-        height:7rem;
+        width: 100%;
+        height:100%;
         object-fit: cover;
-        border-radius: 0.5rem;
     }
+    @media screen and (max-width: 500px) {
+        width: 5rem;
+        height: 5rem;
+    }
+
 }
 
 .cart-item-link {
@@ -246,16 +251,6 @@
 
     .cart-item-options {
         margin-top: 1rem;
-    }
-
-    .cart-item-image-container {
-        width: 5rem;
-        height: 5rem;
-    
-        img {
-            width: 5rem;
-            height:5rem;
-        }
     }
     
     .cart-status-subtitle {

@@ -8,6 +8,7 @@ $font: "Montserrat", serif;
 
 *:not(span) {
     font-family: var(--font) !important;
+    color: #111;
 }
 
 .related-widget-wrapper > div {

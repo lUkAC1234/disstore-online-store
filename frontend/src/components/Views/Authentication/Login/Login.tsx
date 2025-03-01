@@ -57,11 +57,9 @@ class Login extends UIReact<LoginProps, LoginState> {
     this.setState({ loading: true, emailError: false, passwordError: false, error: "" });
     try {
       await this.props.onOTPRequest({ email, password, purpose: "login" });
-    } catch (error: any) {
+    } catch (error) {
       this.setState({ emailError: true, passwordError: error.message, error: error.message });
     } finally {
-      // Do not immediately clear loading here since the parent sets otpMode.
-      // You can clear loading after the promise if needed.
       this.setState({ loading: false });
     }
   };

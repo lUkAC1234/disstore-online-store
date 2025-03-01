@@ -7,6 +7,10 @@
   font-family: var(--font) !important;
 }
 
+option {
+  color: #111 !important;
+}
+
 .related-widget-wrapper > div {
   display: flex;
   flex-flow: row;

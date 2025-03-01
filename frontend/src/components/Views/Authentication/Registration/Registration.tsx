@@ -1,4 +1,3 @@
-// src/components/Authentication/Registration/Registration.tsx
 import styles from "../Login/Login.module.scss";
 import { ReactNode } from "react";
 import { withContext } from "components/Context/ContextInjector";

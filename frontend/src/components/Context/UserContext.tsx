@@ -16,6 +16,11 @@ export interface UserContextState {
   isAuthenticated: boolean;
 }
 
+export interface TokenData {
+  access: string;
+  user: UserData;
+}
+
 export interface UserContextActions extends UserContextState {
   setLogin: (token: string, user: UserData) => void;
   setLogout: () => void;
