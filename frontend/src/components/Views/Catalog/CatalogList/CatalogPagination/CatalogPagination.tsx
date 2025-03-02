@@ -3,14 +3,7 @@ import styles from "./Pagination.module.scss";
 import { PureComponent, ReactNode } from "react";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-interface CatalogPaginationProps {
-    currentPage: number;
-    totalPages: number;
-    handlePrevPage?: () => void;
-    handleNextPage?: () => void;
-}
-
-class CatalogPagination extends PureComponent<CatalogPaginationProps> {
+class CatalogPagination extends PureComponent<CatalogPaginationProps, CatalogPaginationState> {
     render(): ReactNode {
         const { currentPage, totalPages } = this.props;
         return (

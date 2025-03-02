@@ -1,20 +1,5 @@
 import styles from './SizeSelector.module.scss';
 import { PureComponent } from 'react';
-import { Size } from 'components/Context/ClothesContext';
-
-interface DataProps {
-  sizes: Size[];
-}
-
-interface SelectedOptions {
-  size: string;
-}
-
-interface SizeSelectorProps {
-  data: DataProps;
-  selectedOptions: SelectedOptions;
-  handleOptionChange: (option: string, value: string) => void;
-}
 
 class SizeSelector extends PureComponent<SizeSelectorProps> {
   handleOptionChange = (option: string, value: string) => {

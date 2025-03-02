@@ -1,16 +1,9 @@
 import { PureComponent, ReactNode } from "react";
 import styles from "./Profile.module.scss";
-import { UserContextActions } from "components/Context/UserContext";
-import { WithTranslation } from "react-i18next";
 import { UserContext } from "components/Context/ContextCollection";
-import { withContext } from "components/Context/ContextInjector";
+import { withContextSelector } from "components/Context/ContextInjector";
 import { getWithTranslation } from "i18n/hooks";
 import { Navigate } from "react-router-dom";
-
-interface ProfileProps extends UserContextActions, WithTranslation {
-  smallVersion?: boolean; 
-}
-
 
 class Profile extends PureComponent<ProfileProps, ProfileState> {
   get lang(): string {
@@ -34,5 +27,13 @@ class Profile extends PureComponent<ProfileProps, ProfileState> {
   }
 }
 
-const UIProfile = getWithTranslation(withContext(UserContext, Profile));
-export default UIProfile;
+const UIProfile = withContextSelector(UserContext, Profile, (context) => ({
+  isAuthenticated: context.isAuthenticated,
+  user: context.user,
+  setLogout: context.setLogout,
+}));
+
+const TranslatedUIProfile = getWithTranslation(UIProfile);
+
+export default TranslatedUIProfile;
+;

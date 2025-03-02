@@ -1,28 +1,14 @@
 import styles from "./Filters.module.scss";
-import { PureComponent, ReactNode, RefObject } from "react";
+import { PureComponent, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import RangeSliderDual from "../../../../RangeSlider/RangeSliderDual";
-import { ClothesListActions } from "components/Context/ClothesListContext";
-import { withContext } from "components/Context/ContextInjector";
+import { withContextSelector } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
 import SmoothResizable from "components/SmoothResizable/SmoothResizable";
 
-interface CatalogFiltersProps {
-  isFilterActive: boolean;
-  toggleFilter: () => void;
-  catalogFiltersContainerRef: RefObject<HTMLDivElement>;
-}
-
-interface CatalogFiltersProps extends ClothesListActions { }
-
-interface FiltersState {
-  activeColors: boolean;
-  activeSizes: boolean;
-}
-
-class Filters extends PureComponent<CatalogFiltersProps, FiltersState> {
-  state: FiltersState = {
+class Filters extends PureComponent<CatalogFiltersProps, CatalogFiltersState> {
+  state: CatalogFiltersState = {
     activeColors: true,
     activeSizes: true,
   };
@@ -232,6 +218,22 @@ class Filters extends PureComponent<CatalogFiltersProps, FiltersState> {
   }
 }
 
-const UIFilters = withContext(ClothesListContext, Filters);
+const UIFilters = withContextSelector(ClothesListContext, Filters, (context) => ({
+  type: context.type,
+  colors: context.colors,
+  sizes: context.sizes,
+  selectedTypes: context.selectedTypes,
+  selectedColors: context.selectedColors,
+  selectedSizes: context.selectedSizes,
+  selectedMin: context.selectedMin,
+  selectedMax: context.selectedMax,
+  min: context.min,
+  max: context.max,
+  handleFilterSelection: context.handleFilterSelection,
+  setSelectedMin: context.setSelectedMin,
+  setSelectedMax: context.setSelectedMax,
+  setSelectedPriceMinMax: context.setSelectedPriceMinMax,
+  setApplyFilters: context.setApplyFilters,
+}));
 
 export default UIFilters;

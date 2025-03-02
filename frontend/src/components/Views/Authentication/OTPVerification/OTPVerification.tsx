@@ -1,23 +1,6 @@
 import styles from "./OTPVerification.module.scss";
 import { PureComponent, RefObject, createRef } from "react";
 import { origin } from "../../../../../project.config.json";
-import { TokenData } from "components/Context/UserContext";
-
-interface OTPVerificationProps {
-  email: string;
-  purpose: "registration" | "login";
-  onSuccess: (tokenData: TokenData) => void;
-  onChangeData?: () => void;
-  password?: string;
-}
-
-interface OTPVerificationState {
-  otp: string[];
-  error: string;
-  message: string;
-  loading: boolean;
-  resendDelay: number;
-}
 
 class OTPVerification extends PureComponent<OTPVerificationProps, OTPVerificationState> {
   inputRefs: Array<RefObject<HTMLInputElement>>;

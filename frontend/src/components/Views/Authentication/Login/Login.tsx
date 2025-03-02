@@ -1,28 +1,9 @@
-// src/components/Authentication/Login/Login.tsx
 import styles from "./Login.module.scss";
 import { ReactNode } from "react";
-import { UserContextActions } from "components/Context/UserContext";
-import { UserContext } from "components/Context/ContextCollection";
-import { withContext } from "components/Context/ContextInjector";
 import UIReact from "utils/classes/UIReact";
 import { Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-
-interface LoginState {
-  email: string;
-  password: string;
-  emailError: boolean;
-  passwordError: boolean | string;
-  loading: boolean;
-  success: boolean;
-  showPassword: boolean;
-  error: string;
-}
-
-interface LoginProps extends UserContextActions {
-  onOTPRequest: (data: { email: string; password: string; purpose: "login" }) => Promise<boolean>;
-}
 
 class Login extends UIReact<LoginProps, LoginState> {
   state: LoginState = {
@@ -122,5 +103,4 @@ class Login extends UIReact<LoginProps, LoginState> {
   }
 }
 
-const UILogin = withContext(UserContext, Login);
-export default UILogin;
+export default Login;

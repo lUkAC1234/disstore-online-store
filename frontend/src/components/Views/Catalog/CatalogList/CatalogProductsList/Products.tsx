@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { ClothItem } from "components/Context/ClothesContext";
-import { WishlistItem } from "components/Context/WishlistContext";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { ProductModalContext, UserContext, WishlistContext } from "components/Context/ContextCollection";
 import { ModalHandler } from "components/Modal/Modal.utils";
@@ -9,24 +8,8 @@ import Authentication from "components/Views/Authentication/Authentication";
 import CatalogItem from "./CatalogItem/CatalogItem";
 import styles from "./Products.module.scss";
 import { getWithTranslation } from "i18n/hooks";
-import { WithTranslation } from "react-i18next";
 
-interface CatalogProductsProps extends WithTranslation {
-  products: ClothItem[];
-  wishlistItems?: WishlistItem[];
-  addToWishList?: (productId: number) => Promise<void>;
-  removeFromWishlist?: (wishlistItemId: number) => Promise<void>;
-  loadingWishlist?: boolean;
-
-  toggleModal: (callback: () => void) => void;
-  setModalChildren: (children: ReactNode) => void;
-  isModalActive: boolean;
-  modalChildren: ReactNode;
-
-  isAuthenticated: boolean;
-}
-
-class CatalogProducts extends ModalHandler<CatalogProductsProps, { pathname: string }> {
+class CatalogProducts extends ModalHandler<CatalogProductsProps, CatalogProductsState> {
   render(): ReactNode {
     const { products, isAuthenticated } = this.props;
     const wishlistProps = {

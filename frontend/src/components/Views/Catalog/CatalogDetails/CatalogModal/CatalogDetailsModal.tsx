@@ -12,7 +12,7 @@ import {
 } from "components/Context/ContextCollection";
 import { WithTranslation } from "react-i18next";
 import { getWithTranslation } from "i18n/hooks";
-import BaseCatalogDetails, { BaseCatalogState } from "../Base/BaseCatalogDetails";
+import BaseCatalogDetails from "../Base/BaseCatalogDetails";
 import { Link } from "react-router-dom";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import SizeSelector from "../SelectedOptions/Sizes/SizeSelector";
@@ -22,7 +22,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import BlockLoader from "components/BlockLoaders/BlockLoader";
 
-interface CatalogDetailsModalProps extends BaseCatalogState, WithTranslation {
+interface CatalogDetailsModalProps extends WithTranslation {
   productSlug: string;
 }
 

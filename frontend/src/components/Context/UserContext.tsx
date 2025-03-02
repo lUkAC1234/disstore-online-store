@@ -27,7 +27,7 @@ export interface UserContextActions extends UserContextState {
 }
 
 class UserContextProvider extends PureComponent<PropsWithChildren, UserContextState> {
-  state: UserContextState = {
+  state: Readonly<UserContextState> = {
     token: Cookies.getCookie("token") || null,
     user: Cookies.getCookie("user") ? JSON.parse(Cookies.getCookie("user")!) : null,
     isAuthenticated: !!Cookies.getCookie("token"),

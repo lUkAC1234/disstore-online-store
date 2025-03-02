@@ -11,7 +11,7 @@ export interface SelectedOptions {
   selectedImage: string | null;
 }
 
-export interface CartProviderProps extends PropsWithChildren {}
+export interface CartProviderProps extends PropsWithChildren { }
 
 export interface CartItem {
   id: number;
@@ -43,11 +43,10 @@ export interface CartContextActions {
   removeFromCart: (cartItemId: number) => Promise<void>;
   fetchCart: () => Promise<void>;
   clearCart: () => void;
-  toggleCartItem: (productId: number) => Promise<void>;
   updateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
   selectedOptions: SelectedOptions;
   setSelectedOptions: (options: Partial<SelectedOptions>) => void;
-  setSuccess: (success: boolean, cartItem?: CartItem) => void;
+  setSuccessCart: (success: boolean, product?: ClothItem | null, quantity?: number) => void;
   successCart: boolean;
   cartItem: CartItem | null;
 }
@@ -71,11 +70,10 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
           removeFromCart: this.removeFromCart,
           fetchCart: this.fetchCart,
           clearCart: this.clearCart,
-          toggleCartItem: this.toggleCartItem,
           updateCartItem: this.updateCartItem,
           selectedOptions: this.state.selectedOptions,
           setSelectedOptions: this.setSelectedOptions,
-          setSuccess: this.setSuccess,
+          setSuccessCart: this.setSuccessCart,
           successCart: this.state.successCart,
           cartItem: this.state.cartItem,
         }}
@@ -98,7 +96,9 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
     successCart: false,
   };
 
-  private tokenInterval: NodeJS.Timeout | null = null;
+  private tokenInterval: ReturnType<typeof setTimeout>;
+  private addToCartTimeout?: ReturnType<typeof setTimeout>;
+  private successTimeout?: ReturnType<typeof setTimeout>;
 
   private getHeaders(): Record<string, string> {
     const token = Cookies.getCookie("token");
@@ -116,7 +116,7 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
     try {
       return await action();
     } catch (error) {
-      console.error(errorMessage || "Error:", error);
+      console.error(errorMessage || "Ошибка:", error);
       throw error;
     } finally {
       this.setState({ loadingCart: false });
@@ -126,12 +126,6 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
   componentDidMount() {
     this.checkTokenAndUpdate();
     this.tokenInterval = setInterval(this.checkTokenAndUpdate, 2000);
-  }
-
-  componentWillUnmount() {
-    if (this.tokenInterval) {
-      clearInterval(this.tokenInterval);
-    }
   }
 
   checkTokenAndUpdate = async () => {
@@ -151,30 +145,37 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
           headers: this.getHeaders(),
         });
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`HTTP ошибка! статус: ${response.status}`);
         }
         const data: CartData = await response.json();
         this.setState({ cart: data });
       },
-      "Error fetching cart:"
+      "Не получилось загрузить корзину:"
     );
   };
 
   addToCart = async (payload: AddToCartPayload) => {
-    await this.executeWithLoading(
-      async () => {
+    if (this.addToCartTimeout) { return; }
+
+    this.addToCartTimeout = setTimeout(() => {
+      this.addToCartTimeout = undefined;
+    }, 1000);
+
+    try {
+      await this.executeWithLoading(async () => {
         const response = await fetch(`${origin}/orders/cart/items/`, {
           method: "POST",
           headers: this.getHeaders(),
           body: JSON.stringify(payload),
         });
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`HTTP ошибка! статус: ${response.status}`);
         }
         await this.fetchCart();
-      },
-      "Error adding to cart:"
-    );
+      }, "Не получилось добавить в корзину");
+    } catch (error) {
+      console.error("Ошибка при добавлении корзину:", error);
+    }
   };
 
   removeFromCart = async (cartItemId: number) => {
@@ -185,38 +186,30 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
           headers: this.getHeaders(),
         });
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`HTTP ошибка! статус: ${response.status}`);
         }
         await this.fetchCart();
       },
-      "Error removing from cart:"
+      "Не получилось удалить с корзины:"
     );
   };
 
-  toggleCartItem = async (productId: number) => {
-    const items = this.state.cart?.items || [];
-    const existingItem = items.find((item) => item.product.id === productId);
-    if (existingItem) {
-      await this.removeFromCart(existingItem.id);
-    } else {
-      await this.addToCart({
-        product_id: productId,
-        quantity: 1,
-        selected_color: "",
-        selected_size: "",
-        selected_image: null,
-      });
-    }
+  setSuccessCart = (successCart: boolean, product?: ClothItem | null, quantity?: number) => {
+    const cartItem = product ? { id: product.id, product, quantity } : null;
+
+    this.successTimeout && clearTimeout(this.successTimeout);
+    this.setState({ successCart, cartItem });
+    this.successTimeout = setTimeout(() => {
+      this.setState({ successCart: false, cartItem: null });
+      this.successTimeout = undefined;
+    }, 3000);
   };
 
-  setSuccess = (successCart: boolean, cartItem?: CartItem | null) => {
-    console.log("successCart", successCart);
-    this.setState((prevState) => ({
-      ...prevState,
-      successCart,
-      cartItem,
-    }), () => { setTimeout(() => this.setState({ successCart: false, cartItem: null }), 3000); });
-  };
+  componentWillUnmount() {
+    this.tokenInterval && clearInterval(this.tokenInterval);
+    this.successTimeout && clearTimeout(this.successTimeout);
+    this.addToCartTimeout && clearTimeout(this.addToCartTimeout);
+  }
 
   updateCartItem = async (cartItemId: number, quantity: number) => {
     await this.executeWithLoading(
@@ -227,11 +220,11 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
           body: JSON.stringify({ quantity }),
         });
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`HTTP ошибка! статус: ${response.status}`);
         }
         await this.fetchCart();
       },
-      "Error updating cart item:"
+      "Не получилось обновить корзину:"
     );
   };
 

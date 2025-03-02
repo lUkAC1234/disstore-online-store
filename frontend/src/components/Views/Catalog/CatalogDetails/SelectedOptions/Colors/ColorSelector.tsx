@@ -1,20 +1,5 @@
 import styles from './ColorSelector.module.scss';
 import { PureComponent } from 'react';
-import { Color } from 'components/Context/ClothesContext';
-
-interface ColorsData {
-  colors: Color[];
-}
-
-interface SelectedOptions {
-  color: string;
-}
-
-interface ColorSelectorProps {
-  data: ColorsData;
-  selectedOptions: SelectedOptions;
-  handleOptionChange: (option: string, value: string) => void;
-}
 
 class ColorSelector extends PureComponent<ColorSelectorProps> {
   render() {

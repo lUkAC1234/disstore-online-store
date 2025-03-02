@@ -1,26 +1,14 @@
 import { ReactNode } from "react";
 import styles from "./WishList.module.scss";
-import { WishlistItem } from "components/Context/WishlistContext";
 import { ProductModalContext, WishlistContext } from "components/Context/ContextCollection";
 import { withContextSelector } from "components/Context/ContextInjector";
 import WishlistEmpty from "./WishListEmpty/WishlistEmpty";
 import { ModalHandler } from "components/Modal/Modal.utils";
 import { getWithTranslation } from "i18n/hooks";
-import { WithTranslation } from "react-i18next";
 import UICatalogModal from "../Catalog/CatalogDetails/CatalogModal/CatalogDetailsModal";
 import CatalogItem from "../Catalog/CatalogList/CatalogProductsList/CatalogItem/CatalogItem";
 
-interface WishListProps extends WithTranslation {
-  toggleModal: (callback: () => void) => void;
-  setModalChildren: (children: ReactNode) => void;
-  isModalActive: boolean;
-  modalChildren: ReactNode;
-
-  wishlistItems: WishlistItem[];
-  removeFromWishlist: (wishlistItemId: number) => Promise<void>;
-}
-
-class WishList extends ModalHandler<WishListProps, { pathname: string }> {
+class WishList extends ModalHandler<WishListProps, WishListState> {
   state: Readonly<{ pathname: string; }> = {
     pathname: location.pathname,
   };

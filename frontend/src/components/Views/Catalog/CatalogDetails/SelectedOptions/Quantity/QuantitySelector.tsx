@@ -1,49 +1,13 @@
 import styles from './QuantitySelector.module.scss';
-import { ReactNode } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { withContextSelector } from 'components/Context/ContextInjector';
 import { CartContext, ProductModalContext, UserContext, WishlistContext } from 'components/Context/ContextCollection';
 import { getWithTranslation } from 'i18n/hooks';
-import { WithTranslation } from 'react-i18next';
-import { WishlistItem } from 'components/Context/WishlistContext';
 import Authentication from "components/Views/Authentication/Authentication";
 import { ModalHandler } from 'components/Modal/Modal.utils';
-import { CartItem } from 'components/Context/CartContext';
 
-
-interface DataProps {
-  id: string | number;
-  count: number;
-  title?: string;
-
-}
-
-interface SelectedOptions {
-  quantity: number;
-}
-
-interface QuantitySelectorProps extends WithTranslation {
-  data: DataProps;
-  maxAvailable: number;
-  globalQuantity: number;
-  positionStatic?: boolean
-  addToCart: (id: string | number) => void;
-  selectedOptions: SelectedOptions;
-  handleOptionChange: (option: string, value: string | number) => void;
-  isAuthenticated: boolean;
-  addToWishList?: (productId: number) => Promise<void>;
-  removeFromWishlist?: (wishlistItemId: number) => Promise<void>;
-  wishlistItems?: WishlistItem[];
-  toggleModal: (callback: () => void) => void;
-  setModalChildren: (children: ReactNode) => void;
-  isModalActive: boolean;
-  modalChildren: ReactNode;
-
-  setSuccess: (success: boolean, cartItem?: CartItem) => void;
-}
-
-class QuantitySelector extends ModalHandler<QuantitySelectorProps, { pathname: string }> {
+class QuantitySelector extends ModalHandler<QuantitySelectorProps, QuantitySelectorState> {
   get lang(): string {
     return this.props.i18n.language;
   }
@@ -61,12 +25,11 @@ class QuantitySelector extends ModalHandler<QuantitySelectorProps, { pathname: s
   };
 
   render() {
-    const { data, maxAvailable, globalQuantity, addToCart, selectedOptions, isAuthenticated, addToWishList, removeFromWishlist, wishlistItems, setSuccess} = this.props;
+    const { data, maxAvailable, globalQuantity, addToCart, selectedOptions, isAuthenticated, addToWishList, removeFromWishlist, wishlistItems, setSuccessCart} = this.props;
     const { quantity } = selectedOptions;
     const totalQuantity = globalQuantity + quantity;
     const disableIncrease = totalQuantity >= maxAvailable;
     const disableAddToCart = totalQuantity > maxAvailable;
-
     const wishlistItem = wishlistItems?.find((wItem) => wItem.product.id === data?.id);
     const inWishlist = Boolean(wishlistItem);
 
@@ -95,7 +58,7 @@ class QuantitySelector extends ModalHandler<QuantitySelectorProps, { pathname: s
                 isAuthenticated
                   ? () => {
                     addToCart(data.id)
-                    setSuccess(true, { id: data.id, product: { id: data.id, title: data.title } as DataProps, quantity: totalQuantity } as CartItem)
+                    setSuccessCart(true, data, totalQuantity);
                   }
                   : () => this.openModal(<Authentication smallVersion />)
               }
@@ -153,7 +116,7 @@ class QuantitySelector extends ModalHandler<QuantitySelectorProps, { pathname: s
 }
 
 const ___UIQuantitySelector = withContextSelector(CartContext, QuantitySelector, (context) => ({
-  setSuccess: context.setSuccess,
+  setSuccessCart: context.setSuccessCart,
 }));
 
 const __UIQuantitySelector = withContextSelector(WishlistContext, ___UIQuantitySelector, (context) => ({

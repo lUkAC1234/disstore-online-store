@@ -4,7 +4,7 @@ import styles from "./Authentication.module.scss";
 import Registration from "./Registration/Registration";
 import Login from "./Login/Login";
 import OTPVerification from "./OTPVerification/OTPVerification";
-import { TokenData, UserContextActions } from "components/Context/UserContext";
+import { TokenData } from "components/Context/UserContext";
 import { UserContext } from "components/Context/ContextCollection";
 import { withContext } from "components/Context/ContextInjector";
 import UIReact from "utils/classes/UIReact";
@@ -13,21 +13,8 @@ import logo from "assets/main/images/layout/logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { Link, Navigate } from "react-router-dom";
-import { WithTranslation } from "react-i18next";
 import { getWithTranslation } from "i18n/hooks";
 import { origin } from "../../../../project.config.json";
-
-interface AuthenticationState {
-  isLoginView: boolean;
-  otpMode: boolean;
-  otpEmail: string;
-  otpPurpose: "login" | "registration";
-  otpPassword?: string;
-}
-
-interface AuthenticationProps extends UserContextActions, WithTranslation {
-  smallVersion?: boolean;
-}
 
 class Authentication extends UIReact<AuthenticationProps, AuthenticationState> {
   state: AuthenticationState = {

@@ -6,22 +6,8 @@ import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import EmptyCart from "./Empty/EmptyCart";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { CartContext } from "components/Context/ContextCollection";
-import { CartData, CartItem } from "components/Context/CartContext";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
-import { WithTranslation } from "react-i18next";
 import { getWithTranslation } from "i18n/hooks";
-
-interface ExtendedCartItem extends CartItem {
-  selected_color?: string;
-  selected_size?: string;
-  selected_image?: string;
-}
-
-interface CartProps extends WithTranslation {
-  cart: CartData | null;
-  removeFromCart: (cartItemId: number) => Promise<void>;
-  updateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
-}
 
 class Cart extends PureComponent<CartProps> {
   async componentDidMount(): Promise<void> {
@@ -34,7 +20,7 @@ class Cart extends PureComponent<CartProps> {
     return this.props.i18n.language;
   }
 
-  handleIncrease = async (cartItem: ExtendedCartItem) => {
+  handleIncrease = async (cartItem: ExtendedCartItemProps) => {
     try {
       await this.props.updateCartItem(cartItem.id, cartItem.quantity + 1);
     } catch (error) {
@@ -42,7 +28,7 @@ class Cart extends PureComponent<CartProps> {
     }
   };
 
-  handleDecrease = async (cartItem: ExtendedCartItem) => {
+  handleDecrease = async (cartItem: ExtendedCartItemProps) => {
     try {
       if (cartItem.quantity > 1) {
         await this.props.updateCartItem(cartItem.id, cartItem.quantity - 1);
@@ -57,7 +43,7 @@ class Cart extends PureComponent<CartProps> {
   renderCartItems(): ReactNode {
     const { cart } = this.props;
     return cart?.items?.map((item) => {
-      const extendedItem = item as ExtendedCartItem;
+      const extendedItem = item as ExtendedCartItemProps;
       return (
         <div key={extendedItem.id} className={styles["cart-item"]}>
           <button
@@ -221,10 +207,12 @@ class Cart extends PureComponent<CartProps> {
   }
 }
 
-const UICart = getWithTranslation(withContextSelector(CartContext, Cart, (context) => ({
+const UICart = withContextSelector(CartContext, Cart, (context) => ({
   cart: context.cart,
   removeFromCart: context.removeFromCart,
   updateCartItem: context.updateCartItem,
-})));
+}));
 
-export default UICart;
+const TransltatedUICart = getWithTranslation(UICart);
+
+export default TransltatedUICart;

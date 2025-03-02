@@ -1,0 +1,28 @@
+import { WithTranslation } from "react-i18next";
+
+declare global {
+    interface HeaderProps extends WithTranslation {
+        resetFilters: () => void;
+        loading: boolean;
+        error: boolean;
+        products: ClothItem[];
+        type: Clothestypes[];
+        setApplyFilters: () => void;
+        setSelectedTypes: (values: number[], callback?: () => void) => void;
+        isAuthenticated: boolean;
+        wishlistItems: WishlistItem[];
+        cart: CartData | null;
+    }
+
+    interface HeaderState {
+        activeLink: string | null;
+        title: string;
+        searchResults: ClothItem[];
+        searchLoading: boolean;
+        searchError: string | null;
+        setTitle: (value: string) => void;
+        isMobile: boolean;
+    }
+}
+
+export { }

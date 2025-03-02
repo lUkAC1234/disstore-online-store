@@ -11,40 +11,10 @@ import HeaderError from "./HeaderError/HeaderError";
 import { activeClassNameObserver } from "utils/hooks/NavActiveClassObserver";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import UIReact from "utils/classes/UIReact";
-import { WishlistItem } from "components/Context/WishlistContext";
-import { CartData } from "components/Context/CartContext";
-import { WithTranslation } from "react-i18next";
 import { getWithTranslation } from "i18n/hooks";
-import { Clothestypes, ClothItem } from "components/Context/ClothesContext";
+import { ClothItem } from "components/Context/ClothesContext";
 import { origin } from "../../../../project.config.json";
 import { debounce } from "utils/hooks/debounce";
-
-interface HeaderState {
-  activeLink: string | null;
-  title: string;
-  searchResults: ClothItem[];
-  searchLoading: boolean;
-  searchError: string | null;
-  setTitle: (value: string) => void;
-  isMobile: boolean;
-}
-
-interface HeaderProps extends WithTranslation {
-  // ClothesContextActions
-  resetFilters: () => void;
-  loading: boolean;
-  error: boolean;
-  products: ClothItem[];
-  type: Clothestypes[];
-  setApplyFilters: () => void;
-  setSelectedTypes: (values: number[], callback?: () => void) => void;
-  // UserContextActions
-  isAuthenticated: boolean;
-  // WishlistContextActions
-  wishlistItems: WishlistItem[];
-  // CartContextActions
-  cart: CartData | null;
-}
 
 class Header extends UIReact<HeaderProps, HeaderState> {
   searchInputContainerRef = createRef<HTMLDivElement>();

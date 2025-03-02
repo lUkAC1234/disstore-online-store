@@ -1,34 +1,13 @@
 import { ReactNode } from "react";
-import { ClothItem } from "components/Context/ClothesContext";
 import UIReact from "utils/classes/UIReact";
 import { debounce } from "utils/hooks/debounce";
 import { origin } from "../../../../../../project.config.json";
 import {
   AddToCartPayload,
-  CartData,
-  SelectedOptions,
 } from "components/Context/CartContext";
 
-export interface BaseCatalogState { }
-
-export interface BaseCatalogProps
-{
-  // ClothesContextActions
-  data: ClothItem;
-  setData: (data: ClothItem) => void;
-
-  // ClothesListActions
-  error: boolean
-
-  // CartContextActions
-  setSelectedOptions: (options: Partial<SelectedOptions>) => void;
-  cart: CartData | null;
-  selectedOptions: SelectedOptions;
-  addToCart: (payload: AddToCartPayload) => Promise<void>;
-}
-
 abstract class BaseCatalogDetails<P = {}>
-  extends UIReact<BaseCatalogProps & P, BaseCatalogState> {
+  extends UIReact<BaseCatalogDetailsProps & P, BaseCatalogDetailsState> {
   abstract getProductSlug(): string;
   abstract get lang(): string;
   abstract renderContent(): ReactNode;
@@ -42,7 +21,7 @@ abstract class BaseCatalogDetails<P = {}>
     this.props.setData(null);
   }
 
-  componentDidUpdate(prevProps: Readonly<BaseCatalogProps & P>): void {
+  componentDidUpdate(prevProps: Readonly<BaseCatalogDetailsProps & P>): void {
     if (this.props.data && prevProps.data !== this.props.data) {
       const { colors, sizes, catalogImages, count } = this.props.data;
       this.props.setSelectedOptions({

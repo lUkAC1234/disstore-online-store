@@ -12,33 +12,15 @@ import CatalogErrorPage from "./CatalogError/CatalogErrorPage.tsx";
 import CatalogPagination from "./CatalogPagination/CatalogPagination.tsx";
 import CatalogProducts from "./CatalogProductsList/Products.tsx";
 import Filters from "./CatalogFilters/Filters.tsx";
-import { ClothItem } from "components/Context/ClothesContext.tsx";
-import { WithTranslation } from "react-i18next";
 import { getWithTranslation } from "i18n/hooks.ts";
 
-interface CatalogState {
-  isFilterActive: boolean;
-}
-
-interface CatalogListProps extends WithTranslation {
-  loading: boolean; 
-  error: boolean;
-  products: ClothItem[];
-  currentPage: number;
-  totalPages: number;
-  loadingProducts: boolean;
-  resetFilters: () => void;
-  setNextPage: () => void;
-  setPrevPage: () => void;
-}
-
-class CatalogList extends UIReact<CatalogListProps, CatalogState> {
+class CatalogList extends UIReact<CatalogListProps, CatalogListState> {
   get lang(): string {
     return this.props.i18n.language;
   }
 
   catalogFiltersContainerRef = createRef<HTMLDivElement>();
-  state: CatalogState = {
+  state: Readonly<CatalogListState> = {
     isFilterActive: false,
   };
 

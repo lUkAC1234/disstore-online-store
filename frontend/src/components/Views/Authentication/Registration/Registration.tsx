@@ -1,34 +1,9 @@
 import styles from "../Login/Login.module.scss";
 import { ReactNode } from "react";
-import { withContext } from "components/Context/ContextInjector";
-import { UserContextActions } from "components/Context/UserContext";
-import { UserContext } from "components/Context/ContextCollection";
 import UIReact from "utils/classes/UIReact";
 import { Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-
-interface RegistrationState {
-  email: string;
-  password: string;
-  errorEmail: string;
-  errorPassword: string;
-  loading: boolean;
-  success: boolean;
-  showPassword: boolean;
-  submitted: boolean;
-}
-
-interface RegistrationProps extends UserContextActions {
-  onOTPRequest: (data: {
-    email: string;
-    password: string;
-    first_name?: string;
-    last_name?: string;
-    mobile_number?: string;
-    purpose: "registration";
-  }) => Promise<boolean>;
-}
 
 class Registration extends UIReact<RegistrationProps, RegistrationState> {
   state: RegistrationState = {
@@ -156,5 +131,4 @@ class Registration extends UIReact<RegistrationProps, RegistrationState> {
   }
 }
 
-const UIRegistration = withContext(UserContext, Registration);
-export default UIRegistration;
+export default Registration;
