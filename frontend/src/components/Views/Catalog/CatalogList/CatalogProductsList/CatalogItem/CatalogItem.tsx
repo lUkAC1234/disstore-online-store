@@ -1,19 +1,9 @@
+import styles from "./CatalogItem.module.scss";
 import { PureComponent, MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
-import styles from "./CatalogItem.module.scss";
-import { ClothItem } from "components/Context/ClothesContext";
 
-export interface CatalogItemProps {
-  item: ClothItem;
-  lang: string;
-  isInWishlist?: boolean;
-  onWishlistClick?: (item: ClothItem) => void;
-  onCartClick?: (item: ClothItem) => void;
-
-}
-
-class CatalogItem extends PureComponent<CatalogItemProps> {
+class CatalogItem extends PureComponent<CatalogItemProps, CatalogItemState> {
   truncateText(text: string, maxLength: number): string {
     return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
   }
