@@ -22,6 +22,7 @@ declare global {
         searchError: string | null;
         setTitle: (value: string) => void;
         isMobile: boolean;
+        linksMobileIsOpen: boolean;
     }
 }
 

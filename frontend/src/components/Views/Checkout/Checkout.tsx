@@ -1,5 +1,5 @@
 import { PureComponent, ChangeEvent, FormEvent } from "react";
-import { withContext } from "components/Context/ContextInjector";
+import { withContextSelector } from "components/Context/ContextInjector";
 import { CartContext, UserContext } from "components/Context/ContextCollection";
 import { CartItem } from "components/Context/CartContext";
 import { getWithTranslation } from "i18n/hooks";
@@ -157,7 +157,7 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
         throw new Error(errData.detail || `Ошибка: ${response.status}`);
       }
       this.props.clearCart();
-      this.props.setSuccessCart(true);
+      this.props.setSuccessCheckout(true);
       this.setState({ success: true });
     } catch (error) {
       console.error("Ошибка при оформлении заказа:", error);
@@ -337,4 +337,16 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
   }
 }
 
-export default getWithTranslation(withContext(CartContext, withContext(UserContext, Checkout)));
+const _UICheckout = withContextSelector(CartContext, Checkout, (context) => ({
+  cart: context.cart,
+  clearCart: context.clearCart,
+  setSuccessCheckout: context.setSuccessCheckout,
+}));
+
+const UICheckout = withContextSelector(UserContext, _UICheckout, (context) => ({
+  user: context.user,
+}));
+
+const TranslatedCheckout = getWithTranslation(UICheckout);
+
+export default TranslatedCheckout;

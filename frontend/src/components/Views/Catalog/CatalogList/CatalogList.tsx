@@ -61,12 +61,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogListState> {
     } = this.props;
 
     if (loading) return <SpinnerLoaderWrapperFixed />;
-
-    if (error) {
-      return (
-        <CatalogErrorPage error={"К сожалению, не удалось загрузить данные"} />
-      );
-    }
+    if (error) return <CatalogErrorPage error={"К сожалению, не удалось загрузить данные"} />;
 
     return (
       <section className={styles["catalog-section"]}>
@@ -140,4 +135,6 @@ const UICatalogList = withContextSelector(ClothesListContext, CatalogList, (cont
   setPrevPage: context.setPrevPage,
 }));
 
-export default getWithTranslation(UICatalogList);
+const TranslatedCatalogList = getWithTranslation(UICatalogList);
+
+export default TranslatedCatalogList;

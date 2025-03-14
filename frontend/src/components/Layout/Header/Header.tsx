@@ -3,7 +3,7 @@ import { createRef, ReactNode } from "react";
 import { Link, NavLink } from "react-router-dom";
 import LogoSvg from "assets/main/images/layout/logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faBars, faArrowRightLong, faArrowLeftLong, } from "@fortawesome/free-solid-svg-icons";
+import { faXmark, faBars, faArrowRightLong, faArrowLeftLong, faAngleDown, } from "@fortawesome/free-solid-svg-icons";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { CartContext, ClothesListContext, UserContext, WishlistContext } from "components/Context/ContextCollection";
 import SpinnerLoader from "components/Loaders/SpinnerLoader";
@@ -30,6 +30,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
     searchError: null,
     setTitle: () => { },
     isMobile: this.mediaQuery.matches,
+    linksMobileIsOpen: false,
   };
 
   get lang(): string {
@@ -39,13 +40,13 @@ class Header extends UIReact<HeaderProps, HeaderState> {
   componentDidMount(): void {
     if (this.mediaQuery.addEventListener) {
       this.mediaQuery.addEventListener("change", this.handleMediaQueryChange);
-    } 
+    }
   }
 
   componentWillUnmount(): void {
     if (this.mediaQuery.removeEventListener) {
       this.mediaQuery.removeEventListener("change", this.handleMediaQueryChange);
-    } 
+    }
   }
 
   handleMediaQueryChange = (e: MediaQueryListEvent): void => {
@@ -101,6 +102,12 @@ class Header extends UIReact<HeaderProps, HeaderState> {
     this.setState({ activeLink: null });
   };
 
+  toggleLinksMobileActiveClass = () => {
+    this.setState((prevState) => ({
+      linksMobileIsOpen: !prevState.linksMobileIsOpen,
+    }));
+  };
+
   debouncedSearch = debounce((value: string) => {
     const query = value.trim();
     if (query.length < 2) {
@@ -135,7 +142,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
   };
 
   render() {
-    const { activeLink, isMobile } = this.state;
+    const { activeLink, isMobile, linksMobileIsOpen } = this.state;
     const { cart, wishlistItems } = this.props;
     return (
       <header className="header" id="header">
@@ -176,13 +183,16 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                         }
                       >
                         Каталог
+
                       </NavLink>
+
                       <span>
                         Каталог
                         <FontAwesomeIcon icon={faArrowRightLong} />
                       </span>
                     </button>
-                    <div className="header-link-extra-details-container">
+                    
+                    <div className={`header-link-extra-details-container ${linksMobileIsOpen ? 'active' : ''}`}>
                       <div className="header-link-extra-details-wrapper">
                         <button
                           className="header-link-extra-details-close-button"
@@ -201,10 +211,18 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                           }
                         >
                           Каталог
+
                         </NavLink>
+
                         {this.linksMobile}
                       </div>
                     </div>
+                    <button 
+                      onClick={this.toggleLinksMobileActiveClass}
+                      className="header-link-extra-details-activator"
+                    >
+                      <FontAwesomeIcon icon={faAngleDown} />
+                    </button>
                   </li>
                   <li className="header-link-list">
                     <NavLink

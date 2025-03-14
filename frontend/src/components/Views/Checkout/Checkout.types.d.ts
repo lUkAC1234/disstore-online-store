@@ -5,7 +5,7 @@ declare global {
   interface CheckoutProps extends WithTranslation {
     cart: CartData | null;
     clearCart: () => void;
-    setSuccessCart: (success: boolean, product?: ClothItem | null, quantity?: number) => void;
+    setSuccessCheckout: (success: boolean) => void;
     user: UserData
   }
   interface CheckoutState {

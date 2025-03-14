@@ -46,8 +46,12 @@ export interface CartContextActions {
   updateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
   selectedOptions: SelectedOptions;
   setSelectedOptions: (options: Partial<SelectedOptions>) => void;
-  setSuccessCart: (success: boolean, product?: ClothItem | null, quantity?: number) => void;
+  setSuccessCart: (successCart: boolean, product?: ClothItem | null, quantity?: number) => void;
+  setSuccessCheckout: (successCart: boolean) => void;
+  closeSuccessCart: () => void;
+  closeSuccessCheckoutCart: () => void;
   successCart: boolean;
+  successCheckout: boolean;
   cartItem: CartItem | null;
 }
 
@@ -57,6 +61,7 @@ export interface CartContextState {
   loadingCart: boolean;
   selectedOptions: SelectedOptions;
   successCart: boolean;
+  successCheckout: boolean;
 }
 
 class CartContextProvider extends PureComponent<CartProviderProps, CartContextState> {
@@ -74,8 +79,12 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
           selectedOptions: this.state.selectedOptions,
           setSelectedOptions: this.setSelectedOptions,
           setSuccessCart: this.setSuccessCart,
+          setSuccessCheckout: this.setSuccessCheckout,
+          closeSuccessCart: this.closeSuccessCart,
+          closeSuccessCheckoutCart: this.closeSuccessCheckoutCart,
           successCart: this.state.successCart,
           cartItem: this.state.cartItem,
+          successCheckout: this.state.successCheckout,
         }}
       >
         {this.props.children}
@@ -94,11 +103,13 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
       selectedImage: null,
     },
     successCart: false,
+    successCheckout: false,
   };
 
   private tokenInterval: ReturnType<typeof setTimeout>;
   private addToCartTimeout?: ReturnType<typeof setTimeout>;
   private successTimeout?: ReturnType<typeof setTimeout>;
+  private successCheckoutTimeout?: ReturnType<typeof setTimeout>;
 
   private getHeaders(): Record<string, string> {
     const token = Cookies.getCookie("token");
@@ -205,10 +216,28 @@ class CartContextProvider extends PureComponent<CartProviderProps, CartContextSt
     }, 3000);
   };
 
+  setSuccessCheckout = (successCheckout: boolean) => {
+    this.successCheckoutTimeout && clearTimeout(this.successTimeout);
+    this.setState({ successCheckout });
+    this.successCheckoutTimeout = setTimeout(() => {
+      this.setState({ successCheckout: false });
+      this.successCheckoutTimeout = undefined;
+    }, 3000);
+  }
+
+  closeSuccessCart = () => {
+    this.setState({ successCart: false });
+  }
+
+  closeSuccessCheckoutCart = () => {
+    this.setState({ successCheckout: false });
+  }
+
   componentWillUnmount() {
     this.tokenInterval && clearInterval(this.tokenInterval);
     this.successTimeout && clearTimeout(this.successTimeout);
     this.addToCartTimeout && clearTimeout(this.addToCartTimeout);
+    this.successCheckoutTimeout && clearTimeout(this.successCheckoutTimeout);
   }
 
   updateCartItem = async (cartItemId: number, quantity: number) => {
