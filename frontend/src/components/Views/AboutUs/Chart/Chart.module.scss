@@ -1,0 +1,23 @@
+.growthChart {
+    overflow: hidden;
+}
+
+.chart-wrapper {
+    height: 25rem;
+    width: 100%;
+
+    // @media screen and (max-width: 600px) {
+    //     position: relative;
+    //     left: -2rem;
+    //     height: 20rem;
+    //     margin: 0;
+    //     padding: 0;
+    // }
+
+    @media screen and (max-width: 500px) {
+        position: relative;
+        left: -2rem;
+        width: 110%;
+        height: 15rem;
+    }
+}

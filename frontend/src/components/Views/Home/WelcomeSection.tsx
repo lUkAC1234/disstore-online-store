@@ -1,9 +1,10 @@
 import styles from "./Home.module.scss";
 import { PureComponent, ReactNode } from "react";
-import welcomeImage from "assets/main/images/main-page/models2.webp";
+import welcomeImage from "assets/main/images/main-page/models.webp";
+import thumbwelcomeImage from "assets/main/images/main-page/thumb_welcomeImage.webp";
 import { Link } from "react-router-dom";
 import i18next from "i18next";
-import BlockLoader from "components/BlockLoaders/BlockLoader";
+import OptimizedImage from "components/OptimizedImage/OptimizedImage";
 const lang = i18next.language;
 
 class WelcomeSection extends PureComponent {
@@ -50,19 +51,13 @@ class WelcomeSection extends PureComponent {
                             </div>
                         </div>
                     </div>
-                    <BlockLoader
-                        isLoaded={!!welcomeImage}
-                        containerStyle={{ background: "#ababab1a" }}
-                    >
-                        <div className={styles["welcome-image-column"]}>
-                            <img
-                                src={welcomeImage}
-                                alt="Fashion people"
-                                loading="lazy"
-                                decoding="async"
-                            />
-                        </div>
-                    </BlockLoader>
+                    <div className={styles["welcome-image-column"]}>
+                        <OptimizedImage
+                            src={welcomeImage}
+                            alt={"Fashion people"}
+                            thumbnail={thumbwelcomeImage}
+                        />
+                    </div>
                 </div>
             </section>
         )

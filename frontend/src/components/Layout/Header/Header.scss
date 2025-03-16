@@ -25,6 +25,7 @@
 }
 
 .header-logo-container {
+    z-index: var(--z-index-2);
     img {
         width: 5rem;
         height: 6rem;
@@ -110,7 +111,6 @@
         margin-left: 0.5rem;
         all: unset;
         cursor: pointer;
-        z-index: 10;
     
         svg {
             font-size: 0.8rem;

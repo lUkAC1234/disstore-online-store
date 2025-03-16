@@ -10,6 +10,7 @@ import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import styles from "./Checkout.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import OptimizedImage from "components/OptimizedImage/OptimizedImage";
 
 class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
   state: CheckoutState = {
@@ -257,23 +258,14 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
                       return (
                         <div key={item.id} className={styles["order-item"]}>
                           <div className={styles["order-item-image-container"]}>
-                            {extendedItem.selected_image ? (
-                              <img
-                                src={extendedItem.selected_image}
-                                alt={extendedItem.product.title}
-                              />
-                            ) : (extendedItem.product.catalogImages[0]?.image ||
-                              extendedItem.product.catalogImages[0]?.thumbnail) ? (
-                              <img
-                                src={
-                                  extendedItem.product.catalogImages[0].image ||
-                                  extendedItem.product.catalogImages[0].thumbnail
-                                }
-                                alt={extendedItem.product.title}
-                              />
-                            ) : (
-                              <SpinnerLoaderWrapper smallWrapper />
-                            )}
+                            <OptimizedImage
+                              src={
+                                extendedItem.selected_image ||
+                                extendedItem.product.catalogImages[0].image
+                              }
+                              alt={extendedItem.product.title}
+                              thumbnail={extendedItem.product.catalogImages[0]?.thumbnail}
+                            />
                           </div>
                           <div className={styles["order-item-content-container"]}>
                             <div className={styles["order-item-content-column"]}>

@@ -39,16 +39,9 @@ class Header extends UIReact<HeaderProps, HeaderState> {
 
   componentDidMount(): void {
     if (this.mediaQuery.addEventListener) {
-      this.mediaQuery.addEventListener("change", this.handleMediaQueryChange);
+      this.mediaQuery.addEventListener("change", this.handleMediaQueryChange, { signal: this.controller.signal });
     }
   }
-
-  componentWillUnmount(): void {
-    if (this.mediaQuery.removeEventListener) {
-      this.mediaQuery.removeEventListener("change", this.handleMediaQueryChange);
-    }
-  }
-
   handleMediaQueryChange = (e: MediaQueryListEvent): void => {
     this.setState({ isMobile: e.matches });
   };
@@ -191,8 +184,10 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                         <FontAwesomeIcon icon={faArrowRightLong} />
                       </span>
                     </button>
-                    
-                    <div className={`header-link-extra-details-container ${linksMobileIsOpen ? 'active' : ''}`}>
+
+                    <div
+                      className={`header-link-extra-details-container ${linksMobileIsOpen ? 'active' : ''}`}
+                    >
                       <div className="header-link-extra-details-wrapper">
                         <button
                           className="header-link-extra-details-close-button"
@@ -217,7 +212,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                         {this.linksMobile}
                       </div>
                     </div>
-                    <button 
+                    <button
                       onClick={this.toggleLinksMobileActiveClass}
                       className="header-link-extra-details-activator"
                     >

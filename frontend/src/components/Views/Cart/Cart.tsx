@@ -6,8 +6,8 @@ import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import EmptyCart from "./Empty/EmptyCart";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { CartContext } from "components/Context/ContextCollection";
-import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import { getWithTranslation } from "i18n/hooks";
+import OptimizedImage from "components/OptimizedImage/OptimizedImage";
 
 class Cart extends PureComponent<CartProps> {
   async componentDidMount(): Promise<void> {
@@ -60,28 +60,20 @@ class Cart extends PureComponent<CartProps> {
             </svg>
           </button>
           <div className={styles["cart-item-image-container"]}>
-            {extendedItem.selected_image ? (
-              <img
-                src={extendedItem.selected_image}
-                alt={extendedItem.product.title}
-              />
-            ) : (extendedItem.product.catalogImages[0]?.image ||
-              extendedItem.product.catalogImages[0]?.thumbnail) ? (
-              <img
-                src={
-                  extendedItem.product.catalogImages[0].image ||
-                  extendedItem.product.catalogImages[0].thumbnail
-                }
-                alt={extendedItem.product.title}
-              />
-            ) : (
-              <SpinnerLoaderWrapper smallWrapper />
-            )}
+            <OptimizedImage
+              src={
+                extendedItem.selected_image ||
+                extendedItem.product.catalogImages[0].image
+              }
+              alt={extendedItem.product.title}
+              thumbnail={extendedItem.product.catalogImages[0]?.thumbnail}
+            />
             <Link
               className={styles["cart-item-link"]}
               to={`/${this.lang}/catalog/clothes/${extendedItem.product.slug}`}
             />
           </div>
+
           <div className={styles["cart-details-info-container"]}>
             <h4 className={styles["cart-item-title"]}>
               {extendedItem.product.title}

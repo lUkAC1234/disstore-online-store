@@ -25,10 +25,11 @@ import ColorSelector from "./SelectedOptions/Colors/ColorSelector";
 import SizeSelector from "./SelectedOptions/Sizes/SizeSelector";
 import QuantitySelector from "./SelectedOptions/Quantity/QuantitySelector";
 import BlockLoader from "components/BlockLoaders/BlockLoader";
+import OptimizedImage from "components/OptimizedImage/OptimizedImage";
 const Swiper = OriginalSwiper as unknown as FC<any>;
 
 interface CatalogDetailsProps extends WithTranslation {
-  
+
 }
 
 class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
@@ -117,20 +118,11 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
                     onClick={() => this.handleImageClick(image)}
                     className={styles["thumbnail-slide"]}
                   >
-                    <img
-                      src={thumbnail}
+                    <OptimizedImage
+                      src={image}
+                      thumbnail={thumbnail}
                       alt={`Thumbnail ${index + 1}`}
-                      loading="lazy"
-                      decoding="async"
-                      className={`${styles["thumbnail"]} ${selectedOptions.selectedImage === image ? styles["active"] : ""
-                        }`}
-                      onLoad={({ target }) => {
-                        const temp = new Image();
-                        temp.src = image;
-                        temp.onload = () => {
-                          (target as HTMLImageElement).src = image;
-                        };
-                      }}
+                      imageClassname={`${styles["thumbnail"]} ${selectedOptions.selectedImage === image ? styles["active"] : ""}`}
                     />
                   </SwiperSlide>
                 ))}
@@ -142,24 +134,11 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
                   data-fancybox="gallery"
                   data-src={selectedOptions.selectedImage || ""}
                 >
-                  {data?.catalogImages?.[0]?.thumbnail ? (
-                    <img
-                      src={data.catalogImages[0].thumbnail}
-                      alt={data.title || "Рисунок"}
-                      loading="lazy"
-                      decoding="async"
-                      onLoad={({ target }) => {
-                        if (selectedOptions.selectedImage) {
-                          const temp = new Image();
-                          temp.src = selectedOptions.selectedImage;
-                          temp.onload = () =>
-                            (target as HTMLImageElement).src = selectedOptions.selectedImage;
-                        }
-                      }}
-                    />
-                  ) : (
-                    <SpinnerLoaderWrapper />
-                  )}
+                  <OptimizedImage
+                    src={selectedOptions.selectedImage}
+                    thumbnail={data?.catalogImages?.[0]?.thumbnail}
+                    alt={data?.title || "Рисунок"}
+                  />
                 </a>
               </div>
               <div style={{ display: "none" }}>

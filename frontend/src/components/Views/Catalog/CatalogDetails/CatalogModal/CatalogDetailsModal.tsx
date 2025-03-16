@@ -21,6 +21,7 @@ import QuantitySelector from "../SelectedOptions/Quantity/QuantitySelector";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import BlockLoader from "components/BlockLoaders/BlockLoader";
+import OptimizedImage from "components/OptimizedImage/OptimizedImage";
 
 interface CatalogDetailsModalProps extends WithTranslation {
   productSlug: string;
@@ -43,25 +44,11 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
       <div className={styles["catalog-modal-container"]}>
         <div className={styles["catalog-modal-left-side"]}>
           <div className={styles["catalog-modal-image-container"]}>
-            {data?.catalogImages?.[0]?.thumbnail ? (
-              <img
-                src={data.catalogImages[0].thumbnail}
-                alt={data.title || "Рисунок"}
-                loading="lazy"
-                decoding="async"
-                onLoad={({ target }) => {
-                  if (data.catalogImages[0].image) {
-                    const img = data.catalogImages[0].image;
-                    const temp = new Image();
-                    temp.src = img;
-                    temp.onload = () =>
-                      (target as HTMLImageElement).src = img;
-                  }
-                }}
-              />
-            ) : (
-              <SpinnerLoaderWrapper />
-            )}
+            <OptimizedImage
+              src={data?.catalogImages[0].image}
+              thumbnail={data?.catalogImages[0].thumbnail}
+              alt={data?.title || "Рисунок"}
+            />
           </div>
           <BlockLoader
             isLoaded={!!data}

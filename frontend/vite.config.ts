@@ -25,6 +25,9 @@ export default defineConfig({
       }
     }),
   ],
+  optimizeDeps: {
+    include: ["recharts"],
+  },
   css: {
     preprocessorOptions: {
       scss: {
