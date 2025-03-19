@@ -1,7 +1,8 @@
 import { WithTranslation } from "react-i18next";
+import { WithRouterProps } from "../../../Hocs/withRouter";
 
 declare global {
-    interface HeaderProps extends WithTranslation {
+    interface HeaderProps extends WithTranslation, WithRouterProps {
         resetFilters: () => void;
         loading: boolean;
         error: boolean;

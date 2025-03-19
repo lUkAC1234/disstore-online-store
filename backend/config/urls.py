@@ -1,8 +1,7 @@
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path, include
 from django.conf import settings
-from web import views
 from django.conf.urls.i18n import i18n_patterns
 
 # handler404 = views.PageNotFound
@@ -13,6 +12,7 @@ urlpatterns = [
     path('api/clothes/', include('web.urls')),
     path('api/auth/', include('UserAuth.urls')),
     path('api/orders/', include('Cart.urls')),
+    path('api/faqs/', include('Faq.urls')),
 ]
 
 urlpatterns += i18n_patterns(

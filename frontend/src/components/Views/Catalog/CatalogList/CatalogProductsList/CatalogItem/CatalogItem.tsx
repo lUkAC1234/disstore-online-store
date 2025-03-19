@@ -75,15 +75,11 @@ class CatalogItem extends PureComponent<CatalogItemProps, CatalogItemState> {
               -{item.discount}%
             </span>
           )}
-          {item?.catalogImages?.[0]?.thumbnail ? (
-            <OptimizedImage
-              src={item.catalogImages[0]?.image}
-              thumbnail={item.catalogImages[0].thumbnail}
-              alt={item.title || "Рисунок"}
-            />
-          ) : (
-            <SpinnerLoaderWrapper />
-          )}
+          <OptimizedImage
+            src={item.catalogImages[0]?.image}
+            thumbnail={item.catalogImages[0].thumbnail}
+            alt={item.title || "Рисунок"}
+          />
         </div>
         <h2 className={styles["catalog-item-title"]}>
           {this.truncateText(item.title, 20)}

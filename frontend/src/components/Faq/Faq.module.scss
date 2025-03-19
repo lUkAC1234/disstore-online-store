@@ -1,0 +1,40 @@
+.faq-section {
+  background: var(--text-black);
+  margin-bottom: 3rem;
+  overflow: hidden;
+}
+
+.faq-container {
+  width: min(100%, 80rem);
+  padding: 3rem 1rem;
+  margin-inline: auto;
+
+  & * {
+    color: var(--text-white);
+  }
+}
+
+.faq-subtitle {
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+.faq-text {
+  text-align: center;
+  margin: 0.5rem auto 0;
+  width: min(100%, 40rem);
+}
+
+.faq-wrapper {
+  margin-top: 3rem;
+}
+
+@media screen and (max-width: 600px) {
+  .faq-subtitle {
+    font-size: 2rem;
+  }
+  
+  .faq-text {
+    font-size: 0.9rem;
+  }
+}

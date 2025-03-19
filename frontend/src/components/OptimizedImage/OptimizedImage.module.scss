@@ -1,7 +1,21 @@
 .imageWrapper {
   width: 100%;
-  aspect-ratio: 1 / 1; 
+  aspect-ratio: 1 / 1;
   overflow: hidden;
+
+  &.no_image_height {
+    .mainImage {
+      height: unset;
+    }
+  }
+
+  &.aspect_16_9 {
+    aspect-ratio: 16 / 9;
+  }
+
+  &.no_aspect {
+    aspect-ratio: unset;
+  }
 }
 
 .mainImage {

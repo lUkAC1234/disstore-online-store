@@ -54,6 +54,7 @@
 .about-us-history-subtitle {
     font-size: 2.5rem;
     color: var(--text-white);
+    font-family: var(--boldFont);
 }
 
 .about-us-history-content-text-container {
@@ -144,6 +145,7 @@
 
 .achievements-subtitle {
     font-size: 2.5rem;
+    font-family: var(--boldFont);
 }
 
 .achievements-text {
@@ -198,6 +200,8 @@
 .achievements-statistics-number {
     font-size: 3rem;
     margin-bottom: 1rem;
+    font-weight: 900;
+    font-family: var(--boldFont);
 }
 
 .achievements-statistics-number-description {

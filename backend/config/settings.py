@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'web',
     'UserAuth',
     "Cart.apps.CartConfig",
+    'Faq',
 ]
 
 MIDDLEWARE = [

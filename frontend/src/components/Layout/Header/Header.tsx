@@ -15,6 +15,7 @@ import { getWithTranslation } from "i18n/hooks";
 import { ClothItem } from "components/Context/ClothesContext";
 import { origin } from "../../../../project.config.json";
 import { debounce } from "utils/hooks/debounce";
+import withRouter from "../../../Hocs/withRouter";
 
 class Header extends UIReact<HeaderProps, HeaderState> {
   searchInputContainerRef = createRef<HTMLDivElement>();
@@ -37,13 +38,23 @@ class Header extends UIReact<HeaderProps, HeaderState> {
     return this.props.i18n.language;
   }
 
+  componentDidUpdate(prevProps: Readonly<HeaderProps>): void {
+    if (
+      prevProps.pathname !== this.props.pathname &&
+      this.state.linksMobileIsOpen
+    ) {
+      this.setState({ linksMobileIsOpen: false });
+    }
+  }
+
   componentDidMount(): void {
     if (this.mediaQuery.addEventListener) {
       this.mediaQuery.addEventListener("change", this.handleMediaQueryChange, { signal: this.controller.signal });
     }
+    window.addEventListener("click", this.outSideClickHandler, {signal: this.controller.signal})
   }
-  handleMediaQueryChange = (e: MediaQueryListEvent): void => {
-    this.setState({ isMobile: e.matches });
+  handleMediaQueryChange = (evt: MediaQueryListEvent): void => {
+    this.setState({ isMobile: evt.matches });
   };
 
   toggleSearchInput = () => {
@@ -93,6 +104,18 @@ class Header extends UIReact<HeaderProps, HeaderState> {
 
   handleCloseDetails = () => {
     this.setState({ activeLink: null });
+  };
+
+  extraLinksContainerRef = createRef<HTMLDivElement>();
+  activatorRef = createRef<HTMLButtonElement>();
+
+  outSideClickHandler = (evt: MouseEvent) => {
+    if (!this.state.linksMobileIsOpen) return;
+    const target = evt.target as Node;
+    const container = this.extraLinksContainerRef.current;
+    const activator = this.activatorRef.current;
+    if ((container && container.contains(target)) || (activator && activator.contains(target))) { return; }
+    this.toggleLinksMobileActiveClass();
   };
 
   toggleLinksMobileActiveClass = () => {
@@ -186,6 +209,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                     </button>
 
                     <div
+                      ref={this.extraLinksContainerRef}
                       className={`header-link-extra-details-container ${linksMobileIsOpen ? 'active' : ''}`}
                     >
                       <div className="header-link-extra-details-wrapper">
@@ -213,6 +237,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                       </div>
                     </div>
                     <button
+                      ref={this.activatorRef}
                       onClick={this.toggleLinksMobileActiveClass}
                       className="header-link-extra-details-activator"
                     >
@@ -509,6 +534,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
         onClick={() => {
           this.closeEntireMenu();
           this.props.setSelectedTypes([item.id], this.props.setApplyFilters);
+          this.toggleLinksMobileActiveClass()
         }}
       >
         <div className="header-extra-link-image-container">
@@ -548,4 +574,6 @@ const UIHeader = withContextSelector(CartContext, _UIHeader, (context) => ({
 
 const TranslatedUIHeader = getWithTranslation(UIHeader);
 
-export default TranslatedUIHeader;
+const WithRouterHeader = withRouter(TranslatedUIHeader)
+
+export default WithRouterHeader;

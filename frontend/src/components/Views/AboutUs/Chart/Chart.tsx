@@ -39,6 +39,7 @@ class AboutUsChart extends UIReact<{}, AboutUsChartState> {
         return (
             <section className={styles["growthChart"]}>
                 <div className={styles["chart-container"]}>
+                    <h2 className={styles["chart-title"]}>Наши продажи в показателях</h2>
                     <div className={styles["chart-wrapper"]}>
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart

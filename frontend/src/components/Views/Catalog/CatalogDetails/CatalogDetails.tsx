@@ -19,7 +19,6 @@ import { faAngleRight, faImage } from "@fortawesome/free-solid-svg-icons";
 import InjectedUIFancybox from "components/Fancybox/Fancybox";
 import { Navigation } from "swiper/modules";
 import { SwiperSlide } from "swiper/react";
-import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import { Swiper as OriginalSwiper } from "swiper/react";
 import ColorSelector from "./SelectedOptions/Colors/ColorSelector";
 import SizeSelector from "./SelectedOptions/Sizes/SizeSelector";
@@ -122,13 +121,14 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
                       src={image}
                       thumbnail={thumbnail}
                       alt={`Thumbnail ${index + 1}`}
+                      no_aspect
                       imageClassname={`${styles["thumbnail"]} ${selectedOptions.selectedImage === image ? styles["active"] : ""}`}
                     />
                   </SwiperSlide>
                 ))}
                 {emptyLoaderSlides}
               </Swiper>
-              <div className={styles["catalog-main-image"]}>
+              <div className={styles["catalog-main-image-container"]}>
                 <a
                   href={selectedOptions.selectedImage || ""}
                   data-fancybox="gallery"
@@ -138,6 +138,8 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
                     src={selectedOptions.selectedImage}
                     thumbnail={data?.catalogImages?.[0]?.thumbnail}
                     alt={data?.title || "Рисунок"}
+                    no_aspect
+                    className={styles["catalog-main-image"]}
                   />
                 </a>
               </div>

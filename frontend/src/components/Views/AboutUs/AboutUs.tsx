@@ -1,13 +1,19 @@
 import styles from "./AboutUs.module.scss";
-import { PureComponent, ReactNode } from "react";
-import Chart from "./Chart/Chart";
+import { lazy, PureComponent, ReactNode, Suspense } from "react";
 import { Link } from "react-router-dom";
 import historyImage from "assets/main/images/aboutus/historyImage.webp";
-import statistics from "assets/main/images/aboutus/statistics.webp";
 import statistics2 from "assets/main/images/aboutus/statistics2.webp";
 import statistics3 from "assets/main/images/aboutus/statistics3.webp";
+import thumbhistoryImage from "assets/main/images/aboutus/thumb_historyImage.webp"
+import thumbStatistics2 from "assets/main/images/aboutus/thumb_statistics2.webp"
+import thumbStatistics3 from "assets/main/images/aboutus/thumb_statistics3.webp"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
+import OptimizedImage from "components/OptimizedImage/OptimizedImage";
+
+const Chart = lazy(() => import("./Chart/Chart"));
+const Faq = lazy(() => import("components/Faq/Faq"));
 
 class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
   render(): ReactNode {
@@ -37,7 +43,12 @@ class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
               </div>
             </div>
             <div className={styles["about-us-history-image-container"]}>
-              <img src={historyImage} alt="" />
+              <OptimizedImage
+                src={historyImage}
+                thumbnail={thumbhistoryImage}
+                alt={"Фотография истории"}
+                aspect_16_9
+              />
             </div>
           </div>
         </section>
@@ -57,7 +68,12 @@ class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
                 </div>
               </div>
               <div className={`${styles["achievements-statistics-column"]} ${styles["second"]}`}>
-                <img src={statistics3} alt="" />
+                <OptimizedImage
+                  src={statistics3}
+                  thumbnail={thumbStatistics3}
+                  alt={"Фотография Cтатистики"}
+                  no_aspect
+                />
               </div>
               <div className={`${styles["achievements-statistics-column"]} ${styles["third"]}`}>
                 <h3 className={styles["achievements-statistics-head-title"]}>Годы на рынке</h3>
@@ -74,14 +90,23 @@ class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
                 </div>
               </div>
               <div className={`${styles["achievements-statistics-column"]} ${styles["fifth"]}`}>
-              <img src={statistics2} alt="" />
+                <OptimizedImage
+                  src={statistics2}
+                  thumbnail={thumbStatistics2}
+                  alt={"Фотография Cтатистики"}
+                  no_aspect
+                />
               </div>
-              
             </div>
           </div>
         </section>
 
-        <Chart />
+        <Suspense fallback={<SpinnerLoaderWrapper relativeCentered />}>
+          <Chart />
+        </Suspense>
+        <Suspense fallback={<SpinnerLoaderWrapper relativeCentered />}>
+          <Faq />
+        </Suspense>
       </div>
     );
   }
