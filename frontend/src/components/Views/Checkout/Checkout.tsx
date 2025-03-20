@@ -10,7 +10,7 @@ import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import styles from "./Checkout.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import OptimizedImage from "components/OptimizedImage/OptimizedImage";
+import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
 
 class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
   state: CheckoutState = {

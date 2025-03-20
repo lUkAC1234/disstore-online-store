@@ -16,6 +16,7 @@ class WishList extends ModalHandler<WishListProps, WishListState> {
   get lang(): string {
     return this.props.i18n.language
   }
+  
   componentDidMount(): void {
     if (document.documentElement.scrollTop > 0) {
       window.scrollTo({

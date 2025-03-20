@@ -1,5 +1,5 @@
 import { CSSProperties, PureComponent, ReactNode, createRef } from "react";
-import BlockLoader, { BlockLoaderProps } from "components/BlockLoaders/BlockLoader";
+import BlockLoader, { BlockLoaderProps } from "components/UI/BlockLoaders/BlockLoader";
 import styles from "./OptimizedImage.module.scss";
 
 export interface OptimizedImageProps extends Omit<BlockLoaderProps, "isLoaded"> {

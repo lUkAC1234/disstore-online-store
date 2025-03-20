@@ -1,11 +1,10 @@
 import styles from "./Faq.module.scss";
 import { PureComponent, ReactNode } from "react";
 import FaqItem from "./FaqItem/FaqItem";
-import BlockLoader from "components/BlockLoaders/BlockLoader";
+import BlockLoader from "components/UI/BlockLoaders/BlockLoader";
 import { origin } from "../../../project.config.json";
-
-interface FaqProps { }
-
+import { Link } from "react-router-dom";
+import SmoothResizable from "components/UI/SmoothResizable/SmoothResizable";
 
 class Faq extends PureComponent<FaqProps, FaqState> {
   state: Readonly<FaqState> = {
@@ -18,21 +17,24 @@ class Faq extends PureComponent<FaqProps, FaqState> {
     if (cachedFaqs) {
       this.setState({ faqs: JSON.parse(cachedFaqs) });
     } else {
-      fetch(`${origin}/faqs/`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Не получилось получить данные");
-          }
-          return response.json();
-        })
-        .then((data: FaqData[]) => {
-          sessionStorage.setItem("faqs", JSON.stringify(data));
-          this.setState({ faqs: data });
-        })
-        .catch((error) => {
-          console.error("Fetching FAQs failed:", error);
-          this.setState({ error: error.message });
-        });
+      this.fetchData();
+    }
+  }
+
+  async fetchData(): Promise<void> {
+    try {
+      const response: Response = await fetch(`${origin}/faqs/`);
+      if (!response.ok) {
+        throw new Error("Не получилось получить данные");
+      }
+
+      const faqs: FaqData[] = await response.json();
+      this.setState({ faqs }, () => {
+        sessionStorage.setItem("faqs", JSON.stringify(faqs));
+      });
+    } catch (err) {
+      this.setState({ error: err.message });
+      console.error(err);
     }
   }
 
@@ -51,10 +53,17 @@ class Faq extends PureComponent<FaqProps, FaqState> {
           ) : (
             <div className={styles["faq-wrapper"]}>
               {faqs.map((faq, index) => (
-                <BlockLoader isLoaded={!!faq}>
-                  <FaqItem key={index} question={faq.question} answer={faq.answer} />
+                <BlockLoader key={faq.id || index} isLoaded={!!faq}>
+                  <SmoothResizable key={faq.id || index}>
+                    <FaqItem question={faq.question} answer={faq.answer} />
+                  </SmoothResizable>
                 </BlockLoader>
               ))}
+              <div className={styles["faq-contact-us-container"]}>
+                <h3 className={styles["faq-contact-us-subtitle"]}>Все еще есть вопросы?</h3>
+                <p className={styles["faq-contact-us-text"]}>Свяжитесь с нами для получения дополнительной информации.</p>
+                <Link to="" className={styles["faq-contact-us-link"]}>Связаться</Link>
+              </div>
             </div>
           )}
         </div>

@@ -7,8 +7,6 @@ import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from 'react-router-dom';
 import CatalogItem from '../Catalog/CatalogList/CatalogProductsList/CatalogItem/CatalogItem';
 import { ClothItem } from "components/Context/ClothesContext";
-import { WithTranslation } from "react-i18next";
-import { getWithTranslation } from "i18n/hooks";
 import Authentication from "components/Views/Authentication/Authentication";
 import UICatalogModal from '../Catalog/CatalogDetails/CatalogModal/CatalogDetailsModal';
 import { WishlistItem } from "components/Context/WishlistContext";
@@ -19,7 +17,7 @@ import { ProductModalContext } from 'components/Context/ContextCollection';
 import { withContextSelector } from 'components/Context/ContextInjector';
 import SpinnerLoaderWrapper from 'components/Loaders/SpinnerLoaderWrapper';
 
-interface NewClothesProps extends WithTranslation {
+interface NewClothesProps {
     wishlistItems?: WishlistItem[];
     addToWishList?: (productId: number) => Promise<void>;
     removeFromWishlist?: (wishlistItemId: number) => Promise<void>;
@@ -29,6 +27,7 @@ interface NewClothesProps extends WithTranslation {
     isModalActive: boolean;
     modalChildren: ReactNode;
     isAuthenticated: boolean;
+    lang?: string;
 }
 
 interface NewClothesState {
@@ -45,10 +44,6 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
         error: null,
         pathname: location.pathname,
     };
-
-    get lang(): string {
-        return this.props.i18n.language;
-    }
 
     async componentDidMount(): Promise<void> {
         this.fetchNewClothes();
@@ -82,6 +77,7 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
             addToWishList,
             removeFromWishlist,
             isAuthenticated,
+            lang,
         } = this.props;
         const { products, loading, error } = this.state;
 
@@ -148,7 +144,7 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
                                 <SwiperSlide key={item.id} className={styles["new-clothes-column"]}>
                                     <CatalogItem
                                         item={item}
-                                        lang={this.lang}
+                                        lang={lang}
                                         isInWishlist={inWishlist}
                                         onWishlistClick={(clickedItem: ClothItem) => {
                                             if (isAuthenticated) {
@@ -184,7 +180,7 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
                         </div>
                     </Swiper>
                     <div className={styles["view-all-clothes-link-container"]}>
-                        <Link to={`/${this.lang}/catalog`} className={styles["view-all-clothes-link"]}>
+                        <Link to={`/${lang}/catalog`} className={styles["view-all-clothes-link"]}>
                             Просмотреть все
                         </Link>
                     </div>
@@ -205,4 +201,4 @@ const UINewClothes = withContextSelector(
     })
 );
 
-export default getWithTranslation(UINewClothes);
+export default UINewClothes;

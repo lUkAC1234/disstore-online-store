@@ -7,7 +7,7 @@ import EmptyCart from "./Empty/EmptyCart";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { CartContext } from "components/Context/ContextCollection";
 import { getWithTranslation } from "i18n/hooks";
-import OptimizedImage from "components/OptimizedImage/OptimizedImage";
+import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
 
 class Cart extends PureComponent<CartProps> {
   async componentDidMount(): Promise<void> {

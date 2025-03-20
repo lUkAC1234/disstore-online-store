@@ -349,7 +349,7 @@
     display: flex;
     margin-top: 2rem;
     width: 80vw;
-    padding-bottom: 3rem !important;
+    padding-bottom: 5rem !important;
     overflow: visible;
     pointer-events: visiblePainted;
 
@@ -364,7 +364,7 @@
 
 .swiper-buttons-together-right-container {
     position: absolute;
-    bottom: 2rem;
+    bottom: 3.25rem;
     right: 0;
     z-index: var(--z-index-2);
     width: 7.25rem;

@@ -1,3 +1,5 @@
+@use "assets/main/styles/scss/components/_components";
+
 .faq-section {
   background: var(--text-black);
   margin-bottom: 3rem;
@@ -27,14 +29,41 @@
 
 .faq-wrapper {
   margin-top: 3rem;
+  border-top: 0.1rem solid color-mix(in srgb, var(--text-white), transparent 80%);
+}
+
+.faq-contact-us-container {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.faq-contact-us-subtitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.faq-contact-us-text {
+  margin-block: 0.5rem 1rem;
+}
+
+.faq-contact-us-link {
+  @extend .primary-white-button;
+  color: var(--text-black);
 }
 
 @media screen and (max-width: 600px) {
   .faq-subtitle {
     font-size: 2rem;
   }
-  
-  .faq-text {
+
+  .faq-text,
+  .faq-contact-us-text {
     font-size: 0.9rem;
+  }
+
+  .faq-contact-us-subtitle {
+    font-size: 1.25rem;
   }
 }

@@ -1,8 +1,7 @@
 import styles from "./CatalogItem.module.scss";
 import { PureComponent, MouseEvent } from "react";
 import { Link } from "react-router-dom";
-import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
-import OptimizedImage from "components/OptimizedImage/OptimizedImage";
+import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
 
 class CatalogItem extends PureComponent<CatalogItemProps, CatalogItemState> {
   truncateText(text: string, maxLength: number): string {

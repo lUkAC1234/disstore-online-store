@@ -21,7 +21,6 @@ declare global {
         searchResults: ClothItem[];
         searchLoading: boolean;
         searchError: string | null;
-        setTitle: (value: string) => void;
         isMobile: boolean;
         linksMobileIsOpen: boolean;
     }

@@ -7,8 +7,6 @@ import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from 'react-router-dom';
 import CatalogItem from '../Catalog/CatalogList/CatalogProductsList/CatalogItem/CatalogItem';
 import { ClothItem } from "components/Context/ClothesContext";
-import { WithTranslation } from "react-i18next";
-import { getWithTranslation } from "i18n/hooks";
 import Authentication from "components/Views/Authentication/Authentication";
 import UICatalogModal from '../Catalog/CatalogDetails/CatalogModal/CatalogDetailsModal';
 import { WishlistItem } from "components/Context/WishlistContext";
@@ -18,7 +16,7 @@ import HeaderError from 'components/Layout/Header/HeaderError/HeaderError';
 import { withContextSelector } from 'components/Context/ContextInjector';
 import { ProductModalContext } from 'components/Context/ContextCollection';
 
-interface TopSellingProps extends WithTranslation {
+interface TopSellingProps {
     wishlistItems?: WishlistItem[];
     addToWishList?: (productId: number) => Promise<void>;
     removeFromWishlist?: (wishlistItemId: number) => Promise<void>;
@@ -28,6 +26,7 @@ interface TopSellingProps extends WithTranslation {
     isModalActive: boolean;
     modalChildren: ReactNode;
     isAuthenticated: boolean;
+    lang?: string;
 }
 
 interface TopSellingState {
@@ -44,10 +43,6 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
         error: null,
         pathname: location.pathname,
     };
-
-    get lang(): string {
-        return this.props.i18n.language;
-    }
 
     async componentDidMount(): Promise<void> {
         this.fetchPopularClothes();
@@ -80,6 +75,7 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
             addToWishList,
             removeFromWishlist,
             isAuthenticated,
+            lang,
         } = this.props;
         const { products, loading, error } = this.state;
 
@@ -146,7 +142,7 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
                                 <SwiperSlide key={item.id} className={styles["top-selling-column"]}>
                                     <CatalogItem
                                         item={item}
-                                        lang={this.lang}
+                                        lang={lang}
                                         isInWishlist={inWishlist}
                                         onWishlistClick={(clickedItem: ClothItem) => {
                                             if (isAuthenticated) {
@@ -182,7 +178,7 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
                         </div>
                     </Swiper>
                     <div className={styles["view-all-clothes-link-container"]}>
-                        <Link to={`/${this.lang}/catalog`} className={styles["view-all-clothes-link"]}>
+                        <Link to={`/${lang}/catalog`} className={styles["view-all-clothes-link"]}>
                             Просмотреть все
                         </Link>
                     </div>
@@ -203,4 +199,4 @@ const UITopSelling = withContextSelector(
   })
 );
 
-export default getWithTranslation(UITopSelling);
+export default UITopSelling;

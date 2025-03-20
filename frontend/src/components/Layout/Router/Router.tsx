@@ -11,6 +11,7 @@ import Footer from "../Footer/Footer";
 // Lazy-loaded components
 const Home = lazy(() => import("components/Views/Home/Home"));
 const Aboutus = lazy(() => import("components/Views/AboutUs/AboutUs"));
+const Contact = lazy(() => import("components/Views/Contact/Contact"));
 const CatalogList = lazy(() => import("components/Views/Catalog/CatalogList/CatalogList"));
 const ClothesDetails = lazy(() => import("components/Views/Catalog/CatalogDetails/CatalogDetails"));
 const Error404 = lazy(() => import("components/Views/Errors/error404/404"));
@@ -44,6 +45,7 @@ class RouterView extends UIReact<RouterViewProps, RouterViewState> {
       ["/", { path: "/", element: <Navigate to={`/${this.props.i18n.language}`} />, index: true }],
       ["/:lang", { path: "/:lang", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Home /></Suspense>, index: true }],
       ["/:lang/about/us", { path: "/:lang/about/us", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Aboutus /></Suspense> }],
+      ["/:lang/contact/us", { path: "/:lang/contact/us", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Contact /></Suspense> }],
       ["/:lang/catalog", { path: "/:lang/catalog", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><CatalogList /></Suspense> }],
       ["/:lang/catalog/clothes/:id", { path: "/:lang/catalog/clothes/:slug", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><ClothesDetails /></Suspense> }],
       ["/:lang/cart", { path: "/:lang/cart", element: <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}><Cart /></Suspense> }],

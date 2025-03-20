@@ -23,8 +23,8 @@ import { Swiper as OriginalSwiper } from "swiper/react";
 import ColorSelector from "./SelectedOptions/Colors/ColorSelector";
 import SizeSelector from "./SelectedOptions/Sizes/SizeSelector";
 import QuantitySelector from "./SelectedOptions/Quantity/QuantitySelector";
-import BlockLoader from "components/BlockLoaders/BlockLoader";
-import OptimizedImage from "components/OptimizedImage/OptimizedImage";
+import BlockLoader from "components/UI/BlockLoaders/BlockLoader";
+import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
 const Swiper = OriginalSwiper as unknown as FC<any>;
 
 interface CatalogDetailsProps extends WithTranslation {

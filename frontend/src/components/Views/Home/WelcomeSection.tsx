@@ -3,12 +3,15 @@ import { PureComponent, ReactNode } from "react";
 import welcomeImage from "assets/main/images/main-page/models.webp";
 import thumbwelcomeImage from "assets/main/images/main-page/thumb_welcomeImage.webp";
 import { Link } from "react-router-dom";
-import i18next from "i18next";
-import OptimizedImage from "components/OptimizedImage/OptimizedImage";
-const lang = i18next.language;
+import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
 
-class WelcomeSection extends PureComponent {
+interface WelcomeSectionProps {
+    lang?: string;
+};
+
+class WelcomeSection extends PureComponent<WelcomeSectionProps> {
     render(): ReactNode {
+        const { lang } = this.props;
         return (
             <section className={styles["welcome-section"]}>
                 <div className={styles["welcome-container"]}>

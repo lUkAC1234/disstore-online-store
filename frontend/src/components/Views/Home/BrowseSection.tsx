@@ -4,21 +4,17 @@ import { Link } from "react-router-dom";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
 import { Clothestypes } from "components/Context/ClothesContext";
-import { WithTranslation } from "react-i18next";
-import { getWithTranslation } from "i18n/hooks";
 
-interface BrowseSectionProps extends WithTranslation {
+interface BrowseSectionProps {
     type: Clothestypes[];
     setSelectedTypes: (values: number[], callback?: () => void) => void;
     setApplyFilters: () => void;
+    lang?: string;
 }
 
 class BrowseSection extends PureComponent<BrowseSectionProps> {
-    get lang(): string {
-        return this.props.i18n.language;
-    }
-
     render(): ReactNode {
+        const { lang } = this.props
         return (
             <section className={styles["browse-style-section"]}>
                 <div className={styles["browse-style-container"]}>
@@ -34,7 +30,7 @@ class BrowseSection extends PureComponent<BrowseSectionProps> {
                                     {firstTwo.map(item => (
                                         <Link
                                             key={item.id}
-                                            to={`/${this.lang}/catalog`}
+                                            to={`/${lang}/catalog`}
                                             className={styles["browse-style-column"]}
                                             onClick={() => {
                                                 this.props.setSelectedTypes([item.id], this.props.setApplyFilters);
@@ -56,7 +52,7 @@ class BrowseSection extends PureComponent<BrowseSectionProps> {
                                     {nextTwo.map(item => (
                                         <Link
                                             key={item.id}
-                                            to={`/${this.lang}/catalog`}
+                                            to={`/${lang}/catalog`}
                                             className={`${styles["browse-style-column"]} ${styles["casual"]}`}
                                             onClick={() => {
                                                 this.props.setSelectedTypes([item.id], this.props.setApplyFilters);
@@ -90,8 +86,6 @@ const UIBrowseSection = withContextSelector(
         type: context.type,
         setSelectedTypes: context.setSelectedTypes,
         setApplyFilters: context.setApplyFilters,
-    }));
+}));
 
-const TranslatedBrowseSection = getWithTranslation(UIBrowseSection);
-
-export default TranslatedBrowseSection;
+export default UIBrowseSection;

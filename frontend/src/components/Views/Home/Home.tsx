@@ -8,7 +8,7 @@ import { getWithTranslation } from 'i18n/hooks';
 import { WishlistItem } from 'components/Context/WishlistContext';
 
 const BrandsSection = lazy(() => import("./BrandsSection"));
-const NewClothes = lazy(() => import("./NewClothesSection")); 
+const NewClothes = lazy(() => import("./NewClothesSection"));
 const TopSelling = lazy(() => import("./TopSellingSection"));
 const ExtraOffer = lazy(() => import("./ExtraOffer"));
 const BrowseSection = lazy(() => import("./BrowseSection"));
@@ -33,10 +33,14 @@ class MainPage extends PureComponent<HomeProps> {
     }
   }
 
+  get lang(): string {
+    return this.props.i18n.language
+  }
+
   render(): ReactNode {
     return (
       <>
-        <WelcomeSection />
+        <WelcomeSection lang={this.lang} />
         <BrandsSection />
         <NewClothes
           wishlistItems={this.props.wishlistItems}
@@ -44,17 +48,19 @@ class MainPage extends PureComponent<HomeProps> {
           removeFromWishlist={this.props.removeFromWishlist}
           loadingWishlist={this.props.loadingWishlist}
           isAuthenticated={this.props.isAuthenticated}
+          lang={this.lang}
         />
         <div className={styles["hr-line"]}></div>
-        <TopSelling 
+        <TopSelling
           wishlistItems={this.props.wishlistItems}
           addToWishList={this.props.addToWishList}
           removeFromWishlist={this.props.removeFromWishlist}
           loadingWishlist={this.props.loadingWishlist}
           isAuthenticated={this.props.isAuthenticated}
+          lang={this.lang}
         />
-        <ExtraOffer />
-        <BrowseSection />
+        <ExtraOffer lang={this.lang} />
+        <BrowseSection lang={this.lang} />
         <FeedbackSection />
       </>
     );
@@ -81,4 +87,6 @@ const UIHome = withContextSelector(
   })
 );
 
-export default getWithTranslation(UIHome);
+const TranslatedHome = getWithTranslation(UIHome);
+
+export default TranslatedHome;

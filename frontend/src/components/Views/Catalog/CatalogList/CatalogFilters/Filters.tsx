@@ -2,10 +2,10 @@ import styles from "./Filters.module.scss";
 import { PureComponent, ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import RangeSliderDual from "../../../../RangeSlider/RangeSliderDual";
+import RangeSliderDual from "components/UI/RangeSlider/RangeSliderDual";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
-import SmoothResizable from "components/SmoothResizable/SmoothResizable";
+import SmoothResizable from "components/UI/SmoothResizable/SmoothResizable";
 
 class Filters extends PureComponent<CatalogFiltersProps, CatalogFiltersState> {
   state: CatalogFiltersState = {

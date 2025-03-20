@@ -10,14 +10,18 @@ import thumbStatistics3 from "assets/main/images/aboutus/thumb_statistics3.webp"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
-import OptimizedImage from "components/OptimizedImage/OptimizedImage";
+import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
+import { getWithTranslation } from "i18n/hooks";
 
 const Chart = lazy(() => import("./Chart/Chart"));
 const Faq = lazy(() => import("components/Faq/Faq"));
 
 class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
-  render(): ReactNode {
+  get lang(): string {
+    return this.props.i18n.language
+  }
 
+  render(): ReactNode {
     return (
       <div className={styles["about-us-container"]}>
         <section className={styles["about-us-heading-section"]}>
@@ -34,8 +38,8 @@ class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
               <div className={styles["about-us-history-content-text-container"]}>
                 <p className={styles["about-us-history-text"]}>Наша компания была основана с целью предоставить клиентам лучшие товары и услуги. Мы верим в инновации и стремимся к постоянному совершенствованию. Наша миссия — делать жизнь наших клиентов лучше и удобнее.</p>
                 <div className={styles["about-us-history-links-controller"]}>
-                  <Link className={styles["about-us-history-link-white"]} to={""}>Каталог</Link>
-                  <Link className={styles["about-us-history-link-black"]} to={""}>
+                  <Link className={styles["about-us-history-link-white"]} to={`/${this.lang}/catalog`}>Каталог</Link>
+                  <Link className={styles["about-us-history-link-black"]} to={`/${this.lang}/contact/us`}>
                     Связаться
                     <FontAwesomeIcon icon={faChevronRight} />
                   </Link>
@@ -112,4 +116,6 @@ class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
   }
 }
 
-export default AboutUs;
+const TranslatedAboutUs = getWithTranslation(AboutUs)
+
+export default TranslatedAboutUs;
