@@ -1,0 +1,41 @@
+.review-item {
+    position: relative;
+    display: grid;
+    border: 0.1rem solid var(--welcome-border);
+    border-radius: 1rem;
+    padding: 2rem;
+    height: 100%;
+
+    @media screen and (max-width: 992px) {
+        padding: 1rem;
+    }
+}
+
+.review-item-title-text {
+    word-break: keep-all;
+}
+
+.review-item-title-icon {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+}
+
+.review-item-text {
+    margin-block: 0.5rem 1rem;
+    font-family: var(--GteboldRegular);
+    font-weight: 500;
+}
+
+.review-date-container {
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
+    margin-top: auto;
+}
+
+.review-item-text,
+.review-date-name,
+.review-date {
+    color: var(--text-p);
+}

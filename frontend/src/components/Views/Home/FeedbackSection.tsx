@@ -3,11 +3,42 @@ import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import star5 from "assets/main/images/main-page/5star.png";
 import styles from "./Home.module.scss";
+import ReviewItem from "../Catalog/CatalogDetails/Navigation/Review/ReviewItem/ReviewItem";
+import { origin } from "../../../../project.config.json";
 
-class FeedbackSection extends PureComponent {
+class FeedbackSection extends PureComponent<FeedbackProps, FeedbackState> {
+    state: Readonly<FeedbackState> = {
+        feedbacks: [],
+        error: "",
+    }
+    componentDidMount() {
+        const cachedFeedbacks = sessionStorage.getItem("feedbacks");
+        if (cachedFeedbacks) {
+            this.setState({ feedbacks: JSON.parse(cachedFeedbacks) });
+        } else {
+            this.fetchData();
+        }
+    }
+
+    async fetchData(): Promise<void> {
+        try {
+            const response: Response = await fetch(`${origin}/global/reviews`);
+            if (!response.ok) {
+                throw new Error("Не получилось получить данные");
+            }
+
+            const feedbacks: FeedbackData[] = await response.json();
+            this.setState({ feedbacks }, () => {
+                sessionStorage.setItem("feedbacks", JSON.stringify(feedbacks));
+            });
+        } catch (err) {
+            this.setState({ error: err.message });
+            console.error(err);
+        }
+    }
     render(): ReactNode {
+        const { feedbacks } = this.state;
         return (
             <section className={styles["feedbacks-section"]}>
                 <div className={`${styles["feedbacks-main-container"]} ${styles["feedbacks-container"]}`}>
@@ -43,41 +74,36 @@ class FeedbackSection extends PureComponent {
                                 spaceBetween: 10,
                             },
                             480: {
-                                slidesPerView: 2,
+                                slidesPerView: 1.5,
                                 spaceBetween: 10,
                             },
                             800: {
-                                slidesPerView: 3,
+                                slidesPerView: 2,
                                 spaceBetween: 15,
                             },
                             1300: {
-                                slidesPerView: 4,
+                                slidesPerView: 3,
                                 spaceBetween: 20,
                             },
                             2000: {
-                                slidesPerView: 5,
+                                slidesPerView: 4,
                                 spaceBetween: 25,
                             },
                         }}
                     >
-                        {Array.from({ length: 6 }).map((_, index) => (
-                            <SwiperSlide key={index} className={styles["feedbacks-column"]}>
-                                <div className={styles["feedbacks-content"]}>
-                                    <div className={styles["feedback-rate-container"]}>
-                                        <img
-                                            src={star5}
-                                            alt="Rating"
-                                        />
-                                    </div>
-                                    <h5 className={styles["feedbacks-username"]}>Sarah M.</h5>
-                                    <p className={styles["feedbacks-text"]}>
-                                        I'm blown away by the quality and style of the clothes I
-                                        received from Shop.co. From casual wear to elegant dresses,
-                                        every piece I've bought has exceeded my expectations.
-                                    </p>
-                                </div>
-                            </SwiperSlide>
-                        ))}
+                        {feedbacks && feedbacks.length > 0 ? (
+                            feedbacks.map((feedback) => (
+                                <SwiperSlide key={feedback.id} className={styles["feedbacks-column"]}>
+                                    <ReviewItem
+                                        userEmail={feedback.user.email}
+                                        text={feedback.text}
+                                        createdAt={feedback.created_at}
+                                    />
+                                </SwiperSlide>
+                            ))
+                        ) : (
+                            <div>No feedbacks available</div>
+                        )}
                     </Swiper>
                 </div>
             </section>

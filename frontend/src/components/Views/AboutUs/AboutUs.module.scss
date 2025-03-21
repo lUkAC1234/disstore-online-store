@@ -1,7 +1,7 @@
 @use "assets/main/styles/scss/components/_components";
 
 .about-us-container {
-    padding-block: 1rem;
+    padding-top: 1rem;
 }
 
 .about-us-heading-container {
@@ -35,10 +35,34 @@
 // HISTORY SECTION
 
 .about-us-history-container {
+    position: relative;
     display: grid;
     place-items: center;
     background: var(--text-black);
-    padding: 2rem;
+    padding: 4rem 2rem;
+    margin-block: 6rem;
+
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 3rem;
+        background-image: url('assets/main/images/layout/wavy2.svg');
+        background-repeat: repeat-x;
+        background-size: 6rem;
+    }
+
+    &::before {
+        top: -3rem;
+    }
+
+    &::after {
+        bottom: -2.4rem;
+        height: 2.5rem;
+        transform: rotate(180deg);
+    }
 }
 
 .about-us-history-content {
@@ -249,7 +273,7 @@
     .achievements-subtitle {
         font-size: 2rem;
     }
-    
+
     .achievements-text {
         font-size: 0.9rem;
     }

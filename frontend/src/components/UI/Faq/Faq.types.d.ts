@@ -1,5 +1,7 @@
+import { WithTranslation } from "react-i18next";
+
 declare global {
-  interface FaqProps { }
+  interface FaqProps extends WithTranslation { }
 
   interface FaqData {
     id: number;

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'UserAuth',
     "Cart.apps.CartConfig",
     'Faq',
+    'GlobalReviews',
 ]
 
 MIDDLEWARE = [
@@ -106,7 +107,7 @@ TEMPLATES = [
 UNFOLD = {
     "SITE_TITLE": "DISSTORE.UZ",
     "SITE_HEADER": "DISSTORE.UZ",
-    "SITE_URL": "/clothes/",
+    "SITE_URL": "/api/clothes/",
     "SHOW_HISTORY": True, 
     "SHOW_VIEW_ON_SITE": True,
     "COLORS": {
@@ -160,6 +161,11 @@ UNFOLD = {
                         "title": "Панель управления",
                         "icon": "dashboard",
                         "link": reverse_lazy("admin:index"),
+                    },
+                    {
+                        "title": "Добавить одежду",
+                        "icon": "shop",  
+                        "link": "/admin/web/clothesmodel/add/",
                     },
                 ],
             },

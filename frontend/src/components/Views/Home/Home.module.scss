@@ -828,10 +828,7 @@
 }
 
 .feedbacks-column {
-    background-color: var(--text-white);
-    padding: 2rem 1rem;
-    box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.1);
-    border-radius: 1rem;
+    min-height: 13rem;
 }
 
 .feedback-rate-container {

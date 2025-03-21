@@ -13,8 +13,8 @@ import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
 import { getWithTranslation } from "i18n/hooks";
 
-const Chart = lazy(() => import("./Chart/Chart"));
-const Faq = lazy(() => import("components/Faq/Faq"));
+const Chart = lazy(() => import("components/UI/Chart/Chart"));
+const Faq = lazy(() => import("components/UI/Faq/Faq"));
 
 class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
   get lang(): string {

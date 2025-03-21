@@ -14,6 +14,7 @@ const ExtraOffer = lazy(() => import("./ExtraOffer"));
 const BrowseSection = lazy(() => import("./BrowseSection"));
 const FeedbackSection = lazy(() => import("./FeedbackSection"));
 const WelcomeSection = lazy(() => import("./WelcomeSection"));
+const Faq = lazy(() => import("components/UI/Faq/Faq"));
 
 interface HomeProps extends WithTranslation {
   wishlistItems?: WishlistItem[];
@@ -62,6 +63,7 @@ class MainPage extends PureComponent<HomeProps> {
         <ExtraOffer lang={this.lang} />
         <BrowseSection lang={this.lang} />
         <FeedbackSection />
+        <Faq />
       </>
     );
   }

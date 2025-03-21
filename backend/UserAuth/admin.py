@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
-from django.utils.html import format_html
 
 @admin.register(UserModel)
 class UserAdmin(BaseUserAdmin, ModelAdmin):

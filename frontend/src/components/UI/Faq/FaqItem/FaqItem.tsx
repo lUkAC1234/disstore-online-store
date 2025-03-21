@@ -18,11 +18,11 @@ class FaqItem extends PureComponent<FaqItemProps, FaqItemState> {
         return (
             <div className={styles["faq-item"]}>
                 <div className={styles["faq-item-head"]}>
-                    <h3 className={styles["faq-question"]}>{question}</h3>
                     <button className={isActive
                         ? `${styles["faq-toggler"]} ${styles["faq-toggler--active"]}`
                         : styles["faq-toggler"]} onClick={this.toggleAnswer}>
-                        <FontAwesomeIcon icon={faChevronDown} />
+                        <h3 className={styles["faq-question"]}>{question}</h3>
+                        <FontAwesomeIcon className={styles["faq-icon"]} icon={faChevronDown} />
                     </button>
                 </div>
                 <div

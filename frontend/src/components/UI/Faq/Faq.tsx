@@ -2,15 +2,20 @@ import styles from "./Faq.module.scss";
 import { PureComponent, ReactNode } from "react";
 import FaqItem from "./FaqItem/FaqItem";
 import BlockLoader from "components/UI/BlockLoaders/BlockLoader";
-import { origin } from "../../../project.config.json";
+import { origin } from "../../../../project.config.json";
 import { Link } from "react-router-dom";
 import SmoothResizable from "components/UI/SmoothResizable/SmoothResizable";
+import { getWithTranslation } from "i18n/hooks";
 
 class Faq extends PureComponent<FaqProps, FaqState> {
   state: Readonly<FaqState> = {
     faqs: [],
     error: null,
   };
+
+  get lang(): string {
+    return this.props.i18n.language
+  }
 
   componentDidMount() {
     const cachedFaqs = sessionStorage.getItem("faqs");
@@ -62,7 +67,7 @@ class Faq extends PureComponent<FaqProps, FaqState> {
               <div className={styles["faq-contact-us-container"]}>
                 <h3 className={styles["faq-contact-us-subtitle"]}>Все еще есть вопросы?</h3>
                 <p className={styles["faq-contact-us-text"]}>Свяжитесь с нами для получения дополнительной информации.</p>
-                <Link to="" className={styles["faq-contact-us-link"]}>Связаться</Link>
+                <Link to={`/${this.lang}/contact/us`} className={styles["faq-contact-us-link"]}>Связаться</Link>
               </div>
             </div>
           )}
@@ -72,4 +77,6 @@ class Faq extends PureComponent<FaqProps, FaqState> {
   }
 }
 
-export default Faq;
+const TranslatedFaq = getWithTranslation(Faq)
+
+export default TranslatedFaq;

@@ -4,13 +4,6 @@
     overflow: hidden;
 }
 
-.faq-item-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-}
-
 .faq-question {
     font-weight: 500;
 
@@ -21,14 +14,23 @@
 
 .faq-toggler {
     all: unset;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
     cursor: pointer;
     transition: transform 0.3s ease;
     padding: 1rem;
     margin: -1rem;
 
-    &.faq-toggler--active {
+    &.faq-toggler--active .faq-icon {
         transform: rotate(-90deg);
     }
+}
+
+.faq-icon {
+    transition: transform 0.3s ease;
 }
 
 .faq-answer-container {

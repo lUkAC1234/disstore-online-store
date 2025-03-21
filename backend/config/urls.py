@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/auth/', include('UserAuth.urls')),
     path('api/orders/', include('Cart.urls')),
     path('api/faqs/', include('Faq.urls')),
+    path('api/global/reviews', include('GlobalReviews.urls')),
 ]
 
 urlpatterns += i18n_patterns(
