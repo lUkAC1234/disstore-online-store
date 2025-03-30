@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Navigation } from "swiper/modules";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { Link } from 'react-router-dom';
 import CatalogItem from '../Catalog/CatalogList/CatalogProductsList/CatalogItem/CatalogItem';
 import { ClothItem } from "components/Context/ClothesContext";
 import Authentication from "components/Views/Authentication/Authentication";
@@ -16,6 +15,7 @@ import HeaderError from 'components/Layout/Header/HeaderError/HeaderError';
 import { ProductModalContext } from 'components/Context/ContextCollection';
 import { withContextSelector } from 'components/Context/ContextInjector';
 import SpinnerLoaderWrapper from 'components/Loaders/SpinnerLoaderWrapper';
+import { ActionButtonLink, Container, HeadingTwo, Section } from 'components/UI/Html/Elements/Elements';
 
 interface NewClothesProps {
     wishlistItems?: WishlistItem[];
@@ -60,7 +60,7 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
 
             const response = await fetch(`${origin}/clothes/new/`);
             if (!response.ok) {
-                throw new Error("Failed to fetch new clothes");
+                throw new Error("Не получилось загрузить новые одежды");
             }
             const data = await response.json();
             const products: ClothItem[] = data.results ? data.results : data;
@@ -95,11 +95,11 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
         }
 
         return (
-            <section className={`swiper-section ${styles["new-clothes-section"]}`}>
-                <div className={`swiper-main-container ${styles["new-clothes-container"]}`}>
-                    <h2 className={`swiper-subtitle ${styles["new-clothes-subtitle"]} fade fadeInDown`}>
+            <Section className={`${styles["new-clothes-section"]}`}>
+                <Container className={`${styles["new-clothes-container"]}`}>
+                    <HeadingTwo bold className={`${styles["new-clothes-subtitle"]}`}>
                         Новинки
-                    </h2>
+                    </HeadingTwo>
                     <Swiper
                         className={styles["mySwiper-new-clothes"]}
                         modules={[Navigation, Keyboard]}
@@ -120,10 +120,10 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
                         speed={600}
                         breakpoints={{
                             0: {
-                                slidesPerView: 1.5,
+                                slidesPerView: 1,
                                 spaceBetween: 10,
                             },
-                            450: {
+                            380: {
                                 slidesPerView: 2,
                                 spaceBetween: 15,
                             },
@@ -180,12 +180,12 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
                         </div>
                     </Swiper>
                     <div className={styles["view-all-clothes-link-container"]}>
-                        <Link to={`/${lang}/catalog`} className={styles["view-all-clothes-link"]}>
+                        <ActionButtonLink white to={`/${lang}/catalog`} className={styles["view-all-clothes-link"]}>
                             Просмотреть все
-                        </Link>
+                        </ActionButtonLink>
                     </div>
-                </div>
-            </section>
+                </Container>
+            </Section>
         );
     }
 }

@@ -88,8 +88,6 @@
 
 .catalog-item-description {
   margin-block: 0.5rem 1rem;
-  font-size: 0.9rem;
-  color: var(--text-p);
 }
 
 .catalog-item-title,
@@ -206,12 +204,12 @@
 
 @media screen and (max-width: 600px) {
   .catalog-item {
-    &:nth-child(3n) {
+    &:nth-child(5n) {
       grid-column: span 2;
     }
 
-    &:nth-child(3n) .catalog-image-container,
-    &:nth-child(3n) .catalog-image-container img {
+    &:nth-child(5n) .catalog-image-container,
+    &:nth-child(5n) .catalog-image-container img {
       aspect-ratio: 16 / 9;
     }
 

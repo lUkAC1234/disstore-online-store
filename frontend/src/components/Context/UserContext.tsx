@@ -1,6 +1,7 @@
 import { PureComponent, ReactNode, PropsWithChildren } from "react";
 import { UserContext } from "./ContextCollection";
 import Cookies from "utils/modules/Cookies";
+import { origin } from "../../../project.config.json";
 
 export interface UserData {
   id: number;
@@ -16,14 +17,10 @@ export interface UserContextState {
   isAuthenticated: boolean;
 }
 
-export interface TokenData {
-  access: string;
-  user: UserData;
-}
-
 export interface UserContextActions extends UserContextState {
   setLogin: (token: string, user: UserData) => void;
   setLogout: () => void;
+  updateUser: (data: Partial<UserData>) => Promise<void>;
 }
 
 class UserContextProvider extends PureComponent<PropsWithChildren, UserContextState> {
@@ -54,6 +51,33 @@ class UserContextProvider extends PureComponent<PropsWithChildren, UserContextSt
     this.setState({ token: null, user: null, isAuthenticated: false });
   };
 
+  updateUser = async (data: Partial<UserData>): Promise<void> => {
+    try {
+      const token = this.state.token;
+      if (!token) {
+        throw new Error("User is not authenticated");
+      }
+      const response = await fetch(`${origin}/auth/users/me/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      const updatedUser = { ...this.state.user, ...result.user };
+      Cookies.setCookie("user", JSON.stringify(updatedUser), 7);
+      this.setState({ user: updatedUser });
+    } catch (error) {
+      console.error("Error updating user data:", error);
+      throw error;
+    }
+  };
+
   render(): ReactNode {
     return (
       <UserContext.Provider
@@ -61,6 +85,7 @@ class UserContextProvider extends PureComponent<PropsWithChildren, UserContextSt
           ...this.state,
           setLogin: this.setLogin,
           setLogout: this.setLogout,
+          updateUser: this.updateUser,
         }}
       >
         {this.props.children}

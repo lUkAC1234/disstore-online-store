@@ -5,6 +5,7 @@ import HeaderError from "../HeaderError/HeaderError";
 import { Clothestypes } from "components/Context/ClothesContext";
 
 interface LinksMobileProps {
+    isMenuDisactive: boolean;
     loading: boolean;
     error: boolean;
     type: Clothestypes[];
@@ -18,6 +19,7 @@ interface LinksMobileProps {
 class LinksMobile extends PureComponent<LinksMobileProps> {
     render() {
         const {
+            isMenuDisactive,
             loading,
             error,
             type,
@@ -59,9 +61,11 @@ class LinksMobile extends PureComponent<LinksMobileProps> {
                             toggleLinksMobileActiveClass();
                         }}
                     >
-                        <div className="header-extra-link-image-container">
-                            <img src={item.image} alt={item.title} />
-                        </div>
+                        {!isMenuDisactive &&
+                            <div className="header-extra-link-image-container">
+                                <img src={item.image} alt={item.title} />
+                            </div>
+                        }
                         <h4 className="header-extra-link-title">{item.title}</h4>
                     </NavLink>
                 ))}

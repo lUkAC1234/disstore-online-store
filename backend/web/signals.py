@@ -1,9 +1,6 @@
 from django.db.models.signals import pre_save
 from .models import ClothesModel
 from django.dispatch import receiver
-# --------------------------------------------------------------------------- #
-
-# --------------------------------------------------------------------------- #
 
 @receiver(pre_save, sender=ClothesModel)
 def real_price(sender, instance, **kwargs):

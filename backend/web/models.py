@@ -48,6 +48,8 @@ class ClothesModel(models.Model):
     
     long_description = RichTextField(verbose_name=_("Полное описание"))
     created_at = models.DateTimeField(_("Дата создания"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Обновился в"), auto_now=True)
+    
     
     popularity = models.PositiveIntegerField(default=0, verbose_name=_("Популярность"))
     

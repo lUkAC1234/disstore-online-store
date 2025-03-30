@@ -221,3 +221,8 @@ class OTPVerifySerializer(serializers.Serializer):
                 'mobile_number': user.mobile_number,
             }
         }
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ('first_name', 'last_name', 'mobile_number')

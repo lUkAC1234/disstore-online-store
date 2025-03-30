@@ -25,14 +25,7 @@ interface HomeProps extends WithTranslation {
 }
 
 class MainPage extends PureComponent<HomeProps> {
-  async componentDidMount(): Promise<void> {
-    if (document.documentElement.scrollTop > 0) {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }
-  }
+  componentDidMount(): void { window.scrollTo({ top: 0, behavior: "smooth" }); }
 
   get lang(): string {
     return this.props.i18n.language

@@ -4,7 +4,8 @@ from .views import (
     UserLoginView,
     UpdatePasswordView,
     OTPRequestView,
-    OTPVerifyView
+    OTPVerifyView,
+    UpdateUserView,
 )
 
 urlpatterns = [
@@ -13,4 +14,5 @@ urlpatterns = [
     path('update_password/', UpdatePasswordView.as_view(), name='update_password'),
     path('otp/request/', OTPRequestView.as_view(), name='otp_request'),
     path('otp/verify/', OTPVerifyView.as_view(), name='otp_verify'),
+    path('users/me/', UpdateUserView.as_view(), name='update_user'),
 ]

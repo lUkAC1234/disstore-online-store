@@ -159,8 +159,6 @@ class ClothesListProvider extends PureComponent<ClothesListContextProps, Clothes
         }
     };
 
-
-
     setSelectedPriceMinMax = (values: number[]): void => {
         this.setState(prevState => ({
             ...prevState,

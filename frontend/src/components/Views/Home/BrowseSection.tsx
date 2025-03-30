@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
 import { Clothestypes } from "components/Context/ClothesContext";
+import { HeadingFive, HeadingTwo, Section } from "components/UI/Html/Elements/Elements";
 
 interface BrowseSectionProps {
     type: Clothestypes[];
@@ -16,9 +17,9 @@ class BrowseSection extends PureComponent<BrowseSectionProps> {
     render(): ReactNode {
         const { lang } = this.props
         return (
-            <section className={styles["browse-style-section"]}>
+            <Section className={styles["browse-style-section"]}>
                 <div className={styles["browse-style-container"]}>
-                    <h2 className={styles["browse-style-subtitle"]}>Поиск по стилю одежды</h2>
+                    <HeadingTwo bold className={styles["browse-style-subtitle"]}>Поиск по стилю одежды</HeadingTwo>
                     {(() => {
                         const items = this.props.type.slice(0, 4);
                         const firstTwo = items.slice(0, 2);
@@ -36,7 +37,7 @@ class BrowseSection extends PureComponent<BrowseSectionProps> {
                                                 this.props.setSelectedTypes([item.id], this.props.setApplyFilters);
                                             }}
                                         >
-                                            <h3 className={styles["browse-style-column-title"]}>{item.title}</h3>
+                                            <HeadingFive regular className={styles["browse-style-column-title"]}>{item.title}</HeadingFive>
                                             <div className={styles["browse-style-column-image-container"]}>
                                                 <img
                                                     src={item.image}
@@ -58,7 +59,7 @@ class BrowseSection extends PureComponent<BrowseSectionProps> {
                                                 this.props.setSelectedTypes([item.id], this.props.setApplyFilters);
                                             }}
                                         >
-                                            <h3 className={styles["browse-style-column-title"]}>{item.title}</h3>
+                                            <HeadingFive regular className={styles["browse-style-column-title"]}>{item.title}</HeadingFive>
                                             <div className={styles["browse-style-column-image-container"]}>
                                                 <img
                                                     src={item.image}
@@ -74,7 +75,7 @@ class BrowseSection extends PureComponent<BrowseSectionProps> {
                         );
                     })()}
                 </div>
-            </section>
+            </Section>
         )
     }
 }

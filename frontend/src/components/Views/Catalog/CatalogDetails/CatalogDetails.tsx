@@ -15,7 +15,7 @@ import { WithTranslation } from "react-i18next";
 import { getWithTranslation } from "i18n/hooks";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faImage } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faAngleRight, faAngleUp, faImage } from "@fortawesome/free-solid-svg-icons";
 import InjectedUIFancybox from "components/Fancybox/Fancybox";
 import { Navigation } from "swiper/modules";
 import { SwiperSlide } from "swiper/react";
@@ -90,8 +90,12 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
                 className={styles["swiper-navigation-buttons-catalog-container"]}
                 style={{ display: data?.catalogImages?.length > 3 ? "flex" : "none" }}
               >
-                <div className={`swiper-button-prev ${styles["navigation-button-catalog-prev"]}`} />
-                <div className={`swiper-button-next ${styles["navigation-button-catalog-next"]}`} />
+                <div className={styles["navigation-button-catalog-prev"]}>
+                  <FontAwesomeIcon icon={faAngleUp} />
+                </div>
+                <div className={styles["navigation-button-catalog-next"]}>
+                  <FontAwesomeIcon icon={faAngleDown} />
+                </div>
               </div>
               <Swiper
                 direction="vertical"

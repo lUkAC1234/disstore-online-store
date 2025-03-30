@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.gzip.GZipMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -166,6 +167,11 @@ UNFOLD = {
                         "title": "Добавить одежду",
                         "icon": "shop",  
                         "link": "/admin/web/clothesmodel/add/",
+                    },
+                    {
+                        "title": "Заказы",
+                        "icon": "message",  
+                        "link": "/admin/Cart/order/",
                     },
                 ],
             },

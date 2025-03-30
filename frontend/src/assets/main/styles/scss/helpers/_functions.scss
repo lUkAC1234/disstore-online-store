@@ -16,7 +16,7 @@ strong {
   word-break: break-word !important;
 }
 
-*:not(button):not(a):not(svg):not(path):not(circle):not(g):not(span):not(div):not(font) {
+:where(:not(button):not(a):not(svg):not(path):not(circle):not(g):not(span):not(div):not(font)) {
   color: var(--text-black);
 }
 

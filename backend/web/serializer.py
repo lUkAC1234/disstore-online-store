@@ -67,5 +67,6 @@ class ClothesModelSerializer(serializers.ModelSerializer):
                   'reviews',
                   'faqs',
                   'created_at',
+                  'updated_at',
                   'popularity',
                   ]

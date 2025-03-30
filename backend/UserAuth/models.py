@@ -32,11 +32,12 @@ class UserManager(BaseUserManager):
     
 class UserModel(AbstractUser):
     mobile_regex = RegexValidator(
-        regex=r'^\+998\d{9}$',
-        message="Номер должен быть в формате: '+998 12 345 67 89'"
+        regex=r'^\+998\s\(\d{2}\)\s\d{3}\s\d{2}\s\d{2}$',
+        message="Номер должен быть в формате: '+998 (90) 123 45 67'"
     )
+
     mobile_number = models.CharField(
-        max_length=13,
+        max_length=19,
         validators=[mobile_regex],
         blank=True,
     )
@@ -58,8 +59,6 @@ class UserModel(AbstractUser):
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
         
-# Email verification models (OTP)
-
 class OTPVerification(models.Model):
     PURPOSE_CHOICES = (
         ('registration', 'Registration'),

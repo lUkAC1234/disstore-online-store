@@ -40,14 +40,6 @@
     gap: 1rem;
 }
 
-.catalog-active-filter-title {
-    font-size: 2.5rem;
-
-    @media screen and (max-width: 400px) {
-        font-size: 1.75rem !important;
-    }
-}
-
 .filters-mobile-version {
     display: none;
     border: transparent;
@@ -70,11 +62,7 @@
     }
 }
 
-@media screen and (max-width: 992px) {
-    .catalog-active-filter-title {
-        font-size: 2rem;
-    }
-
+@media screen and (max-width: 600px) {
     .filters-mobile-version {
         width: 2.5rem;
         height: 2.5rem;

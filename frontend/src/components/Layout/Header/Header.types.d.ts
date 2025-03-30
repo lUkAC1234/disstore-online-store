@@ -22,6 +22,7 @@ declare global {
         searchLoading: boolean;
         searchError: string | null;
         isMobile: boolean;
+        isMenuDisactive: boolean;
         linksMobileIsOpen: boolean;
     }
 }

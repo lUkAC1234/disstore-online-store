@@ -16,8 +16,6 @@ declare global {
     processing: boolean;
     error: string | null;
     success: boolean;
-    onPhoneChange: (evt: ChangeEvent<HTMLInputElement>) => void;
-    rawDigits: string;
   }
   interface ExtendedCartItem extends CartItem {
     selected_color?: string;

@@ -7,6 +7,7 @@ from .models import (
     OrderItem,
 )
 from unfold.admin import ModelAdmin
+from django.utils.html import format_html
 
 @admin.register(WishlistModel)
 class WishlistModelAdmin(ModelAdmin):
@@ -30,10 +31,28 @@ class CartItemModelAdmin(ModelAdmin):
     
 @admin.register(Order)
 class OrderAdmin(ModelAdmin):
-    list_display = ['id', 'user', 'full_name', 'address', 'phone', 'email', 'status', 'created_at']
+    list_display = ['id', 'user', 'full_name', 'address', 'phone', 'email', 'get_status_colored', 'created_at']
     list_display_links = ['id', 'user']
     search_fields = ['user__email', 'full_name', 'address', 'phone', 'email']
     list_filter = ['status', 'created_at']
+
+    def get_status_colored(self, obj):
+        colors = {
+            "pending": "#6c757d",  
+            "confirmed": "#FFC107", 
+            "processing": "#007BFF", 
+            "shipped": "#6610f2", 
+            "delivered": "#28A745", 
+            "canceled": "#DC3545", 
+        }
+        color = colors.get(obj.status, "#6c757d") 
+        return format_html(
+            '<span style="background-color: {}; color: white; padding: 0.5rem; border-radius: 0.5rem;">{}</span>',
+            color, obj.get_status_display()
+        )
+
+    get_status_colored.short_description = "Статус"
+    get_status_colored.admin_order_field = "status"
 
 @admin.register(OrderItem)
 class OrderItemAdmin(ModelAdmin):

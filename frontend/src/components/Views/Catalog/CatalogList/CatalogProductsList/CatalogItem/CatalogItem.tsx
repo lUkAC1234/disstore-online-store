@@ -2,6 +2,7 @@ import styles from "./CatalogItem.module.scss";
 import { PureComponent, MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
+import { SmallText } from "components/UI/Html/Elements/Elements";
 
 class CatalogItem extends PureComponent<CatalogItemProps, CatalogItemState> {
   truncateText(text: string, maxLength: number): string {
@@ -83,9 +84,9 @@ class CatalogItem extends PureComponent<CatalogItemProps, CatalogItemState> {
         <h2 className={styles["catalog-item-title"]}>
           {this.truncateText(item.title, 20)}
         </h2>
-        <p className={styles["catalog-item-description"]}>
+        <SmallText className={styles["catalog-item-description"]}>
           {this.truncateText(item.short_description, 40)}
-        </p>
+        </SmallText>
         {item.count > 0 ? (
           <p className={styles["catalog-item-count"]}>
             В наличии{" "}

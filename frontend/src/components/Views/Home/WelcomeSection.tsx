@@ -4,6 +4,7 @@ import welcomeImage from "assets/main/images/main-page/models.webp";
 import thumbwelcomeImage from "assets/main/images/main-page/thumb_welcomeImage.webp";
 import { Link } from "react-router-dom";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
+import { ActionButtonLink, HeadingOne, Text } from "components/UI/Html/Elements/Elements";
 
 interface WelcomeSectionProps {
     lang?: string;
@@ -16,41 +17,41 @@ class WelcomeSection extends PureComponent<WelcomeSectionProps> {
             <section className={styles["welcome-section"]}>
                 <div className={styles["welcome-container"]}>
                     <div className={styles["welcome-text-column"]}>
-                        <h1 className={styles["welcome-main-title"]}>
+                        <HeadingOne className={styles["welcome-main-title"]}>
                             Найдите одежду которая подходит вашему стилю
-                        </h1>
-                        <p className={styles["welcome-text"]}>
+                        </HeadingOne>
+                        <Text className={styles["welcome-text"]}>
                             Ознакомьтесь с нашим разнообразным ассортиментом тщательно
                             созданной одежды, разработанной, чтобы подчеркнуть вашу
                             индивидуальность и удовлетворить ваше чувство стиля
-                        </p>
-                        <Link to={`/${lang}/catalog`} className={styles["welcome-link"]}>
+                        </Text>
+                        <ActionButtonLink to={`/${lang}/catalog`} className={styles["welcome-link"]}>
                             Купить сейчас
-                        </Link>
+                        </ActionButtonLink>
                         <div className={styles["welcome-numbers-count-container"]}>
                             <div className={styles["welcome-numbers-count-column"]}>
                                 <span className={styles["welcome-numbers-count"]}>
                                     200+
                                 </span>
-                                <p className={styles["welcome-numbers-count-text"]}>
+                                <Text className={styles["welcome-numbers-count-text"]}>
                                     Международных брендов
-                                </p>
+                                </Text>
                             </div>
                             <div className={styles["welcome-numbers-count-column"]}>
                                 <span className={styles["welcome-numbers-count"]}>
                                     2,000+
                                 </span>
-                                <p className={styles["welcome-numbers-count-text"]}>
+                                <Text className={styles["welcome-numbers-count-text"]}>
                                     Высококачественная продукция
-                                </p>
+                                </Text>
                             </div>
                             <div className={styles["welcome-numbers-count-column"]}>
                                 <span className={styles["welcome-numbers-count"]}>
                                     30,000+
                                 </span>
-                                <p className={styles["welcome-numbers-count-text"]}>
+                                <Text className={styles["welcome-numbers-count-text"]}>
                                     Довольных клиентов
-                                </p>
+                                </Text>
                             </div>
                         </div>
                     </div>

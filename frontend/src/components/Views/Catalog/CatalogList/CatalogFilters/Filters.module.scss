@@ -36,21 +36,22 @@
     justify-content: space-between;
     align-items: center;
 
-    .filters-title {
-        font-size: 1.25rem;
-    }
-
     svg {
         font-size: 1.25rem;
         transform: rotate(-90deg);
         color: var(--text-p);
         cursor: pointer;
     }
+}
 
-    .filters-title-button {
-        border: transparent;
-        background-color: transparent;
-    }
+.filters-title {
+    font-size: 1.25rem;
+    font-family: var(--boldFont);
+}
+
+.filters-title-button {
+    border: transparent;
+    background-color: transparent;
 }
 
 .hr-line {
@@ -256,13 +257,7 @@
 }
 
 .add-to-cart-button {
-    @extend .primary-button;
-    width: 100%;
-    font-size: 1rem;
-
-    @media screen and (max-width: 2000px) {
-        padding-inline: 0.5rem;
-    }
+    width: 100% !important;
 }
 
 @media screen and (max-width: 1200px) {
@@ -281,7 +276,7 @@
             opacity 0.5s ease,
             visibility 0.5s ease;
         transform-origin: bottom;
-        z-index: var(--z-index-3);
+        z-index: var(--z-index-5);
         overflow-y: auto;
 
         &.active {

@@ -13,6 +13,7 @@ import CatalogPagination from "./CatalogPagination/CatalogPagination.tsx";
 import CatalogProducts from "./CatalogProductsList/Products.tsx";
 import Filters from "./CatalogFilters/Filters.tsx";
 import { getWithTranslation } from "i18n/hooks.ts";
+import { HeadingOne } from "components/UI/Html/Elements/Elements.tsx";
 
 class CatalogList extends UIReact<CatalogListProps, CatalogListState> {
   get lang(): string {
@@ -89,7 +90,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogListState> {
                   >
                     <FontAwesomeIcon icon={faSliders} />
                   </button>
-                  <h1 className={styles["catalog-active-filter-title"]}>Каталог</h1>
+                  <HeadingOne className={styles["catalog-active-filter-title"]}>Каталог</HeadingOne>
                 </div>
               </div>
               {loadingProducts ? (

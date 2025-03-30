@@ -2,6 +2,7 @@ import styles from "./Chart.module.scss";
 import { ReactNode } from "react";
 import UIReact from "utils/classes/UIReact";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
+import { HeadingTwo } from "../Html/Elements/Elements";
 
 interface AboutUsChartState {
     isMobile: boolean;
@@ -39,7 +40,7 @@ class AboutUsChart extends UIReact<{}, AboutUsChartState> {
         return (
             <section className={styles["growthChart"]}>
                 <div className={styles["chart-container"]}>
-                    <h2 className={styles["chart-title"]}>Наши продажи в показателях</h2>
+                    <HeadingTwo className={styles["chart-title"]}>Наши продажи в показателях</HeadingTwo>
                     <div className={styles["chart-wrapper"]}>
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart

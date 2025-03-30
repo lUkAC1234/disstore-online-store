@@ -1,5 +1,9 @@
 .catalog-container {
     padding: 2rem 6rem;
+
+    @media screen and (max-width: 2000px) {
+        padding-inline: 1rem;
+    }
 }
 
 .catalog-wrapper {
@@ -40,9 +44,9 @@
     &::after {
         content: "";
         position: absolute;
-        
+
     }
-    
+
     svg {
         font-size: 2rem;
         width: 2rem;
@@ -91,8 +95,6 @@
     }
 }
 
-
-
 // SWIPER BUTTONS
 .Fancybox-container .swiper-navigation-buttons-catalog-container {
     position: absolute;
@@ -101,46 +103,43 @@
     align-items: center;
     flex-flow: column;
     height: 100%;
-    top: -1rem;
-    left: 4.5rem;
+    top: -2rem;
+    left: 4.25rem;
     z-index: 0;
     width: fit-content;
-    height: 31rem;
-
-    .navigation-button-catalog-prev,
-    .navigation-button-catalog-next {
-        position: static !important;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: transparent;
-        border-radius: 50%;
-        border: 0.1rem solid transparent;
-        pointer-events: all;
-        transition: all 0.3s ease;
-        color: var(--text-white);
-        z-index: 100;
-        cursor: pointer;
-        opacity: 0.8;
-
-        &::after {
-            transform: rotate(90deg);
-            color: var(--text-black);
-            font-size: 1.5rem;
-        }
-
-        &:hover {
-            background-color: transparent;
-            color: transparent;
-            opacity: 1;
-        }
-
-        &:hover svg path {
-            fill: var(--text-black);
-        }
-    }
+    height: 32rem;
 }
 
+.navigation-button-catalog-prev,
+.navigation-button-catalog-next {
+    position: static;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border-radius: 50%;
+    border: 0.1rem solid transparent;
+    pointer-events: all;
+    transition: all 0.3s ease;
+    color: var(--text-white);
+    cursor: pointer;
+
+    &::after {
+        transform: rotate(90deg);
+        color: var(--text-black);
+        font-size: 1.25rem;
+    }
+
+    &:hover svg {
+        opacity: 0.8;
+    }
+
+    svg {
+        color: var(--text-p);
+        transition: opacity 0.3s ease;
+        font-size: 1.5rem;
+    }
+}
 
 // CONTENT INFO
 
@@ -213,19 +212,15 @@
 }
 
 // MEDIA QUERIES
-@media screen and (max-width: 2000px) {
-    .catalog-container {
-        padding-inline: 1rem;
-    }
-
-    .Fancybox-container .swiper-navigation-buttons-catalog-container {
-        left: 4.25rem;
-    }
-}
 
 @media screen and (max-width: 1600px) {
     .catalog-wrapper {
         gap: 1rem;
+    }
+
+    .navigation-button-catalog-prev svg,
+    .navigation-button-catalog-next svg {
+        font-size: 1.25rem;
     }
 
     .Fancybox-container {
@@ -234,14 +229,13 @@
         .swiper-navigation-buttons-catalog-container {
             left: 1.75rem;
             height: 26rem;
+            top: -1.5rem;
         }
+    }
 
-        .navigation-button-catalog-prev,
-        .navigation-button-catalog-next {
-            &::after {
-                font-size: 1.125rem !important;
-            }
-        }
+    .navigation-button-catalog-prev svg,
+    .navigation-button-catalog-next svg {
+        font-size: 1.25rem;
     }
 
     .thumbnail-swiper {
@@ -318,20 +312,18 @@
 
         .swiper-navigation-buttons-catalog-container {
             flex-flow: row;
-            height: fit-content !important;
+            height: fit-content;
             width: 34rem;
             bottom: 3.75rem;
             top: unset;
             left: -2rem;
         }
+    }
 
-        .navigation-button-catalog-prev,
-        .navigation-button-catalog-next {
-            &::after {
-                transform: rotate(0deg) !important;
-                font-size: 1.5rem !important;
-            }
-        }
+    .navigation-button-catalog-prev svg,
+    .navigation-button-catalog-next svg {
+        transform: rotate(-90deg);
+        font-size: 1.5rem;
     }
 
     .thumbnail-swiper {

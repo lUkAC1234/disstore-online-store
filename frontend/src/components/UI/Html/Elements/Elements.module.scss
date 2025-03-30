@@ -1,0 +1,205 @@
+@mixin responsive-font($size-lg, $size-md, $size-sm, $size-xs) {
+    font-size: $size-lg;
+
+    @media screen and (max-width: 992px) {
+        font-size: $size-md;
+    }
+
+    @media screen and (max-width: 600px) {
+        font-size: $size-sm;
+    }
+
+    @media screen and (max-width: 400px) {
+        font-size: $size-xs;
+    }
+}
+
+@mixin white {
+    color: var(--text-white);
+}
+
+@mixin bold {
+    font-family: var(--boldFont);
+}
+
+@mixin regular {
+    font-weight: 400;
+}
+
+@mixin centerGrid {
+    display: grid;
+    place-items: center;
+}
+
+@mixin centerFlex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@each $class in (headingOne, headingTwo, headingThree, headingFour, headingFive, headingSix,
+    container, section, article, sidebar, text, smallText, link, bold, listItem,
+    list, inlineText, blockQuote, preformatted, actionButton, small, mark, code,
+    ins, abbr, address, time, kbd, del) {
+    .#{$class}.white {
+        @include white;
+    }
+
+    .#{$class}.bold {
+        @include bold;
+    }
+
+    .#{$class}.regular {
+        @include regular;
+    }
+
+    .#{$class}.centerGrid {
+        @include centerGrid;
+    }
+
+    .#{$class}.centerFlex {
+        @include centerFlex;
+    }
+}
+
+
+// Headings
+:where(.headingOne) {
+    font-weight: 900;
+    @include responsive-font(3.5rem, 3rem, 2.5rem, 2.25rem);
+}
+
+:where(.headingTwo) {
+    @include responsive-font(2.75rem, 2.5rem, 2.25rem, 2rem);
+}
+
+:where(.headingThree) {
+    @include responsive-font(2.5rem, 2.25rem, 2rem, 1.75rem);
+}
+
+:where(.headingFour) {
+    @include responsive-font(2.25rem, 2rem, 1.75rem, 1.5rem);
+}
+
+:where(.headingFive) {
+    @include responsive-font(2rem, 1.75rem, 1.5rem, 1.25rem);
+}
+
+:where(.headingSix) {
+    @include responsive-font(1.75rem, 1.5rem, 1.25rem, 1rem);
+}
+
+// Containers
+:where(.container) {
+    padding-inline: 1rem;
+}
+
+:where(.lg-container) {
+    width: min(100%, 90rem);
+}
+
+:where(.md-container) {
+    width: min(100%, 80rem);
+}
+
+:where(.section) {
+    margin-block: 3rem;
+}
+
+:where(.article) {}
+
+:where(.sidebar) {}
+
+
+// Text Elements
+:where(.text) {
+    font-size: 1rem;
+    color: var(--text-p);
+    line-height: 140%;
+
+    @media screen and (max-width: 600px) {
+        font-size: 0.9rem;
+    }
+}
+
+:where(.smallText) {
+    font-size: 0.9rem;
+    color: var(--text-p);
+    line-height: 140%;
+
+    @media screen and (max-width: 600px) {
+        font-size: 0.8rem;
+    }
+}
+
+:where(.link) {
+    text-decoration: underline;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+:where(.bold) {}
+
+:where(.listItem) {}
+
+:where(.list) {}
+
+:where(.inlineText) {}
+
+:where(.blockQuote) {}
+
+:where(.preformatted) {}
+
+// Buttons
+.actionButton {
+    display: inline-block;
+    border: 0.1rem solid transparent;
+    background: var(--text-black);
+    color: var(--text-white);
+    padding: 1rem 2rem;
+    border-radius: 3.5rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: var(--primary-font);
+    width: max-content;
+
+    &:hover {
+        opacity: 0.7;
+    }
+
+    &.white {
+        background: var(--text-white);
+        border-color: var(--text-black);
+        color: var(--text-black);
+    }
+
+    @media screen and (max-width: 600px) {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.85rem;
+    }
+}
+
+:where(.small) {}
+
+:where(.mark) {}
+
+:where(.del) {}
+
+:where(.ins) {}
+
+:where(.abbr) {}
+
+:where(.address) {}
+
+:where(.time) {}
+
+:where(.kbd) {}
+
+:where(.code) {}

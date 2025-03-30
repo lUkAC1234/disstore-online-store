@@ -3,9 +3,9 @@ import { PureComponent, ReactNode } from "react";
 import FaqItem from "./FaqItem/FaqItem";
 import BlockLoader from "components/UI/BlockLoaders/BlockLoader";
 import { origin } from "../../../../project.config.json";
-import { Link } from "react-router-dom";
 import SmoothResizable from "components/UI/SmoothResizable/SmoothResizable";
 import { getWithTranslation } from "i18n/hooks";
+import { ActionButtonLink, HeadingFive, HeadingTwo, MDContainer, Text } from "../Html/Elements/Elements";
 
 class Faq extends PureComponent<FaqProps, FaqState> {
   state: Readonly<FaqState> = {
@@ -47,14 +47,14 @@ class Faq extends PureComponent<FaqProps, FaqState> {
     const { faqs, error } = this.state;
     return (
       <section className={styles["faq-section"]}>
-        <div className={styles["faq-container"]}>
-          <h2 className={styles["faq-subtitle"]}>Часто задаваемые вопросы</h2>
-          <p className={styles["faq-text"]}>
+        <MDContainer className={styles["faq-container"]}>
+          <HeadingTwo className={styles["faq-subtitle"]}>Часто задаваемые вопросы</HeadingTwo>
+          <Text className={styles["faq-text"]}>
             Здесь вы найдете ответы на наиболее распространенные вопросы о нашей компании и услугах.
-          </p>
+          </Text>
 
           {error ? (
-            <p>Error loading FAQs: {error}</p>
+            <Text>Error loading FAQs: {error}</Text>
           ) : (
             <div className={styles["faq-wrapper"]}>
               {faqs.map((faq, index) => (
@@ -65,13 +65,13 @@ class Faq extends PureComponent<FaqProps, FaqState> {
                 </BlockLoader>
               ))}
               <div className={styles["faq-contact-us-container"]}>
-                <h3 className={styles["faq-contact-us-subtitle"]}>Все еще есть вопросы?</h3>
-                <p className={styles["faq-contact-us-text"]}>Свяжитесь с нами для получения дополнительной информации.</p>
-                <Link to={`/${this.lang}/contact/us`} className={styles["faq-contact-us-link"]}>Связаться</Link>
+                <HeadingFive bold className={styles["faq-contact-us-subtitle"]}>Все еще есть вопросы?</HeadingFive>
+                <Text className={styles["faq-contact-us-text"]}>Свяжитесь с нами для получения дополнительной информации.</Text>
+                <ActionButtonLink white to={`/${this.lang}/contact/us`} className={styles["faq-contact-us-link"]}>Связаться</ActionButtonLink>
               </div>
             </div>
           )}
-        </div>
+        </MDContainer>
       </section>
     );
   }

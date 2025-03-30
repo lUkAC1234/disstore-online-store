@@ -117,7 +117,6 @@ class ClothesModelDetailView(RetrieveAPIView):
         except ClothesModel.DoesNotExist:
             raise NotFound(detail="Clothes not found", code=404)
         
-        
 class ClothesTypeMainView(ListAPIView):
     queryset = TypesModel.objects.all()
     serializer_class = ClothesTypeModelSerializer

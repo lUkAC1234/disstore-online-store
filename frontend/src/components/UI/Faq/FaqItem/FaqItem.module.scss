@@ -1,6 +1,5 @@
 .faq-item {
     border-bottom: 0.1rem solid color-mix(in srgb, var(--text-white), transparent 80%);
-    padding-block: 1rem;
     overflow: hidden;
 }
 
@@ -21,8 +20,7 @@
     gap: 1rem;
     cursor: pointer;
     transition: transform 0.3s ease;
-    padding: 1rem;
-    margin: -1rem;
+    padding-block: 1rem;
 
     &.faq-toggler--active .faq-icon {
         transform: rotate(-90deg);
@@ -41,7 +39,7 @@
     &.active {
         max-height: fit-content;
         opacity: 1;
-        margin-top: 1rem;
+        margin-bottom: 1rem;
     }
 }
 

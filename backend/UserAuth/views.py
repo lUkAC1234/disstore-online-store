@@ -3,11 +3,13 @@ from .serializer import (
     RegisterSerializer,
     LoginTokenObtainPairSerializer,
     OTPRequestSerializer, 
-    OTPVerifySerializer
+    OTPVerifySerializer,
+    UpdateUserSerializer
 )
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.generics import UpdateAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
@@ -46,7 +48,6 @@ class UpdatePasswordView(APIView):
         user.save()
         return Response({"detail": "Password updated successfully."})
 
-# Email Verification Views
 class OTPRequestView(APIView):
     """
     Request an OTP code for registration or login.
@@ -66,3 +67,14 @@ class OTPVerifyView(APIView):
         serializer.is_valid(raise_exception=True)
         token_data = serializer.save()
         return Response(token_data, status=status.HTTP_200_OK)
+    
+class UpdateUserView(UpdateAPIView):
+    serializer_class = UpdateUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def patch(self, request, *args, **kwargs):
+        response = super().patch(request, *args, **kwargs)
+        return Response({'user': response.data}, status=status.HTTP_200_OK)

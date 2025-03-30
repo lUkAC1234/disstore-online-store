@@ -4,7 +4,7 @@ import { ClothItem } from "./ClothesContext";
 import { origin } from "../../../project.config.json";
 import Cookies from "utils/modules/Cookies";
 
-export interface WishlistProviderProps extends PropsWithChildren {}
+export interface WishlistProviderProps extends PropsWithChildren { }
 
 export interface WishlistItem {
   id: number;
@@ -110,11 +110,16 @@ class WishlistContextProvider extends PureComponent<WishlistProviderProps, Wishl
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        await this.fetchWishlist();
+        const newWishlistItem: WishlistItem = await response.json();
+
+        this.setState((prevState) => ({
+          wishlistItems: [...prevState.wishlistItems, newWishlistItem],
+        }));
       },
       "Error adding to wishlist:"
     );
   };
+
 
   removeFromWishlist = async (wishlistItemId: number) => {
     await this.executeWithLoading(

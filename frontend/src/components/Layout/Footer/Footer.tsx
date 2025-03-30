@@ -11,7 +11,7 @@ function Footer(): ReactNode {
         <div className="footer-brand">
           <h2 className="footer-logo">DISSTORE.UZ</h2>
           <p className="footer-description">
-            У нас вы найдете стильную и качественную одежду, которая подчеркнет ваш стиль и подарит комфорт в любой ситуации. 
+            У нас вы найдете стильную и качественную одежду, которая подчеркнет ваш стиль и подарит комфорт в любой ситуации.
             <span> Для мужчин и женщин</span>
           </p>
           <div className="footer-socials">

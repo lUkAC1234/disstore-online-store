@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Navigation } from "swiper/modules";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { Link } from 'react-router-dom';
 import CatalogItem from '../Catalog/CatalogList/CatalogProductsList/CatalogItem/CatalogItem';
 import { ClothItem } from "components/Context/ClothesContext";
 import Authentication from "components/Views/Authentication/Authentication";
@@ -15,6 +14,7 @@ import { origin } from "../../../../project.config.json";
 import HeaderError from 'components/Layout/Header/HeaderError/HeaderError';
 import { withContextSelector } from 'components/Context/ContextInjector';
 import { ProductModalContext } from 'components/Context/ContextCollection';
+import { ActionButtonLink, Container, HeadingTwo, Section } from 'components/UI/Html/Elements/Elements';
 
 interface TopSellingProps {
     wishlistItems?: WishlistItem[];
@@ -58,7 +58,7 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
             }
             const response = await fetch(`${origin}/clothes/popular/`);
             if (!response.ok) {
-                throw new Error("Failed to fetch popular clothes");
+                throw new Error("Не получилось загрузить популярные одежды");
             }
             const data = await response.json();
             const products: ClothItem[] = data.results ? data.results : data;
@@ -93,11 +93,11 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
         }
 
         return (
-            <section className={`swiper-section ${styles["top-selling-section"]}`}>
-                <div className={`swiper-main-container ${styles["top-selling-container"]}`}>
-                    <h2 className={`swiper-subtitle ${styles["top-selling-subtitle"]} fade fadeInDown`}>
+            <Section className={`swiper-section ${styles["top-selling-section"]}`}>
+                <Container className={`swiper-main-container ${styles["top-selling-container"]}`}>
+                    <HeadingTwo bold className={`swiper-subtitle ${styles["top-selling-subtitle"]} fade fadeInDown`}>
                         Популярное
-                    </h2>
+                    </HeadingTwo>
                     <Swiper
                         className={styles["mySwiper-top-selling"]}
                         modules={[Navigation, Keyboard]}
@@ -118,10 +118,10 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
                         speed={600}
                         breakpoints={{
                             0: {
-                                slidesPerView: 1.5,
+                                slidesPerView: 1,
                                 spaceBetween: 10,
                             },
-                            450: {
+                            380: {
                                 slidesPerView: 2,
                                 spaceBetween: 15,
                             },
@@ -178,12 +178,12 @@ class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
                         </div>
                     </Swiper>
                     <div className={styles["view-all-clothes-link-container"]}>
-                        <Link to={`/${lang}/catalog`} className={styles["view-all-clothes-link"]}>
+                        <ActionButtonLink white to={`/${lang}/catalog`} className={styles["view-all-clothes-link"]}>
                             Просмотреть все
-                        </Link>
+                        </ActionButtonLink>
                     </div>
-                </div>
-            </section>
+                </Container>
+            </Section>
         );
     }
 }

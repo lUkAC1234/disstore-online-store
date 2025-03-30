@@ -18,10 +18,7 @@ app.setupAPIs(() => {
 app.renderApp();
 
 window.addEventListener("unload", () => {
-  const preservedKeys = ["cart", "wishlist"];
   Object.keys(sessionStorage).forEach(key => {
-      if (!preservedKeys.includes(key)) {
-          sessionStorage.removeItem(key);
-      }
+    sessionStorage.removeItem(key);
   });
 });

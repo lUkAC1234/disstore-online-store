@@ -23,6 +23,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
   extraLinksContainerRef = createRef<HTMLDivElement>();
   activatorRef = createRef<HTMLButtonElement>();
   mediaQuery: MediaQueryList = window.matchMedia("(max-width: 650px)");
+  menuMediaQuery: MediaQueryList = window.matchMedia("(max-width: 1300px)");
   private searchCache: { [query: string]: ClothItem[] } = {};
   get lang(): string { return this.props.i18n.language; }
 
@@ -33,14 +34,16 @@ class Header extends UIReact<HeaderProps, HeaderState> {
     searchLoading: false,
     searchError: null,
     isMobile: this.mediaQuery.matches,
+    isMenuDisactive: this.menuMediaQuery.matches,
     linksMobileIsOpen: false,
   };
 
   componentDidMount = (): void => {
     if (this.mediaQuery.addEventListener) {
-      this.mediaQuery.addEventListener("change", this.handleMediaQueryChange, {
-        signal: this.controller.signal,
-      });
+      this.mediaQuery.addEventListener("change", this.handleMediaQueryChange, { signal: this.controller.signal, });
+    }
+    if (this.menuMediaQuery.addEventListener) {
+      this.menuMediaQuery.addEventListener("change", this.handleMenuMediaQueryChange, { signal: this.controller.signal, });
     }
     window.addEventListener("click", this.outSideClickHandler, { signal: this.controller.signal, });
   };
@@ -111,6 +114,7 @@ class Header extends UIReact<HeaderProps, HeaderState> {
   };
 
   handleMediaQueryChange = (evt: MediaQueryListEvent): void => { this.setState({ isMobile: evt.matches }); };
+  handleMenuMediaQueryChange = (evt: MediaQueryListEvent): void => { this.setState({ isMenuDisactive: evt.matches }); };
   toggleSearchInput = (): void => { this.searchInputContainerRef.current?.classList.toggle("active"); };
   closeSearchInput = (): void => { this.searchInputContainerRef.current?.classList.remove("active"); };
   toggleMenu = (): void => { this.headerLinksContainerRef.current?.classList.add("active"); };
@@ -151,12 +155,14 @@ class Header extends UIReact<HeaderProps, HeaderState> {
                     setSelectedTypes={this.props.setSelectedTypes}
                     setApplyFilters={this.props.setApplyFilters}
                     toggleLinksMobileActiveClass={this.toggleLinksMobileActiveClass}
+                    isMenuDisactive={this.state.isMenuDisactive}
                   />
                 }
               />
               <div className="header-search-container">
                 <HeaderSearch
                   isMobile={this.state.isMobile}
+                  
                   title={this.state.title}
                   onInputChange={this.handleSearchInputChange}
                   toggleSearchInput={this.toggleSearchInput}

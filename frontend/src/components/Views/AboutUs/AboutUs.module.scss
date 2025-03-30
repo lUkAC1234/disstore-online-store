@@ -7,37 +7,19 @@
 .about-us-heading-container {
     display: grid;
     place-items: center;
-    margin-block: 1rem 3rem;
-    padding-inline: 1rem;
-}
-
-.about-us-heading-title {
-    font-size: 3.5rem;
 }
 
 .about-us-heading-text {
     width: min(100%, 50rem);
     text-align: center;
-    color: var(--text-p);
     margin-top: 1rem;
 }
 
-@media screen and (max-width: 600px) {
-    .about-us-heading-title {
-        font-size: 2.5rem;
-    }
-
-    .about-us-heading-text {
-        font-size: 0.9rem;
-    }
-}
 
 // HISTORY SECTION
 
 .about-us-history-container {
     position: relative;
-    display: grid;
-    place-items: center;
     background: var(--text-black);
     padding: 4rem 2rem;
     margin-block: 6rem;
@@ -47,11 +29,16 @@
         content: "";
         position: absolute;
         left: 0;
+        height: 6rem;
         width: 100%;
-        height: 3rem;
-        background-image: url('assets/main/images/layout/wavy2.svg');
+        background-image: url('assets/main/images/layout/wavy.svg');
         background-repeat: repeat-x;
-        background-size: 6rem;
+        background-size: 6rem 100%;
+
+        @media screen and (max-width: 992px) {
+            background-size: 3rem 100%;
+            height: 4rem;
+        }
     }
 
     &::before {
@@ -59,8 +46,7 @@
     }
 
     &::after {
-        bottom: -2.4rem;
-        height: 2.5rem;
+        bottom: -3rem;
         transform: rotate(180deg);
     }
 }
@@ -68,57 +54,32 @@
 .about-us-history-content {
     display: flex;
     gap: 2rem;
-    width: min(100%, 80rem);
 
     @media screen and (max-width: 800px) {
         flex-wrap: wrap;
+        gap: 0.5rem;
     }
-}
-
-.about-us-history-subtitle {
-    font-size: 2.5rem;
-    color: var(--text-white);
-    font-family: var(--boldFont);
 }
 
 .about-us-history-content-text-container {
     width: min(100%, 40rem);
-    color: var(--text-white);
-}
-
-.about-us-history-text {
-    color: var(--text-white);
-    line-height: 160%;
-}
-
-.about-us-history-link-white {
-    @extend .primary-white-button;
 }
 
 .about-us-history-links-controller {
     display: flex;
     align-items: center;
-    gap: 1rem;
     margin-top: 1rem;
 }
 
 .about-us-history-link-black {
-    color: var(--text-white);
-    transition: opacity 0.3s ease;
-
     svg {
         font-size: 0.6rem;
         margin-left: 0.25rem;
         margin-bottom: 0.05rem;
     }
-
-    &:hover {
-        opacity: 0.8;
-    }
 }
 
 .about-us-history-image-container {
-    width: min(100%, 80rem);
     aspect-ratio: 16 / 9;
     margin-top: 1rem;
 
@@ -134,30 +95,9 @@
     .about-us-history-container {
         padding-inline: 1rem;
     }
-
-    .about-us-history-subtitle {
-        font-size: 2rem;
-    }
-
-    .about-us-history-text {
-        font-size: 0.9rem;
-    }
 }
 
 // ACHIEVEMENTS SECTION
-
-.achievements-section {
-    margin-top: 3rem;
-}
-
-.achievements-container {
-    width: min(100%, 80rem);
-    margin-inline: auto;
-
-    @media screen and (max-width: 2000px) {
-        padding-inline: 1rem;
-    }
-}
 
 .achievements-text-container {
     display: flex;
@@ -167,14 +107,7 @@
     }
 }
 
-.achievements-subtitle {
-    font-size: 2.5rem;
-    font-family: var(--boldFont);
-}
-
 .achievements-text {
-    color: var(--text-p);
-    line-height: 160%;
     margin-top: 0.5rem;
 }
 
@@ -222,15 +155,7 @@
 }
 
 .achievements-statistics-number {
-    font-size: 3rem;
     margin-bottom: 1rem;
-    font-weight: 900;
-    font-family: var(--boldFont);
-}
-
-.achievements-statistics-number-description {
-    color: var(--text-p);
-    line-height: 160%;
 }
 
 @media screen and (max-width: 992px) and (min-width: 601px) {
@@ -268,17 +193,5 @@
 @media screen and (max-width: 600px) {
     .achievements-statistics-wrapper {
         grid-template-columns: 1fr;
-    }
-
-    .achievements-subtitle {
-        font-size: 2rem;
-    }
-
-    .achievements-text {
-        font-size: 0.9rem;
-    }
-
-    .achievements-statistics-number {
-        font-size: 2rem;
     }
 }

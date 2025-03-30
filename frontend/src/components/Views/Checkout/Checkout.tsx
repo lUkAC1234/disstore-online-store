@@ -11,6 +11,7 @@ import styles from "./Checkout.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
+import PhoneInput from "components/UI/Phone/PhoneInput";
 
 class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
   state: CheckoutState = {
@@ -21,8 +22,6 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
     processing: false,
     error: null,
     success: false,
-    onPhoneChange: () => { },
-    rawDigits: "",
   };
 
   get lang(): string {
@@ -60,45 +59,6 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
-  };
-
-  private formatPhoneDigits(digits: string): string {
-    const parts = ["+998 "];
-    const operatorCode = digits.substring(0, 2);
-    const part2 = digits.substring(2, 5);
-    const part3 = digits.substring(5, 7);
-    const part4 = digits.substring(7, 9);
-
-    if (digits.length >= 2) { parts.push(`(${operatorCode}) `); }
-    else if (digits.length === 1) { parts.push(operatorCode); }
-
-    if (part2) {
-      parts.push(part2);
-      if (part3 || part4) parts.push(" ");
-    }
-    if (part3) {
-      parts.push(part3);
-      if (part4) parts.push(" ");
-    }
-
-    if (part4) { parts.push(part4); }
-    return parts.join("");
-  }
-
-  private extractDigits(phone: string): string {
-    const digits = phone.replace(/\D/g, "");
-    return digits.startsWith("998") ? digits.slice(3) : digits;
-  }
-
-  handleChange = (evt: ChangeEvent<HTMLInputElement>): void => {
-    const inputType = (evt.nativeEvent as InputEvent).inputType;
-    let newDigits = this.state.rawDigits;
-    if (inputType && inputType.startsWith("delete")) {
-      newDigits = newDigits.slice(0, -1);
-    } else { newDigits = this.extractDigits(evt.target.value); }
-    newDigits = newDigits.substring(0, 9);
-    const formattedPhone = this.formatPhoneDigits(newDigits);
-    this.setState({ phone: formattedPhone, rawDigits: newDigits });
   };
 
   handleInputChange = (
@@ -173,7 +133,7 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
   }
 
   render() {
-    const { fullName, address, phone, processing, error, success } = this.state;
+    const { fullName, address, processing, error, success } = this.state;
     const { user } = this.props
     const { cart } = this.props;
     if (success) {
@@ -225,15 +185,7 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
               </div>
               <div className={styles["checkout-form-group"]}>
                 <label htmlFor="phone">Телефон</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={phone}
-                  onChange={this.handleChange}
-                  required
-                  placeholder="+998 (__) ___ __ __"
-                />
+                <PhoneInput />
               </div>
               <div className={styles["checkout-form-group"]}>
                 <label htmlFor="email">Электронная почта</label>

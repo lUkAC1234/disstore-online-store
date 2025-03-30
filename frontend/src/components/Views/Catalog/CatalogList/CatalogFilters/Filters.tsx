@@ -6,6 +6,7 @@ import RangeSliderDual from "components/UI/RangeSlider/RangeSliderDual";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
 import SmoothResizable from "components/UI/SmoothResizable/SmoothResizable";
+import { ActionButton } from "components/UI/Html/Elements/Elements";
 
 class Filters extends PureComponent<CatalogFiltersProps, CatalogFiltersState> {
   state: CatalogFiltersState = {
@@ -206,12 +207,12 @@ class Filters extends PureComponent<CatalogFiltersProps, CatalogFiltersState> {
         <div className={styles["hr-line"]}></div>
 
         <div className={styles["add-to-cart-button-container"]}>
-          <button
+          <ActionButton
             className={styles["add-to-cart-button"]}
             onClick={setApplyFilters}
           >
             Применить фильтры
-          </button>
+          </ActionButton>
         </div>
       </div>
     );

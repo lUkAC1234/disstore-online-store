@@ -6,6 +6,7 @@ import { Navigation } from "swiper/modules";
 import styles from "./Home.module.scss";
 import ReviewItem from "../Catalog/CatalogDetails/Navigation/Review/ReviewItem/ReviewItem";
 import { origin } from "../../../../project.config.json";
+import { Container, HeadingTwo, Section } from "components/UI/Html/Elements/Elements";
 
 class FeedbackSection extends PureComponent<FeedbackProps, FeedbackState> {
     state: Readonly<FeedbackState> = {
@@ -40,12 +41,12 @@ class FeedbackSection extends PureComponent<FeedbackProps, FeedbackState> {
     render(): ReactNode {
         const { feedbacks } = this.state;
         return (
-            <section className={styles["feedbacks-section"]}>
-                <div className={`${styles["feedbacks-main-container"]} ${styles["feedbacks-container"]}`}>
+            <Section className={styles["feedbacks-section"]}>
+                <Container className={`${styles["feedbacks-main-container"]} ${styles["feedbacks-container"]}`}>
                     <div className={styles["feedbacks-title-section"]}>
-                        <h2 className={styles["feedbacks-subtitle"]}>
+                        <HeadingTwo bold className={styles["feedbacks-subtitle"]}>
                             Наши довольные клиенты
-                        </h2>
+                        </HeadingTwo>
                         <div className={`${styles["swiper-buttons-together-right-container"]} ${styles["swiper-buttons-feedbacks-container"]}`}>
                             <div className={styles["loop-button-feedbacks-prev"]}>
                                 <FontAwesomeIcon icon={faArrowLeft} />
@@ -102,11 +103,11 @@ class FeedbackSection extends PureComponent<FeedbackProps, FeedbackState> {
                                 </SwiperSlide>
                             ))
                         ) : (
-                            <div>No feedbacks available</div>
+                            <div>Пока нету отзывов</div>
                         )}
                     </Swiper>
-                </div>
-            </section>
+                </Container>
+            </Section>
         )
     }
 }
