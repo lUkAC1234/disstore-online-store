@@ -5,12 +5,14 @@ from .models import (
     ClothesColorModel, 
     ClothesSizeModel, 
     TypesModel,
+    Banner,
 )
 from .serializer import (
     ClothesModelSerializer,
     ClothesColorSerializer,
     ClothesSizeSerializer,
     ClothesTypeModelSerializer,
+    BannerSerializer,
 )
 
 from rest_framework.exceptions import NotFound
@@ -128,3 +130,8 @@ class ClothesColorsMainView(ListAPIView):
 class ClothesSizesMainView(ListAPIView):
     queryset = ClothesSizeModel.objects.all()
     serializer_class = ClothesSizeSerializer
+    
+# BANNERS
+class BannerView(ListAPIView):
+    queryset = Banner.objects.all()
+    serializer_class = BannerSerializer

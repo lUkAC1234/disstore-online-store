@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
 import PhoneInput from "components/UI/Phone/PhoneInput";
+import { ActionButton } from "components/UI/Html/Elements/Elements";
+import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
 
 class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
   state: CheckoutState = {
@@ -140,7 +142,11 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
       return <Navigate to="/order-confirmation" />;
     }
 
-    if (!cart || cart.items.length === 0) {
+    if (cart === null) {
+      return <SpinnerLoaderWrapperFixed withBackground />;
+    }
+
+    if (cart.items.length === 0) {
       return <Navigate to={`/${this.lang}/page-not-found-404`} />;
     }
 
@@ -185,7 +191,10 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
               </div>
               <div className={styles["checkout-form-group"]}>
                 <label htmlFor="phone">Телефон</label>
-                <PhoneInput />
+                <PhoneInput
+                  value={this.state.phone}
+                  onChange={(formatted) => this.setState({ phone: formatted })}
+                />
               </div>
               <div className={styles["checkout-form-group"]}>
                 <label htmlFor="email">Электронная почта</label>
@@ -263,13 +272,13 @@ class Checkout extends PureComponent<CheckoutProps, CheckoutState> {
                   </div>
                 </div>
 
-                <button
+                <ActionButton
                   type="submit"
                   disabled={processing}
                   className={styles["submit-button"]}
                 >
                   {processing ? <SpinnerLoaderWrapper smallWrapper whiteLoader /> : "Оформить заказ"}
-                </button>
+                </ActionButton>
               </div>
             </nav>
 

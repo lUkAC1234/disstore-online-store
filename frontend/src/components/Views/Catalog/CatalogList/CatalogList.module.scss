@@ -6,8 +6,8 @@
         padding-inline: 1rem;
     }
 
-    @media screen and (max-width: 600px) {
-        padding-inline: 0.25rem;
+    @media screen and (max-width: 400px) {
+        padding-inline: 0.5rem;
     }
 }
 
@@ -31,7 +31,6 @@
     align-items: end;
     gap: 1rem;
     margin-bottom: 1rem;
-    padding-inline: 1rem;
 }
 
 .catalog-active-filter {

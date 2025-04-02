@@ -7,6 +7,7 @@ from .models import (
     TypesModel,
     ClothesReviewModel, 
     ClothesFAQModel, 
+    Banner,
 )
 from UserAuth.serializer import RegisterSerializer
 
@@ -70,3 +71,9 @@ class ClothesModelSerializer(serializers.ModelSerializer):
                   'updated_at',
                   'popularity',
                   ]
+        
+# BANNERS
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Banner
+        fields = ['id', 'file', 'thumbnail', 'types', 'created_at', 'updated_at']

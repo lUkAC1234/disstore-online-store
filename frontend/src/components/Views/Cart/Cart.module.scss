@@ -4,11 +4,6 @@
     padding: 3rem 6rem;
 }
 
-.cart-title {
-    font-size: 3.5rem;
-    font-weight: 900;
-}
-
 .cart-content-container {
     display: flex;
     gap: 2rem;
@@ -210,8 +205,8 @@
 }
 
 .checkout-link {
-    @extend .primary-button;
     text-align: center;
+    width: 100%;
 }
 
 @media screen and (max-width: 2000px) {
@@ -244,11 +239,6 @@
     .cart-quantity-controller {
         margin-left: auto;
     }
-
-    .cart-title {
-        font-size: 2.5rem;
-    }
-
     .cart-item-options {
         margin-top: 1rem;
     }
@@ -265,7 +255,6 @@
         font-size: 1rem;
     }
 }
-
 
 .hr-line {
     border-top: 0.075rem solid var(--welcome-border);

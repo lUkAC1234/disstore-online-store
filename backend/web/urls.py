@@ -7,7 +7,8 @@ from .views import (
     ClothesSizesMainView,
     NewClothesView,
     PopularClothesView,
-    SearchingClothesView
+    SearchingClothesView,
+    BannerView,
 )
 
 urlpatterns = [
@@ -18,5 +19,6 @@ urlpatterns = [
     path('types/', ClothesTypeMainView.as_view(), name="types_main"),
     path('colors/', ClothesColorsMainView.as_view(), name="colors_main"),
     path('sizes/', ClothesSizesMainView.as_view(), name="sizes_main"),
+    path('banners/', BannerView.as_view(), name="banners"),  
     path('<slug:slug>/', ClothesModelDetailView.as_view(), name="clothes_detail"),  
 ]

@@ -8,6 +8,7 @@ import { withContextSelector } from "components/Context/ContextInjector";
 import { CartContext } from "components/Context/ContextCollection";
 import { getWithTranslation } from "i18n/hooks";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
+import { ActionButtonLink, HeadingOne } from "components/UI/Html/Elements/Elements";
 
 class Cart extends PureComponent<CartProps> {
   async componentDidMount(): Promise<void> {
@@ -151,7 +152,7 @@ class Cart extends PureComponent<CartProps> {
           <EmptyCart />
         ) : (
           <>
-            <h1 className={styles["cart-title"]}>Ваша Корзина</h1>
+            <HeadingOne className={styles["cart-title"]}>Ваша Корзина</HeadingOne>
             <div className={styles["cart-content-container"]}>
               <div className={styles["cart-details"]}>
                 {this.renderCartItems()}
@@ -186,9 +187,9 @@ class Cart extends PureComponent<CartProps> {
                       {finalTotal.toLocaleString("en-US")} сум
                     </span>
                   </div>
-                  <Link to={`/${this.lang}/checkout`} className={styles["checkout-link"]}>
+                  <ActionButtonLink to={`/${this.lang}/checkout`} className={styles["checkout-link"]}>
                     Перейти к оформлению
-                  </Link>
+                  </ActionButtonLink>
                 </div>
               </div>
             </div>

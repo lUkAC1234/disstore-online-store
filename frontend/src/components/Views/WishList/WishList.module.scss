@@ -1,9 +1,12 @@
 .wishlist-container {
     padding: 3rem 1rem;
+
+    @media screen and (max-width: 400px) {
+        padding-inline: 0.5rem;
+    }
 }
 
 .wishlist-title {
-    font-size: 2rem;
     padding-bottom: 0.5rem;
     border-bottom: 0.1rem solid var(--welcome-border);
 }

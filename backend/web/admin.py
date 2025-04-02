@@ -6,7 +6,8 @@ from .models import (
     ClothesImageModel,
     TypesModel, 
     ClothesReviewModel,
-    ClothesFAQModel
+    ClothesFAQModel,
+    Banner,
 )
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
@@ -106,3 +107,30 @@ class ClothesFAQModelAdmin(ModelAdmin):
     list_display_links = ['id', 'product']
     search_fields = ['product__title']
 
+# BANNERS
+@admin.register(Banner)
+class BannersModelAdmin(ModelAdmin):
+    list_display = ['id', 'file_preview', 'get_types_titles']
+    list_display_links = ['id', 'get_types_titles']
+    search_fields = ['types__title']
+    list_filter = ['types__title']  
+    readonly_fields = ['file_preview']  
+
+    def file_preview(self, obj):
+        if obj.file:
+            ext = obj.file.name.split('.')[-1].lower()
+            if ext in ['jpg', 'jpeg', 'png', 'webp', 'gif']:
+                return mark_safe(f'<img src="{obj.file.url}" style="max-width: 250px; aspect-ratio: 16/9;" />')
+            elif ext in ['mp4', 'mov', 'avi']:
+                return mark_safe(
+                    f'<video width="250" style="aspect-ratio: 16/9;" controls>'
+                    f'<source src="{obj.file.url}" type="video/mp4">'
+                    f'Ваш браузер не поддерживает видео.'
+                    f'</video>'
+                )
+        return "Нет изображения"
+    file_preview.short_description = "Превью"
+    
+    def get_types_titles(self, obj):
+        return ", ".join(obj.types.values_list('title', flat=True))
+    get_types_titles.short_description = "Тип одежды"

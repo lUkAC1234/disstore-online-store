@@ -7,6 +7,7 @@ import { WithTranslation } from 'react-i18next';
 import { getWithTranslation } from 'i18n/hooks';
 import { WishlistItem } from 'components/Context/WishlistContext';
 
+const BannersSection = lazy(() => import("./Banners"));
 const BrandsSection = lazy(() => import("./BrandsSection"));
 const NewClothes = lazy(() => import("./NewClothesSection"));
 const TopSelling = lazy(() => import("./TopSellingSection"));
@@ -36,6 +37,7 @@ class MainPage extends PureComponent<HomeProps> {
       <>
         <WelcomeSection lang={this.lang} />
         <BrandsSection />
+        <BannersSection />
         <NewClothes
           wishlistItems={this.props.wishlistItems}
           addToWishList={this.props.addToWishList}

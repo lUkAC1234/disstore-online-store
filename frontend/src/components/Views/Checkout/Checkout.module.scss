@@ -193,18 +193,10 @@
 }
 
 .submit-button {
-  @extend .primary-button;
   margin-top: 1rem;
-  width: 100%;
-  height: 4rem;
   text-align: center;
   z-index: var(--z-index-2);
-  font-size: 1rem;
-
-  &:disabled {
-    opacity: 0.75;
-    cursor: unset;
-  }
+  width: 100%;
 }
 
 @media screen and (max-width: 1200px) {

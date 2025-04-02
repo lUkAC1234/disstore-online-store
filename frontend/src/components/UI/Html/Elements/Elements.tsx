@@ -1,4 +1,4 @@
-import { PureComponent, createRef, HTMLAttributes, createElement, ElementType } from "react";
+import { PureComponent, createRef, HTMLAttributes, createElement, ElementType, ButtonHTMLAttributes, ReactNode } from "react";
 import { Link as RouterLink, LinkProps } from "react-router-dom";
 import styles from "./Elements.module.scss";
 interface ElementProps extends HTMLAttributes<HTMLElement> { 
@@ -140,12 +140,12 @@ export class Preformatted extends BaseElement {
 
 // Buttons
 
-export class ActionButton extends BaseElement {
+export class ActionButton extends BaseElement<ButtonHTMLAttributes<HTMLButtonElement>>  {
   tag: ElementType = "button";
   customName = "actionButton";
 }
 
-export class ActionButtonLink extends BaseElement<CustomLinkProps> {
+export class ActionButtonLink extends BaseElement<CustomLinkProps & ButtonHTMLAttributes<HTMLButtonElement>> {
   tag: ElementType = RouterLink;
   customName = "actionButton";
 }

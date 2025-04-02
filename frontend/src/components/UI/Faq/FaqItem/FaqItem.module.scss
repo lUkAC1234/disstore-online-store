@@ -1,5 +1,5 @@
 .faq-item {
-    border-bottom: 0.1rem solid color-mix(in srgb, var(--text-white), transparent 80%);
+    border-bottom: 0.11rem solid color-mix(in srgb, var(--text-white), transparent 80%);
     overflow: hidden;
 }
 
@@ -23,7 +23,7 @@
     padding-block: 1rem;
 
     &.faq-toggler--active .faq-icon {
-        transform: rotate(-90deg);
+        transform: rotate(-180deg);
     }
 }
 

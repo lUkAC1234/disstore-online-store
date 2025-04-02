@@ -7,6 +7,7 @@ import { ModalHandler } from "components/Modal/Modal.utils";
 import { getWithTranslation } from "i18n/hooks";
 import UICatalogModal from "../Catalog/CatalogDetails/CatalogModal/CatalogDetailsModal";
 import CatalogItem from "../Catalog/CatalogList/CatalogProductsList/CatalogItem/CatalogItem";
+import { HeadingOne } from "components/UI/Html/Elements/Elements";
 
 class WishList extends ModalHandler<WishListProps, WishListState> {
   state: Readonly<{ pathname: string; }> = {
@@ -33,7 +34,7 @@ class WishList extends ModalHandler<WishListProps, WishListState> {
         <div className={styles["wishlist-container"]}>
           {wishlistItems.length > 0 ? (
             <>
-              <h1 className={styles["wishlist-title"]}>Мои желания</h1>
+              <HeadingOne className={styles["wishlist-title"]}>Мои желания</HeadingOne>
               <div className={styles["wishlist-items-wrapper"]}>
                 {wishlistItems.map((wishlistItem) => (
                   <CatalogItem

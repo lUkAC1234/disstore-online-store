@@ -2,11 +2,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 from ckeditor.fields import RichTextField
-import random, string
+import random, string, os, uuid, subprocess
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
 from UserAuth.models import UserModel
+from django.core.exceptions import ValidationError
+from tempfile import NamedTemporaryFile
 
 TRANSLIT_DICT = {
     'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh', 'З': 'Z', 'И': 'I',
@@ -212,4 +214,188 @@ class ClothesImageModel(models.Model):
         verbose_name = _("Изображение")
         verbose_name_plural = _("Изображения")
         
+# BANNERS
+
+def validate_banner_file(value):
+    ext = os.path.splitext(value.name)[1]
+    valid_extensions = ['.webp', '.png', '.jpg', '.jpeg', '.svg', '.gif', '.mp4', '.mov', '.avi']
+    if ext.lower() not in valid_extensions:
+        raise ValidationError(
+            _("Unsupported file extension. Allowed types: webp, png, jpg, jpeg, svg, gif, mp4, mov, avi.")
+        )
+        
+class Banner(models.Model):
+    file = models.FileField(
+        _("Файл"),
+        upload_to='banners/%Y/%m/%d/',
+        validators=[validate_banner_file]
+    )
+    thumbnail = models.FileField(
+        _("Миниатюра"),
+        upload_to='banners/thumbnails/%Y/%m/%d/',
+        blank=True,
+        null=True
+    )
+    types = models.ManyToManyField(
+        TypesModel, 
+        verbose_name=_("Тип одежды"),
+        related_name='banner_types'
+    )
     
+    created_at = models.DateTimeField(_("Создан в"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Обновлен в"), auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.file:
+            ext = self.file.name.split('.')[-1].lower()
+            if ext in ['jpg', 'jpeg', 'png']:
+                self.file = self.convert_image_to_webp(self.file)
+            elif ext == 'gif':
+                self.file = self.optimize_gif(self.file)
+            elif ext in ['mp4', 'mov', 'avi']:
+                self.file = self.optimize_video(self.file)
+            
+            if not self.thumbnail:
+                self.thumbnail = self.make_thumbnail(self.file)
+        super().save(*args, **kwargs)
+
+    def convert_image_to_webp(self, file):
+        img = Image.open(file)
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGBA")
+        else:
+            img = img.convert("RGB")
+        for quality in range(95, 0, -5):
+            buffer = BytesIO()
+            img.save(buffer, format='WEBP', quality=quality)
+            size_in_kb = buffer.tell() / 1024
+            if size_in_kb <= 80:
+                new_name = f"{os.path.splitext(file.name)[0]}.webp"
+                return ContentFile(buffer.getvalue(), name=new_name)
+        buffer = BytesIO()
+        img.save(buffer, format='WEBP', quality=10)
+        new_name = f"{os.path.splitext(file.name)[0]}.webp"
+        return ContentFile(buffer.getvalue(), name=new_name)
+
+    def optimize_gif(self, file):
+        with NamedTemporaryFile(delete=False, suffix=f"_{file.name}") as temp_input_file:
+            for chunk in file.chunks():
+                temp_input_file.write(chunk)
+            temp_input = temp_input_file.name
+
+        with NamedTemporaryFile(delete=False, suffix="_optimized.webp") as temp_output_file:
+            temp_output = temp_output_file.name
+
+        command = [
+            "ffmpeg",
+            "-y",
+            "-i", temp_input,
+            "-lossless", "0",
+            "-q:v", "50", 
+            "-preset", "picture",
+            "-loop", "0",
+            temp_output
+        ]
+        subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        with open(temp_output, 'rb') as f:
+            optimized_content = f.read()
+
+        os.remove(temp_input)
+        os.remove(temp_output)
+
+        new_name = f"{os.path.splitext(file.name)[0]}_optimized.webp"
+        return ContentFile(optimized_content, name=new_name)
+
+    def optimize_video(self, file):
+        with NamedTemporaryFile(delete=False, suffix=f"_{file.name}") as temp_input_file:
+            for chunk in file.chunks():
+                temp_input_file.write(chunk)
+            temp_input = temp_input_file.name
+
+        with NamedTemporaryFile(delete=False, suffix="_optimized.mp4") as temp_output_file:
+            temp_output = temp_output_file.name
+
+        command = [
+            "ffmpeg",
+            "-y",
+            "-i", temp_input,
+            "-vcodec", "libx264",
+            "-preset", "veryslow",
+            "-b:v", "150k",     
+            "-acodec", "aac",
+            "-b:a", "32k",      
+            "-vf", "scale=-2:240",  
+            "-fs", "200k",       
+            temp_output
+        ]
+        subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        with open(temp_output, 'rb') as f:
+            optimized_content = f.read()
+
+        os.remove(temp_input)
+        os.remove(temp_output)
+
+        new_name = f"{os.path.splitext(file.name)[0]}_optimized.mp4"
+        return ContentFile(optimized_content, name=new_name)
+
+    def make_thumbnail(self, file):
+        ext = file.name.split('.')[-1].lower()
+        if ext in ['webp', 'jpg', 'jpeg', 'png', 'gif']:
+            try:
+                img = Image.open(file)
+            except Exception:
+                return None
+
+            try:
+                img.seek(0)
+            except Exception:
+                pass
+
+            target_width = 50 
+            aspect_ratio = img.width / img.height
+            target_height = int(target_width / aspect_ratio)
+            img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+
+            thumb_io = BytesIO()
+            img.save(thumb_io, format='WEBP', quality=80)
+            new_name = f"thumb_{os.path.splitext(file.name)[0]}.webp"
+            return ContentFile(thumb_io.getvalue(), name=new_name)
+        elif ext in ['mp4', 'mov', 'avi']:
+            with NamedTemporaryFile(delete=False, suffix=f"_{file.name}") as temp_input_file:
+                for chunk in file.chunks():
+                    temp_input_file.write(chunk)
+                temp_input = temp_input_file.name
+
+            with NamedTemporaryFile(delete=False, suffix="_thumb.webp") as temp_output_file:
+                temp_output = temp_output_file.name
+
+            command = [
+                "ffmpeg",
+                "-y",
+                "-i", temp_input,
+                "-ss", "00:00:01.000",
+                "-vframes", "1",
+                "-vf", "scale=50:-1", 
+                temp_output
+            ]
+            subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            with open(temp_output, 'rb') as f:
+                thumb_content = f.read()
+
+            os.remove(temp_input)
+            os.remove(temp_output)
+
+            new_name = f"thumb_{os.path.splitext(file.name)[0]}.webp"
+            return ContentFile(thumb_content, name=new_name)
+        return None
+
+    def __str__(self):
+        return f"Баннер {self.id} для {', '.join(self.types.values_list('title', flat=True))}"
+
+    class Meta:
+        verbose_name = _("Баннер")
+        verbose_name_plural = _("Баннеры")
+        ordering = ('-created_at',)
