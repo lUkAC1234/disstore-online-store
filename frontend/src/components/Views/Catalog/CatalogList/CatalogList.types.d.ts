@@ -1,11 +1,9 @@
-import { WithTranslation } from "react-i18next"; 
-
 declare global {
     interface CatalogListState {
         isFilterActive: boolean;
     }
     
-    interface CatalogListProps extends WithTranslation {
+    interface CatalogListProps {
         loading: boolean;
         error: boolean;
         products: ClothItem[];

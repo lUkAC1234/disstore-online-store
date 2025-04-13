@@ -1,18 +1,12 @@
-import styles from "./Home.module.scss";
+import styles from "./Welcome.module.scss";
 import { PureComponent, ReactNode } from "react";
 import welcomeImage from "assets/main/images/main-page/models.webp";
 import thumbwelcomeImage from "assets/main/images/main-page/thumb_welcomeImage.webp";
-import { Link } from "react-router-dom";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
 import { ActionButtonLink, HeadingOne, Text } from "components/UI/Html/Elements/Elements";
 
-interface WelcomeSectionProps {
-    lang?: string;
-};
-
-class WelcomeSection extends PureComponent<WelcomeSectionProps> {
+class WelcomeSection extends PureComponent {
     render(): ReactNode {
-        const { lang } = this.props;
         return (
             <section className={styles["welcome-section"]}>
                 <div className={styles["welcome-container"]}>
@@ -25,7 +19,7 @@ class WelcomeSection extends PureComponent<WelcomeSectionProps> {
                             созданной одежды, разработанной, чтобы подчеркнуть вашу
                             индивидуальность и удовлетворить ваше чувство стиля
                         </Text>
-                        <ActionButtonLink to={`/${lang}/catalog`} className={styles["welcome-link"]}>
+                        <ActionButtonLink to={`/catalog`} className={styles["welcome-link"]}>
                             Купить сейчас
                         </ActionButtonLink>
                         <div className={styles["welcome-numbers-count-container"]}>

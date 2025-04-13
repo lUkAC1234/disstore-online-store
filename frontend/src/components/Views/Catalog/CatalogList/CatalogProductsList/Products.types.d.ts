@@ -1,11 +1,9 @@
-import { WithTranslation } from "react-i18next";
-
 declare global {
     interface CatalogProductsState {
         pathname: string
     }
 
-    interface CatalogProductsProps extends WithTranslation {
+    interface CatalogProductsProps {
         products: ClothItem[];
         wishlistItems?: WishlistItem[];
         addToWishList?: (productId: number) => Promise<void>;

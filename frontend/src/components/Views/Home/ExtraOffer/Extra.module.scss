@@ -1,0 +1,94 @@
+@use "assets/main/styles/scss/animations/animations.module.scss" as animations;
+
+.extra-offer-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    place-content: center;
+    place-items: center;
+    margin-inline: auto;
+    padding-inline: 1rem;
+}
+
+.extra-offer-content {
+    position: relative;
+    place-content: center;
+    width: min(100%, 45rem);
+    height: 40rem;
+    border-radius: 1.5rem 0 0 1.5rem;
+    padding: 2rem 2rem;
+    overflow: hidden;
+    
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url('assets/main/images/main-page/offer.webp') no-repeat center center / cover;
+        @include animations.ambient-rotate();
+        z-index: -1;
+    }
+}
+
+.extra-offer-title {
+    text-transform: uppercase;
+    line-height: 100%;
+}
+
+.extra-offer-text {
+    margin-top: 1rem;
+}
+
+.extra-offer-link {
+    margin-top: 3rem;
+    border-color: transparent !important;
+}
+
+.extra-offer-image-container {
+    width: min(100%, 45rem);
+
+    img {
+        display: block;
+        width: 100%;
+        height: 40rem;
+        object-fit: cover;
+        border-radius: 0 1.5rem 1.5rem 0;
+    }
+}
+
+
+@media screen and (max-width: 2000px) {
+    .extra-offer-content {
+        padding-inline: 1rem;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .extra-offer-container {
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
+    .extra-offer-content {
+        width: 100%;
+        border-radius: 1.5rem;
+    }
+
+    .extra-offer-image-container {
+        display: none;
+    }
+}
+
+
+@media screen and (max-width: 500px) {
+    .extra-offer-section {
+        margin-bottom: 0;
+    }
+
+    .extra-offer-container {
+        padding-inline: 0;
+    }
+
+    .extra-offer-content {
+        border-radius: 0;
+        padding-inline: 0.5rem;
+    }
+}

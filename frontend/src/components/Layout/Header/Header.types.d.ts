@@ -1,8 +1,7 @@
-import { WithTranslation } from "react-i18next";
 import { WithRouterProps } from "../../../Hocs/withRouter";
 
 declare global {
-    interface HeaderProps extends WithTranslation, WithRouterProps {
+    interface HeaderProps extends WithRouterProps {
         resetFilters: () => void;
         loading: boolean;
         error: boolean;
@@ -24,6 +23,7 @@ declare global {
         isMobile: boolean;
         isMenuDisactive: boolean;
         linksMobileIsOpen: boolean;
+        hasScrolled: boolean;
     }
 }
 

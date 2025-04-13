@@ -1,6 +1,46 @@
-/* Styles for Profile component */
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.profile-wrapper {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 4fr;
+  margin-top: 1rem;
+}
+
+.profile-main-fields-container {
+  background: var(--text-white);
+  padding: 1rem;
+  border: 0.1rem solid var(--welcome-border);
+  border-radius: 0.5rem;
+}
+
+.profile-info-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 1rem;
+  border: 0.1rem solid var(--welcome-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.profile-field-container {
+  position: relative;
+
+  input {
+    background: var(--text-white);
+  }
+}
+
+.edit-btn {
+  all: unset;
+  position: absolute;
+  z-index: var(--z-index-2);
+  cursor: pointer;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1rem;
+
+  svg {
+    font-size: 0.875rem;
+    color: var(--text-black);
+  }
 }

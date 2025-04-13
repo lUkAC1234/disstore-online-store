@@ -1,8 +1,8 @@
 import styles from "./CatalogItem.module.scss";
 import { PureComponent, MouseEvent } from "react";
-import { Link } from "react-router-dom";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
 import { SmallText } from "components/UI/Html/Elements/Elements";
+import LangLink from "components/UI/Link/LangLink";
 
 class CatalogItem extends PureComponent<CatalogItemProps, CatalogItemState> {
   truncateText(text: string, maxLength: number): string {
@@ -26,13 +26,13 @@ class CatalogItem extends PureComponent<CatalogItemProps, CatalogItemState> {
   };
 
   render() {
-    const { item, lang, isInWishlist = false } = this.props;
+    const { item, isInWishlist = false } = this.props;
 
     return (
       <div className={styles["catalog-item"]}>
-        <Link
+        <LangLink
           className={styles["catalog-item-link"]}
-          to={`/${lang}/catalog/clothes/${item.slug}`}
+          to={`/catalog/clothes/${item.slug}`}
         />
         <div className={styles["catalog-item-wishlist-container"]}>
           <button

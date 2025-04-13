@@ -2,12 +2,12 @@ import styles from "./Profile.module.scss";
 import { FormEvent, PureComponent, ReactNode } from "react";
 import { UserContext } from "components/Context/ContextCollection";
 import { withContextSelector } from "components/Context/ContextInjector";
-import { getWithTranslation } from "i18n/hooks";
+import { withTranslation } from "i18n/hooks";
 import { Link, Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import EditFieldModal from "./EditFieldModal/EditFieldModal";
-import {HeadingOne} from "components/UI/Html/Elements/Elements";
+import { Container, HeadingOne, Input, Label, Section, Sidebar } from "components/UI/Html/Elements/Elements";
 
 const fieldLabels: { [key in keyof EditableProfileFields]: string } = {
   first_name: "Имя",
@@ -75,51 +75,75 @@ class Profile extends PureComponent<ProfileProps, ProfileState> {
       return <Navigate to={`/${this.lang}/authentication`} />;
     }
     return (
-      <div className={styles["profile-container"]}>
-        <div className="catalog-link-way">
-          <Link to={`/${this.lang}/`}>Главная</Link>
-          <FontAwesomeIcon icon={faAngleRight} />
-          Профиль
-        </div>
-        <h2>Профиль</h2>
-        <div className={styles["profile-info"]}>
-          <p>
-            <strong>Email:</strong> {this.props.user?.email}
-          </p>
-          <p>
-            <HeadingOne>My Custom Heading</HeadingOne>
+      <Section>
+        <Container className={styles["profile-container"]}>
+          <div className={styles["profile-head-container"]}>
+            <HeadingOne>Профиль</HeadingOne>
+          </div>
 
-            <strong>Имя:</strong> {this.props.user?.first_name}{" "}
-            <button className={styles["edit-btn"]} onClick={() => this.openModal("first_name")}>
-              <FontAwesomeIcon icon={faEdit} />
-            </button>
-          </p>
-          <p>
-            <strong>Фамилия:</strong> {this.props.user?.last_name}{" "}
-            <button className={styles["edit-btn"]} onClick={() => this.openModal("last_name")}>
-              <FontAwesomeIcon icon={faEdit} />
-            </button>
-          </p>
-          <p>
-            <strong>Телефон:</strong> {this.props.user?.mobile_number}{" "}
-            <button className={styles["edit-btn"]} onClick={() => this.openModal("mobile_number")}>
-              <FontAwesomeIcon icon={faEdit} />
-            </button>
-          </p>
-          <button onClick={this.props.setLogout}>Выйти</button>
-        </div>
+          <div className={styles["profile-wrapper"]}>
+            <Sidebar className={styles["profile-sidebar"]}>
+              <div className={styles["profile-sidebar-item"]}>
+                <Link to="">Личный кабинет</Link>
+              </div>
+              <div className={styles["profile-sidebar-item"]}>
+                <Link to="">История заказов</Link>
+              </div>
+            </Sidebar>
+            <div className={styles["profile-main-container"]}>
+              <div className={styles["profile-main-fields-container"]}>
+                <Label htmlFor="email">Почта</Label>
+                <Input className={styles["profile-field"]} id="email" value={this.props.user?.email} disabled />
+              </div>
 
-        {this.state.modalField && (
-          <EditFieldModal
-            field={this.state.modalField}
-            label={fieldLabels[this.state.modalField]}
-            value={this.state.modalValue}
-            onChange={this.handleModalChange}
-            onCancel={this.handleModalCancel}
-            onSubmit={this.handleModalSubmit}
-          />
-        )}
-      </div>
+              <div className={styles["profile-info-container"]}>
+                <div className={styles["profile-form-group"]}>
+                  <Label htmlFor="first_name">Имя</Label>
+                  <div className={styles["profile-field-container"]}>
+                    <Input className={styles["profile-field"]} id="first_name" value={this.props.user?.first_name} disabled />
+                    <button className={styles["edit-btn"]} onClick={() => this.openModal("first_name")}>
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                  </div>
+                </div>
+                <div className={styles["profile-form-group"]}>
+                  <Label htmlFor="last_name">Фамилия</Label>
+                  <div className={styles["profile-field-container"]}>
+                    <Input className={styles["profile-field"]} id="email" value={this.props.user?.last_name} disabled />
+                    <button className={styles["edit-btn"]} onClick={() => this.openModal("last_name")}>
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                  </div>
+                </div>
+                <div className={styles["profile-form-group"]}>
+                  <Label htmlFor="mobile_number">Телефон</Label>
+                  <div className={styles["profile-field-container"]}>
+                    <Input className={styles["profile-field"]} id="email" value={this.props.user?.mobile_number} disabled />
+                    <button className={styles["edit-btn"]} onClick={() => this.openModal("mobile_number")}>
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles["profile-logout-container"]}>
+            <button onClick={this.props.setLogout}>Выйти</button>
+          </div>
+
+          {this.state.modalField && (
+            <EditFieldModal
+              field={this.state.modalField}
+              label={fieldLabels[this.state.modalField]}
+              value={this.state.modalValue}
+              onChange={this.handleModalChange}
+              onCancel={this.handleModalCancel}
+              onSubmit={this.handleModalSubmit}
+            />
+          )}
+        </Container>
+      </Section>
     );
   }
 }
@@ -131,6 +155,6 @@ const UIProfile = withContextSelector(UserContext, Profile, (context) => ({
   updateUser: context.updateUser,
 }));
 
-const TranslatedUIProfile = getWithTranslation(UIProfile);
+const TranslatedUIProfile = withTranslation(UIProfile);
 
 export default TranslatedUIProfile;

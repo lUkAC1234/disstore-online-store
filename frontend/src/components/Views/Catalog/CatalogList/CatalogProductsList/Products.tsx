@@ -7,7 +7,6 @@ import UICatalogModal from "../../CatalogDetails/CatalogModal/CatalogDetailsModa
 import Authentication from "components/Views/Authentication/Authentication";
 import CatalogItem from "./CatalogItem/CatalogItem";
 import styles from "./Products.module.scss";
-import { getWithTranslation } from "i18n/hooks";
 
 class CatalogProducts extends ModalHandler<CatalogProductsProps, CatalogProductsState> {
   render(): ReactNode {
@@ -31,7 +30,6 @@ class CatalogProducts extends ModalHandler<CatalogProductsProps, CatalogProducts
             <CatalogItem
               key={item.id}
               item={item}
-              lang={this.props.i18n.language}
               isInWishlist={inWishlist}
               onWishlistClick={(item: ClothItem) => {
                 if (isAuthenticated) {
@@ -61,11 +59,9 @@ class CatalogProducts extends ModalHandler<CatalogProductsProps, CatalogProducts
   }
 }
 
-const TranslatedCatalog = getWithTranslation(CatalogProducts);
-
 const ___UICatalogProduct = withContextSelector(
     UserContext,
-    TranslatedCatalog,
+    CatalogProducts,
     (context) => ({
       isAuthenticated: context.isAuthenticated,
     })

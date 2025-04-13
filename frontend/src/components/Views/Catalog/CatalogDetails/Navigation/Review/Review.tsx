@@ -1,7 +1,6 @@
 import styles from "./Review.module.scss";
 import NavigationError from "../../NavigationError/NavigationError";
 import { PureComponent, ReactNode } from "react";
-import DateComputed from "components/DateComputed/DateComputed";
 import ReviewItem from "./ReviewItem/ReviewItem";
 
 interface ReviewProps {

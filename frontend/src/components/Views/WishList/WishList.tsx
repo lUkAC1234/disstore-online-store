@@ -4,7 +4,6 @@ import { ProductModalContext, WishlistContext } from "components/Context/Context
 import { withContextSelector } from "components/Context/ContextInjector";
 import WishlistEmpty from "./WishListEmpty/WishlistEmpty";
 import { ModalHandler } from "components/Modal/Modal.utils";
-import { getWithTranslation } from "i18n/hooks";
 import UICatalogModal from "../Catalog/CatalogDetails/CatalogModal/CatalogDetailsModal";
 import CatalogItem from "../Catalog/CatalogList/CatalogProductsList/CatalogItem/CatalogItem";
 import { HeadingOne } from "components/UI/Html/Elements/Elements";
@@ -13,10 +12,6 @@ class WishList extends ModalHandler<WishListProps, WishListState> {
   state: Readonly<{ pathname: string; }> = {
     pathname: location.pathname,
   };
-
-  get lang(): string {
-    return this.props.i18n.language
-  }
   
   componentDidMount(): void {
     if (document.documentElement.scrollTop > 0) {
@@ -40,7 +35,6 @@ class WishList extends ModalHandler<WishListProps, WishListState> {
                   <CatalogItem
                     key={wishlistItem.id}
                     item={wishlistItem.product}
-                    lang={this.lang}
                     isInWishlist={true}
                     onWishlistClick={() => removeFromWishlist(wishlistItem.id)}
                     onCartClick={() =>
@@ -73,4 +67,4 @@ const UIWishList = withContextSelector(WishlistContext, _UIWishList, (context) =
   removeFromWishlist: context.removeFromWishlist,
 }));
 
-export default getWithTranslation(UIWishList);
+export default UIWishList;

@@ -1,11 +1,11 @@
 import styles from "./Modal.module.scss";
-import { Component, ReactNode, PropsWithChildren, MouseEvent } from "react";
+import { ReactNode, PropsWithChildren, MouseEvent, PureComponent } from "react";
 
 interface ModalProps extends PropsWithChildren {
   onClose?: () => void;
 }
 
-class Modal extends Component<ModalProps> {
+class Modal extends PureComponent<ModalProps> {
   stopPropagation = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };

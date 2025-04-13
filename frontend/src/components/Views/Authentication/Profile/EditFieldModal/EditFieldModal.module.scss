@@ -1,0 +1,35 @@
+.modal-overlay {
+    position: fixed;
+    display: grid;
+    place-items: center;
+    padding-inline: 1rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: var(--z-index-11);
+}
+
+.modal {
+    background: var(--text-white);
+    padding: 3rem 2rem;
+    border-radius: 0.5rem;
+    width: min(100%, 25rem);
+}
+
+.change-subtitle {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.modal-buttons {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0.5rem;
+    margin-top: 1rem;
+
+    @media screen and (max-width: 350px) {
+        grid-template-columns: 1fr;
+    }
+}

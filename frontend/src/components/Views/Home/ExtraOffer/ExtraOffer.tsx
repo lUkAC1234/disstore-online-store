@@ -1,15 +1,11 @@
-import styles from "./Home.module.scss";
+import styles from "./Extra.module.scss";
 import { PureComponent, ReactNode } from "react";
 import extraoffer from "assets/main/images/main-page/extraoffer.webp";
 import { ActionButtonLink, HeadingTwo, LGContainer, Section, Text } from "components/UI/Html/Elements/Elements";
 
-interface ExtraOfferProps {
-    lang?: string;
-};
 
-class ExtraOffer extends PureComponent<ExtraOfferProps> {
+class ExtraOffer extends PureComponent {
     render(): ReactNode {
-        const { lang } = this.props
         return (
             <Section className={styles["extra-offer-section"]}>
                 <LGContainer className={styles["extra-offer-container"]}>
@@ -22,7 +18,7 @@ class ExtraOffer extends PureComponent<ExtraOfferProps> {
                             уникальными скидками и создайте стильный гардероб, который будет
                             вдохновлять каждый день
                         </Text>
-                        <ActionButtonLink white to={`/${lang}/catalog`} className={styles["extra-offer-link"]}>
+                        <ActionButtonLink white to={`/catalog`} className={styles["extra-offer-link"]}>
                             Купить сейчас
                         </ActionButtonLink>
                     </div>

@@ -1,16 +1,26 @@
 .header {
     position: fixed;
-    top: 0;
+    top: 2rem;
     left: 0;
     width: 100%;
     z-index: var(--z-index-6);
     background-color: var(--text-white);
-    -webkit-box-shadow: 0 0.7rem 0.5rem rgba(0, 0, 0, 0.15);
-    box-shadow: 0 0.7rem 0.5rem rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
+    border-bottom: 0.1rem solid var(--welcome-border);
 
     * {
         font-family: var(--primary-font);
+    }
+
+    &.header-activated {
+        top: 0;
+        -webkit-box-shadow: 0 0.7rem 0.5rem rgba(0, 0, 0, 0.15);
+        box-shadow: 0 0.7rem 0.5rem rgba(0, 0, 0, 0.15);
+        border-bottom: unset;
+    }
+
+    @media screen and (max-width: 450px) {
+        top: 2.5rem;
     }
 }
 
@@ -26,6 +36,7 @@
 
 .header-logo-container {
     z-index: var(--z-index-2);
+
     img {
         width: 5rem;
         height: 6rem;
@@ -111,13 +122,13 @@
         margin-left: 0.5rem;
         all: unset;
         cursor: pointer;
-    
+
         svg {
             font-size: 0.8rem;
             margin-left: 0.5rem;
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
-    
+
         &:hover svg {
             opacity: 0.8;
         }
@@ -136,7 +147,7 @@ body:has(.header-link-extra-details-container.active) .header-link-extra-details
     gap: 2rem;
     background: var(--text-white);
     box-shadow: 0 0.7rem 0.5rem rgba(0, 0, 0, 0.15);
-    margin: 3rem 1rem 0;
+    margin-top: 2rem;
     padding: 1rem;
 
     &:has(.header-error-container) {
@@ -274,6 +285,7 @@ body:has(.header-link-extra-details-container.active) .header-link-extra-details
     pointer-events: none;
     overflow: hidden auto;
     border: transparent;
+    border-radius: 0.5rem;
     transition: all 0.3s ease;
 
     @media screen and (max-width: 650px) {
@@ -283,6 +295,7 @@ body:has(.header-link-extra-details-container.active) .header-link-extra-details
 
 @media screen and (min-width: 651px) {
     .header-search-form:has(:focus-within) {
+
         &:has(.header-searched-item),
         &:has(.header-error-container) {
             .header-searched-results-container {

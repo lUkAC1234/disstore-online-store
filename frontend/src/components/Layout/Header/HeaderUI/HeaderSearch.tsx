@@ -1,14 +1,14 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PureComponent, ReactNode } from "react";
+import { ChangeEvent, PureComponent, ReactNode, RefObject } from "react";
 
 interface HeaderSearchProps {
     isMobile: boolean;
     title: string;
-    onInputChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+    onInputChange: (evt: ChangeEvent<HTMLInputElement>) => void;
     toggleSearchInput: () => void;
     closeSearchInput: () => void;
-    searchInputRef: React.RefObject<HTMLDivElement>;
+    searchInputRef: RefObject<HTMLDivElement>;
     SearchedProductsOverlay: ReactNode;
 }
 

@@ -4,7 +4,6 @@ import FaqItem from "./FaqItem/FaqItem";
 import BlockLoader from "components/UI/BlockLoaders/BlockLoader";
 import { origin } from "../../../../project.config.json";
 import SmoothResizable from "components/UI/SmoothResizable/SmoothResizable";
-import { getWithTranslation } from "i18n/hooks";
 import { ActionButtonLink, HeadingFive, HeadingTwo, MDContainer, Text } from "../Html/Elements/Elements";
 
 class Faq extends PureComponent<FaqProps, FaqState> {
@@ -12,10 +11,6 @@ class Faq extends PureComponent<FaqProps, FaqState> {
     faqs: [],
     error: null,
   };
-
-  get lang(): string {
-    return this.props.i18n.language
-  }
 
   componentDidMount() {
     const cachedFaqs = sessionStorage.getItem("faqs");
@@ -67,7 +62,7 @@ class Faq extends PureComponent<FaqProps, FaqState> {
               <div className={styles["faq-contact-us-container"]}>
                 <HeadingFive bold className={styles["faq-contact-us-subtitle"]}>Все еще есть вопросы?</HeadingFive>
                 <Text className={styles["faq-contact-us-text"]}>Свяжитесь с нами для получения дополнительной информации.</Text>
-                <ActionButtonLink white to={`/${this.lang}/contact/us`} className={styles["faq-contact-us-link"]}>Связаться</ActionButtonLink>
+                <ActionButtonLink white to={`/contact/us`} className={styles["faq-contact-us-link"]}>Связаться</ActionButtonLink>
               </div>
             </div>
           )}
@@ -77,6 +72,4 @@ class Faq extends PureComponent<FaqProps, FaqState> {
   }
 }
 
-const TranslatedFaq = getWithTranslation(Faq)
-
-export default TranslatedFaq;
+export default Faq;

@@ -1,23 +1,22 @@
-import styles from './Home.module.scss';
+import styles from '../Home.module.scss';
 import { ReactNode } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Keyboard, Navigation } from "swiper/modules";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import CatalogItem from '../Catalog/CatalogList/CatalogProductsList/CatalogItem/CatalogItem';
 import { ClothItem } from "components/Context/ClothesContext";
 import Authentication from "components/Views/Authentication/Authentication";
-import UICatalogModal from '../Catalog/CatalogDetails/CatalogModal/CatalogDetailsModal';
 import { WishlistItem } from "components/Context/WishlistContext";
 import { ModalHandler } from 'components/Modal/Modal.utils';
-import { origin } from "../../../../project.config.json";
+import { origin } from "../../../../../project.config.json";
 import HeaderError from 'components/Layout/Header/HeaderError/HeaderError';
-import { ProductModalContext } from 'components/Context/ContextCollection';
 import { withContextSelector } from 'components/Context/ContextInjector';
-import SpinnerLoaderWrapper from 'components/Loaders/SpinnerLoaderWrapper';
+import { ProductModalContext } from 'components/Context/ContextCollection';
 import { ActionButtonLink, Container, HeadingTwo, Section } from 'components/UI/Html/Elements/Elements';
+import CatalogItem from 'components/Views/Catalog/CatalogList/CatalogProductsList/CatalogItem/CatalogItem';
+import UICatalogModal from 'components/Views/Catalog/CatalogDetails/CatalogModal/CatalogDetailsModal';
 
-interface NewClothesProps {
+interface TopSellingProps {
     wishlistItems?: WishlistItem[];
     addToWishList?: (productId: number) => Promise<void>;
     removeFromWishlist?: (wishlistItemId: number) => Promise<void>;
@@ -27,17 +26,16 @@ interface NewClothesProps {
     isModalActive: boolean;
     modalChildren: ReactNode;
     isAuthenticated: boolean;
-    lang?: string;
 }
 
-interface NewClothesState {
+interface TopSellingState {
     products: ClothItem[];
     loading: boolean;
     error: string | null;
     pathname: string;
 }
 
-class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
+class TopSelling extends ModalHandler<TopSellingProps, TopSellingState> {
     state = {
         products: [],
         loading: true,
@@ -46,25 +44,24 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
     };
 
     async componentDidMount(): Promise<void> {
-        this.fetchNewClothes();
+        this.fetchPopularClothes();
     }
 
-    async fetchNewClothes(): Promise<void> {
+    async fetchPopularClothes(): Promise<void> {
         try {
-            const cached = sessionStorage.getItem("newClothes");
+            const cached = sessionStorage.getItem("popularClothes");
             if (cached) {
                 const products: ClothItem[] = JSON.parse(cached);
                 this.setState({ products, loading: false });
                 return;
             }
-
-            const response = await fetch(`${origin}/clothes/new/`);
+            const response = await fetch(`${origin}/clothes/popular/`);
             if (!response.ok) {
-                throw new Error("Не получилось загрузить новые одежды");
+                throw new Error("Не получилось загрузить популярные одежды");
             }
             const data = await response.json();
             const products: ClothItem[] = data.results ? data.results : data;
-            sessionStorage.setItem("newClothes", JSON.stringify(products));
+            sessionStorage.setItem("popularClothes", JSON.stringify(products));
             this.setState({ products, loading: false });
         } catch (error) {
             this.setState({ error: error.message, loading: false });
@@ -77,12 +74,11 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
             addToWishList,
             removeFromWishlist,
             isAuthenticated,
-            lang,
         } = this.props;
         const { products, loading, error } = this.state;
 
         if (loading) {
-            return <SpinnerLoaderWrapper smallWrapper wrapperStyle={{ height: "25rem" }} />;
+            return <div>Loading popular clothes...</div>;
         }
 
         if (error) {
@@ -95,17 +91,17 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
         }
 
         return (
-            <Section className={`${styles["new-clothes-section"]}`}>
-                <Container className={`${styles["new-clothes-container"]}`}>
-                    <HeadingTwo bold className={`${styles["new-clothes-subtitle"]}`}>
-                        Новинки
+            <Section className={`swiper-section ${styles["top-selling-section"]}`}>
+                <Container className={`swiper-main-container ${styles["top-selling-container"]}`}>
+                    <HeadingTwo bold className={`swiper-subtitle ${styles["top-selling-subtitle"]} fade fadeInDown`}>
+                        Популярное
                     </HeadingTwo>
                     <Swiper
-                        className={styles["mySwiper-new-clothes"]}
+                        className={styles["mySwiper-top-selling"]}
                         modules={[Navigation, Keyboard]}
                         navigation={{
-                            nextEl: `.${styles["loop-button-new-clothes-next"]}`,
-                            prevEl: `.${styles["loop-button-new-clothes-prev"]}`,
+                            nextEl: `.${styles["loop-button-top-selling-next"]}`,
+                            prevEl: `.${styles["loop-button-top-selling-prev"]}`,
                         }}
                         keyboard={{
                             enabled: true,      
@@ -141,10 +137,9 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
                             const wishlistItem = wishlistItems.find(wItem => wItem.product.id === item.id);
                             const inWishlist = Boolean(wishlistItem);
                             return (
-                                <SwiperSlide key={item.id} className={styles["new-clothes-column"]}>
+                                <SwiperSlide key={item.id} className={styles["top-selling-column"]}>
                                     <CatalogItem
                                         item={item}
-                                        lang={lang}
                                         isInWishlist={inWishlist}
                                         onWishlistClick={(clickedItem: ClothItem) => {
                                             if (isAuthenticated) {
@@ -170,17 +165,17 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
                                 </SwiperSlide>
                             );
                         })}
-                        <div className={`${styles["swiper-buttons-together-right-container"]} ${styles["swiper-buttons-new-clothes-container"]}`}>
-                            <div className={styles["loop-button-new-clothes-prev"]}>
+                        <div className={`${styles["swiper-buttons-together-right-container"]} ${styles["swiper-buttons-top-selling-container"]}`}>
+                            <div className={styles["loop-button-top-selling-prev"]}>
                                 <FontAwesomeIcon icon={faAngleLeft} />
                             </div>
-                            <div className={styles["loop-button-new-clothes-next"]}>
+                            <div className={styles["loop-button-top-selling-next"]}>
                                 <FontAwesomeIcon icon={faAngleRight} />
                             </div>
                         </div>
                     </Swiper>
                     <div className={styles["view-all-clothes-link-container"]}>
-                        <ActionButtonLink white to={`/${lang}/catalog`} className={styles["view-all-clothes-link"]}>
+                        <ActionButtonLink white to={`/catalog`} className={styles["view-all-clothes-link"]}>
                             Просмотреть все
                         </ActionButtonLink>
                     </div>
@@ -190,15 +185,15 @@ class NewClothes extends ModalHandler<NewClothesProps, NewClothesState> {
     }
 }
 
-const UINewClothes = withContextSelector(
-    ProductModalContext,
-    NewClothes,
-    (context) => ({
-        toggleModal: context.toggleModal,
-        setModalChildren: context.setModalChildren,
-        isModalActive: context.isModalActive,
-        modalChildren: context.modalChildren,
-    })
+const UITopSelling = withContextSelector(
+  ProductModalContext,
+  TopSelling,
+  (context) => ({
+    toggleModal: context.toggleModal,
+    setModalChildren: context.setModalChildren,
+    isModalActive: context.isModalActive,
+    modalChildren: context.modalChildren,
+  })
 );
 
-export default UINewClothes;
+export default UITopSelling;

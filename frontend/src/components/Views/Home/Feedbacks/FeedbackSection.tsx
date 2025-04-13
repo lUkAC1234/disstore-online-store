@@ -1,12 +1,12 @@
+import styles from "./Feedback.module.scss";
 import { PureComponent, ReactNode } from "react";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import styles from "./Home.module.scss";
-import ReviewItem from "../Catalog/CatalogDetails/Navigation/Review/ReviewItem/ReviewItem";
-import { origin } from "../../../../project.config.json";
+import { origin } from "../../../../../project.config.json";
 import { Container, HeadingTwo, Section } from "components/UI/Html/Elements/Elements";
+import ReviewItem from "components/Views/Catalog/CatalogDetails/Navigation/Review/ReviewItem/ReviewItem";
 
 class FeedbackSection extends PureComponent<FeedbackProps, FeedbackState> {
     state: Readonly<FeedbackState> = {

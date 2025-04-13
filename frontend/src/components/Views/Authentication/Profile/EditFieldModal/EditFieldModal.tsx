@@ -1,6 +1,7 @@
 import styles from "./EditFieldModal.module.scss";
 import { PureComponent, FormEvent } from "react";
 import ControlledPhoneInput from "components/UI/Phone/ControlledPhoneInput";
+import { ActionButton, HeadingFour, Input } from "components/UI/Html/Elements/Elements";
 
 interface EditFieldModalProps {
   field: string; 
@@ -17,7 +18,7 @@ class EditFieldModal extends PureComponent<EditFieldModalProps> {
     return (
       <div className={styles["modal-overlay"]}>
         <div className={styles["modal"]}>
-          <h2>Изменить {label}</h2>
+          <HeadingFour className={styles["change-subtitle"]}>Изменить {label}</HeadingFour>
           <form onSubmit={onSubmit}>
             {field === "mobile_number" ? (
               <ControlledPhoneInput
@@ -26,17 +27,17 @@ class EditFieldModal extends PureComponent<EditFieldModalProps> {
                 placeholder="+998 (__) ___ __ __"
               />
             ) : (
-              <input
+              <Input
                 type="text"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
               />
             )}
             <div className={styles["modal-buttons"]}>
-              <button type="button" onClick={onCancel}>
+              <ActionButton white type="button" onClick={onCancel}>
                 Отмена
-              </button>
-              <button type="submit">Сохранить</button>
+              </ActionButton>
+              <ActionButton type="submit">Сохранить</ActionButton>
             </div>
           </form>
         </div>

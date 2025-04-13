@@ -1,5 +1,4 @@
 import { CartItem } from "components/Context/CartContext";
-import { WithTranslation } from "react-i18next";
 
 declare global {
   interface ExtendedCartItemProps extends CartItem {
@@ -8,7 +7,7 @@ declare global {
     selected_image?: string;
   }
   
-  interface CartProps extends WithTranslation {
+  interface CartProps{
     cart: CartData | null;
     removeFromCart: (cartItemId: number) => Promise<void>;
     updateCartItem: (cartItemId: number, quantity: number) => Promise<void>;

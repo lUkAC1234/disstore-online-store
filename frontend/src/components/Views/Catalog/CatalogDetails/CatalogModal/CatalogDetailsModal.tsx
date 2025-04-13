@@ -10,10 +10,7 @@ import {
   ClothesListContext,
   ProductModalContext,
 } from "components/Context/ContextCollection";
-import { WithTranslation } from "react-i18next";
-import { getWithTranslation } from "i18n/hooks";
 import BaseCatalogDetails from "../Base/BaseCatalogDetails";
-import { Link } from "react-router-dom";
 import SizeSelector from "../SelectedOptions/Sizes/SizeSelector";
 import ColorSelector from "../SelectedOptions/Colors/ColorSelector";
 import QuantitySelector from "../SelectedOptions/Quantity/QuantitySelector";
@@ -21,18 +18,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import BlockLoader from "components/UI/BlockLoaders/BlockLoader";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
+import LangLink from "components/UI/Link/LangLink";
 
-interface CatalogDetailsModalProps extends WithTranslation {
+interface CatalogDetailsModalProps {
   productSlug: string;
 }
 
 class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
   getProductSlug(): string {
     return this.props.productSlug;
-  }
-
-  get lang(): string {
-    return this.props.i18n.language;
   }
 
   renderContent(): ReactNode {
@@ -53,13 +47,13 @@ class CatalogDetailsModal extends BaseCatalogDetails<CatalogDetailsModalProps> {
             isLoaded={!!data}
             containerStyle={{ height: "2rem" }}
           >
-            <Link
+            <LangLink
               className={styles["catalog-modal-item-link"]}
-              to={`/${this.lang}/catalog/clothes/${data?.slug}`}
+              to={`/catalog/clothes/${data?.slug}`}
             >
               <span>Вся информация о товаре </span>
               <FontAwesomeIcon icon={faAngleRight} />
-            </Link>
+            </LangLink>
           </BlockLoader>
         </div>
         <div className={styles["catalog-modal-right-side"]}>
@@ -172,6 +166,6 @@ const UICatalogDetailsModal = withContextSelector(CartContext, _UICatalogDetails
   addToCart: context.addToCart,
 }));
 
-const UICatalogModal = getWithTranslation(UICatalogDetailsModal) as ComponentType<CatalogDetailsModalExternalProps>;
+const UICatalogModal = UICatalogDetailsModal as ComponentType<CatalogDetailsModalExternalProps>;
 
 export default UICatalogModal;

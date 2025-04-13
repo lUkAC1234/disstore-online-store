@@ -1,0 +1,244 @@
+@use "assets/main/styles/scss/animations/animations.module.scss" as animations;
+
+.welcome-section {
+    background-color: var(--welcome-background);
+}
+
+.welcome-container {
+    display: flex;
+    gap: 1rem;
+    padding: 2rem 12rem 0rem 6rem;
+}
+
+.welcome-main-title {
+    width: min(100%, 40rem);
+    line-height: 80%;
+    margin-top: 3rem;
+    font-family: var(--primary-font);
+}
+
+.welcome-text {
+    width: min(100%, 40rem);
+    margin-block: 1rem 2rem;
+}
+
+.welcome-image-column {
+    position: relative;
+    display: flex;
+    align-self: end;
+    height: 100%;
+
+    img {
+        width: 30rem;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        mix-blend-mode: multiply;
+    }
+
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        width: 3rem;
+        height: 3rem;
+        background: url('assets/main/images/main-page/star.webp') no-repeat center / cover;
+        @include animations.ambient-rotate();
+    }
+
+    &::before {
+        top: 15rem;
+        left: -5rem;
+    }
+
+    &::after {
+        top: 5rem;
+        right: 0;
+    }
+}
+
+.welcome-numbers-count-container {
+    display: flex;
+    margin-top: 2rem;
+    gap: 1rem;
+}
+
+.welcome-numbers-count-column:not(:last-child) {
+    border-right: 0.1rem solid var(--welcome-border);
+    padding-right: 1rem;
+    margin-bottom: 1rem;
+}
+
+.welcome-numbers-count {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.welcome-numbers-count-text {
+    margin-block: 0.5rem;
+}
+
+@media screen and (max-width: 2300px) {
+    .welcome-container {
+        padding-inline: 3rem;
+    }
+}
+
+@media screen and (max-width: 1850px) {
+    .welcome-container {
+        padding-inline: 3rem 1rem;
+    }
+
+    .welcome-image-column {
+        &::before {
+            width: 2.5rem;
+            height: 2.5rem;
+            left: -2rem;
+        }
+
+        &::after {
+            width: 3rem;
+            height: 3rem;
+        }
+    }
+}
+
+@media screen and (max-width: 1500px) {
+    .welcome-container {
+        padding-inline: 1rem;
+    }
+
+    .welcome-image-column {
+        img {
+            width: 25rem;
+        }
+    }
+}
+
+@media screen and (max-width: 1250px) {
+    .welcome-container {
+        flex-flow: column;
+        padding-inline: 3rem;
+    }
+
+    .welcome-image-column {
+        margin-inline: auto;
+
+        img {
+            width: 30rem;
+        }
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .welcome-container {
+        padding-inline: 1rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    .welcome-container {
+        .welcome-link {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    .welcome-numbers-count-container {
+        flex-wrap: wrap;
+        justify-content: center;
+
+        @media screen and (max-width: 320px) {
+            flex-flow: column;
+            align-items: center;
+        }
+    }
+
+    .welcome-numbers-count-column {
+        display: grid;
+        place-items: center;
+        width: calc(50% - 1rem);
+    }
+
+    .welcome-numbers-count {
+        font-size: 2rem;
+    }
+
+    .welcome-numbers-count-text {
+        text-align: center;
+    }
+
+    .welcome-numbers-count-column:not(:last-child) {
+        border-right: 0;
+    }
+
+    .welcome-numbers-count-column:first-child {
+        border-right: 0.1rem solid var(--welcome-border);
+    }
+
+    .welcome-image-column {
+        justify-content: center;
+
+        img {
+            width: min(100%, 25rem);
+            object-fit: cover;
+        }
+
+        &::before {
+            left: 0rem;
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .welcome-numbers-count {
+        font-size: 1.5rem;
+    }
+
+    .welcome-numbers-count-column {
+        width: 11rem;
+    }
+
+    .welcome-numbers-count-text {
+        font-size: 0.8rem;
+    }
+
+    .welcome-image-column {
+        &::before {
+            width: 2rem;
+            height: 2rem;
+            top: 10rem;
+        }
+
+        &::after {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .welcome-numbers-count-column {
+        width: 9rem;
+    }
+
+    .welcome-numbers-count-text {
+        font-size: 0.72rem;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .welcome-numbers-count-column {
+        width: 8rem;
+
+        @media screen and (max-width: 320px) {
+            border-right: 0 !important;
+            padding: 0 !important;
+        }
+    }
+
+    .welcome-numbers-count-text {
+        font-size: 0.65rem;
+    }
+}

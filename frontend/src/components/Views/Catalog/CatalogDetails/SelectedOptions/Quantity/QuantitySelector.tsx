@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { withContextSelector } from 'components/Context/ContextInjector';
 import { CartContext, ProductModalContext, UserContext, WishlistContext } from 'components/Context/ContextCollection';
-import { getWithTranslation } from 'i18n/hooks';
+import { withTranslation } from 'i18n/hooks';
 import Authentication from "components/Views/Authentication/Authentication";
 import { ModalHandler } from 'components/Modal/Modal.utils';
 
@@ -136,4 +136,4 @@ const UIQuantitySelector = withContextSelector(UserContext, _UIQuantitySelector,
   isAuthenticated: context.isAuthenticated,
 }));
 
-export default getWithTranslation(UIQuantitySelector);
+export default withTranslation(UIQuantitySelector);

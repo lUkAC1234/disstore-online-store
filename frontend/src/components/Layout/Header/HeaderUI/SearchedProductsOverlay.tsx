@@ -1,21 +1,20 @@
 import { PureComponent } from "react";
-import { Link } from "react-router-dom";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import HeaderError from "../HeaderError/HeaderError";
 import { ClothItem } from "components/Context/ClothesContext";
+import LangLink from "components/UI/Link/LangLink";
 
 interface SearchedProductsOverlayProps {
     searchResults: ClothItem[];
     searchLoading: boolean;
     searchError: string | null;
     title: string;
-    lang: string;
     onClose: () => void;
 }
 
 class SearchedProductsOverlay extends PureComponent<SearchedProductsOverlayProps> {
     render() {
-        const { searchResults, searchLoading, searchError, title, lang, onClose } = this.props;
+        const { searchResults, searchLoading, searchError, title, onClose } = this.props;
         if (title.trim().length < 2) return null;
         if (searchLoading)
             return (
@@ -43,9 +42,9 @@ class SearchedProductsOverlay extends PureComponent<SearchedProductsOverlayProps
             <>
                 {searchResults.map((item) => (
                     <div className="header-searched-item" key={item.id}>
-                        <Link
+                        <LangLink
                             className="header-searched-link"
-                            to={`/${lang}/catalog/clothes/${item.slug}`}
+                            to={`/catalog/clothes/${item.slug}`}
                             onClick={onClose}
                         />
                         <div className="header-searched-item-image-container">

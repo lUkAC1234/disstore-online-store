@@ -1,25 +1,61 @@
-/* Styles for  Messages component */
 .messages-container {
   position: fixed;
-  top: 0;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.25);
   z-index: var(--z-index-11);
   width: 100%;
-  height: max-content;
   visibility: hidden;
-  -webkit-box-shadow: 0 0.7rem 0.5rem rgba(0, 0, 0, 0.15);
-  box-shadow: 0 0.7rem 0.5rem rgba(0, 0, 0, 0.15);
 
   &--active {
     visibility: visible;
-    background: var(--text-white);
   }
 }
 
-.success-cart {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem;
+.messages-wrapper {
+  width: min(100%, 50rem);
+  margin: 2.25rem auto;
+  padding-inline: 1rem;
 }
 
-.success-cart-message {}
+.success-cart,
+.success-checkout {
+  display: grid;
+  grid-template-columns: 1fr 2rem;
+  place-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: var(--text-white);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.success-item {
+  width: 100%;
+}
+
+.success-item-content-wrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.success-item-image-container {
+  position: relative;
+  width: 5rem;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.success-item-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+  border: 0.1rem solid var(--welcome-border);
+  background: var(--clothes-image-background);
+}
+
+.success-item-content {}
+
+.success-cart-message {
+  color: var(--text-black);
+}

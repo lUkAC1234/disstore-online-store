@@ -10,15 +10,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import SpinnerLoaderWrapper from "components/Loaders/SpinnerLoaderWrapper";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
-import { getWithTranslation } from "i18n/hooks";
 import { ActionButtonLink, Container, HeadingOne, HeadingThree, HeadingTwo, MDContainer, Section, SmallText, Text } from "components/UI/Html/Elements/Elements";
 
 const Chart = lazy(() => import("components/UI/Chart/Chart"));
 const Faq = lazy(() => import("components/UI/Faq/Faq"));
 
 class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
-
-  get lang(): string { return this.props.i18n.language }
   componentDidMount(): void { window.scrollTo({ top: 0, behavior: "smooth" }); }
 
   render(): ReactNode {
@@ -38,8 +35,8 @@ class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
               <div className={styles["about-us-history-content-text-container"]}>
                 <Text white>Наша компания была основана с целью предоставить клиентам лучшие товары и услуги. Мы верим в инновации и стремимся к постоянному совершенствованию. Наша миссия — делать жизнь наших клиентов лучше и удобнее.</Text>
                 <div className={styles["about-us-history-links-controller"]}>
-                  <ActionButtonLink white to={`/${this.lang}/catalog`}>Каталог</ActionButtonLink>
-                  <ActionButtonLink to={`/${this.lang}/catalog`} className={styles["about-us-history-link-black"]}>Связаться <FontAwesomeIcon icon={faChevronRight} /></ActionButtonLink>
+                  <ActionButtonLink white to={`/catalog`}>Каталог</ActionButtonLink>
+                  <ActionButtonLink to={`/contact/us`} className={styles["about-us-history-link-black"]}>Связаться <FontAwesomeIcon icon={faChevronRight} /></ActionButtonLink>
                 </div>
               </div>
             </MDContainer>
@@ -115,6 +112,4 @@ class AboutUs extends PureComponent<AboutUsProps, AboutUsState> {
   }
 }
 
-const TranslatedAboutUs = getWithTranslation(AboutUs)
-
-export default TranslatedAboutUs;
+export default AboutUs;

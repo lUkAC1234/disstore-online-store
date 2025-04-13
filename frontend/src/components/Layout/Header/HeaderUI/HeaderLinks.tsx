@@ -1,17 +1,16 @@
 import { faAngleDown, faArrowLeftLong, faArrowRightLong, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PureComponent, ReactNode } from "react";
-import { NavLink } from "react-router-dom";
+import NavigationLink from "components/UI/Link/NavigationLink";
+import { PureComponent, ReactNode, RefObject } from "react";
 import { activeClassNameObserver } from "utils/hooks/NavActiveClassObserver";
 
 interface HeaderLinksProps {
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: RefObject<HTMLDivElement>;
   activeLink: string | null;
-  lang: string;
   onLinkClick: (link: string) => void;
   closeEntireMenu: () => void;
-  extraLinksContainerRef: React.RefObject<HTMLDivElement>;
-  activatorRef: React.RefObject<HTMLButtonElement>;
+  extraLinksContainerRef: RefObject<HTMLDivElement>;
+  activatorRef: RefObject<HTMLButtonElement>;
   linksMobileIsOpen: boolean;
   toggleLinksMobileActiveClass: () => void;
   onCloseDetails: () => void;
@@ -23,7 +22,6 @@ class HeaderLinks extends PureComponent<HeaderLinksProps> {
     const {
       containerRef,
       activeLink,
-      lang,
       onLinkClick,
       closeEntireMenu,
       extraLinksContainerRef,
@@ -45,14 +43,14 @@ class HeaderLinks extends PureComponent<HeaderLinksProps> {
               className={`header-link button ${activeLink === "catalog" ? "activated" : ""}`}
               onClick={() => onLinkClick("catalog")}
             >
-              <NavLink
-                to={`/${lang}/catalog`}
+              <NavigationLink
+                to={`/catalog`}
                 className={() =>
                   activeClassNameObserver(`/catalog`, "header-link")
                 }
               >
                 Каталог
-              </NavLink>
+              </NavigationLink>
               <span>
                 Каталог <FontAwesomeIcon icon={faArrowRightLong} />
               </span>
@@ -68,8 +66,8 @@ class HeaderLinks extends PureComponent<HeaderLinksProps> {
                 >
                   <FontAwesomeIcon icon={faArrowLeftLong} />
                 </button>
-                <NavLink
-                  to={`/${lang}/catalog`}
+                <NavigationLink
+                  to={`/catalog`}
                   onClick={closeEntireMenu}
                   className={() =>
                     activeClassNameObserver(
@@ -79,7 +77,7 @@ class HeaderLinks extends PureComponent<HeaderLinksProps> {
                   }
                 >
                   Каталог
-                </NavLink>
+                </NavigationLink>
                 {extraLinks}
               </div>
             </div>
@@ -92,26 +90,26 @@ class HeaderLinks extends PureComponent<HeaderLinksProps> {
             </button>
           </li>
           <li className="header-link-list">
-            <NavLink
+            <NavigationLink
               className={() =>
                 activeClassNameObserver(`/contact/us`, "header-link")
               }
-              to={`/${lang}/contact/us`}
+              to={`/contact/us`}
               onClick={closeEntireMenu}
             >
               Контакты
-            </NavLink>
+            </NavigationLink>
           </li>
           <li className="header-link-list">
-            <NavLink
+            <NavigationLink
               className={() =>
                 activeClassNameObserver(`/about/us`, "header-link")
               }
-              to={`/${lang}/about/us`}
+              to={`/about/us`}
               onClick={closeEntireMenu}
             >
               О нас
-            </NavLink>
+            </NavigationLink>
           </li>
         </ul>
       </div>

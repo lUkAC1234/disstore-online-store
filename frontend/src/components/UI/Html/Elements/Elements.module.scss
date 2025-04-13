@@ -109,7 +109,12 @@
 
 :where(.article) {}
 
-:where(.sidebar) {}
+:where(.sidebar) {
+    background: var(--background-white);
+    padding: 1rem;
+    border: 0.1rem solid var(--welcome-border);
+    border-radius: 0.5rem;
+}
 
 
 // Text Elements
@@ -188,6 +193,35 @@
         padding: 0.75rem 1.5rem;
         font-size: 0.85rem;
     }
+}
+
+:where(.customInput) {
+    background-color: var(--background-white);
+    border: 0.05rem solid var(--welcome-border);
+    border-radius: 0.25rem;
+    color: var(--text-black);
+    font-size: 0.875rem;
+    font-weight: 400;
+    height: 2.5rem;
+    padding: 0;
+    text-indent: 1rem;
+    width: 100%;
+    font-family: var(--primary-font);
+    transition: border-color 0.3s ease;
+
+    &:focus {
+        border-color: var(--text-black);
+    }
+
+    &:disabled {
+        background: var(--welcome-background);
+    }
+}
+
+:where(.customLabel) {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
 }
 
 :where(.small) {}

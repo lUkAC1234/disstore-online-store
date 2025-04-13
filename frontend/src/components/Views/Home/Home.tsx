@@ -3,21 +3,19 @@ import { PureComponent, ReactNode, lazy } from "react";
 import "swiper/css";
 import { UserContext, WishlistContext } from 'components/Context/ContextCollection';
 import { withContextSelector } from 'components/Context/ContextInjector';
-import { WithTranslation } from 'react-i18next';
-import { getWithTranslation } from 'i18n/hooks';
 import { WishlistItem } from 'components/Context/WishlistContext';
 
-const BannersSection = lazy(() => import("./Banners"));
-const BrandsSection = lazy(() => import("./BrandsSection"));
-const NewClothes = lazy(() => import("./NewClothesSection"));
-const TopSelling = lazy(() => import("./TopSellingSection"));
-const ExtraOffer = lazy(() => import("./ExtraOffer"));
-const BrowseSection = lazy(() => import("./BrowseSection"));
-const FeedbackSection = lazy(() => import("./FeedbackSection"));
-const WelcomeSection = lazy(() => import("./WelcomeSection"));
+const BannersSection = lazy(() => import("./Banners/Banners"));
+const BrandsSection = lazy(() => import("./Brands/BrandsSection"));
+const NewClothes = lazy(() => import("./New/NewClothesSection"));
+const TopSelling = lazy(() => import("./Popular/TopSellingSection"));
+const ExtraOffer = lazy(() => import("./ExtraOffer/ExtraOffer"));
+const BrowseSection = lazy(() => import("./Browse/BrowseSection"));
+const FeedbackSection = lazy(() => import("./Feedbacks/FeedbackSection"));
+const WelcomeSection = lazy(() => import("./Welcome/WelcomeSection"));
 const Faq = lazy(() => import("components/UI/Faq/Faq"));
 
-interface HomeProps extends WithTranslation {
+export interface HomeProps {
   wishlistItems?: WishlistItem[];
   addToWishList?: (productId: number) => Promise<void>;
   removeFromWishlist?: (wishlistItemId: number) => Promise<void>;
@@ -28,14 +26,10 @@ interface HomeProps extends WithTranslation {
 class MainPage extends PureComponent<HomeProps> {
   componentDidMount(): void { window.scrollTo({ top: 0, behavior: "smooth" }); }
 
-  get lang(): string {
-    return this.props.i18n.language
-  }
-
   render(): ReactNode {
     return (
       <>
-        <WelcomeSection lang={this.lang} />
+        <WelcomeSection />
         <BrandsSection />
         <BannersSection />
         <NewClothes
@@ -44,7 +38,6 @@ class MainPage extends PureComponent<HomeProps> {
           removeFromWishlist={this.props.removeFromWishlist}
           loadingWishlist={this.props.loadingWishlist}
           isAuthenticated={this.props.isAuthenticated}
-          lang={this.lang}
         />
         <div className={styles["hr-line"]}></div>
         <TopSelling
@@ -53,10 +46,9 @@ class MainPage extends PureComponent<HomeProps> {
           removeFromWishlist={this.props.removeFromWishlist}
           loadingWishlist={this.props.loadingWishlist}
           isAuthenticated={this.props.isAuthenticated}
-          lang={this.lang}
         />
-        <ExtraOffer lang={this.lang} />
-        <BrowseSection lang={this.lang} />
+        <ExtraOffer />
+        <BrowseSection />
         <FeedbackSection />
         <Faq />
       </>
@@ -83,7 +75,4 @@ const UIHome = withContextSelector(
     removeFromWishlist: context.removeFromWishlist,
   })
 );
-
-const TranslatedHome = getWithTranslation(UIHome);
-
-export default TranslatedHome;
+export default UIHome;

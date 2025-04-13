@@ -1,11 +1,9 @@
 import "./Header.scss";
 import { ChangeEvent, createRef } from "react";
-import { Link } from "react-router-dom";
 import LogoSvg from "assets/main/images/layout/logo.svg";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { CartContext, ClothesListContext, UserContext, WishlistContext } from "components/Context/ContextCollection";
 import UIReact from "utils/classes/UIReact";
-import { getWithTranslation } from "i18n/hooks";
 import { ClothItem } from "components/Context/ClothesContext";
 import { origin } from "../../../../project.config.json";
 import { debounce } from "utils/hooks/debounce";
@@ -16,6 +14,8 @@ import HeaderIcons from "./HeaderUI/HeaderIcons";
 import HeaderMobileMenuButton from "./HeaderUI/HeaderMobileMenuButton";
 import LinksMobile from "./HeaderUI/LinksMobile";
 import SearchedProductsOverlay from "./HeaderUI/SearchedProductsOverlay";
+import AnnouncementBar from "./HeaderUI/AnnouncementBar";
+import NavigationLink from "components/UI/Link/NavigationLink";
 
 class Header extends UIReact<HeaderProps, HeaderState> {
   searchInputContainerRef = createRef<HTMLDivElement>();
@@ -25,7 +25,6 @@ class Header extends UIReact<HeaderProps, HeaderState> {
   mediaQuery: MediaQueryList = window.matchMedia("(max-width: 650px)");
   menuMediaQuery: MediaQueryList = window.matchMedia("(max-width: 1300px)");
   private searchCache: { [query: string]: ClothItem[] } = {};
-  get lang(): string { return this.props.i18n.language; }
 
   state: Readonly<HeaderState> = {
     activeLink: null,
@@ -36,9 +35,11 @@ class Header extends UIReact<HeaderProps, HeaderState> {
     isMobile: this.mediaQuery.matches,
     isMenuDisactive: this.menuMediaQuery.matches,
     linksMobileIsOpen: false,
+    hasScrolled: false,
   };
 
   componentDidMount = (): void => {
+    window.addEventListener("scroll", this.handleScroll);
     if (this.mediaQuery.addEventListener) {
       this.mediaQuery.addEventListener("change", this.handleMediaQueryChange, { signal: this.controller.signal, });
     }
@@ -68,6 +69,13 @@ class Header extends UIReact<HeaderProps, HeaderState> {
     this.setState((prevState) => ({
       activeLink: prevState.activeLink === link ? null : link,
     }));
+  };
+
+  handleScroll = (): void => {
+    const hasScrolled = window.scrollY > 10;
+    if (this.state.hasScrolled !== hasScrolled) {
+      this.setState({ hasScrolled });
+    }
   };
 
   outSideClickHandler = (evt: MouseEvent): void => {
@@ -124,72 +132,70 @@ class Header extends UIReact<HeaderProps, HeaderState> {
 
   render() {
     return (
-      <header className="header" id="header">
-        <nav className="navbar">
-          <div className="navbar-wrapper">
-            <HeaderMobileMenuButton onClick={this.toggleMenu} />
-            <div className="header-logo-container">
-              <Link to={`/${this.lang}/`}>
-                <img src={LogoSvg} alt="Logo" />
-              </Link>
-            </div>
-            <div className="header-content-container">
-              <HeaderLinks
-                containerRef={this.headerLinksContainerRef}
-                activeLink={this.state.activeLink}
-                lang={this.lang}
-                onLinkClick={this.handleLinkClick}
-                closeEntireMenu={this.closeEntireMenu}
-                extraLinksContainerRef={this.extraLinksContainerRef}
-                activatorRef={this.activatorRef}
-                linksMobileIsOpen={this.state.linksMobileIsOpen}
-                toggleLinksMobileActiveClass={this.toggleLinksMobileActiveClass}
-                onCloseDetails={this.handleCloseDetails}
-                extraLinks={
-                  <LinksMobile
-                    loading={this.props.loading}
-                    error={this.props.error}
-                    type={this.props.type}
-                    lang={this.lang}
-                    closeEntireMenu={this.closeEntireMenu}
-                    setSelectedTypes={this.props.setSelectedTypes}
-                    setApplyFilters={this.props.setApplyFilters}
-                    toggleLinksMobileActiveClass={this.toggleLinksMobileActiveClass}
-                    isMenuDisactive={this.state.isMenuDisactive}
-                  />
-                }
-              />
-              <div className="header-search-container">
-                <HeaderSearch
-                  isMobile={this.state.isMobile}
-                  
-                  title={this.state.title}
-                  onInputChange={this.handleSearchInputChange}
-                  toggleSearchInput={this.toggleSearchInput}
-                  closeSearchInput={this.closeSearchInput}
-                  searchInputRef={this.searchInputContainerRef}
-                  SearchedProductsOverlay={
-                    <SearchedProductsOverlay
-                      searchResults={this.state.searchResults}
-                      searchLoading={this.state.searchLoading}
-                      searchError={this.state.searchError}
-                      title={this.state.title}
-                      lang={this.lang}
-                      onClose={this.closeSearchInput}
+      <>
+        <AnnouncementBar></AnnouncementBar>
+        <header className={`header ${this.state.hasScrolled ? 'header-activated' : ''}`} id="header">
+          <nav className="navbar">
+            <div className="navbar-wrapper">
+              <HeaderMobileMenuButton onClick={this.toggleMenu} />
+              <div className="header-logo-container">
+                <NavigationLink to={`/`}>
+                  <img src={LogoSvg} alt="Logo" />
+                </NavigationLink>
+              </div>
+              <div className="header-content-container">
+                <HeaderLinks
+                  containerRef={this.headerLinksContainerRef}
+                  activeLink={this.state.activeLink}
+                  onLinkClick={this.handleLinkClick}
+                  closeEntireMenu={this.closeEntireMenu}
+                  extraLinksContainerRef={this.extraLinksContainerRef}
+                  activatorRef={this.activatorRef}
+                  linksMobileIsOpen={this.state.linksMobileIsOpen}
+                  toggleLinksMobileActiveClass={this.toggleLinksMobileActiveClass}
+                  onCloseDetails={this.handleCloseDetails}
+                  extraLinks={
+                    <LinksMobile
+                      loading={this.props.loading}
+                      error={this.props.error}
+                      type={this.props.type}
+                      closeEntireMenu={this.closeEntireMenu}
+                      setSelectedTypes={this.props.setSelectedTypes}
+                      setApplyFilters={this.props.setApplyFilters}
+                      toggleLinksMobileActiveClass={this.toggleLinksMobileActiveClass}
+                      isMenuDisactive={this.state.isMenuDisactive}
                     />
                   }
                 />
-                <HeaderIcons
-                  lang={this.lang}
-                  cart={this.props.cart}
-                  wishlistItems={this.props.wishlistItems}
-                  isAuthenticated={this.props.isAuthenticated}
-                />
+                <div className="header-search-container">
+                  <HeaderSearch
+                    isMobile={this.state.isMobile}
+                    title={this.state.title}
+                    onInputChange={this.handleSearchInputChange}
+                    toggleSearchInput={this.toggleSearchInput}
+                    closeSearchInput={this.closeSearchInput}
+                    searchInputRef={this.searchInputContainerRef}
+                    SearchedProductsOverlay={
+                      <SearchedProductsOverlay
+                        searchResults={this.state.searchResults}
+                        searchLoading={this.state.searchLoading}
+                        searchError={this.state.searchError}
+                        title={this.state.title}
+                        onClose={this.closeSearchInput}
+                      />
+                    }
+                  />
+                  <HeaderIcons
+                    cart={this.props.cart}
+                    wishlistItems={this.props.wishlistItems}
+                    isAuthenticated={this.props.isAuthenticated}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </nav>
-      </header>
+          </nav>
+        </header>
+      </>
     );
   }
 }
@@ -210,6 +216,5 @@ const ___UIHeader = withContextSelector(
 const __UIHeader = withContextSelector(UserContext, ___UIHeader, (context) => ({ isAuthenticated: context.isAuthenticated, }));
 const _UIHeader = withContextSelector(WishlistContext, __UIHeader, (context) => ({ wishlistItems: context.wishlistItems, }));
 const UIHeader = withContextSelector(CartContext, _UIHeader, (context) => ({ cart: context.cart, }));
-const TranslatedUIHeader = getWithTranslation(UIHeader);
-const WithRouterHeader = withRouter(TranslatedUIHeader);
+const WithRouterHeader = withRouter(UIHeader);
 export default WithRouterHeader;

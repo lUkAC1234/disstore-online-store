@@ -1,6 +1,7 @@
-import { PureComponent, createRef, HTMLAttributes, createElement, ElementType, ButtonHTMLAttributes, ReactNode } from "react";
-import { Link as RouterLink, LinkProps } from "react-router-dom";
+import { PureComponent, createRef, HTMLAttributes, createElement, ElementType, ButtonHTMLAttributes, InputHTMLAttributes, LabelHTMLAttributes } from "react";
+import { LinkProps } from "react-router-dom";
 import styles from "./Elements.module.scss";
+import LangLink from "components/UI/Link/LangLink";
 interface ElementProps extends HTMLAttributes<HTMLElement> { 
   white?: boolean; 
   bold?: boolean; 
@@ -104,7 +105,7 @@ export class SmallText extends BaseElement {
 }
 
 export class CustomLink extends BaseElement<CustomLinkProps> {
-  tag: ElementType = RouterLink;
+  tag: ElementType = LangLink;
   customName = "link";
 }
 
@@ -140,14 +141,25 @@ export class Preformatted extends BaseElement {
 
 // Buttons
 
-export class ActionButton extends BaseElement<ButtonHTMLAttributes<HTMLButtonElement>>  {
+export class ActionButton extends BaseElement<ElementProps & ButtonHTMLAttributes<HTMLButtonElement>>  {
   tag: ElementType = "button";
   customName = "actionButton";
 }
 
 export class ActionButtonLink extends BaseElement<CustomLinkProps & ButtonHTMLAttributes<HTMLButtonElement>> {
-  tag: ElementType = RouterLink;
+  tag: ElementType = LangLink;
   customName = "actionButton";
+}
+
+// Inputs
+export class Input extends BaseElement<ElementProps &  InputHTMLAttributes<HTMLInputElement>> {
+  tag: ElementType = "input";
+  customName = "customInput";
+}
+
+export class Label extends BaseElement<ElementProps &  LabelHTMLAttributes<HTMLLabelElement>> {
+  tag: ElementType = "label";
+  customName = "customLabel";
 }
 
 // Other Elements

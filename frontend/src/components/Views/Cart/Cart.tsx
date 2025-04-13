@@ -1,24 +1,19 @@
 import { PureComponent, ReactNode } from "react";
 import styles from "./Cart.module.scss";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import EmptyCart from "./Empty/EmptyCart";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { CartContext } from "components/Context/ContextCollection";
-import { getWithTranslation } from "i18n/hooks";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
 import { ActionButtonLink, HeadingOne } from "components/UI/Html/Elements/Elements";
+import LangLink from "components/UI/Link/LangLink";
 
 class Cart extends PureComponent<CartProps> {
   async componentDidMount(): Promise<void> {
     if (document.documentElement.scrollTop > 0) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }
-
-  get lang(): string {
-    return this.props.i18n.language;
   }
 
   handleIncrease = async (cartItem: ExtendedCartItemProps) => {
@@ -69,18 +64,18 @@ class Cart extends PureComponent<CartProps> {
               alt={extendedItem.product.title}
               thumbnail={extendedItem.product.catalogImages[0]?.thumbnail}
             />
-            <Link
+            <LangLink
               className={styles["cart-item-link"]}
-              to={`/${this.lang}/catalog/clothes/${extendedItem.product.slug}`}
+              to={`/catalog/clothes/${extendedItem.product.slug}`}
             />
           </div>
 
           <div className={styles["cart-details-info-container"]}>
             <h4 className={styles["cart-item-title"]}>
               {extendedItem.product.title}
-              <Link
+              <LangLink
                 className={styles["cart-item-link"]}
-                to={`/${this.lang}/catalog/clothes/${extendedItem.product.slug}`}
+                to={`/catalog/clothes/${extendedItem.product.slug}`}
               />
             </h4>
             {(extendedItem.selected_color || extendedItem.selected_size) && (
@@ -187,7 +182,7 @@ class Cart extends PureComponent<CartProps> {
                       {finalTotal.toLocaleString("en-US")} сум
                     </span>
                   </div>
-                  <ActionButtonLink to={`/${this.lang}/checkout`} className={styles["checkout-link"]}>
+                  <ActionButtonLink to={`/checkout`} className={styles["checkout-link"]}>
                     Перейти к оформлению
                   </ActionButtonLink>
                 </div>
@@ -206,6 +201,4 @@ const UICart = withContextSelector(CartContext, Cart, (context) => ({
   updateCartItem: context.updateCartItem,
 }));
 
-const TransltatedUICart = getWithTranslation(UICart);
-
-export default TransltatedUICart;
+export default UICart;

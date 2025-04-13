@@ -1,7 +1,5 @@
-import { WithTranslation } from "react-i18next";
-
 declare global {
-  interface WishListProps extends WithTranslation {
+  interface WishListProps {
     toggleModal: (callback: () => void) => void;
     setModalChildren: (children: ReactNode) => void;
     isModalActive: boolean;

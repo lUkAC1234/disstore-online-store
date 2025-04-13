@@ -1,15 +1,14 @@
 import { PureComponent } from "react";
-import { NavLink } from "react-router-dom";
 import SpinnerLoader from "components/Loaders/SpinnerLoader";
 import HeaderError from "../HeaderError/HeaderError";
 import { Clothestypes } from "components/Context/ClothesContext";
+import NavigationLink from "components/UI/Link/NavigationLink";
 
 interface LinksMobileProps {
     isMenuDisactive: boolean;
     loading: boolean;
     error: boolean;
     type: Clothestypes[];
-    lang: string;
     closeEntireMenu: () => void;
     setSelectedTypes: (types: number[], callback: () => void) => void;
     setApplyFilters: () => void;
@@ -23,7 +22,6 @@ class LinksMobile extends PureComponent<LinksMobileProps> {
             loading,
             error,
             type,
-            lang,
             closeEntireMenu,
             setSelectedTypes,
             setApplyFilters,
@@ -51,9 +49,9 @@ class LinksMobile extends PureComponent<LinksMobileProps> {
         return (
             <>
                 {type.map((item) => (
-                    <NavLink
+                    <NavigationLink
                         key={item.id}
-                        to={`/${lang}/catalog`}
+                        to={`/catalog`}
                         className="header-link-extra-details-column"
                         onClick={() => {
                             closeEntireMenu();
@@ -67,7 +65,7 @@ class LinksMobile extends PureComponent<LinksMobileProps> {
                             </div>
                         }
                         <h4 className="header-extra-link-title">{item.title}</h4>
-                    </NavLink>
+                    </NavigationLink>
                 ))}
             </>
         );

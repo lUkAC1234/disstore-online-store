@@ -18,7 +18,7 @@ urlpatterns = [
     path('search/', SearchingClothesView.as_view(), name="search_clothes"),
     path('types/', ClothesTypeMainView.as_view(), name="types_main"),
     path('colors/', ClothesColorsMainView.as_view(), name="colors_main"),
-    path('sizes/', ClothesSizesMainView.as_view(), name="sizes_main"),
-    path('banners/', BannerView.as_view(), name="banners"),  
-    path('<slug:slug>/', ClothesModelDetailView.as_view(), name="clothes_detail"),  
+    path('sizes/', ClothesSizesMainView.as_view(), name="sizes_main"), 
+    path('cloth/<slug:slug>/', ClothesModelDetailView.as_view(), name="clothes_detail"),  
+    path('banners/', BannerView.as_view(), name="banners"), 
 ]

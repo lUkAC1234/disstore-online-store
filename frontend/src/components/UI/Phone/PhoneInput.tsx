@@ -1,5 +1,6 @@
 import { ChangeEvent, PureComponent } from "react";
 import { extractDigits, formatPhoneDigits } from "./Phone.utils";
+import { Input } from "../Html/Elements/Elements";
 
 export interface PhoneInputProps {
   value?: string;
@@ -31,7 +32,7 @@ class PhoneInput extends PureComponent<PhoneInputProps, PhoneInputState> {
   render() {
     const { placeholder } = this.props;
     return (
-      <input
+      <Input
         type="tel"
         name="phone"
         value={this.state.phone}

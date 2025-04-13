@@ -6,10 +6,10 @@ import {
   AddToCartPayload,
 } from "components/Context/CartContext";
 
+
 abstract class BaseCatalogDetails<P = {}>
   extends UIReact<BaseCatalogDetailsProps & P, BaseCatalogDetailsState> {
   abstract getProductSlug(): string;
-  abstract get lang(): string;
   abstract renderContent(): ReactNode;
 
   async componentDidMount(): Promise<void> {
@@ -45,12 +45,12 @@ abstract class BaseCatalogDetails<P = {}>
         this.props.setData(JSON.parse(cachedData));
         return;
       }
-      const response = await fetch(`${origin}/clothes/${productSlug}/`, {
+      const response = await fetch(`${origin}/clothes/cloth/${productSlug}/`, {
         signal: this.controller!.signal,
       });
       if (!response.ok) {
         if (response.status === 404) {
-          window.location.href = `/${this.lang}/page-not-found-404`;
+          window.location.href = `/ru/page-not-found-404`;
           return;
         }
         throw new Error("Failed to fetch data");

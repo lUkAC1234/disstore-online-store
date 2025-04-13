@@ -1,18 +1,18 @@
 import { lazy, PureComponent, ReactNode, Suspense } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import SpinnerLoaderWrapperFixed from "components/Loaders/SpinnerLoaderWrapperFixed";
+import LazyLoaded from "components/UI/Async/LazyLoaded";
 
+const RouterView = lazy(() => import("components/Layout/Router/RouterView"));
 const UIMessages = lazy(() => import("components/Views/Messages/Messages"));
 const GlobalModal = lazy(() => import("components/Modal/GlobalModal"));
-const RouterView = lazy(() => import("components/Layout/Router/Router"));
 
 class Layout extends PureComponent {
   render(): ReactNode {
     return (
       <Router>
-        <Suspense fallback={<SpinnerLoaderWrapperFixed withBackground />}>
+        <LazyLoaded>
           <RouterView />
-        </Suspense>
+        </LazyLoaded>
         <Suspense fallback={null}>
           <UIMessages />
         </Suspense>

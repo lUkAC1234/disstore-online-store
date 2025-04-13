@@ -2,7 +2,7 @@ import { PureComponent, ChangeEvent, FormEvent } from "react";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { CartContext, UserContext } from "components/Context/ContextCollection";
 import { CartItem } from "components/Context/CartContext";
-import { getWithTranslation } from "i18n/hooks";
+import { withTranslation } from "i18n/hooks";
 import { origin } from "../../../../project.config.json";
 import Cookies from "utils/modules/Cookies";
 import { Navigate } from "react-router-dom";
@@ -300,6 +300,6 @@ const UICheckout = withContextSelector(UserContext, _UICheckout, (context) => ({
   user: context.user,
 }));
 
-const TranslatedCheckout = getWithTranslation(UICheckout);
+const TranslatedCheckout = withTranslation(UICheckout);
 
 export default TranslatedCheckout;

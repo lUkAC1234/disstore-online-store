@@ -1,9 +1,7 @@
 import styles from "./404.module.scss"
 import { PureComponent, ReactNode } from "react";
-import { Link } from "react-router-dom";
-import i18next from "i18next";
 import ClothesHanger from "assets/main/images/layout/clothes-hanger.svg"
-const lang = i18next.language;
+import { ActionButtonLink } from "components/UI/Html/Elements/Elements";
 
 class Error404 extends PureComponent {
   async componentDidMount(): Promise<void> {
@@ -27,8 +25,8 @@ class Error404 extends PureComponent {
           <h2 className={styles["page-not-found-error-subtitle"]}>Упс! Страница не найдена</h2>
           <p className={styles["page-not-found-info"]}>Страница, которую вы ищете, могла быть удалена или временно недоступна.</p>
           <div className={styles["page-not-found-links-container"]}>
-            <Link to={`/${lang}`} className={styles["page-not-found-link-home"]}>Вернуться домой</Link>
-            <Link to={`/${lang}/catalog`} className={styles["page-not-found-link-catalog"]}>Каталог</Link>
+            <ActionButtonLink white to={`/`} className={styles["page-not-found-link-home"]}>Вернуться домой</ActionButtonLink>
+            <ActionButtonLink to={`/catalog`} className={styles["page-not-found-link-home"]}>Каталог</ActionButtonLink>
           </div>
         </div>
       </section>

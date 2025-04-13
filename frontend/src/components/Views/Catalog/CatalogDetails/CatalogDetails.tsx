@@ -11,9 +11,6 @@ import {
 } from "components/Context/ContextCollection";
 import BaseCatalogDetails from "./Base/BaseCatalogDetails";
 import star5 from "assets/main/images/main-page/5star.png";
-import { WithTranslation } from "react-i18next";
-import { getWithTranslation } from "i18n/hooks";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleRight, faAngleUp, faImage } from "@fortawesome/free-solid-svg-icons";
 import InjectedUIFancybox from "components/Fancybox/Fancybox";
@@ -25,21 +22,16 @@ import SizeSelector from "./SelectedOptions/Sizes/SizeSelector";
 import QuantitySelector from "./SelectedOptions/Quantity/QuantitySelector";
 import BlockLoader from "components/UI/BlockLoaders/BlockLoader";
 import OptimizedImage from "components/UI/OptimizedImage/OptimizedImage";
+import LangLink from "components/UI/Link/LangLink";
 const Swiper = OriginalSwiper as unknown as FC<any>;
 
-interface CatalogDetailsProps extends WithTranslation {
-
-}
+export interface CatalogDetailsProps {}
 
 class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
   getProductSlug(): string {
     const { pathname } = location;
     const parts = pathname.split("/");
     return parts[4];
-  }
-
-  get lang(): string {
-    return this.props.i18n.language;
   }
 
   componentDidMount = async (): Promise<void> => {
@@ -75,9 +67,9 @@ class CatalogDetails extends BaseCatalogDetails<CatalogDetailsProps> {
       <div className={styles["catalog-container"]}>
         <BlockLoader isLoaded={!!data} containerStyle={{ width: "min(100%, 30rem)", height: "2rem", marginBottom: "3rem", marginLeft: "0.75rem" }}>
           <div className="catalog-link-way" style={{ marginLeft: "0.5rem" }}>
-            <Link to={`/${this.lang}/`}>Главная</Link>
+            <LangLink to={`/`}>Главная</LangLink>
             <FontAwesomeIcon icon={faAngleRight} />
-            <Link to={`/${this.lang}/catalog`}>Каталог</Link>
+            <LangLink to={`/catalog`}>Каталог</LangLink>
             <FontAwesomeIcon icon={faAngleRight} />
             {data?.title}
           </div>
@@ -273,4 +265,4 @@ const UICatalog = withContextSelector(
   })
 );
 
-export default getWithTranslation(UICatalog);
+export default UICatalog;

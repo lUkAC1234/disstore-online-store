@@ -1,6 +1,5 @@
 import styles from "./CatalogList.module.scss";
 import { createRef, ReactNode } from "react";
-import { Link } from "react-router-dom";
 import UIReact from "utils/classes/UIReact";
 import { withContextSelector } from "components/Context/ContextInjector";
 import { ClothesListContext } from "components/Context/ContextCollection";
@@ -12,14 +11,10 @@ import CatalogErrorPage from "./CatalogError/CatalogErrorPage.tsx";
 import CatalogPagination from "./CatalogPagination/CatalogPagination.tsx";
 import CatalogProducts from "./CatalogProductsList/Products.tsx";
 import Filters from "./CatalogFilters/Filters.tsx";
-import { getWithTranslation } from "i18n/hooks.ts";
 import { HeadingOne } from "components/UI/Html/Elements/Elements.tsx";
+import LangLink from "components/UI/Link/LangLink.tsx";
 
 class CatalogList extends UIReact<CatalogListProps, CatalogListState> {
-  get lang(): string {
-    return this.props.i18n.language;
-  }
-
   catalogFiltersContainerRef = createRef<HTMLDivElement>();
   state: Readonly<CatalogListState> = {
     isFilterActive: false,
@@ -68,7 +63,7 @@ class CatalogList extends UIReact<CatalogListProps, CatalogListState> {
       <section className={styles["catalog-section"]}>
         <div className={styles["catalog-container"]}>
           <div className="catalog-link-way">
-            <Link to={`/${this.lang}/`}>Главная</Link>
+            <LangLink to={`/`}>Главная</LangLink>
             <FontAwesomeIcon icon={faAngleRight} />
             Каталог
           </div>
@@ -136,6 +131,4 @@ const UICatalogList = withContextSelector(ClothesListContext, CatalogList, (cont
   setPrevPage: context.setPrevPage,
 }));
 
-const TranslatedCatalogList = getWithTranslation(UICatalogList);
-
-export default TranslatedCatalogList;
+export default UICatalogList;

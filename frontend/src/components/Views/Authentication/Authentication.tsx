@@ -12,9 +12,10 @@ import auth from "assets/main/images/auth/auth.webp";
 import logo from "assets/main/images/layout/logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
-import { Link, Navigate } from "react-router-dom";
-import { getWithTranslation } from "i18n/hooks";
+import { Navigate } from "react-router-dom";
+import { withTranslation } from "i18n/hooks";
 import { origin } from "../../../../project.config.json";
+import LangLink from "components/UI/Link/LangLink";
 
 class Authentication extends UIReact<AuthenticationProps, AuthenticationState> {
   state: AuthenticationState = {
@@ -120,9 +121,9 @@ class Authentication extends UIReact<AuthenticationProps, AuthenticationState> {
                     <img src={logo} alt="" />
                   </div>
                   <div className={styles["authentication-back-link-container"]}>
-                    <Link to={`/${this.lang}`}>
+                    <LangLink to={`/`}>
                       <FontAwesomeIcon icon={faArrowLeftLong} />
-                    </Link>
+                    </LangLink>
                   </div>
                 </>
               )}
@@ -156,5 +157,5 @@ class Authentication extends UIReact<AuthenticationProps, AuthenticationState> {
   }
 }
 
-const UIAuthentication = getWithTranslation(withContext(UserContext, Authentication));
+const UIAuthentication = withTranslation(withContext(UserContext, Authentication));
 export default UIAuthentication;

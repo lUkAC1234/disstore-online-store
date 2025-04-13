@@ -1,18 +1,12 @@
 import styles from "./EmptyCart.module.scss";
 import { PureComponent, ReactNode } from "react";
-import { Link } from "react-router-dom";
 import emptyCart from "assets/main/images/emptyStatus/emptyCart.svg"
-import { WithTranslation } from "react-i18next";
-import { getWithTranslation } from "i18n/hooks";
+import LangLink from "components/UI/Link/LangLink";
 
-interface EmptyCartProps extends WithTranslation {}
+interface EmptyCartProps {}
 interface EmptyCartState {}
 
 class EmptyCart extends PureComponent<EmptyCartProps, EmptyCartState> {
-  get lang(): string {
-    return this.props.i18n.language
-  }
-
   render(): ReactNode {
     return (
       <div className={styles["empty-cart-container"]}>
@@ -21,12 +15,10 @@ class EmptyCart extends PureComponent<EmptyCartProps, EmptyCartState> {
         </div>
         <h1 className={styles["empty-cart-error-code"]}>В корзине пока пусто</h1>
         <p className={styles["empty-cart-error-info"]}>Начните с каталога — нужный товар можно найти через поиск или заглянуть в подборки</p>
-        <Link className={styles["empty-cart-link"]} to={`/${this.lang}/catalog`}>Каталог</Link>
+        <LangLink className={styles["empty-cart-link"]} to={`/catalog`}>Каталог</LangLink>
       </div>
     );
   }
 }
 
-const TranslatedEmptyCart = getWithTranslation(EmptyCart);
-
-export default TranslatedEmptyCart;
+export default EmptyCart;

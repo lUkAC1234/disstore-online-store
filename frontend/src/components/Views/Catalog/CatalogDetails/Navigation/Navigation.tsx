@@ -3,8 +3,7 @@ import { PureComponent, ReactNode } from "react";
 import Details from "./Details/Details";
 import FAQs from "./FAQ/FAQs";
 import Review from "./Review/Review";
-import TransformTransition from "components/UI/TransformTransition/TransformTransition";
-;
+import TransformTransition from "components/UI/TransformTransition/TransformTransition";;
 
 interface NavigationSectionState {
     fullWidth: boolean;
