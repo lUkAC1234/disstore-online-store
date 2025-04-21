@@ -26,15 +26,14 @@ class BrandsSection extends PureComponent<BrandsSectionProps, BrandsSectionState
     return (
       <section className={styles["brands-section"]}>
         <div className={styles["brands-container"]}>
-          <div className={styles["brands-track"]}>
-            {repeatedBrands.map((brand, index) => (
-              <>
+          <div className={styles["brands-wrapper"]}>
+            <div className={styles["brands-track"]}>
+              {repeatedBrands.map((brand, index) => (
                 <div key={index} className={styles["brands-column"]}>
                   <img src={brand} alt="brand" loading="lazy" decoding="async" />
                 </div>
-              </>
-
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>

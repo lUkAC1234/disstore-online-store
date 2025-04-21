@@ -1,29 +1,19 @@
 import styles from "./Profile.module.scss";
-import { FormEvent, PureComponent, ReactNode } from "react";
+import { PureComponent, ReactNode } from "react";
+import { Navigate } from "react-router-dom";
+import { withTranslation } from "i18n/hooks";
 import { UserContext } from "components/Context/ContextCollection";
 import { withContextSelector } from "components/Context/ContextInjector";
-import { withTranslation } from "i18n/hooks";
-import { Link, Navigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import EditFieldModal from "./EditFieldModal/EditFieldModal";
-import { Container, HeadingOne, Input, Label, Section, Sidebar } from "components/UI/Html/Elements/Elements";
-
-const fieldLabels: { [key in keyof EditableProfileFields]: string } = {
-  first_name: "Имя",
-  last_name: "Фамилия",
-  mobile_number: "Телефон",
-};
+import { Container, Section, Sidebar } from "components/UI/Html/Elements/Elements";
+import UserProfile from "./UserProfile/UserProfile";
+import Orders from "./Orders/Orders";
 
 class Profile extends PureComponent<ProfileProps, ProfileState> {
-  static editableFields: (keyof EditableProfileFields)[] = ["first_name", "last_name", "mobile_number"];
-
-  state: Readonly<ProfileState> = {
+  readonly state: Readonly<ProfileState> = {
     first_name: this.props.user?.first_name || "",
     last_name: this.props.user?.last_name || "",
     mobile_number: this.props.user?.mobile_number || "",
-    modalField: null,
-    modalValue: "",
+    activeTab: "orders",
   };
 
   get lang(): string {
@@ -31,117 +21,58 @@ class Profile extends PureComponent<ProfileProps, ProfileState> {
   }
 
   componentDidUpdate(prevProps: ProfileProps) {
-    if (prevProps.user !== this.props.user) {
-      this.setState({
-        first_name: this.props.user?.first_name || "",
-        last_name: this.props.user?.last_name || "",
-        mobile_number: this.props.user?.mobile_number || "",
-      });
+    if (prevProps.user !== this.props.user && this.props.user) {
+      const { first_name, last_name, mobile_number } = this.props.user;
+      this.setState({ first_name, last_name, mobile_number });
     }
   }
 
-  openModal = (field: keyof EditableProfileFields) => {
-    this.setState({
-      modalField: field,
-      modalValue: this.props.user ? this.props.user[field] : "",
-    });
-  };
-
-  handleModalCancel = () => {
-    this.setState({ modalField: null, modalValue: "" });
-  };
-
-  handleModalChange = (newValue: string) => {
-    this.setState({ modalValue: newValue });
-  };
-
-  handleModalSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    const { modalField, modalValue } = this.state;
-    if (!modalField) return;
-
-    if (this.props.user[modalField] !== modalValue) {
-      try {
-        await this.props.updateUser({ [modalField]: modalValue });
-      } catch (error) {
-        console.error("Update failed", error);
-      }
-    }
-    this.setState({ modalField: null, modalValue: "" });
+  handleTabChange = (tab: "orders" | "profile") => {
+    this.setState({ activeTab: tab });
   };
 
   render(): ReactNode {
-    if (!this.props.isAuthenticated) {
+    const { isAuthenticated, user, setLogout } = this.props;
+
+    if (!isAuthenticated || !user) {
       return <Navigate to={`/${this.lang}/authentication`} />;
     }
+
+    const { first_name, last_name, activeTab } = this.state;
+
     return (
       <Section>
         <Container className={styles["profile-container"]}>
           <div className={styles["profile-head-container"]}>
-            <HeadingOne>Профиль</HeadingOne>
+            <h1>{first_name} {last_name}</h1>
           </div>
 
           <div className={styles["profile-wrapper"]}>
             <Sidebar className={styles["profile-sidebar"]}>
-              <div className={styles["profile-sidebar-item"]}>
-                <Link to="">Личный кабинет</Link>
-              </div>
-              <div className={styles["profile-sidebar-item"]}>
-                <Link to="">История заказов</Link>
-              </div>
+              <ul className={styles["profile-sidebar-wrapper"]}>
+                <li
+                  className={`${styles["profile-sidebar-list"]} ${activeTab === "orders" ? styles["active"] : ""}`}
+                  onClick={() => this.handleTabChange("orders")}
+                >
+                  Заказы
+                </li>
+                <li
+                  className={`${styles["profile-sidebar-list"]} ${activeTab === "profile" ? styles["active"] : ""}`}
+                  onClick={() => this.handleTabChange("profile")}
+                >
+                  Профиль
+                </li>
+              </ul>
             </Sidebar>
-            <div className={styles["profile-main-container"]}>
-              <div className={styles["profile-main-fields-container"]}>
-                <Label htmlFor="email">Почта</Label>
-                <Input className={styles["profile-field"]} id="email" value={this.props.user?.email} disabled />
-              </div>
 
-              <div className={styles["profile-info-container"]}>
-                <div className={styles["profile-form-group"]}>
-                  <Label htmlFor="first_name">Имя</Label>
-                  <div className={styles["profile-field-container"]}>
-                    <Input className={styles["profile-field"]} id="first_name" value={this.props.user?.first_name} disabled />
-                    <button className={styles["edit-btn"]} onClick={() => this.openModal("first_name")}>
-                      <FontAwesomeIcon icon={faEdit} />
-                    </button>
-                  </div>
-                </div>
-                <div className={styles["profile-form-group"]}>
-                  <Label htmlFor="last_name">Фамилия</Label>
-                  <div className={styles["profile-field-container"]}>
-                    <Input className={styles["profile-field"]} id="email" value={this.props.user?.last_name} disabled />
-                    <button className={styles["edit-btn"]} onClick={() => this.openModal("last_name")}>
-                      <FontAwesomeIcon icon={faEdit} />
-                    </button>
-                  </div>
-                </div>
-                <div className={styles["profile-form-group"]}>
-                  <Label htmlFor="mobile_number">Телефон</Label>
-                  <div className={styles["profile-field-container"]}>
-                    <Input className={styles["profile-field"]} id="email" value={this.props.user?.mobile_number} disabled />
-                    <button className={styles["edit-btn"]} onClick={() => this.openModal("mobile_number")}>
-                      <FontAwesomeIcon icon={faEdit} />
-                    </button>
-                  </div>
-                </div>
-              </div>
+            <div className={styles["profile-content"]}>
+              {activeTab === "orders" ? <Orders /> : <UserProfile user={user} />}
             </div>
           </div>
 
           <div className={styles["profile-logout-container"]}>
-            <button onClick={this.props.setLogout}>Выйти</button>
+            <button onClick={setLogout}>Выйти</button>
           </div>
-
-          {this.state.modalField && (
-            <EditFieldModal
-              field={this.state.modalField}
-              label={fieldLabels[this.state.modalField]}
-              value={this.state.modalValue}
-              onChange={this.handleModalChange}
-              onCancel={this.handleModalCancel}
-              onSubmit={this.handleModalSubmit}
-            />
-          )}
         </Container>
       </Section>
     );
@@ -152,9 +83,6 @@ const UIProfile = withContextSelector(UserContext, Profile, (context) => ({
   isAuthenticated: context.isAuthenticated,
   user: context.user,
   setLogout: context.setLogout,
-  updateUser: context.updateUser,
 }));
 
-const TranslatedUIProfile = withTranslation(UIProfile);
-
-export default TranslatedUIProfile;
+export default withTranslation(UIProfile);

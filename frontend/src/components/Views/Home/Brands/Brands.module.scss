@@ -1,13 +1,22 @@
 .brands-section {
     position: relative;
-    z-index: 1;
+    z-index: var(--z-index-3);
     background: var(--text-black);
 }
 
 .brands-container {
     position: relative;
     width: 100%;
-    padding-block: 2rem;
+    padding-block: 1.5rem;
+}
+
+.brands-wrapper {
+    transform: rotate(-1deg);
+    background-color: var(--clothes-discount-number);
+    padding-block: 0.5rem;
+    @media screen and (min-width: 1251px) {
+        margin-top: -2rem;
+    }
 }
 
 .brands-track {
@@ -19,8 +28,8 @@
 
 .brands-column {
     img {
-        width: 10rem;
-        height: 3rem;
+        width: auto;
+        height: 2rem;
         object-fit: contain;
         filter: grayscale(100%);
         transition: filter 0.3s ease;
@@ -41,21 +50,6 @@
     }
 }
 
-@media screen and (max-width: 992px) {
-
-    .brands-container {
-        padding-block: 1.5rem;
-    }
-
-    .brands-column {
-        img {
-            width: 8rem;
-            height: 2rem;
-            object-fit: contain;
-        }
-    }
-}
-
 @media screen and (max-width: 600px) {
 
     .brands-container {
@@ -64,13 +58,5 @@
 
     .brands-track {
         gap: 0.75rem;
-    }
-
-    .brands-column {
-        img {
-            width: 6rem;
-            height: 2rem;
-            object-fit: contain;
-        }
     }
 }

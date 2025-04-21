@@ -32,4 +32,9 @@
     @media screen and (max-width: 350px) {
         grid-template-columns: 1fr;
     }
+
+    button {
+        padding: 0.75rem 0.75rem;
+        font-size: 0.8rem;
+    }
 }

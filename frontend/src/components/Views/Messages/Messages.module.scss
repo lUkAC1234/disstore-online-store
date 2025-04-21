@@ -15,13 +15,18 @@
   width: min(100%, 50rem);
   margin: 2.25rem auto;
   padding-inline: 1rem;
+
+  @media screen and (max-width: 600px) {
+    padding-inline: 0.5rem;
+    margin-block: 1rem;
+  }
 }
 
 .success-cart,
 .success-checkout {
-  display: grid;
-  grid-template-columns: 1fr 2rem;
-  place-items: center;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
   gap: 0.5rem;
   padding: 1rem;
   border-radius: 0.5rem;
@@ -37,11 +42,16 @@
 .success-item-content-wrapper {
   display: flex;
   gap: 0.5rem;
+
+  @media screen and (max-width: 400px) {
+    flex-flow: column;
+  }
 }
 
 .success-item-image-container {
   position: relative;
   width: 5rem;
+  max-height: 5rem;
   aspect-ratio: 1 / 1;
   overflow: hidden;
 }
@@ -54,8 +64,24 @@
   background: var(--clothes-image-background);
 }
 
-.success-item-content {}
+.success-item-content {
+}
 
-.success-cart-message {
+.success-message {
   color: var(--text-black);
+  font-family: var(--GteMediumFont) !important;
+}
+
+.success-item-link {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  color: var(--clothes-discount-number);
+  font-size: 0.9rem;
+
+  @media screen and (max-width: 400px) {
+    position: static;
+    display: block;
+    margin-top: 1rem;
+  }
 }

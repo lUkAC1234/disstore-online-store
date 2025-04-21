@@ -8,7 +8,7 @@ interface ILazyLoadedProps extends PropsWithChildren {
 class LazyLoaded extends PureComponent<ILazyLoadedProps> {
   render(): ReactNode {
     return (
-      <Suspense fallback={this.props.fallbackUI ?? <SpinnerLoaderWrapper fixedPosition />}>
+      <Suspense fallback={this.props.fallbackUI ?? <SpinnerLoaderWrapper fixedPosition withBackground />}>
         {this.props.children}
       </Suspense>
     );

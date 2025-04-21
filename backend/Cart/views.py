@@ -116,7 +116,5 @@ class CheckoutView(APIView):
             )
 
         cart.items.all().delete()
-
-
         order_serializer = OrderSerializer(order)
         return Response(order_serializer.data, status=status.HTTP_201_CREATED)

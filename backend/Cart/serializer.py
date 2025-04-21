@@ -65,9 +65,6 @@ class CartItemSerializer(serializers.ModelSerializer):
         selected_color = validated_data.pop('selected_color', "") or ""
         selected_size = validated_data.pop('selected_size', "") or ""
         selected_image = validated_data.pop('selected_image', None) 
-        
-        print("Sanitized options:", repr(selected_color), repr(selected_size), repr(selected_image))
-        
         cart_item, created = CartItem.objects.get_or_create(
             cart=cart,
             product=product,

@@ -14,7 +14,11 @@ abstract class BaseElement<P extends ElementProps = ElementProps> extends PureCo
   elementRef = createRef<HTMLElement>();
   abstract tag: ElementType;
   abstract customName: string;
-  componentDidMount() { this.elementRef.current?.setAttribute("is", this.customName); }
+  componentDidMount(): void {
+    if (this.elementRef.current && "setAttribute" in this.elementRef.current) {
+      this.elementRef.current.setAttribute("is", this.customName);
+    }
+  }
 
   render() {
     const { children, className, white, bold, regular, centerGrid, centerFlex, ...rest } = this.props;
